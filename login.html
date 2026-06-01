@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DMI LMS — Sign in</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dmi-red:#c0202a;--dmi-red-dark:#8f1118;--dmi-red-light:#fde8e9;
+  --navy:#0f1e2d;--blue:#1a3a5c;--sky:#2a7abf;
+  --border:#d5dce8;--text:#1e2d40;--muted:#6b7a90;
+  --bg:#f2f5f9;--white:#fff;--gold:#c9903a;
+}
+html,body{height:100%;font-family:'Outfit',sans-serif;color:var(--text);overflow-x:hidden}
+body{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 50%,#0f2236 100%);min-height:100vh;display:flex;flex-direction:column;position:relative;overflow:hidden}
+body::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 10% 20%,rgba(192,32,42,.18) 0%,transparent 55%),radial-gradient(ellipse at 90% 75%,rgba(42,122,191,.15) 0%,transparent 50%)}
+.land-header{position:relative;z-index:2;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:12px 50px}
+.dmi-logo-wrap{display:flex;align-items:center;gap:12px}
+.dmi-badge{width:44px;height:44px;border-radius:8px;background:#eef21d;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--dmi-red);font-size:14px;letter-spacing:.5px}
+.dmi-logo-text .name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:#fff;line-height:1.1}
+.dmi-logo-text .tagline{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:1.2px;text-transform:uppercase}
+.land-header-right{font-size:12px;color:rgba(255,255,255,.6)}
+.land-header-right a{color:rgba(255,255,255,.8);text-decoration:none}
+.main{flex:1;display:grid;grid-template-columns:1fr 1fr;position:relative;z-index:1}
+.left{display:flex;flex-direction:column;justify-content:center;padding:50px 50px 60px 70px;color:#fff}
+.since{display:inline-flex;align-items:center;gap:8px;background:rgba(192,32,42,.2);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:24px;width:fit-content}
+.since::before{content:'';width:7px;height:7px;background:var(--dmi-red);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.dept{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:600}
+.h1{font-family:'Playfair Display',serif;font-size:clamp(34px,3.5vw,54px);line-height:1.1;color:#fff;margin-bottom:8px}
+.h1 em{font-style:italic;color:var(--gold)}
+.sub{font-size:15px;color:rgba(255,255,255,.62);line-height:1.75;max-width:400px;margin-bottom:36px}
+.stats{display:flex;border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;width:fit-content}
+.st{padding:14px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.st:last-child{border-right:none}
+.st .n{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#fff;line-height:1}
+.st .l{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.right{display:flex;align-items:center;justify-content:center;padding:40px 60px 40px 30px}
+.card{background:#fff;border-radius:20px;padding:36px 36px 32px;width:100%;max-width:450px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .5s cubic-bezier(.2,.8,.3,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.card-hd{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.card-hd .logo{width:48px;height:48px;border-radius:10px;background:#eef21d;border:2px solid var(--dmi-red);display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--dmi-red);font-size:15px}
+.card-hd .org{font-size:14px;font-weight:800;color:var(--navy);letter-spacing:.3px}
+.card-hd .dept2{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.card h2{font-size:19px;color:var(--navy);font-weight:700;margin-bottom:3px}
+.card .csub{font-size:12.5px;color:var(--muted);margin-bottom:22px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.field label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px}
+.field input,.field select{border:1.5px solid var(--border);border-radius:7px;padding:10px 12px;font-size:13.5px;font-family:inherit;color:var(--text);outline:none;transition:border .15s;background:var(--bg)}
+.field input:focus,.field select:focus{border-color:var(--sky);background:#fff;box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.btn{width:100%;padding:13px;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));box-shadow:0 6px 20px rgba(192,32,42,.35);transition:transform .2s;margin-top:8px}
+.btn:hover{transform:translateY(-2px)}
+.btn:disabled{opacity:.7;cursor:not-allowed;transform:none}
+.msg{margin-top:14px;padding:10px 12px;border-radius:7px;font-size:13px;display:none}
+.msg.err{background:var(--dmi-red-light);color:var(--dmi-red-dark);border:1px solid #f5b9bf;display:block}
+.msg.ok{background:#e6f4ec;color:#1e7a45;border:1px solid #b6e3d2;display:block}
+.foot{position:relative;z-index:2;background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.07);padding:10px 50px;display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35)}
+.back{text-align:center;margin-top:14px;font-size:12px;color:var(--muted)}
+.back a{color:var(--sky);text-decoration:none;font-weight:600}
+@media (max-width:780px){.main{grid-template-columns:1fr}.left{padding:30px 24px}.right{padding:20px 24px 40px}.land-header,.foot{padding:12px 24px}}
+</style>
+</head>
+<body>
+<div class="land-header">
+  <div class="dmi-logo-wrap">
+    <div class="dmi-badge">DMI</div>
+    <div class="dmi-logo-text">
+      <div class="name">DMI Computer Education</div>
+      <div class="tagline">Established 2008</div>
+    </div>
+  </div>
+  <div class="land-header-right"><a href="index.html">Home</a></div>
+</div>
+
+<div class="main">
+  <div class="left">
+    <div class="since">Award-Winning Institute</div>
+    <div class="dept">DMI Learning Management System</div>
+    <h1 class="h1">Welcome to <em>DMI&nbsp;LMS</em></h1>
+    <p class="sub">Sign in to access your courses, practice papers, and track your progress with personalised feedback from our teachers.</p>
+    <div class="stats">
+      <div class="st"><div class="n">15+</div><div class="l">Years</div></div>
+      <div class="st"><div class="n">5000+</div><div class="l">Students</div></div>
+      <div class="st"><div class="n">98%</div><div class="l">Success</div></div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="card">
+      <div class="card-hd">
+        <div class="logo">DMI</div>
+        <div>
+          <div class="org">DMI Computer Education</div>
+          <div class="dept2">Learning Portal</div>
+        </div>
+      </div>
+      <h2>Sign in to your account</h2>
+      <div class="csub">Choose your role and enter your credentials</div>
+
+      <div class="field"><label>I am a</label>
+        <select id="role"><option value="student">Student</option><option value="teacher">Teacher</option></select>
+      </div>
+      <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@example.com"/></div>
+      <div class="field"><label>Password</label><input id="password" type="password" placeholder="••••••••"/></div>
+
+      <button class="btn" id="loginBtn" type="button">Sign in &rarr;</button>
+      <div id="msg" class="msg"></div>
+      <div class="back"><a href="index.html">&larr; Back to home</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <div>&copy; DMI Computer Education — Award-Winning Institute</div>
+  <div>Powered by DMI LMS</div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
+
+const msg = document.getElementById('msg');
+const btn = document.getElementById('loginBtn');
+function show(t,c){msg.className='msg '+c;msg.textContent=t;}
+
+async function call(action, params){
+  const body = new URLSearchParams({action, ...params});
+  const r = await fetch(API_URL, {method:'POST', body});
+  return r.json();
+}
+
+btn.addEventListener('click', async () => {
+  const role = document.getElementById('role').value;
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  if (!email || !password) { show('Please enter email and password', 'err'); return; }
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const res = await call('login', {email, password});
+    if (!res.ok) {
+      // Friendlier "expired" message
+      if (res.expired) { show(res.error || 'Your access has expired. Please contact the admin to renew.', 'err'); return; }
+      show(res.error || 'Login failed', 'err'); return;
+    }
+    if (res.role !== role) { show('This account is a '+res.role+', not a '+role, 'err'); return; }
+    localStorage.setItem('dmi_lms_user', JSON.stringify(res.user));
+    localStorage.setItem('dmi_lms_role', res.role);
+    show('Welcome, '+res.user.name+'. Redirecting…', 'ok');
+    // ?next=… lets us bounce the student back to the paper they tried to open
+    const urlNext = new URLSearchParams(location.search).get('next');
+    const fallback = res.role === 'teacher' ? 'teacher-panel.html' : 'student-panel.html';
+    setTimeout(() => { window.location.href = urlNext && res.role === 'student' ? urlNext : fallback; }, 600);
+  } catch(e) { show('Network error: '+e.message, 'err'); }
+  finally { btn.disabled = false; btn.textContent = 'Sign in →'; }
+});
+document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+</script>
+</body>
+</html>

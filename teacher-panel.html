@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DMI LMS — Teacher Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dmi-red:#c0202a;--dmi-red-dark:#8f1118;--dmi-red-light:#fde8e9;
+  --navy:#0f1e2d;--blue:#1a3a5c;--sky:#2a7abf;
+  --border:#d5dce8;--text:#1e2d40;--muted:#6b7a90;
+  --bg:#f2f5f9;--white:#fff;--gold:#c9903a;
+  --green:#1e7a45;--green-l:#e6f4ec;--amber:#d97706;--amber-l:#fef3cd;
+}
+html,body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text)}
+body{min-height:100vh}
+
+/* Top bar (matches DMI LMS admin) */
+.topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 26px;height:62px;box-shadow:0 2px 8px rgba(15,30,45,.04);position:sticky;top:0;z-index:50}
+.tb-left{display:flex;align-items:center;gap:24px}
+.dmi-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.dmi-badge{background:#eef21d;color:var(--dmi-red);font-weight:900;font-size:13px;letter-spacing:.5px;padding:7px 11px;border-radius:6px;border:1.5px solid var(--dmi-red)}
+.brand-text{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--navy)}
+.tb-nav{display:flex;gap:4px}
+.tb-nav a{padding:8px 14px;font-size:13px;color:var(--muted);text-decoration:none;border-radius:6px;font-weight:600}
+.tb-nav a:hover{background:var(--bg);color:var(--navy)}
+.tb-nav a.active{background:var(--navy);color:#fff}
+.tb-right{display:flex;align-items:center;gap:14px}
+.who{font-size:13px;color:var(--muted)}
+.who b{color:var(--navy)}
+.logout{background:var(--dmi-red);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;text-decoration:none}
+.logout:hover{background:var(--dmi-red-dark)}
+
+.wrap{max-width:1280px;margin:0 auto;padding:24px}
+
+/* Page header */
+.page-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.page-title{font-family:'Playfair Display',serif;font-size:30px;font-weight:700;color:var(--navy)}
+.page-actions{display:flex;gap:8px}
+.btn{padding:10px 18px;font-size:13px;font-weight:700;border-radius:7px;cursor:pointer;border:none;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:#fff;box-shadow:0 4px 14px rgba(192,32,42,.28)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{background:#fff;color:var(--navy);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--sky);color:var(--blue)}
+.btn-danger{background:var(--dmi-red);color:#fff;padding:6px 10px;font-size:11.5px;border-radius:5px}
+.btn-sm{padding:6px 12px;font-size:12px}
+
+/* Tabs */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:22px;flex-wrap:wrap}
+.tab{padding:12px 22px;background:transparent;border:none;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab:hover{color:var(--navy)}
+.tab.active{color:var(--dmi-red);border-bottom-color:var(--dmi-red)}
+
+/* Panels & cards */
+.panel{display:none}.panel.active{display:block}
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px;box-shadow:0 1px 3px rgba(15,30,45,.04)}
+.card+.card{margin-top:14px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+.card-hd h2{font-family:'Playfair Display',serif;font-size:19px;color:var(--navy);font-weight:700}
+.card-hd .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--dmi-red)}
+.kpi.b::before{background:var(--blue)}.kpi.g::before{background:var(--green)}.kpi.a::before{background:var(--amber)}
+.kpi .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.kpi .v{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--navy);margin-top:8px}
+
+/* Forms */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px}
+input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13.5px;font-family:inherit;color:var(--text);outline:none;background:var(--bg);transition:border .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--sky);background:#fff;box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+textarea{resize:vertical;min-height:80px}
+
+/* Tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px;margin-top:14px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:left;font-size:13px;vertical-align:top}
+th{background:var(--bg);font-weight:700;color:var(--navy);text-transform:uppercase;font-size:11px;letter-spacing:.5px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbfd}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;background:var(--bg);border:1px solid var(--border);color:var(--navy)}
+.badge.red{background:var(--dmi-red-light);border-color:#f5b9bf;color:var(--dmi-red-dark)}
+.badge.green{background:var(--green-l);border-color:#b6e3d2;color:var(--green)}
+.badge.blue{background:#e8f0fb;border-color:#bcd6f3;color:var(--blue)}
+.score-cell{font-family:'Playfair Display',serif;font-size:18px;color:var(--green);font-weight:700}
+.score-cell .pct{font-family:'Outfit',sans-serif;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:2px}
+
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.toolbar .grow{flex:1;min-width:220px}
+.msg{margin-top:12px;padding:10px 13px;border-radius:7px;font-size:13px;display:none}
+.msg.err{background:var(--dmi-red-light);color:var(--dmi-red-dark);border:1px solid #f5b9bf;display:block}
+.msg.ok{background:var(--green-l);color:var(--green);border:1px solid #b6e3d2;display:block}
+.empty{padding:32px;text-align:center;color:var(--muted);font-size:13.5px}
+.link{color:var(--sky);text-decoration:none;font-weight:600;font-size:12.5px}
+.link:hover{text-decoration:underline}
+
+@media (max-width:760px){.tb-nav{display:none}.page-title{font-size:22px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <a class="dmi-brand" href="index.html">
+      <span class="dmi-badge">DMI</span>
+      <span class="brand-text">DMI LMS</span>
+    </a>
+    <nav class="tb-nav">
+      <a href="index.html">My Courses</a>
+      <a href="index.html">Practice Papers</a>
+      <a href="#" class="active">Teacher Panel</a>
+    </nav>
+  </div>
+  <div class="tb-right">
+    <div class="who">Hi, <b id="who">…</b></div>
+    <a href="#" class="logout" id="logoutBtn">Logout</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="page-hd">
+    <div>
+      <div class="page-title">Teacher Panel</div>
+      <div style="color:var(--muted);font-size:13px;margin-top:4px">Manage students, courses, and post marks</div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi"><div class="l">Total Students</div><div class="v" id="kStudents">0</div></div>
+    <div class="kpi b"><div class="l">Courses</div><div class="v" id="kCourses">0</div></div>
+    <div class="kpi g"><div class="l">Marks Posted</div><div class="v" id="kMarks">0</div></div>
+    <div class="kpi a"><div class="l">Class Average</div><div class="v" id="kAvg">—</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="students">Students</button>
+    <button class="tab" data-tab="add">Add Student</button>
+    <button class="tab" data-tab="courses">Courses</button>
+    <button class="tab" data-tab="postMark">Post Mark</button>
+    <button class="tab" data-tab="allMarks">All Marks</button>
+    <button class="tab" data-tab="exams">Exam Submissions</button>
+  </div>
+
+  <!-- STUDENTS -->
+  <div class="panel active" id="panel-students">
+    <div class="card">
+      <div class="card-hd">
+        <div><h2>All Students</h2><div class="sub">Search, view and remove student accounts</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="loadStudents()">Refresh</button>
+      </div>
+      <div class="toolbar"><input id="searchStu" class="grow" placeholder="Search by name, email, class…"/></div>
+      <div id="studentsBox"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- ADD STUDENT -->
+  <div class="panel" id="panel-add">
+    <div class="card">
+      <div class="card-hd"><div><h2>Add a new student</h2><div class="sub">Create a student account they can use to sign in</div></div></div>
+      <div class="grid">
+        <div class="field"><label>Full name</label><input id="sName"/></div>
+        <div class="field"><label>Email</label><input id="sEmail" type="email"/></div>
+        <div class="field"><label>Password</label><input id="sPass"/></div>
+        <div class="field"><label>Class / Batch</label><input id="sClass" placeholder="e.g. IELTS-A"/></div>
+      </div>
+      <button class="btn btn-primary" onclick="addStudent()">+ Create Student</button>
+      <div id="addMsg" class="msg"></div>
+    </div>
+  </div>
+
+  <!-- COURSES -->
+  <div class="panel" id="panel-courses">
+    <div class="card">
+      <div class="card-hd"><div><h2>Add Course / Lesson</h2><div class="sub">Each row is one lesson with optional Video and PDF URL</div></div></div>
+      <div class="grid">
+        <div class="field"><label>Course</label><input id="cCourse" placeholder="e.g. IELTS Reading"/></div>
+        <div class="field"><label>Lesson</label><input id="cLesson" placeholder="e.g. Book 19 Test 1"/></div>
+        <div class="field"><label>Video URL</label><input id="cVideo" placeholder="https://…"/></div>
+        <div class="field"><label>PDF URL</label><input id="cPdf" placeholder="https://…"/></div>
+      </div>
+      <button class="btn btn-primary" onclick="addCourse()">+ Add Lesson</button>
+      <div id="cMsg" class="msg"></div>
+    </div>
+    <div class="card">
+      <div class="card-hd">
+        <div><h2>All Courses</h2><div class="sub">All lessons across all courses</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="loadCourses()">Refresh</button>
+      </div>
+      <div class="toolbar"><input id="searchCrs" class="grow" placeholder="Filter…"/></div>
+      <div id="coursesBox"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- POST MARK -->
+  <div class="panel" id="panel-postMark">
+    <div class="card">
+      <div class="card-hd"><div><h2>Post a mark</h2><div class="sub">Students see their marks instantly on their dashboard</div></div></div>
+      <div class="grid">
+        <div class="field"><label>Student</label><select id="mStudent"><option value="">Loading…</option></select></div>
+        <div class="field"><label>Course</label><input id="mCourse" placeholder="e.g. IELTS Reading"/></div>
+        <div class="field"><label>Test / Lesson</label><input id="mTest" placeholder="e.g. Book 19 Test 1"/></div>
+        <div class="field"><label>Score</label><input id="mScore" type="number" min="0"/></div>
+        <div class="field"><label>Out of</label><input id="mMax" type="number" value="40"/></div>
+      </div>
+      <div class="field"><label>Comments (optional)</label><textarea id="mComments" placeholder="Feedback for the student"></textarea></div>
+      <button class="btn btn-primary" onclick="postMark()">Save Mark</button>
+      <div id="markMsg" class="msg"></div>
+    </div>
+  </div>
+
+  <!-- EXAM SUBMISSIONS -->
+  <div class="panel" id="panel-exams">
+    <div class="card">
+      <div class="card-hd">
+        <div><h2>Exam Submissions</h2><div class="sub">Every test a student completed online — full answers + questions</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="loadExams()">Refresh</button>
+      </div>
+      <div class="toolbar"><input id="searchExams" class="grow" placeholder="Filter by student or test…"/></div>
+      <div id="examsBox"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- ALL MARKS -->
+  <div class="panel" id="panel-allMarks">
+    <div class="card">
+      <div class="card-hd">
+        <div><h2>All marks posted</h2><div class="sub">Across every student, newest first</div></div>
+        <button class="btn btn-ghost btn-sm" onclick="loadMarks()">Refresh</button>
+      </div>
+      <div class="toolbar"><input id="searchMarks" class="grow" placeholder="Filter by student, course, test…"/></div>
+      <div id="marksBox"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
+
+const user = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
+const role = localStorage.getItem('dmi_lms_role');
+if (!user || role !== 'teacher') { window.location.href = 'login.html'; }
+document.getElementById('who').textContent = user ? user.name : '';
+
+document.getElementById('logoutBtn').onclick = () => {
+  localStorage.clear(); window.location.href = 'login.html';
+};
+
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+});
+
+async function call(action, params={}){
+  const body = new URLSearchParams({action, ...params});
+  const r = await fetch(API_URL, {method:'POST', body});
+  return r.json();
+}
+function setMsg(id,t,c){const el=document.getElementById(id);el.className='msg '+c;el.textContent=t;}
+
+let allStudents=[], allMarks=[], allCourses=[];
+
+async function loadStudents(){
+  document.getElementById('studentsBox').innerHTML = '<div class="empty">Loading…</div>';
+  const res = await call('listStudents');
+  if (!res.ok){document.getElementById('studentsBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  allStudents = res.data;
+  document.getElementById('kStudents').textContent = allStudents.length;
+  renderStudents();
+  const sel = document.getElementById('mStudent');
+  sel.innerHTML = '<option value="">— Select student —</option>' +
+    allStudents.map(s => `<option value="${s.Email}|${s.Name}">${s.Name} — ${s.Email}</option>`).join('');
+}
+
+function renderStudents(){
+  const q = document.getElementById('searchStu').value.toLowerCase();
+  const list = allStudents.filter(s => !q ||
+    String(s.Name||'').toLowerCase().includes(q) ||
+    String(s.Email||'').toLowerCase().includes(q) ||
+    String(s.Class||'').toLowerCase().includes(q));
+  if (!list.length){document.getElementById('studentsBox').innerHTML='<div class="empty">No students yet. Click "Add Student" to create one.</div>';return;}
+  document.getElementById('studentsBox').innerHTML = `<div class="tbl-wrap"><table>
+    <thead><tr><th>Name</th><th>Email</th><th>Class</th><th>Joined</th><th>Expires</th><th>Status</th><th></th></tr></thead>
+    <tbody>${list.map(s => {
+      const expDate = s.ExpiryDate ? new Date(s.ExpiryDate) : null;
+      const expired = !!s.expired;
+      const daysLeft = expDate ? Math.ceil((expDate - new Date())/(1000*60*60*24)) : null;
+      return `<tr>
+        <td><b>${s.Name||''}</b></td>
+        <td>${s.Email||''}</td>
+        <td>${s.Class?'<span class="badge blue">'+s.Class+'</span>':''}</td>
+        <td>${s.JoinDate ? new Date(s.JoinDate).toLocaleDateString() : ''}</td>
+        <td>${expDate ? expDate.toLocaleDateString() : '—'}${(!expired && daysLeft !== null) ? '<br/><small style="color:var(--muted)">'+daysLeft+' day'+(daysLeft===1?'':'s')+' left</small>' : ''}</td>
+        <td>${expired ? '<span class="badge red">Expired</span>' : '<span class="badge green">Active</span>'}</td>
+        <td>
+          <button class="btn btn-sm" style="background:var(--blue);color:#fff;border:none" onclick="renewStudent('${s.Email}')">Renew</button>
+          <button class="btn btn-danger" onclick="deleteStudent('${s.Email}')">Delete</button>
+        </td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
+}
+
+async function renewStudent(email) {
+  const days = prompt('Renew this student for how many days?', '30');
+  if (!days) return;
+  const res = await call('renewStudent', { email, days });
+  if (!res.ok) { alert(res.error); return; }
+  alert('Renewed. New expiry: ' + new Date(res.newExpiry).toLocaleDateString());
+  loadStudents();
+}
+
+let allExams = [];
+async function loadExams(){
+  document.getElementById('examsBox').innerHTML='<div class="empty">Loading…</div>';
+  const res = await call('listExamResults');
+  if (!res.ok){document.getElementById('examsBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  allExams = res.data;
+  renderExams();
+}
+function renderExams(){
+  const q = document.getElementById('searchExams').value.toLowerCase();
+  const list = allExams.filter(e => !q ||
+    String(e.StudentName||'').toLowerCase().includes(q) ||
+    String(e.StudentEmail||'').toLowerCase().includes(q) ||
+    String(e.TestName||'').toLowerCase().includes(q));
+  if (!list.length){document.getElementById('examsBox').innerHTML='<div class="empty">No exam submissions yet.</div>';return;}
+  document.getElementById('examsBox').innerHTML = `<div class="tbl-wrap"><table>
+    <thead><tr><th>Date</th><th>Student</th><th>Test</th><th>Score</th><th></th></tr></thead>
+    <tbody>${list.map((e,i) => {
+      const s=Number(e.Score)||0, mx=Number(e.MaxScore)||0;
+      const pct = mx ? Math.round((s/mx)*1000)/10 : null;
+      return `<tr>
+        <td>${e.Date ? new Date(e.Date).toLocaleDateString() : ''}</td>
+        <td><b>${e.StudentName||''}</b><br/><small style="color:var(--muted)">${e.StudentEmail||''}</small></td>
+        <td>${e.TestName||''}${e.Course?'<br/><span class="badge red" style="margin-top:4px">'+e.Course+'</span>':''}</td>
+        <td><div class="score-cell">${s}<span style="color:var(--muted);font-size:14px;font-weight:500"> / ${mx||'-'}</span>${pct!==null?'<span class="pct">'+pct+'%</span>':''}</div></td>
+        <td><button class="btn btn-ghost btn-sm" onclick="viewExam(${i})">View Answers</button></td>
+      </tr>`;
+    }).join('')}</tbody></table></div>
+    <div id="examModal" style="display:none;position:fixed;inset:0;background:rgba(15,30,45,.6);z-index:99;align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)this.style.display='none'">
+      <div style="background:#fff;border-radius:12px;max-width:780px;width:100%;max-height:90vh;overflow:auto;padding:26px;position:relative">
+        <button onclick="document.getElementById('examModal').style.display='none'" style="position:absolute;top:14px;right:18px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)">×</button>
+        <div id="examModalBody"></div>
+      </div>
+    </div>`;
+}
+function viewExam(idx){
+  const e = allExams[idx];
+  let answers = {}, questions = {};
+  try { answers = JSON.parse(e.AnswersJSON || '{}'); } catch(_) {}
+  try { questions = JSON.parse(e.QuestionsJSON || '{}'); } catch(_) {}
+  const keys = Object.keys(answers).length ? Object.keys(answers) : Object.keys(questions);
+  const rows = keys.length ? keys.map(k => `
+    <tr><td style="font-weight:700;color:var(--dmi-red);width:40px">${k}</td>
+        <td>${(questions[k]||'').toString().replace(/</g,'&lt;') || '<em style="color:var(--muted)">(question text not captured)</em>'}</td>
+        <td><b>${(answers[k]||'').toString().replace(/</g,'&lt;') || '—'}</b></td></tr>`).join('') :
+    '<tr><td colspan="3" class="empty">No answer data captured</td></tr>';
+  document.getElementById('examModalBody').innerHTML = `
+    <h2 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:6px">${e.TestName||'Exam'}</h2>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:18px">${e.StudentName||''} · ${e.StudentEmail||''} · ${e.Date?new Date(e.Date).toLocaleString():''}</div>
+    <div style="background:var(--bg);padding:14px;border-radius:8px;margin-bottom:18px;font-size:14px">
+      Score: <b style="color:var(--green);font-size:18px">${e.Score||0} / ${e.MaxScore||'-'}</b>
+    </div>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th style="width:40px">Q#</th><th>Question</th><th>Student Answer</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+  document.getElementById('examModal').style.display = 'flex';
+}
+document.getElementById('searchExams').addEventListener('input', renderExams);
+document.getElementById('searchStu').addEventListener('input', renderStudents);
+
+async function addStudent(){
+  const name = document.getElementById('sName').value.trim();
+  const email = document.getElementById('sEmail').value.trim();
+  const password = document.getElementById('sPass').value;
+  const klass = document.getElementById('sClass').value;
+  if (!name || !email || !password){setMsg('addMsg','Name, email and password are required','err');return;}
+  setMsg('addMsg','Saving…','ok');
+  const res = await call('addStudent', {name, email, password, class:klass});
+  if (!res.ok){setMsg('addMsg', res.error, 'err'); return;}
+  setMsg('addMsg','Student created successfully.','ok');
+  ['sName','sEmail','sPass','sClass'].forEach(i => document.getElementById(i).value='');
+  loadStudents();
+}
+
+async function deleteStudent(email){
+  if (!confirm('Delete '+email+'?')) return;
+  const res = await call('deleteStudent', {email});
+  if (!res.ok){alert(res.error);return;}
+  loadStudents();
+}
+
+async function loadCourses(){
+  document.getElementById('coursesBox').innerHTML='<div class="empty">Loading…</div>';
+  const res = await call('listCourses');
+  if (!res.ok){document.getElementById('coursesBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  allCourses = res.data;
+  document.getElementById('kCourses').textContent = allCourses.length;
+  renderCourses();
+}
+function renderCourses(){
+  const q = document.getElementById('searchCrs').value.toLowerCase();
+  const list = allCourses.filter(c => !q ||
+    String(c.Course||'').toLowerCase().includes(q) ||
+    String(c.Lesson||'').toLowerCase().includes(q));
+  if (!list.length){document.getElementById('coursesBox').innerHTML='<div class="empty">No courses yet. Add one above.</div>';return;}
+  document.getElementById('coursesBox').innerHTML = `<div class="tbl-wrap"><table>
+    <thead><tr><th>Course</th><th>Lesson</th><th>Video</th><th>PDF</th><th></th></tr></thead>
+    <tbody>${list.map(c => `<tr>
+      <td><span class="badge red">${c.Course||''}</span></td>
+      <td><b>${c.Lesson||''}</b></td>
+      <td>${c.VideoURL?'<a class="link" href="'+c.VideoURL+'" target="_blank">Video ↗</a>':''}</td>
+      <td>${c.PDFURL?'<a class="link" href="'+c.PDFURL+'" target="_blank">PDF ↗</a>':''}</td>
+      <td><button class="btn btn-danger" onclick="delCourse('${c.CourseID}')">Delete</button></td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+document.getElementById('searchCrs').addEventListener('input', renderCourses);
+
+async function addCourse(){
+  const course = document.getElementById('cCourse').value.trim();
+  const lesson = document.getElementById('cLesson').value.trim();
+  const videoURL = document.getElementById('cVideo').value.trim();
+  const pdfURL = document.getElementById('cPdf').value.trim();
+  if (!course || !lesson){setMsg('cMsg','Course and Lesson are required','err');return;}
+  setMsg('cMsg','Saving…','ok');
+  const res = await call('addCourse', {course, lesson, videoURL, pdfURL});
+  if (!res.ok){setMsg('cMsg', res.error, 'err'); return;}
+  setMsg('cMsg','Lesson added.','ok');
+  ['cCourse','cLesson','cVideo','cPdf'].forEach(i => document.getElementById(i).value='');
+  loadCourses();
+}
+async function delCourse(id){
+  if (!confirm('Delete this lesson?')) return;
+  const res = await call('deleteCourse', {courseID:id});
+  if (!res.ok){alert(res.error);return;}
+  loadCourses();
+}
+
+async function postMark(){
+  const sVal = document.getElementById('mStudent').value;
+  if (!sVal){setMsg('markMsg','Select a student','err');return;}
+  const [studentEmail, studentName] = sVal.split('|');
+  const course = document.getElementById('mCourse').value.trim();
+  const test = document.getElementById('mTest').value.trim();
+  const score = document.getElementById('mScore').value;
+  const maxScore = document.getElementById('mMax').value;
+  const comments = document.getElementById('mComments').value;
+  if (!test){setMsg('markMsg','Test/lesson name is required','err');return;}
+  setMsg('markMsg','Saving…','ok');
+  const res = await call('addMark', {studentEmail, studentName, course, test, score, maxScore, teacherName:user.name, comments});
+  if (!res.ok){setMsg('markMsg', res.error, 'err'); return;}
+  setMsg('markMsg','Mark saved.','ok');
+  ['mCourse','mTest','mScore','mComments'].forEach(i => document.getElementById(i).value='');
+  loadMarks();
+}
+
+async function loadMarks(){
+  document.getElementById('marksBox').innerHTML='<div class="empty">Loading…</div>';
+  const res = await call('listMarks');
+  if (!res.ok){document.getElementById('marksBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  allMarks = res.data;
+  document.getElementById('kMarks').textContent = allMarks.length;
+  // Class average
+  if (allMarks.length){
+    const pcts = allMarks.map(m => (Number(m.MaxScore)||0) ? (Number(m.Score)/Number(m.MaxScore))*100 : 0);
+    const avg = (pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(0);
+    document.getElementById('kAvg').textContent = avg + '%';
+  } else document.getElementById('kAvg').textContent = '—';
+  renderMarks();
+}
+function renderMarks(){
+  const q = document.getElementById('searchMarks').value.toLowerCase();
+  const list = allMarks.filter(m => !q ||
+    String(m.StudentName||'').toLowerCase().includes(q) ||
+    String(m.StudentEmail||'').toLowerCase().includes(q) ||
+    String(m.Course||'').toLowerCase().includes(q) ||
+    String(m.Test||'').toLowerCase().includes(q));
+  if (!list.length){document.getElementById('marksBox').innerHTML='<div class="empty">No marks yet.</div>';return;}
+  document.getElementById('marksBox').innerHTML = `<div class="tbl-wrap"><table>
+    <thead><tr><th>Date</th><th>Student</th><th>Course</th><th>Test</th><th>Score</th><th>By</th><th>Comments</th></tr></thead>
+    <tbody>${list.map(m => {
+      const s=Number(m.Score)||0, mx=Number(m.MaxScore)||0;
+      const pct = mx ? Math.round((s/mx)*1000)/10 : null;
+      return `<tr>
+        <td>${m.Date ? new Date(m.Date).toLocaleDateString() : ''}</td>
+        <td><b>${m.StudentName||''}</b><br/><small style="color:var(--muted)">${m.StudentEmail||''}</small></td>
+        <td>${m.Course?'<span class="badge red">'+m.Course+'</span>':''}</td>
+        <td>${m.Test||''}</td>
+        <td><div class="score-cell">${s}<span style="color:var(--muted);font-size:14px;font-weight:500"> / ${mx||'-'}</span>${pct!==null?'<span class="pct">'+pct+'%</span>':''}</div></td>
+        <td>${m.TeacherName||''}</td>
+        <td>${m.Comments||''}</td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
+}
+document.getElementById('searchMarks').addEventListener('input', renderMarks);
+
+loadStudents(); loadCourses(); loadMarks(); loadExams();
+</script>
+</body>
+</html>

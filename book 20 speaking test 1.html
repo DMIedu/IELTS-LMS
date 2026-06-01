@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DMI Computer Education – IELTS Speaking Mock Test (Book 20 Test 1)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0a0e1a;--surface:#111827;--card:#1a2235;--border:#2a3a55;
+  --accent:#3b82f6;--accent2:#06b6d4;--gold:#f59e0b;
+  --green:#10b981;--red:#ef4444;--text:#e2e8f0;--muted:#64748b;--radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+header{background:linear-gradient(135deg,#0f172a,#1e3a5f);border-bottom:1px solid var(--border);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--accent2);}
+.logo span{color:var(--gold);}
+.header-right{display:flex;align-items:center;gap:10px;}
+.badge{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:.7rem;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;}
+.browser-warn{font-size:.74rem;color:var(--gold);background:rgba(245,158,11,.1);padding:4px 10px;border-radius:8px;border:1px solid rgba(245,158,11,.3);display:none;}
+
+.container{max-width:900px;margin:0 auto;padding:28px 20px;}
+
+.phases{display:flex;gap:6px;margin-bottom:28px;background:var(--surface);border-radius:50px;padding:6px;border:1px solid var(--border);}
+.phase-btn{flex:1;padding:9px 4px;border-radius:40px;border:none;font-family:'DM Sans',sans-serif;font-size:.74rem;font-weight:600;cursor:pointer;transition:all .3s;background:transparent;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.phase-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 15px rgba(59,130,246,.4);}
+.phase-btn.done{color:var(--green);}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:26px;margin-bottom:18px;}
+.card-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--accent2);margin-bottom:5px;}
+.card-sub{font-size:.82rem;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+
+.question-box{background:linear-gradient(135deg,#1e3a5f22,#06b6d422);border:1px solid var(--accent2);border-radius:10px;padding:18px 22px 14px;font-size:1.05rem;line-height:1.7;color:var(--text);margin-bottom:16px;position:relative;}
+.question-box::before{content:'"';position:absolute;top:-10px;left:14px;font-size:3rem;color:var(--accent2);opacity:.35;font-family:'Playfair Display',serif;}
+
+/* ── MIC PANEL ── */
+.mic-panel{background:var(--surface);border-radius:14px;border:2px dashed var(--border);padding:18px 18px 14px;text-align:center;transition:all .35s;}
+.mic-panel.listening{border-color:var(--red);border-style:solid;background:rgba(239,68,68,.03);}
+.mic-panel.done{border-color:var(--green);border-style:solid;}
+
+.waveform-wrap{height:48px;margin-bottom:10px;border-radius:8px;overflow:hidden;background:rgba(0,0,0,.2);}
+canvas.waveform{width:100%;height:48px;display:block;}
+
+.mic-btn{width:68px;height:68px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;transition:all .3s;font-size:1.75rem;background:linear-gradient(135deg,#1e293b,#0f172a);border:2px solid var(--border);box-shadow:0 4px 18px rgba(0,0,0,.4);}
+.mic-btn:hover{transform:scale(1.06);}
+.mic-btn.listening{background:radial-gradient(circle,#ef4444,#dc2626);border-color:var(--red);box-shadow:0 0 0 8px rgba(239,68,68,.18),0 4px 18px rgba(239,68,68,.4);animation:mp 1.4s ease-in-out infinite;}
+@keyframes mp{0%,100%{box-shadow:0 0 0 8px rgba(239,68,68,.18);}50%{box-shadow:0 0 0 18px rgba(239,68,68,.04);}}
+
+.mic-status{font-size:.8rem;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;transition:color .3s;}
+.mic-status.listening{color:var(--red);}
+.mic-status.done{color:var(--green);}
+.rec-timer{font-size:1.45rem;font-weight:700;color:var(--text);letter-spacing:3px;display:none;}
+
+.mic-controls{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap;}
+.mcc{padding:6px 14px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.mcc:hover{border-color:var(--accent);color:var(--accent);}
+
+.transcript-area{margin-top:12px;}
+.tx-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink .9s infinite;display:none;}
+.live-dot.on{display:inline-block;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.tx-wrap{position:relative;}
+textarea.tx{width:100%;min-height:95px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;resize:vertical;transition:border-color .3s;line-height:1.6;}
+textarea.tx:focus{outline:none;border-color:var(--accent);}
+textarea.tx.live{border-color:rgba(239,68,68,.5);background:rgba(239,68,68,.025);}
+.interim-overlay{position:absolute;bottom:10px;left:13px;right:13px;pointer-events:none;font-size:.88rem;color:var(--muted);font-style:italic;line-height:1.5;}
+.tx-hint{font-size:.75rem;color:var(--muted);margin-top:4px;line-height:1.5;}
+.tx-err{font-size:.76rem;color:var(--red);margin-top:3px;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.86rem;border:none;cursor:pointer;transition:all .25s;text-transform:uppercase;letter-spacing:.5px;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 14px rgba(59,130,246,.3);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,.4);}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn-outline{background:transparent;color:var(--accent);border:1px solid var(--accent);}
+.btn-outline:hover{background:rgba(59,130,246,.1);}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+
+/* INFO BOXES */
+.info-box{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.25);border-radius:10px;padding:11px 15px;margin-bottom:12px;font-size:.82rem;color:var(--muted);line-height:1.6;}
+.info-box strong{color:var(--accent2);}
+.info-box.warn{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.3);color:var(--gold);}
+.info-box.err{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.3);color:var(--red);}
+.info-box.ok{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.3);color:var(--green);}
+
+/* CUE CARD */
+.cue-card{background:linear-gradient(135deg,#1a3a2a,#0a2a1a);border:1px solid var(--green);border-radius:12px;padding:18px 20px;margin-bottom:14px;}
+.cue-card h3{color:var(--green);font-size:.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;}
+.cue-card .ct{font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:9px;}
+.cue-card ul{list-style:none;padding:0;}
+.cue-card ul li{padding:3px 0;font-size:.86rem;color:var(--text);}
+.cue-card ul li::before{content:"▸ ";color:var(--green);}
+
+/* PREP BAR */
+.prep-bar{background:var(--surface);border-radius:10px;border:1px solid var(--border);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.prep-cnt{font-size:1.3rem;font-weight:700;color:var(--gold);min-width:38px;font-variant-numeric:tabular-nums;}
+.prep-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.prep-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--accent));border-radius:3px;transition:width .5s linear;}
+.prep-lbl{font-size:.76rem;color:var(--muted);}
+
+/* SCORES */
+.smg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+@media(max-width:540px){.smg{grid-template-columns:repeat(2,1fr);}}
+.sc{background:var(--surface);border-radius:10px;padding:12px 8px;border:1px solid var(--border);text-align:center;}
+.sl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;}
+.sv{font-family:'Playfair Display',serif;font-size:1.85rem;font-weight:700;}
+.sb{font-size:.72rem;color:var(--muted);margin-top:2px;}
+
+.score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;}
+@media(max-width:520px){.score-grid{grid-template-columns:1fr;}}
+.score-grid .sc{padding:15px;}
+.score-grid .sv{font-size:2.1rem;}
+
+.overall-score{background:linear-gradient(135deg,#1e3a5f,#0f2a4a);border:1px solid var(--accent);border-radius:14px;padding:22px;text-align:center;margin-bottom:18px;}
+.ol{font-size:.8rem;color:var(--accent2);text-transform:uppercase;letter-spacing:1px;}
+.ov{font-family:'Playfair Display',serif;font-size:3.8rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.od{color:var(--muted);font-size:.87rem;margin-top:4px;}
+
+.fsec{margin-top:14px;}
+.fsec h4{font-size:.8rem;color:var(--accent2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;}
+.ft{font-size:.88rem;line-height:1.75;color:var(--text);background:var(--surface);border-radius:10px;padding:13px;border-left:3px solid var(--accent2);}
+
+.loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.87rem;padding:10px;}
+.spinner{width:19px;height:19px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--accent);animation:spin .8s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.api-key-section{background:var(--card);border:1px solid var(--gold);border-radius:var(--radius);padding:30px;text-align:center;}
+.api-key-section h2{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);margin-bottom:8px;}
+.api-key-section p{color:var(--muted);font-size:.85rem;margin-bottom:18px;line-height:1.6;}
+.ir{display:flex;gap:10px;max-width:520px;margin:0 auto;}
+.ir input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;}
+.ir input:focus{outline:none;border-color:var(--accent);}
+
+.hidden{display:none!important;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DMI <span>AI</span> Speaking Examiner</div>
+  <div class="header-right">
+    <span class="browser-warn" id="browser-warn">⚠ Use Chrome/Edge for microphone</span>
+    <div class="badge">Book 20 Test 1 · Claude AI</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- SETUP -->
+  <div id="setup-section" class="api-key-section">
+    <h2>🎤 IELTS Speaking Mock Test</h2>
+    <p>
+      Enter your Anthropic API key to begin.<br>
+      Your voice is <strong>transcribed live</strong> via the browser's built-in Speech API —<br>
+      then assessed by Claude on all <strong>4 official IELTS band descriptors</strong>.
+    </p>
+    <div class="ir">
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-…"/>
+      <button class="btn btn-primary" onclick="startSetup()">▶ Begin</button>
+    </div>
+    <p style="margin-top:10px;font-size:.75rem;color:var(--muted);">Key used only in your browser — never stored.</p>
+    <div id="setup-err" style="margin-top:10px;"></div>
+  </div>
+
+  <!-- MAIN TEST -->
+  <div id="main-test" class="hidden">
+
+    <div class="phases">
+      <button class="phase-btn active" id="phase-btn-1">Part 1 · Interview</button>
+      <button class="phase-btn" id="phase-btn-2">Part 2 · Cue Card</button>
+      <button class="phase-btn" id="phase-btn-3">Part 3 · Discussion</button>
+      <button class="phase-btn" id="phase-btn-r">📊 Results</button>
+    </div>
+
+    <!-- PART 1 -->
+    <div id="part1" class="hidden">
+      <div class="card">
+        <div class="card-title">Part 1 — Introduction &amp; Interview</div>
+        <div class="card-sub">Answer naturally for 1–2 minutes. Click the microphone — your words appear live. Edit freely, then click Assess.</div>
+        <div id="p1-container"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="next-p1-btn" onclick="nextP1()">Next Question →</button>
+          <button class="btn btn-outline hidden" id="finish-p1-btn" onclick="goToPhase(2)">Finish Part 1 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div id="part2" class="hidden">
+      <div class="card">
+        <div class="card-title">Part 2 — Individual Long Turn</div>
+        <div class="card-sub">1 minute to prepare, then speak for 1–2 minutes covering all cue card points.</div>
+        <div id="p2-cue"></div>
+        <div id="p2-prep"></div>
+        <div id="p2-mic"></div>
+        <div id="p2-fb"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="p2-assess-btn" onclick="assessPart2()">🤖 Assess My Answer</button>
+          <button class="btn btn-outline hidden" id="p2-next-btn" onclick="goToPhase(3)">Continue to Part 3 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 3 -->
+    <div id="part3" class="hidden">
+      <div class="card">
+        <div class="card-title">Part 3 — Two-way Discussion</div>
+        <div class="card-sub">Give detailed, reasoned answers with examples and developed ideas.</div>
+        <div id="p3-container"></div>
+        <div class="btn-row">
+          <button class="btn btn-primary" id="next-p3-btn" onclick="nextP3()">Next Question →</button>
+          <button class="btn btn-outline hidden" id="finish-p3-btn" onclick="showResults()">View Results 🏆</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-section" class="hidden">
+      <div class="overall-score">
+        <div class="ol">Overall Band Score</div>
+        <div class="ov" id="overall-score">—</div>
+        <div class="od" id="overall-desc">Calculating…</div>
+      </div>
+      <div class="score-grid" id="score-grid"></div>
+      <div class="card">
+        <div class="card-title">📋 Examiner's Full Report</div>
+        <div id="detailed-fb"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="restartTest()">🔄 New Test</button>
+        <button class="btn btn-outline" onclick="downloadReport()">⬇ Download Report</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+//  TEXT TO SPEECH (AI EXAMINER OUT LOUD)
+// ═══════════════════════════════════════════════
+let activePart = 'p1';
+function speakQuestion(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  const voices = window.speechSynthesis.getVoices();
+  const engVoice = voices.find(v => v.lang.startsWith('en-GB') || v.lang.startsWith('en-US')) || voices[0];
+  if (engVoice) utterance.voice = engVoice;
+  utterance.rate = 0.95;
+  
+  const micStatus = document.getElementById(activePart + '-micst');
+  if (micStatus) {
+    micStatus.textContent = "AI Examiner is speaking...";
+    micStatus.className = "mic-status speaking";
+  }
+  
+  utterance.onend = () => {
+    if (micStatus && micStatus.textContent === "AI Examiner is speaking...") {
+      micStatus.textContent = "Click microphone to start speaking";
+      micStatus.className = "mic-status";
+    }
+  };
+  
+  window.speechSynthesis.speak(utterance);
+}
+
+// ═══════════════════════════════════════════════
+//  AUDIO RECORDING (MEDIA RECORDER API)
+// ═══════════════════════════════════════════════
+let mediaRecorder = null;
+let recordedChunks = [];
+let recordedBlobs = {};
+
+function startMediaRecording(stream, slotId) {
+  recordedChunks = [];
+  const options = { mimeType: 'audio/webm' };
+  try {
+    mediaRecorder = new MediaRecorder(stream, options);
+  } catch (e) {
+    mediaRecorder = new MediaRecorder(stream);
+  }
+  
+  mediaRecorder.ondataavailable = e => {
+    if (e.data && e.data.size > 0) {
+      recordedChunks.push(e.data);
+    }
+  };
+  
+  mediaRecorder.onstop = () => {
+    const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+    const url = URL.createObjectURL(blob);
+    recordedBlobs[slotId] = url;
+    
+    const playerContainer = document.getElementById(slotId + '-player-container');
+    if (playerContainer) {
+      playerContainer.innerHTML = `
+        <div class="audio-player-wrap" style="display:flex;align-items:center;justify-content:center;gap:12px;margin:12px 0 6px;padding:8px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;">
+          <audio src="${url}" controls style="height:32px;border-radius:20px;"></audio>
+          <button class="mcc" style="border-color:var(--accent2);color:var(--accent2);padding:6px 12px;" onclick="downloadAudioClip('${slotId}')">⬇ Download Audio</button>
+        </div>
+      `;
+    }
+  };
+  
+  mediaRecorder.start();
+}
+
+function stopMediaRecording() {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+    mediaRecorder.stop();
+  }
+}
+
+function downloadAudioClip(slotId) {
+  const url = recordedBlobs[slotId];
+  if (url) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `DMI_IELTS_Speaking_${slotId}_${new Date().toISOString().slice(0,10)}.webm`;
+    a.click();
+  }
+}
+
+//  STATE
+// ═══════════════════════════════════════════════
+let apiKey = '';
+let p1Idx = 0, p3Idx = 0;
+let scores = {fluency:[],lexical:[],grammar:[],pronunciation:[]};
+let allFeedback = [];
+
+// Speech state
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let isRecording = false;
+let activeSlot = null;
+let finalTexts = {};          // {slotId: accumulated final text}
+let recSec = 0, recInterval = null;
+
+// Audio visualizer
+let audioCtx = null, analyser = null, micStream = null, rafId = null;
+
+// ═══════════════════════════════════════════════
+//  QUESTION BANK
+// ═══════════════════════════════════════════════
+const QB = {
+  p1:[
+    "Do you use technology a lot in your daily life? Why or why not?",
+    "What kind of technology do you find most useful and why?",
+    "Do you think young people spend too much time on their phones?"
+  ],
+  p2:{
+    title:"Describe a piece of technology that you use regularly",
+    pts:["What it is and what it does","How long you have been using it","Why it is important to you","How it has changed your daily life"]
+  },
+  p3:[
+    "How has technology changed the way people communicate in society?",
+    "Do you think artificial intelligence will eventually replace human workers? Why?",
+    "What are the main advantages and disadvantages of social media for young people?"
+  ]
+};
+
+// ═══════════════════════════════════════════════
+//  BROWSER CHECK
+// ═══════════════════════════════════════════════
+function checkBrowser(){
+  if(!SR) document.getElementById('browser-warn').style.display='inline-block';
+}
+window.addEventListener('DOMContentLoaded', () => {
+  checkBrowser();
+  const savedKey = localStorage.getItem('dmi:ielts:speaking:apikey');
+  if (savedKey) {
+    document.getElementById('api-key-input').value = savedKey;
+  }
+  
+  // Stop speaking when user exits the page
+  window.addEventListener('beforeunload', () => {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+  });
+});
+
+// ═══════════════════════════════════════════════
+//  SETUP
+// ═══════════════════════════════════════════════
+function startSetup(){
+  const k = document.getElementById('api-key-input').value.trim();
+  if(!k.startsWith('sk-')){
+    document.getElementById('setup-err').innerHTML=`<div class="info-box err">⚠ Enter a valid Anthropic API key (starts with sk-ant-).</div>`;
+    return;
+  }
+  apiKey=k;
+  document.getElementById('setup-section').classList.add('hidden');
+  document.getElementById('main-test').classList.remove('hidden');
+  goToPhase(1);
+}
+
+// ═══════════════════════════════════════════════
+//  PHASE ROUTER
+// ═══════════════════════════════════════════════
+function goToPhase(n){
+  stopRecording();
+  ['part1','part2','part3','results-section'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  ['phase-btn-1','phase-btn-2','phase-btn-3','phase-btn-r'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
+  if(n===1){document.getElementById('part1').classList.remove('hidden');document.getElementById('phase-btn-1').classList.add('active');initP1();}
+  else if(n===2){document.getElementById('part2').classList.remove('hidden');document.getElementById('phase-btn-2').classList.add('active');initP2();}
+  else if(n===3){document.getElementById('part3').classList.remove('hidden');document.getElementById('phase-btn-3').classList.add('active');initP3();}
+  else{document.getElementById('results-section').classList.remove('hidden');document.getElementById('phase-btn-r').classList.add('active');}
+}
+
+// ═══════════════════════════════════════════════
+//  MIC PANEL BUILDER  — one per question slot
+// ═══════════════════════════════════════════════
+function micPanel(slotId){
+  const p = slotId.split('-')[0]; // "p1","p2","p3"
+  return `
+  <div class="mic-panel" id="${p}-panel">
+    <div class="waveform-wrap">
+      <canvas class="waveform" id="${p}-wave"></canvas>
+    </div>
+    <button class="mic-btn" id="${p}-micbtn" title="Click to record / stop"
+      onclick="toggleMic('${slotId}','${p}')">🎤</button>
+    <div class="mic-status" id="${p}-micst">Click microphone to start speaking</div>
+    <div class="rec-timer" id="${p}-timer">0:00</div>
+    <div class="mic-controls">
+      <button class="mcc" onclick="clearSlot('${slotId}','${p}')">🗑 Clear</button>
+      <button class="mcc" onclick="stopRecording()">⏹ Stop</button>
+    </div>
+  </div>
+  <div class="transcript-area">
+    <div class="tx-label">
+      <span class="live-dot" id="${p}-dot"></span>
+      Live Transcript — edit freely after recording
+    </div>
+    <div class="tx-wrap">
+      <textarea class="tx" id="${slotId}"
+        placeholder="Your spoken words will appear here automatically…"
+        rows="5" oninput="finalTexts['${slotId}']=this.value"></textarea>
+      <div class="interim-overlay" id="${slotId}-interim"></div>
+    </div>
+    <div class="tx-hint">💡 Words appear live while you speak &nbsp;·&nbsp; Stop recording then click <strong>Assess</strong></div>
+    <div class="tx-err" id="${slotId}-err"></div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════
+//  MIC TOGGLE
+// ═══════════════════════════════════════════════
+function toggleMic(slotId, part){
+  if(isRecording && activeSlot===slotId){ stopRecording(); return; }
+  if(isRecording) stopRecording();
+  beginRecording(slotId, part);
+}
+
+async function beginRecording(slotId, part){
+  if(!SR){
+    document.getElementById(slotId+'-err').textContent='Speech API not supported — type your answer manually (Chrome/Edge required).';
+    return;
+  }
+
+  // Request mic permission early so waveform works
+  try{
+    micStream = await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+  } catch(e){
+    document.getElementById(slotId+'-err').textContent='Microphone access denied. Enable mic in browser settings.';
+    return;
+  }
+
+  isRecording = true;
+  activeSlot = slotId;
+  finalTexts[slotId] = finalTexts[slotId]||'';
+
+  // Build recognition
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = e => {
+    if(activeSlot!==slotId) return;
+    let interim='', addFinal='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const t=e.results[i][0].transcript;
+      if(e.results[i].isFinal) addFinal+=t+' ';
+      else interim+=t;
+    }
+    if(addFinal) finalTexts[slotId]=(finalTexts[slotId]||'')+addFinal;
+    const ta=document.getElementById(slotId);
+    if(ta) ta.value=finalTexts[slotId];
+    const ov=document.getElementById(slotId+'-interim');
+    if(ov) ov.textContent=interim;
+  };
+
+  recognition.onerror = e=>{
+    if(e.error==='no-speech') return;
+    stopRecording();
+    document.getElementById(slotId+'-err').textContent='Mic error: '+e.error+'. Check browser permissions.';
+  };
+
+  recognition.onend = ()=>{ if(isRecording) { try{recognition.start();}catch(ex){} } };
+
+  // Start
+  try{ recognition.start(); }catch(ex){}
+  startMediaRecording(micStream, slotId);
+
+  // UI
+  document.getElementById(part+'-micbtn').classList.add('listening');
+  document.getElementById(part+'-micbtn').innerHTML='⏹';
+  document.getElementById(part+'-micst').textContent='Listening… speak now';
+  document.getElementById(part+'-micst').className='mic-status listening';
+  document.getElementById(part+'-dot').classList.add('on');
+  document.getElementById(slotId).classList.add('live');
+  document.getElementById(part+'-panel').classList.add('listening');
+
+  // Timer
+  recSec=0;
+  const timerEl=document.getElementById(part+'-timer');
+  timerEl.style.display='block';
+  timerEl.textContent='0:00';
+  recInterval=setInterval(()=>{
+    recSec++;
+    const m=Math.floor(recSec/60),s=recSec%60;
+    timerEl.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+  },1000);
+
+  // Waveform
+  startWaveform(part+'-wave', micStream);
+}
+
+function stopRecording(){
+  if(!isRecording) return;
+  isRecording=false;
+  if(recognition){try{recognition.stop();}catch(e){} recognition=null;}
+  clearInterval(recInterval);
+
+  const slotId=activeSlot;
+  if(slotId){
+    const part=slotId.split('-')[0];
+
+    // Clear interim
+    const ov=document.getElementById(slotId+'-interim');
+    if(ov) ov.textContent='';
+
+    // Update UI
+    const btn=document.getElementById(part+'-micbtn');
+    const st=document.getElementById(part+'-micst');
+    const panel=document.getElementById(part+'-panel');
+    const dot=document.getElementById(part+'-dot');
+    const ta=document.getElementById(slotId);
+
+    if(btn){btn.classList.remove('listening');btn.innerHTML='🎤';}
+    if(st){st.textContent=`Recorded · ${fmtTime(recSec)} · edit below if needed`;st.className='mic-status done';}
+    if(panel){panel.classList.remove('listening');panel.classList.add('done');}
+    if(dot) dot.classList.remove('on');
+    if(ta) ta.classList.remove('live');
+  }
+
+  stopWaveform();
+  stopMediaRecording();
+  activeSlot=null;
+}
+
+function clearSlot(slotId, part){
+  finalTexts[slotId]='';
+  const ta=document.getElementById(slotId);
+  if(ta) ta.value='';
+  const ov=document.getElementById(slotId+'-interim');
+  if(ov) ov.textContent='';
+  const panel=document.getElementById(part+'-panel');
+  if(panel){panel.classList.remove('done');panel.classList.remove('listening');}
+  const st=document.getElementById(part+'-micst');
+  if(st){st.textContent='Click microphone to start speaking';st.className='mic-status';}
+}
+
+function fmtTime(s){const m=Math.floor(s/60),sec=s%60;return`${m}:${sec.toString().padStart(2,'0')}`;}
+
+// ═══════════════════════════════════════════════
+//  WAVEFORM VISUALIZER
+// ═══════════════════════════════════════════════
+function startWaveform(canvasId, stream){
+  try{
+    if(!audioCtx) audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const src=audioCtx.createMediaStreamSource(stream);
+    analyser=audioCtx.createAnalyser();
+    analyser.fftSize=256;
+    src.connect(analyser);
+    drawWave(canvasId);
+  }catch(e){}
+}
+
+function drawWave(canvasId){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas||!analyser){return;}
+  const ctx2=canvas.getContext('2d');
+  const W=canvas.clientWidth||800, H=canvas.clientHeight||48;
+  canvas.width=W*window.devicePixelRatio;
+  canvas.height=H*window.devicePixelRatio;
+  ctx2.scale(window.devicePixelRatio,window.devicePixelRatio);
+  const buf=new Uint8Array(analyser.frequencyBinCount);
+  function draw(){
+    rafId=requestAnimationFrame(draw);
+    analyser.getByteTimeDomainData(buf);
+    ctx2.clearRect(0,0,W,H);
+    // glow
+    ctx2.strokeStyle='#ef4444';
+    ctx2.lineWidth=2;
+    ctx2.shadowColor='#ef4444';
+    ctx2.shadowBlur=8;
+    ctx2.beginPath();
+    const sl=W/buf.length;
+    let x=0;
+    for(let i=0;i<buf.length;i++){
+      const v=buf[i]/128;
+      const y=(v*H)/2;
+      i===0?ctx2.moveTo(x,y):ctx2.lineTo(x,y);
+      x+=sl;
+    }
+    ctx2.stroke();
+    ctx2.shadowBlur=0;
+  }
+  draw();
+}
+
+function stopWaveform(){
+  if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+  if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}
+  analyser=null;
+  // Draw idle line on all canvases
+  ['p1-wave','p2-wave','p3-wave'].forEach(id=>{
+    const c=document.getElementById(id);
+    if(!c) return;
+    const ctx2=c.getContext('2d');
+    ctx2.clearRect(0,0,c.width,c.height);
+    ctx2.strokeStyle='#2a3a55';
+    ctx2.lineWidth=1.5;
+    ctx2.beginPath();
+    const mid=(c.height/window.devicePixelRatio)/2;
+    ctx2.moveTo(0,mid);ctx2.lineTo(c.width/window.devicePixelRatio,mid);
+    ctx2.stroke();
+  });
+}
+
+// ═══════════════════════════════════════════════
+//  PART 1
+// ═══════════════════════════════════════════════
+function initP1(){ p1Idx=0; renderP1(); }
+
+function renderP1(){
+  const box=document.getElementById('p1-container');
+  const nxt=document.getElementById('next-p1-btn');
+  const fin=document.getElementById('finish-p1-btn');
+  if(p1Idx>=QB.p1.length){
+    box.innerHTML=`<div class="info-box ok">✅ All Part 1 questions answered. Continue to Part 2.</div>`;
+    nxt.style.display='none'; fin.classList.remove('hidden'); return;
+  }
+  const q=QB.p1[p1Idx];
+  box.innerHTML=`
+    <div class="question-box">${q}</div>
+    ${micPanel('p1-tx')}
+    <div id="p1-fb"></div>
+    <div class="btn-row" style="margin-top:10px">
+      <button class="btn btn-primary"
+        onclick="assessQ('p1-tx','p1-fb',QB.p1[${p1Idx}])">🤖 Assess This Answer</button>
+    </div>`;
+  finalTexts['p1-tx']='';
+  nxt.style.display=''; fin.classList.add('hidden');
+}
+
+function nextP1(){ stopRecording(); p1Idx++; renderP1(); }
+
+// ═══════════════════════════════════════════════
+//  PART 2
+// ═══════════════════════════════════════════════
+function initP2(){
+  stopRecording();
+  document.getElementById('p2-cue').innerHTML=`
+    <div class="cue-card">
+      <h3>📋 Cue Card</h3>
+      <div class="ct">${QB.p2.title}</div>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:7px">You should say:</p>
+      <ul>${QB.p2.pts.map(p=>`<li>${p}</li>`).join('')}</ul>
+    </div>`;
+
+  let ps=60;
+  document.getElementById('p2-prep').innerHTML=`
+    <div class="prep-bar">
+      <div class="prep-lbl">Prepare</div>
+      <div class="prep-cnt" id="p2-pcnt">1:00</div>
+      <div class="prep-track"><div class="prep-fill" id="p2-pfill" style="width:100%"></div></div>
+      <div class="prep-lbl">left</div>
+    </div>`;
+  const pt=setInterval(()=>{
+    ps--;
+    const m=Math.floor(ps/60),s=ps%60;
+    const el=document.getElementById('p2-pcnt');
+    const fl=document.getElementById('p2-pfill');
+    if(el) el.textContent=`${m}:${s.toString().padStart(2,'0')}`;
+    if(fl) fl.style.width=(ps/60*100)+'%';
+    if(ps<=0){clearInterval(pt); if(el){el.textContent='Start!';el.style.color='var(--green)';}}
+  },1000);
+
+  document.getElementById('p2-mic').innerHTML=micPanel('p2-tx');
+  document.getElementById('p2-fb').innerHTML='';
+  document.getElementById('p2-next-btn').classList.add('hidden');
+  finalTexts['p2-tx']='';
+}
+
+async function assessPart2(){
+  await assessQ('p2-tx','p2-fb', QB.p2.title);
+  document.getElementById('p2-next-btn').classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════════════
+//  PART 3
+// ═══════════════════════════════════════════════
+function initP3(){ p3Idx=0; renderP3(); }
+
+function renderP3(){
+  const box=document.getElementById('p3-container');
+  const nxt=document.getElementById('next-p3-btn');
+  const fin=document.getElementById('finish-p3-btn');
+  if(p3Idx>=QB.p3.length){
+    box.innerHTML=`<div class="info-box ok">✅ Part 3 complete. View your full results!</div>`;
+    nxt.style.display='none'; fin.classList.remove('hidden'); return;
+  }
+  const q=QB.p3[p3Idx];
+  box.innerHTML=`
+    <div class="question-box">${q}</div>
+    ${micPanel('p3-tx')}
+    <div id="p3-fb"></div>
+    <div class="btn-row" style="margin-top:10px">
+      <button class="btn btn-primary"
+        onclick="assessQ('p3-tx','p3-fb',QB.p3[${p3Idx}])">🤖 Assess This Answer</button>
+    </div>`;
+  finalTexts['p3-tx']='';
+  nxt.style.display=''; fin.classList.add('hidden');
+}
+
+function nextP3(){ stopRecording(); p3Idx++; renderP3(); }
+
+// ═══════════════════════════════════════════════
+//  AI ASSESSMENT
+// ═══════════════════════════════════════════════
+async function assessQ(slotId, fbId, question){
+  stopRecording();
+  const ta=document.getElementById(slotId);
+  const fb=document.getElementById(fbId);
+  const txt=(ta?.value||finalTexts[slotId]||'').trim();
+
+  if(!txt||txt.length<15){
+    fb.innerHTML=`<div class="info-box warn">⚠ Please speak (or type) your answer first — at least a few sentences.</div>`;
+    return;
+  }
+
+  fb.innerHTML=`<div class="loading"><div class="spinner"></div>AI Examiner is evaluating…</div>`;
+
+  const prompt=`You are an official British Council IELTS Speaking examiner.
+
+QUESTION: ${question}
+CANDIDATE TRANSCRIPT: ${txt}
+
+Score on the 4 official IELTS criteria using band 1-9 (half steps allowed):
+1. Fluency and Coherence
+2. Lexical Resource
+3. Grammatical Range and Accuracy
+4. Pronunciation (infer from text quality and sophistication)
+
+Return ONLY minified valid JSON — no markdown, no code fences:
+{"fluency":6.5,"lexical":6.0,"grammar":6.5,"pronunciation":6.0,"overall":6.5,"strengths":"Specific strengths with examples from the transcript","improvements":"Two concrete improvements with examples","model_answer_hint":"One example sentence showing Band 7+ language for this question"}`;
+
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:900,messages:[{role:"user",content:prompt}]})
+    });
+    const data=await res.json();
+    const raw=data.content?.[0]?.text||'{}';
+    const result=JSON.parse(raw.replace(/```json|```/g,'').trim());
+
+    scores.fluency.push(result.fluency||6);
+    scores.lexical.push(result.lexical||6);
+    scores.grammar.push(result.grammar||6);
+    scores.pronunciation.push(result.pronunciation||6);
+    allFeedback.push({question,response:txt,...result});
+
+    const col=s=>s>=7?'var(--green)':s>=5.5?'var(--gold)':'var(--red)';
+
+    fb.innerHTML=`
+      <div style="margin-top:14px">
+        <div class="smg">
+          ${[['Fluency','fluency'],['Lexical','lexical'],['Grammar','grammar'],['Pronunc.','pronunciation']].map(([l,k])=>`
+            <div class="sc">
+              <div class="sl">${l}</div>
+              <div class="sv" style="color:${col(result[k])}">${result[k]??'–'}</div>
+            </div>`).join('')}
+        </div>
+        <div class="fsec">
+          <h4>✅ Strengths</h4>
+          <div class="ft" style="border-color:var(--green)">${result.strengths||'–'}</div>
+        </div>
+        <div class="fsec" style="margin-top:10px">
+          <h4>📈 Areas to Improve</h4>
+          <div class="ft" style="border-color:var(--gold)">${result.improvements||'–'}</div>
+        </div>
+        <div class="fsec" style="margin-top:10px">
+          <h4>💡 Band 7+ Model Sentence</h4>
+          <div class="ft" style="border-color:var(--accent)">${result.model_answer_hint||'–'}</div>
+        </div>
+      </div>`;
+  }catch(err){
+    fb.innerHTML=`<div class="info-box err">❌ Error: ${err.message}. Check API key.</div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  RESULTS
+// ═══════════════════════════════════════════════
+async function showResults(){
+  stopRecording();
+  goToPhase(4);
+
+  const avg=arr=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1):0;
+  const fA=parseFloat(avg(scores.fluency)),lA=parseFloat(avg(scores.lexical)),
+        gA=parseFloat(avg(scores.grammar)),pA=parseFloat(avg(scores.pronunciation));
+  const ov=((fA+lA+gA+pA)/4).toFixed(1);
+  const band=b=>b>=8.5?"Expert User":b>=7.5?"Very Good User":b>=6.5?"Competent User":b>=5.5?"Modest User":b>=4.5?"Limited User":"Extremely Limited";
+  const col=s=>s>=7?'var(--green)':s>=5.5?'var(--gold)':'var(--red)';
+
+  document.getElementById('overall-score').textContent=ov;
+  document.getElementById('overall-desc').textContent=band(parseFloat(ov));
+  document.getElementById('score-grid').innerHTML=[
+    ['Fluency & Coherence',fA],['Lexical Resource',lA],
+    ['Grammatical Range',gA],['Pronunciation',pA]
+  ].map(([l,v])=>`
+    <div class="sc">
+      <div class="sl">${l}</div>
+      <div class="sv" style="color:${col(v)}">${v}</div>
+      <div class="sb">${band(v)}</div>
+    </div>`).join('');
+
+  document.getElementById('detailed-fb').innerHTML=`<div class="loading"><div class="spinner"></div>Generating personalised examiner report…</div>`;
+
+  const summary=allFeedback.map((f,i)=>`Q${i+1}[${f.overall}]: "${f.question.substring(0,55)}…"`).join('\n');
+  const prompt=`You are a senior IELTS Speaking examiner. Write a formal, personalised performance report.
+
+Scores — Fluency:${fA} Lexical:${lA} Grammar:${gA} Pronunciation:${pA} Overall:${ov}
+Questions assessed: ${allFeedback.length}
+${summary}
+
+Write 200-250 words covering: performance summary, key strengths with evidence, priority improvements with study tips, recommended resources, realistic next-attempt target and timeline.
+Professional tone. No markdown headers. Well-structured paragraphs.`;
+
+  try{
+    const res=await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:700,messages:[{role:"user",content:prompt}]})
+    });
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'';
+    document.getElementById('detailed-fb').innerHTML=`<div class="ft" style="border-color:var(--accent2)">${text.replace(/\n\n/g,'</p><p style="margin-top:10px">').replace(/\n/g,'<br>')}</div>`;
+  }catch(e){
+    document.getElementById('detailed-fb').innerHTML=`<div class="ft">Overall Band: ${ov} — ${band(parseFloat(ov))}</div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  RESTART + DOWNLOAD
+// ═══════════════════════════════════════════════
+function restartTest(){
+  stopRecording();
+  scores={fluency:[],lexical:[],grammar:[],pronunciation:[]};
+  allFeedback=[]; p1Idx=0; p3Idx=0; finalTexts={};
+  goToPhase(1);
+}
+
+function downloadReport(){
+  const avg=arr=>arr.length?(arr.reduce((a,b)=>a+b,0)/arr.length).toFixed(1):'–';
+  const ov=((parseFloat(avg(scores.fluency))+parseFloat(avg(scores.lexical))+parseFloat(avg(scores.grammar))+parseFloat(avg(scores.pronunciation)))/4).toFixed(1);
+  const lines=[
+    `IELTS SPEAKING MOCK TEST — AI EXAMINER REPORT`,
+    `Generated : ${new Date().toLocaleString()}`,
+    ``,`OVERALL BAND SCORE : ${ov}`,``,
+    `CRITERION SCORES`,
+    `  Fluency & Coherence      : ${avg(scores.fluency)}`,
+    `  Lexical Resource         : ${avg(scores.lexical)}`,
+    `  Grammatical Range & Acc. : ${avg(scores.grammar)}`,
+    `  Pronunciation            : ${avg(scores.pronunciation)}`,``,
+    `RESPONSES ASSESSED : ${allFeedback.length}`,
+    `${'─'.repeat(60)}`,
+    ...allFeedback.flatMap((f,i)=>[
+      ``,`Q${i+1}: ${f.question}`,
+      `Response   : ${f.response}`,
+      `Band Score : ${f.overall}`,
+      `Strengths  : ${f.strengths}`,
+      `Improve    : ${f.improvements}`,
+      `─`.repeat(60)
+    ])
+  ];
+  const blob=new Blob([lines.join('\n')],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='IELTS_AI_Speaking_Report.txt';
+  a.click();
+}
+</script>
+</body>
+</html>

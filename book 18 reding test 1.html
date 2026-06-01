@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DMI Computer Education – IELTS Reading Exam (Book 18 Test 1)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dmi-red:#c0202a;--dmi-red-dark:#8f1118;--dmi-red-light:#fde8e9;
+  --navy:#0f1e2d;--blue:#1a3a5c;--sky:#2a7abf;
+  --border:#d5dce8;--text:#1e2d40;--muted:#6b7a90;
+  --bg:#f2f5f9;--white:#fff;
+  --green:#1e7a45;--green-l:#e6f4ec;
+  --amber:#d97706;--amber-l:#fef3cd;
+  --highlight:#ffe566;--gold:#c9903a;
+}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* ── LANDING ── */
+#screenLanding{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 50%,#0f2236 100%);position:relative;overflow:hidden;align-items:stretch}
+#screenLanding::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 10% 20%,rgba(192,32,42,.18) 0%,transparent 55%),radial-gradient(ellipse at 90% 75%,rgba(42,122,191,.15) 0%,transparent 50%)}
+.land-header{position:relative;z-index:2;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:12px 50px}
+.dmi-logo-wrap{display:flex;align-items:center;gap:12px}
+.dmi-logo-img{width:44px;height:44px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+.dmi-logo-text .name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:white;line-height:1.1}
+.dmi-logo-text .tagline{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:1.2px;text-transform:uppercase}
+.land-header-right{display:flex;align-items:center;gap:20px;font-size:12px;color:rgba(255,255,255,.6)}
+.land-header-right a{color:rgba(255,255,255,.8);text-decoration:none}.land-header-right a:hover{color:white}
+.land-body{display:grid;grid-template-columns:1fr 1fr;flex:1;position:relative;z-index:1}
+.land-left{display:flex;flex-direction:column;justify-content:center;padding:50px 50px 60px 70px;color:white}
+.land-since{display:inline-flex;align-items:center;gap:8px;background:rgba(192,32,42,.2);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:24px;width:fit-content}
+.land-since::before{content:'';width:7px;height:7px;background:var(--dmi-red);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.land-dept{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:600}
+.land-h1{font-family:'Playfair Display',serif;font-size:clamp(34px,3.5vw,54px);line-height:1.1;color:white;margin-bottom:8px}
+.land-h1 em{font-style:italic;color:var(--gold)}
+.land-sub{font-size:15px;color:rgba(255,255,255,.62);line-height:1.75;max-width:400px;margin-bottom:36px}
+.award-badge{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 16px;margin-bottom:32px;max-width:400px}
+.award-icon{font-size:24px;flex-shrink:0}
+.award-text .t{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.8px}
+.award-text .s{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;line-height:1.4}
+.land-stats{display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;width:fit-content}
+.lst{padding:14px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.lst:last-child{border-right:none}
+.lst .n{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:white;line-height:1}
+.lst .l{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.land-right{display:flex;align-items:center;justify-content:center;padding:40px 60px 40px 30px}
+.reg-card{background:white;border-radius:20px;padding:36px 36px 32px;width:100%;max-width:450px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .5s cubic-bezier(.2,.8,.3,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.card-dmi-header{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.card-dmi-logo{width:48px;height:48px;border-radius:10px;object-fit:cover;border:2px solid var(--dmi-red)}
+.card-dmi-info .org{font-size:14px;font-weight:800;color:var(--navy);letter-spacing:.3px}
+.card-dmi-info .dept{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.card-dmi-info .sub{font-size:11px;color:var(--muted);margin-top:1px}
+.reg-card h2{font-size:19px;color:var(--navy);font-weight:700;margin-bottom:3px}
+.reg-card .sub{font-size:12.5px;color:var(--muted);margin-bottom:22px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px}
+.field input,.field select{border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--text);outline:none;transition:border .15s;background:var(--bg)}
+.field input:focus,.field select:focus{border-color:var(--sky);background:white;box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.field.has-error input,.field.has-error select{border-color:var(--dmi-red)}
+.err-msg{color:var(--dmi-red);font-size:11px;display:none}
+.field.has-error .err-msg{display:block}
+.agree-row{display:flex;align-items:flex-start;gap:9px;margin:14px 0}
+.agree-row input{margin-top:3px;accent-color:var(--dmi-red);flex-shrink:0}
+.agree-row label{font-size:12px;color:var(--muted);line-height:1.5}
+.btn-start{width:100%;padding:13px;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));box-shadow:0 6px 20px rgba(192,32,42,.35);transition:all .2s}
+.btn-start:hover{transform:translateY(-2px)}
+.admin-link{text-align:center;margin-top:12px;font-size:12px;color:var(--muted)}
+.admin-link a{color:var(--sky);text-decoration:none;font-weight:600;cursor:pointer}
+.land-footer{position:relative;z-index:2;background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.07);padding:10px 50px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35)}
+
+/* ── EXAM ── */
+#screenExam{background:var(--bg);overflow:hidden;height:100vh}
+.topbar{background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.3);z-index:10;position:relative}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.dmi-badge-sm{background:var(--dmi-red);color:white;font-weight:800;font-size:11px;letter-spacing:1.2px;padding:3px 9px;border-radius:4px}
+.student-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:3px 11px;font-size:12px;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:6px}
+.student-chip .dot{width:6px;height:6px;background:#4caf50;border-radius:50%}
+.timer-wrap{text-align:center}
+.timer-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:7px;padding:3px 16px;font-size:23px;font-weight:700;letter-spacing:2px;color:#e8f0ff;min-width:108px;text-align:center}
+.timer-box.warn{color:#ffca28}.timer-box.danger{color:#ff6b6b;animation:tpulse 1s infinite}
+@keyframes tpulse{0%,100%{opacity:1}50%{opacity:.5}}
+.topbar-right{display:flex;align-items:center;gap:7px}
+.tb-btn{background:transparent;border:1.5px solid rgba(255,255,255,.22);color:white;font-size:11.5px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,.1)}
+.tb-btn.danger{background:var(--dmi-red);border-color:var(--dmi-red)}
+.tb-btn.hl-active{background:rgba(255,225,0,.2);border-color:rgba(255,225,0,.7);color:#ffe566}
+
+/* Part tabs */
+.sec-bar{background:var(--blue);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:36px;flex-shrink:0}
+.sec-tabs{display:flex;height:100%}
+.sec-tab{height:100%;display:flex;align-items:center;padding:0 18px;cursor:pointer;border-right:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:500;opacity:.6;transition:all .15s;user-select:none;white-space:nowrap}
+.sec-tab:hover{opacity:1;background:rgba(255,255,255,.08)}
+.sec-tab.active{opacity:1;background:rgba(255,255,255,.16);font-weight:700;border-bottom:2px solid var(--gold)}
+.sec-tab sup{font-size:9px;margin-left:4px;opacity:.7}
+
+/* Split layout */
+.exam-main{display:flex;flex:1;overflow:hidden}
+.passage-panel{width:50%;background:white;display:flex;flex-direction:column;border-right:2px solid var(--border);overflow:hidden}
+.panel-hd{background:#f5f8fd;border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.panel-hd-title{font-size:13px;font-weight:700;color:var(--navy)}
+.panel-tools{display:flex;gap:5px}
+.tool-btn{background:white;border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .15s}
+.tool-btn:hover{background:#e8f0fb;border-color:var(--sky);color:var(--blue)}
+.tool-btn.hl-on{background:#ffe566;border-color:#c8a800;color:#5a3a00}
+
+/* Passage text */
+.p-scroll{overflow-y:auto;flex:1;padding:22px 26px 40px;line-height:1.85;font-size:15px;font-family:'Georgia',serif;color:var(--text);user-select:text}
+.p-scroll::-webkit-scrollbar{width:5px}.p-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.p-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:5px;line-height:1.25}
+.p-sub{font-size:13px;color:var(--muted);font-style:italic;font-family:'Outfit',sans-serif;margin-bottom:18px}
+.p-scroll p{margin-bottom:14px}
+.p-scroll strong{font-weight:normal}
+.para-lbl{color:var(--dmi-red);font-weight:700;margin-right:5px;font-family:'Outfit',sans-serif;font-size:12px}
+
+/* Highlight spans */
+.hl-mark{background:var(--highlight);border-radius:2px;cursor:default}
+.hl-mark:hover::after{content:'✕';font-size:10px;margin-left:3px;color:#8a6000;cursor:pointer}
+
+.splitter{width:5px;background:var(--border);cursor:col-resize;flex-shrink:0;transition:background .15s}
+.splitter:hover,.splitter.drag{background:var(--dmi-red)}
+
+/* Questions panel */
+.q-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.q-panel-hd{background:#f5f8fd;border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.q-panel-hd-title{font-size:13px;font-weight:700;color:var(--navy)}
+.q-scroll{flex:1;overflow-y:auto;padding:16px 18px 40px;user-select:text}
+.q-scroll::-webkit-scrollbar{width:5px}.q-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.q-sec-hd{background:var(--navy);color:white;border-radius:8px 8px 0 0;padding:11px 15px 8px;margin-bottom:0}
+.q-sec-hd h3{font-size:13px;font-weight:700;margin-bottom:4px}
+.q-sec-hd p{font-size:11.5px;opacity:.8;line-height:1.5}
+.q-sec-bd{background:white;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:15px;margin-bottom:14px}
+.q-block{margin-bottom:18px}
+.q-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--blue);color:white;border-radius:50%;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
+.q-num.ans{background:var(--green)}.q-num.flg{background:var(--amber)}
+.q-lbl{display:flex;align-items:flex-start;margin-bottom:8px}
+.q-txt{font-size:13.5px;line-height:1.55;padding-top:2px}
+.mcq-opt{display:flex;align-items:flex-start;gap:9px;padding:8px 11px;border-radius:6px;border:1.5px solid var(--border);margin-bottom:5px;cursor:pointer;transition:all .15s;background:white;font-size:13px}
+.mcq-opt:hover{border-color:var(--sky);background:#f0f7ff}
+.mcq-opt.sel{border-color:var(--dmi-red);background:#fff0f1}
+.mcq-opt input[type=radio]{margin-top:3px;flex-shrink:0;accent-color:var(--dmi-red)}
+.tfng-row{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.tfng-q{flex:1;font-size:13px;line-height:1.5}
+.tfng-btns{flex-shrink:0}
+.tfng-sel{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12.5px;font-family:inherit;color:var(--muted);cursor:pointer;outline:none;background:white;transition:border .15s,background .15s;min-width:138px}
+.tfng-sel:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.tfng-sel.sT{border-color:var(--green);background:var(--green-l);color:var(--green);font-weight:700}
+.tfng-sel.sF{border-color:var(--dmi-red);background:var(--dmi-red-light);color:var(--dmi-red);font-weight:700}
+.tfng-sel.sN{border-color:var(--amber);background:var(--amber-l);color:var(--amber);font-weight:700}
+.fill-in{border:1.5px solid var(--border);border-radius:5px;padding:5px 10px;font-size:13px;font-family:inherit;width:170px;color:var(--text);transition:border .15s;outline:none}
+.fill-in:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.fill-in.got{border-color:var(--green);background:var(--green-l)}
+.match-sel{border:1.5px solid var(--border);border-radius:5px;padding:6px 10px;font-size:13px;font-family:inherit;color:var(--text);cursor:pointer;outline:none;background:white;transition:border .15s}
+.match-sel:focus{border-color:var(--sky)}
+.match-sel.got{border-color:var(--green);background:var(--green-l)}
+.q-tbl{width:100%;border-collapse:collapse;margin:8px 0 12px;font-size:13px}
+.q-tbl th{background:#e8ecf5;color:var(--navy);padding:7px 11px;text-align:left;font-weight:700;border:1px solid var(--border)}
+.q-tbl td{padding:7px 11px;border:1px solid var(--border);vertical-align:middle}
+.q-tbl tr:nth-child(even) td{background:#f8f9fc}
+
+/* ── BOTTOM NAV ── */
+.bot-nav{background:white;border-top:2px solid var(--border);padding:7px 14px 6px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.q-nav-groups{flex:1;display:flex;flex-direction:column;gap:5px}
+.q-part-row{display:flex;align-items:center;gap:8px}
+.q-part-lbl{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;min-width:52px;flex-shrink:0}
+.q-part-lbl.cur{color:var(--dmi-red)}
+.q-part-btns{display:flex;gap:3px;flex-wrap:wrap}
+.qg-btn{width:26px;height:26px;border-radius:4px;border:1.5px solid var(--border);background:white;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit;color:var(--muted)}
+.qg-btn:hover{border-color:var(--sky);color:var(--blue)}
+.qg-btn.ans{background:var(--green);border-color:var(--green);color:white}
+.qg-btn.flg{background:var(--amber);border-color:var(--amber);color:white;border-radius:50%}
+.qg-btn.cur{outline:2.5px solid var(--dmi-red);outline-offset:1px}
+.nav-right{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+.nav-legend{display:flex;gap:8px;font-size:10px;color:var(--muted)}
+.leg-dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px}
+.nav-acts{display:flex;gap:5px}
+.btn-nav{background:var(--blue);color:white;border:none;border-radius:6px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-nav:hover{background:var(--navy)}
+.btn-flg{background:white;border:1.5px solid var(--amber);color:var(--amber);border-radius:6px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-flg.on{background:var(--amber);color:white}
+
+/* Notes panel */
+#notesPanel{display:none;width:200px;background:#fffde7;border-left:2px solid #f9d835;flex-direction:column;flex-shrink:0}
+.notes-hd{background:#f9d835;padding:7px 11px;font-size:12px;font-weight:700;color:#5a4a00;display:flex;justify-content:space-between}
+#notesTA{flex:1;border:none;resize:none;padding:11px;font-family:inherit;font-size:12px;background:#fffde7;color:#3a3000;outline:none}
+
+/* ── CUSTOM CONTEXT MENU ── */
+#ctxMenu{position:fixed;z-index:99999;background:white;border-radius:9px;box-shadow:0 8px 32px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.07);padding:5px;min-width:170px;display:none}
+#ctxMenu.visible{display:block}
+.ctx-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:6px;font-size:13.5px;cursor:pointer;color:var(--text);font-family:'Outfit',sans-serif;transition:background .1s}
+.ctx-item:hover{background:var(--bg)}
+.ctx-sep{height:1px;background:var(--border);margin:4px 8px}
+
+/* ── RESULTS ── */
+#screenResults{background:var(--bg);overflow-y:auto;align-items:center;padding:36px 20px}
+.res-card{background:white;border-radius:20px;padding:36px;max-width:780px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.1);animation:cardIn .5s both}
+.res-dmi-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.res-dmi-left{display:flex;align-items:center;gap:12px}
+.res-dmi-logo{width:52px;height:52px;border-radius:10px;object-fit:cover;border:2px solid var(--dmi-red)}
+.res-dmi-org{font-size:15px;font-weight:800;color:var(--navy)}
+.res-dmi-sub{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.res-dmi-right{text-align:right;font-size:11px;color:var(--muted);line-height:1.7}
+.res-title{text-align:center;margin-bottom:24px}
+.res-title .tag{display:inline-block;background:var(--green-l);color:var(--green);font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 12px;border-radius:100px;margin-bottom:10px;text-transform:uppercase}
+.res-title h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--navy);margin-bottom:4px}
+.res-title p{color:var(--muted);font-size:13px}
+.res-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.res-score-box{text-align:center;border-radius:12px;padding:18px;border:1px solid var(--border)}
+.res-score-box .big{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--navy)}
+.res-score-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+.student-info-box{background:var(--bg);border-radius:10px;padding:14px 18px;margin-bottom:22px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.si-item .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.si-item .v{font-size:13px;font-weight:600;color:var(--navy)}
+.review-section h3{font-size:14px;color:var(--navy);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.rev-row{display:flex;align-items:flex-start;gap:10px;padding:7px 11px;border-radius:6px;margin-bottom:5px;border:1px solid var(--border);font-size:13px}
+.rev-row.ok{border-color:var(--green);background:var(--green-l)}
+.rev-row.bad{border-color:var(--dmi-red);background:var(--dmi-red-light)}
+.rev-row.skip{border-color:#ccc;background:#f5f5f5}
+.rev-qn{font-weight:700;min-width:24px;color:var(--navy)}
+.rev-detail{flex:1;line-height:1.5}
+.res-actions{display:flex;gap:12px;margin-top:24px;justify-content:center;flex-wrap:wrap}
+.res-btn{padding:11px 26px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;border:none}
+.res-btn.prim{background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:white;box-shadow:0 4px 14px rgba(192,32,42,.3)}
+.res-btn.sec{background:white;color:var(--blue);border:2px solid var(--blue)}
+.res-footer-note{text-align:center;margin-top:20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:14px;line-height:1.6}
+
+/* ── ADMIN LOGIN ── */
+#screenAdminLogin{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 60%,#0f2236 100%);align-items:center;justify-content:center;min-height:100vh;position:relative}
+#screenAdminLogin::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(192,32,42,.15) 0%,transparent 55%)}
+.login-card{background:white;border-radius:18px;padding:40px 38px;width:100%;max-width:380px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .4s both;position:relative;z-index:1}
+.login-dmi-top{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:18px;border-bottom:2px solid var(--bg)}
+.login-dmi-logo{width:46px;height:46px;border-radius:9px;object-fit:cover;border:2px solid var(--dmi-red)}
+.login-dmi-org{font-size:14px;font-weight:800;color:var(--navy)}
+.login-dmi-sub{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.login-card h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:3px}
+.login-card .sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.login-field input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;font-size:14px;font-family:inherit;outline:none;transition:all .15s}
+.login-field input:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.login-err{color:var(--dmi-red);font-size:12px;margin-top:9px;display:none;background:var(--dmi-red-light);padding:8px 12px;border-radius:6px}
+.btn-login{width:100%;padding:12px;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 14px rgba(192,32,42,.3)}
+.btn-login:hover{transform:translateY(-1px)}
+.back-link{text-align:center;margin-top:14px;font-size:12px;color:var(--muted);cursor:pointer}
+.back-link:hover{color:var(--blue)}
+
+/* ── ADMIN DASHBOARD ── */
+#screenAdmin{background:var(--bg);overflow:hidden;height:100vh}
+.admin-top{background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.admin-dmi-logo{width:36px;height:36px;border-radius:7px;object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+.admin-org{font-size:14px;font-weight:700;color:white;line-height:1}
+.admin-org span{color:var(--gold)}
+.admin-org-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;letter-spacing:.5px}
+.admin-tag{background:rgba(192,32,42,.3);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:3px 11px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.admin-scroll{flex:1;overflow-y:auto;padding:24px}
+.admin-scroll::-webkit-scrollbar{width:6px}.admin-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.a-stat{background:white;border-radius:12px;padding:18px 20px;border:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.a-stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.a-stat-icon.red{background:var(--dmi-red-light)}.a-stat-icon.green{background:var(--green-l)}.a-stat-icon.amber{background:var(--amber-l)}.a-stat-icon.blue{background:#e8f0fb}
+.a-stat-val{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy);line-height:1}
+.a-stat-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+.admin-panel{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px}
+.ap-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:#fafbfd}
+.ap-header h2{font-size:15px;font-weight:700;color:var(--navy)}
+.ap-tools{display:flex;gap:7px}
+.ap-tool{background:white;border:1.5px solid var(--border);border-radius:7px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .15s}
+.ap-tool:hover{border-color:var(--sky);color:var(--blue);background:#f0f7ff}
+.ap-tool.prim{background:var(--dmi-red);color:white;border-color:var(--dmi-red)}
+.ap-tool.green{background:var(--green);color:white;border-color:var(--green)}
+.search-row{padding:12px 20px;border-bottom:1px solid var(--border);background:#fafbfd}
+.search-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px 13px;font-size:13px;font-family:inherit;outline:none;transition:border .15s;background:white}
+.search-input:focus{border-color:var(--sky)}
+.results-table{width:100%;border-collapse:collapse;font-size:13px}
+.results-table th{background:#f0f4fb;color:var(--navy);padding:10px 14px;text-align:left;font-weight:700;font-size:11px;letter-spacing:.4px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.results-table td{padding:10px 14px;border-bottom:1px solid #eef1f6;vertical-align:middle}
+.results-table tr:last-child td{border-bottom:none}
+.results-table tr:hover td{background:#f8fafd}
+.band-pill{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:700}
+.bhi{background:var(--green-l);color:var(--green)}.bmid{background:var(--amber-l);color:var(--amber)}.blo{background:var(--dmi-red-light);color:var(--dmi-red)}
+.score-bar-wrap{display:flex;align-items:center;gap:8px}
+.score-bar{height:5px;background:#e8ecf5;border-radius:3px;flex:1;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--sky),var(--blue))}
+.no-data{text-align:center;padding:44px 20px;color:var(--muted)}
+.no-data .icon{font-size:40px;margin-bottom:10px}
+.detail-btn{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);font-family:inherit}
+.detail-btn:hover{background:#e8f0fb;border-color:var(--sky)}
+.delete-btn{background:var(--dmi-red-light);border:1px solid var(--dmi-red);border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--dmi-red);font-family:inherit;margin-left:4px}
+.delete-btn:hover{background:var(--dmi-red);color:white}
+
+/* modals */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9000;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:14px;padding:30px 34px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);transform:scale(.95);transition:transform .2s}
+.modal-ov.open .modal{transform:scale(1)}
+.modal h2{font-size:19px;color:var(--navy);margin-bottom:8px}
+.modal p{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.modal-stats{display:flex;gap:14px;margin-bottom:22px}
+.mstat{flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:12px}
+.mstat .n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy)}
+.mstat .l{font-size:11px;color:var(--muted);margin-top:2px}
+.modal-btns{display:flex;gap:10px}
+.mbtn{flex:1;border-radius:8px;padding:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;border:none}
+.mbtn.sec{background:white;border:1.5px solid var(--border);color:var(--muted)}
+.mbtn.prim{background:var(--dmi-red);color:white}
+.detail-modal-content{max-height:62vh;overflow-y:auto;margin-bottom:18px}
+.dm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.dm-item{background:var(--bg);border-radius:8px;padding:9px 13px}
+.dm-item .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dm-item .v{font-size:13.5px;font-weight:600;color:var(--navy);margin-top:2px}
+.dm-answers table{width:100%;border-collapse:collapse;font-size:12px}
+.dm-answers th{background:#f0f4fb;padding:6px 10px;text-align:left;font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.dm-answers td{padding:6px 10px;border-bottom:1px solid #eef1f6;font-family:monospace}
+.dm-answers tr.ok td{background:var(--green-l)}.dm-answers tr.bad td{background:var(--dmi-red-light)}
+
+@media print{.res-actions,.bot-nav,.topbar,.sec-bar{display:none!important}body{background:white}.res-card{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+
+<!-- ══ CUSTOM CONTEXT MENU ══ -->
+<div id="ctxMenu">
+  <div class="ctx-item" id="ctxHL"><span style="font-size:16px">🖊</span> Highlight Selection</div>
+  <div class="ctx-item" id="ctxRemHL" style="display:none"><span style="font-size:16px">✕</span> Remove Highlight</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctxNote"><span style="font-size:16px">📝</span> Add to Notes</div>
+</div>
+
+<!-- ══════ SCREEN 1: LANDING ══════ -->
+<div id="screenLanding" class="screen active">
+  <div class="land-header">
+    <div class="dmi-logo-wrap">
+      <img class="dmi-logo-img" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div class="dmi-logo-text"><div class="name">DMI Computer Education</div><div class="tagline">Since 2008 · Northern Sri Lanka</div></div>
+    </div>
+    <div class="land-header-right">
+      <span>📞 <a href="tel:0777173517">0777 173 517</a></span>
+      <span>✉️ <a href="mailto:info@dmi.lk" style="color:inherit">info@dmi.lk</a></span>
+      <span>🌐 <a href="https://www.dmi.lk" target="_blank">www.dmi.lk</a></span>
+    </div>
+  </div>
+  <div class="land-body">
+    <div class="land-left">
+      <div class="land-since">🏆 British Council Registered Centre</div>
+      <div class="land-dept">IELTS Department · Academic Module</div>
+      <h1 class="land-h1">IELTS Reading<br><em>Exam Portal</em></h1>
+      <p class="land-sub">DMI Computer Education's official computer-based IELTS Reading practice test. Complete 40 questions across three academic passages in 60 minutes.<br><strong style="color:var(--gold)">Cambridge IELTS 18 – Test 1</strong></p>
+      <div class="award-badge">
+        <div class="award-icon">🥇</div>
+        <div class="award-text">
+          <div class="t">Award of Excellence – IELTS Partners Forum 2023</div>
+          <div class="s">Recognised by British Council as a top-performing IELTS test registration centre in Sri Lanka for 15+ years.</div>
+        </div>
+      </div>
+      <div class="land-stats">
+        <div class="lst"><div class="n">40</div><div class="l">Questions</div></div>
+        <div class="lst"><div class="n">60</div><div class="l">Minutes</div></div>
+        <div class="lst"><div class="n">9.0</div><div class="l">Max Band</div></div>
+        <div class="lst"><div class="n">15+</div><div class="l">Years</div></div>
+      </div>
+    </div>
+    <div class="land-right">
+      <div class="reg-card">
+        <div class="card-dmi-header">
+          <img class="card-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+          <div class="card-dmi-info"><div class="org">DMI Computer Education</div><div class="dept">IELTS Academic Reading</div><div class="sub">Cambridge IELTS 18 – Test 1</div></div>
+        </div>
+        <h2>Student Registration</h2>
+        <p class="sub">Fill in your details carefully before starting the exam.</p>
+        <div class="form-row">
+          <div class="field" id="f-fname"><label>First Name *</label><input type="text" id="fname" placeholder="e.g. Arun"/><div class="err-msg">Required</div></div>
+          <div class="field" id="f-lname"><label>Last Name *</label><input type="text" id="lname" placeholder="e.g. Kumar"/><div class="err-msg">Required</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="f-sid"><label>Student ID *</label><input type="text" id="sid" placeholder="e.g. DMI-2024-001"/><div class="err-msg">Required</div></div>
+          <div class="field"><label>Date of Birth</label><input type="date" id="dob"/></div>
+        </div>
+        <div class="form-row full">
+          <div class="field" id="f-email"><label>Email Address *</label><input type="email" id="email" placeholder="e.g. student@email.com"/><div class="err-msg">Valid email required</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="f-school"><label>DMI Branch *</label>
+            <select id="school"><option value="">Select branch…</option><option>Jaffna (Head Office)</option><option>Nelliady</option><option>Chunnakam</option><option>Sandilipay</option><option>Chavakachcheri</option><option>Kilinochchi</option><option>Other</option></select>
+            <div class="err-msg">Please select a branch</div>
+          </div>
+          <div class="field"><label>Class / Group</label><input type="text" id="classgroup" placeholder="e.g. IELTS Batch 3"/></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Nationality</label><input type="text" id="nationality" placeholder="e.g. Sri Lankan"/></div>
+          <div class="field"><label>Test Attempt</label>
+            <select id="attempt"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4+">4th+</option></select>
+          </div>
+        </div>
+        <div class="agree-row">
+          <input type="checkbox" id="agree"/>
+          <label for="agree">I confirm my details are accurate and I will complete this test independently without external help, as per DMI examination rules.</label>
+        </div>
+        <button class="btn-start" onclick="startExam()">Begin IELTS Reading Test →</button>
+        <div class="admin-link"><a onclick="showAdminLogin()">🔐 Teacher / Admin Dashboard</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="land-footer">
+    <span>© 2024 DMI Computer Education · www.dmi.lk · Since 2008</span>
+    <span>Jaffna · Nelliady · Chunnakam · Sandilipay · Chavakachcheri · Kilinochchi</span>
+    <span>Hotline: 0777 173 517 · <a href="mailto:info@dmi.lk" style="color:rgba(255,255,255,.5)">info@dmi.lk</a></span>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 2: EXAM ══════ -->
+<div id="screenExam" class="screen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1.5px solid rgba(255,255,255,0.2)" onerror="this.style.display='none'"/>
+      <div class="dmi-badge-sm">DMI</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5)">IELTS Academic Reading · Book 18</div>
+      <div class="student-chip"><span class="dot"></span><span id="chipName">Student</span></div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-box" id="timer">60:00</div>
+      <div class="timer-label"></div>
+    </div>
+    <div class="topbar-right">
+      <button class="tb-btn" onclick="toggleNotes()">📝 Notes</button>
+      <button class="tb-btn" id="hlTopBtn" onclick="toggleHL()">🖊 Highlight: OFF</button>
+      <button class="tb-btn danger" onclick="showSubmitModal()">Submit Test</button>
+    </div>
+  </div>
+
+  <div class="sec-bar">
+    <div class="sec-tabs">
+      <div class="sec-tab active" id="tab1" onclick="gotoSec(1)">Part 1 – Urban Farming<sup>Q1–13</sup></div>
+      <div class="sec-tab" id="tab2" onclick="gotoSec(2)">Part 2 – Forest Management<sup>Q14–26</sup></div>
+      <div class="sec-tab" id="tab3" onclick="gotoSec(3)">Part 3 – Space Junk<sup>Q27–40</sup></div>
+    </div>
+    <div style="font-size:11px;opacity:.6">DMI · 40 Questions · 60 Minutes</div>
+  </div>
+
+  <div class="exam-main" id="examMain">
+    <!-- PASSAGE PANEL -->
+    <div class="passage-panel" id="passagePanel">
+      <div class="panel-hd">
+        <span class="panel-hd-title" id="pTitle">Passage 1 – Urban Farming</span>
+        <div class="panel-tools">
+          <button class="tool-btn" onclick="chFS(-1)">A−</button>
+          <button class="tool-btn" onclick="chFS(1)">A+</button>
+          <button class="tool-btn" id="hlPassBtn" onclick="toggleHL()">🖊 OFF</button>
+        </div>
+      </div>
+      <div class="p-scroll" id="pScroll">
+        <div id="p1">
+          <div class="p-title">Urban Farming</div>
+          <p>In Paris, urban farmers are trying a new approach to agriculture that uses no soil and very little space. Could it help cities to become self-sufficient in food?</p>
+          <p>On top of a huge exhibition hall in southern Paris, the world's largest urban rooftop farm has started to bear fruit. Strawberries that are small, tasty and growing demands have been occasionally picked here since May 2020, and a handful of other crops are pushing up, green, from large, white, planting bags. Pascal Hardy, an engineer and consultant in sustainable development, founded this company, Agripolis, in 2018. The farm, which measures 14,000 square metres and is on top of Paris Expo, a convention centre in the 15th arrondissement, aims to grow more than 1,000 kg of fruit and vegetables in high season, in over 20 varieties including <strong>lettuces</strong>, strawberries, herbs, aubergines and tomatoes.</p>
+          <p>This is far from the sum of Hardy's ambitions. He plans to build a vast vertical farm in the south of the city – essentially a column of plants, standing almost like an apartment block – that could eventually provide 10% of Paris's total food <strong>consumption</strong>. Meanwhile, other schemes to produce food in cities are being developed in Shanghai, Singapore, New York and Tokyo, in countries where the cost of land is high and the distances food currently has to travel to reach consumers are bytes.</p>
+          <p>In many cities, growing crops on vacant lots has a long history – allotments in the UK go back at least to the 19th century – and has recently been given fresh impetus by movements such as transition towns and guerrilla gardening. But new technologies are now changing the picture. Aeroponic farming, for example, grows plants in an air mist rather than in the ground or water. In this system, plants are grown in vertical tubes, which not only requires minimal space but also minimises water use by up to 90%. Advocates say this also eliminates the need for <strong>pesticides</strong>, as there is no soil for pests to breed in, and reduces transportation <strong>journeys</strong>, as food can be grown close to where it is consumed.</p>
+          <p>Hardy is not the only entrepreneur in this market. In the USA, there are a number of established vertical and indoor farming operations, including Plenty, Bowery Farming and AeroFarms. AeroFarms, which operates one of the world's largest indoor vertical farms in Newark, New Jersey, uses aeroponic systems to grow leafy greens. Such systems, say proponents, give <strong>producers</strong> more control over growing conditions, and allow them to choose crop varieties based on <strong>flavour</strong> rather than ability to withstand transportation.</p>
+          <p>For now, commercial urban farming is relatively small-scale. But advocates say that aeroponic urban farms could be run above or below ground. Underground car parks, for example, could be transformed into farms, as could the basements of large buildings. The technology uses a tiny fraction of the electricity of conventional greenhouses, thanks to LED lighting that allows farmers to optimise wavelengths for plant growth. The cost of the produce is comparable to that of soil-based organic produce, and cheaper than hydroponic alternatives.</p>
+          <p>There are some things, however, that aeroponic urban farms are not suited to growing. Root vegetables, for instance, need soil. And crops such as wheat and rice require much larger areas than city farms can provide. Some crops, such as beans, are better suited to summer months. But for salad leaves, herbs, strawberries and tomatoes, the method works well. Research at various universities suggests that the nutritional value of aeroponically grown produce is at least equal to that of soil-grown equivalents, and may in some cases be higher.</p>
+        </div>
+        <div id="p2" style="display:none">
+          <div class="p-title">Forest management in Pennsylvania, USA</div>
+          <p><span class="para-lbl">A</span>How does a tree's 'value' change when it is used for different purposes? That depends on the
+
+
+ 
+
+
+species of tree, its size, its condition and the landowner's goals. Some trees are valuable as timber – as 'ichiban' (number one) grade logs, used for high-quality furniture. Others provide wildlife habitat: food and shelter for birds and mammals. A tree might be worth very little as a log but have great ecological importance. In Pennsylvania, where about 60% of the state is forested, the decisions that forest landowners make affect millions of hectares and have a major impact on environmental quality, biodiversity and the state's economy.</p>
+          <p><span class="para-lbl">B</span>Historically, Pennsylvania's forests have been exploited for their most commercially valuable trees through a practice known as 'high-grading'. In this type of cutting, only the biggest, healthiest, most commercially desirable trees were removed, leaving the forest populated by poor-quality trees, sometimes called 'junk trees'. High-grading has negative long-term consequences for the forest: the genetic quality of the remaining trees tends to be lower, the structure of the forest is degraded, and the overall health of the ecosystem declines. Essentially, by always taking the best and leaving the worst, high-grading leads to forests that are progressively less productive and less valuable over time – both economically and ecologically.</p>
+          <p><span class="para-lbl">C</span>There is, however, an alternative approach that can make harvesting low-quality trees economically viable while also benefiting the forest. Wood energy markets provide a use for trees that have little or no value as timber. These markets use low-quality wood for generating heat and electricity through combustion, or for producing liquid fuels for vehicles. In Pennsylvania and neighbouring states, several biomass energy plants are in operation, and more are planned. They create a market for wood that was previously considered waste. This gives forest landowners an economic incentive to remove poor-quality trees, which can improve the overall health and quality of the remaining forest.</p>
+          <p><span class="para-lbl">D</span>One important method for improving forest quality is the Timber Stand Improvement (TSI) cut. TSI cuts target trees that are competing with more desirable species for sunlight, water and nutrients. By removing these competitors – which often include invasive plants and non-native species – the remaining trees are freed to grow faster and healthier. TSI cuts do not aim to generate significant revenue; their primary purpose is ecological improvement. However, if a nearby wood energy market exists, the wood removed in TSI cuts can at least be sold for some return, rather than simply being left to rot or burned on site.</p>
+          <p><span class="para-lbl">E</span>Salvage cuts serve a different but equally important purpose. These operations target trees that are dead, dying or damaged – often the result of insect infestations, diseases or storm damage. In Pennsylvania, the emerald ash borer and hemlock woolly adelgid are two examples of insects that have devastated large areas of forest. Salvage cuts can help to slow the spread of such pests by removing infected trees before the insects can move to healthy neighbours. The wood from salvage cuts may have limited timber value, but it can often be used in wood energy markets. By enabling the removal of trees that would otherwise become sources of further <strong>fire</strong> risk and pest infestation, salvage operations contribute to overall forest health.</p>
+          <p><span class="para-lbl">F</span>A third type of cutting, the shelterwood cut, is used to regenerate the forest. In this method, mature trees are gradually removed over a period of years, allowing young seedlings to become established under the partial shade of the remaining canopy. Once the new generation of trees is firmly rooted, the last of the older trees are removed. This approach allows foresters to control which species regenerate – for example, by promoting oak or cherry over less desirable species. The shelterwood method is particularly useful in forests that have been degraded by decades of high-grading, as it allows landowners to essentially 'reset' the species composition.</p>
+          <p><span class="para-lbl">G</span>While it is important to harvest low-quality wood for energy and forest improvement, it is equally important to recognise that some 'low-use' wood should be retained. Dead standing trees (snags) and fallen logs provide essential <strong>nutrients</strong> to the forest floor as they decompose. Trees with <strong>cavities</strong> – holes created by decay or woodpeckers – offer nesting sites and shelter for a wide range of wildlife, from owls and wood ducks to squirrels and bats. Certain small trees and shrubs, such as <strong>hawthorn</strong> and dogwood, produce berries and fruits that are critical food sources for birds and mammals. These elements are part of the 'structural diversity' that makes a forest ecosystem healthy and resilient. Species that are <strong>rare</strong> in a given area should also be left to grow, as they add to the genetic diversity of the forest. A responsible approach to forest management balances the economic benefits of wood removal with the ecological need to maintain a complex, diverse and functioning forest ecosystem.</p>
+        </div>
+        <div id="p3" style="display:none">
+          <div class="p-title">Conquering Earth's space junk problem</div>
+          <p><span class="para-lbl">A</span>Last year, commercial companies, military and civil departments and amateurs sent more than 400 satellites into orbit, over four times the yearly average in the previous decade. Numbers could rise even more sharply if leading space companies follow through on plans to deploy hundreds to thousands of large constellations of satellites to space in the next few years. All that traffic can lead to disaster. Ten years ago, a US commercial Iridium satellite smashed into an inactive Russian communications satellite called Cosmos-2251, creating thousands of new pieces of space shrapnel that now threaten other satellites in low Earth orbit – the zone stretching up to 2,000 kilometres in altitude. Altogether, there are roughly 20,000 human-made objects in orbit, from working satellites to small rocket pieces. And satellite operators can't steer away from every potential crash, because each move consumes time and <strong>fuel</strong> that could otherwise be used for the spacecraft's main job.</p>
+          <p><span class="para-lbl">B</span>Concern about space junk goes back to the beginning of the satellite era, but the number of objects in orbit is rising so rapidly that researchers are investigating new ways of attacking the problem. Several government agencies and companies are developing or testing 'space cleanup' technologies. One broad approach involves tracking debris more precisely, so that operators can steer their craft away more efficiently. Another approach is to build satellites to be less wasteful – for instance, by designing them for controlled reentry so that they burn up in the atmosphere at the end of their lives, rather than becoming permanent orbital junk. A third, more radical approach is 'active debris removal': physically grabbing or deflecting pieces of space junk.</p>
+          <p><span class="para-lbl">C</span>The challenge starts with tracking. Although the US military's Space Surveillance Network tracks some 20,000 pieces of debris larger than 10 cm, there are an estimated 500,000 pieces between 1 and 10 cm and more than 100 million smaller than 1 cm. The tiniest fragments are essentially invisible, yet even a fleck of paint can cause significant damage at orbital speeds. Improving tracking technology is essential, and several nations are investing in upgraded ground-based radar and optical systems, as well as sensors in space itself.</p>
+          <p><span class="para-lbl">D</span>One innovative idea for debris removal comes from the European Space Agency (ESA), which has proposed a mission called ClearSpace-1, planned for 2025. The mission would use a 'chaser' spacecraft with four robotic arms to capture a piece of debris – specifically, a payload adapter left over from a 2013 Vega rocket launch – and drag it into Earth's atmosphere to burn up. Other proposals include using lasers to slow down debris and cause it to re-enter the atmosphere, deploying nets or harpoons to snag fragments, and using magnets on spacecraft to attract and de-orbit metallic junk.</p>
+          <p><span class="para-lbl">E</span>Some experts worry about the legal and political complications of space cleanup. International law currently holds that a nation retains ownership of its space objects indefinitely, even if they are no longer functional. This means that one country cannot simply remove another's defunct satellite without permission, even if it poses a collision risk. Resolving these jurisdictional issues will require new international agreements. Another concern is the potential for cleanup technology to be misused. A spacecraft capable of grabbing defunct satellites could also, in theory, be used to interfere with operational ones – raising fears about the weaponisation of space. In addition, the sheer cost of active debris removal makes it crucial to develop <strong>sustainability</strong> practices that prevent the problem from getting worse in the first place.</p>
+          <p><span class="para-lbl">F</span>Space sustainability involves several principles. First, new satellites should be designed for disposal at the end of their lives – either through controlled de-orbiting or by moving to a 'graveyard orbit' far from active spacecraft. Second, launch vehicles should be designed to minimise the debris they produce; rocket stages should be de-orbited, and measures should be taken to prevent <strong>explosions</strong> of old rocket bodies, which are a major source of new fragments. Third, operators of large satellite constellations – such as SpaceX's Starlink network, which could eventually number more than 40,000 satellites – must be held to high standards of debris mitigation. If even a small fraction of those satellites fail to de-orbit properly, they could significantly worsen the debris problem. Some analysts have proposed requiring satellite operators to post a 'space bond' or take out insurance, so that if a company goes <strong>bankrupt</strong> and can't de-orbit its fleet, funds are available for cleanup.</p>
+          <p><span class="para-lbl">G</span>The stakes are high. If the amount of debris in orbit reaches a tipping point – a scenario known as 'Kessler syndrome', after NASA scientist Donald Kessler, who described it in 1978 – collisions could become self-sustaining, with each crash producing new fragments that cause further collisions in a chain reaction. This could eventually make certain orbits unusable, with devastating consequences for communications, weather monitoring, navigation and scientific research. Preventing this scenario will require a combination of better tracking, international cooperation, new technology, responsible satellite design and, almost certainly, active debris removal on a much larger scale than anything yet attempted.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="splitter" id="splitter"></div>
+
+    <!-- QUESTIONS PANEL -->
+    <div class="q-panel">
+      <div class="q-panel-hd">
+        <span class="q-panel-hd-title" id="qPanelTitle">Part 1 – Questions 1–13</span>
+        <div style="font-size:12px;color:var(--muted)">Answered: <span id="ansCount">0</span>/40</div>
+      </div>
+      <div class="q-scroll" id="qScroll">
+
+        <!-- PART 1 -->
+        <div id="sec1">
+          <div class="q-sec-hd"><h3>Questions 1–3 — Sentence Completion</h3><p>Complete the sentences. Choose <strong>NO MORE THAN TWO WORDS AND/OR A NUMBER</strong> from the passage for each answer.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn1">1</span><div class="q-txt">Vertical tubes are used to grow strawberries, <input class="fill-in" id="q1" placeholder="answer…" oninput="onFill(1)"/> and herbs.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn2">2</span><div class="q-txt">There will eventually be a daily harvest of as much as <input class="fill-in" id="q2" placeholder="answer…" oninput="onFill(2)"/> in weight of fruit and vegetables.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn3">3</span><div class="q-txt">It may be possible that the farm's produce will account for as much as 10% of the city's food <input class="fill-in" id="q3" placeholder="answer…" oninput="onFill(3)"/> overall.</div></div></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 4–7 — Table Completion</h3><p>Complete the table. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p></div>
+          <div class="q-sec-bd">
+            <div style="background:#f0f4fb;border-radius:8px;padding:14px 18px;margin-bottom:10px;font-size:13px;font-weight:700;text-align:center;color:var(--navy)">Advantages of aeroponic urban farming</div>
+            <table class="q-tbl">
+              <tr><th>Aspect</th><th>Advantage</th><th>Answer</th></tr>
+              <tr><td>Pest control</td><td>No soil means no need for <strong>4</strong></td><td><span id="qn4" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q4" oninput="onFill(4)" style="width:110px" placeholder="…"/></td></tr>
+              <tr><td>Transport</td><td>Local production reduces transportation <strong>5</strong></td><td><span id="qn5" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q5" oninput="onFill(5)" style="width:110px" placeholder="…"/></td></tr>
+              <tr><td>Income</td><td>Greater control gives <strong>6</strong> more flexibility</td><td><span id="qn6" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q6" oninput="onFill(6)" style="width:110px" placeholder="…"/></td></tr>
+              <tr><td>Crop selection</td><td>Varieties can be chosen for <strong>7</strong> rather than durability</td><td><span id="qn7" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q7" oninput="onFill(7)" style="width:110px" placeholder="…"/></td></tr>
+            </table>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 8–13 — True / False / Not Given</h3><p>Do the following statements agree with the information given in the passage?</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn8" style="flex-shrink:0">8</span><div class="tfng-q">Urban farming can take place above or below ground.</div><div class="tfng-btns"><select class="tfng-sel" id="ts8" onchange="selTFNG(8,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn9" style="flex-shrink:0">9</span><div class="tfng-q">Some of the equipment used in aeroponic farming can be
+
+
+ 
+
+
+made by hand.</div><div class="tfng-btns"><select class="tfng-sel" id="ts9" onchange="selTFNG(9,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn10" style="flex-shrink:0">10</span><div class="tfng-q">Urban farming
+
+
+ 
+
+
+relies more on electricity than some other types of farming.</div><div class="tfng-btns"><select class="tfng-sel" id="ts10" onchange="selTFNG(10,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn11" style="flex-shrink:0">11</span><div class="tfng-q">Fruit and vegetables grown on an aeroponic urban farm are cheaper than traditionally grown organic produce.</div><div class="tfng-btns"><select class="tfng-sel" id="ts11" onchange="selTFNG(11,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn12" style="flex-shrink:0">12</span><div class="tfng-q">Most produce can be grown on an aeroponic urban farm at any time of the year.</div><div class="tfng-btns"><select class="tfng-sel" id="ts12" onchange="selTFNG(12,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn13" style="flex-shrink:0">13</span><div class="tfng-q">Beans take longer to grow on an urban farm than other vegetables.</div><div class="tfng-btns"><select class="tfng-sel" id="ts13" onchange="selTFNG(13,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+          </div>
+        </div>
+
+        <!-- PART 2 -->
+        <div id="sec2" style="display:none">
+          <div class="q-sec-hd"><h3>Questions 14–18 — Matching Information</h3><p>Reading Passage 2 has seven paragraphs, <strong>A–G</strong>. Which paragraph contains the following information? Write the correct letter, A–G.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn14">14</span><div class="q-txt">a reference to
+
+
+ 
+
+
+
+
+
+the
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+negative
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+consequences of
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+focusing
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+only
+
+
+ 
+
+
+
+
+
+on financial
+
+
+ 
+
+
+return</div></div><select class="match-sel" id="q14" onchange="onSel(14)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn15">15</span><div class="q-txt">the
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+different
+
+
+ 
+
+
+
+
+
+
+
+
+factors
+
+
+ 
+
+
+that
+
+
+ 
+
+
+
+
+
+contribute
+
+
+ 
+
+
+to a
+
+
+ 
+
+
+tree's
+
+
+ 
+
+
+worth</div></div><select class="match-sel" id="q15" onchange="onSel(15)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn16">16</span><div class="q-txt">a
+
+
+ 
+
+
+reference
+
+
+ 
+
+
+to
+
+
+ 
+
+
+using
+
+
+ 
+
+
+
+
+
+wood
+
+
+ 
+
+
+as a
+
+
+ 
+
+
+source
+
+
+ 
+
+
+of
+
+
+ 
+
+
+
+
+
+fuel
+
+
+ 
+
+
+for
+
+
+ 
+
+
+vehicles</div></div><select class="match-sel" id="q16" onchange="onSel(16)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn17">17</span><div class="q-txt">examples of
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tree-attacking
+
+
+ 
+
+
+insects</div></div><select class="match-sel" id="q17" onchange="onSel(17)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn18">18</span><div class="q-txt">
+
+
+an
+
+
+ 
+
+
+alternative
+
+
+ 
+
+
+name for
+
+
+ 
+
+
+low-use
+
+
+ 
+
+
+wood
+
+
+ 
+
+
+trees</div></div><select class="match-sel" id="q18" onchange="onSel(18)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 19–21 — Matching Features</h3><p>Match each type of
+
+
+ 
+
+
+
+
+
+cutting
+
+
+ 
+
+
+method
+
+
+ 
+
+
+with
+
+
+ 
+
+
+its
+
+
+ 
+
+
+purpose. Choose the correct letter, <strong>A, B or C</strong>.</p><p style="font-size:12px;margin-top:6px"><strong>A</strong> TSI cuts &nbsp;·&nbsp; <strong>B</strong> Salvage cuts &nbsp;·&nbsp; <strong>C</strong> Shelterwood cuts</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn19">19</span><div class="q-txt">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+removing
+
+
+ 
+
+
+diseased
+
+
+ 
+
+
+or damaged
+
+
+ 
+
+
+trees
+
+
+ 
+
+
+to
+
+
+ 
+
+
+prevent
+
+
+ 
+
+
+pest
+
+
+ 
+
+
+spread</div></div><select class="match-sel" id="q19" onchange="onSel(19)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn20">20</span><div class="q-txt">
+
+
+creating a young forest by gradually
+
+
+ 
+
+
+removing older
+
+
+ 
+
+
+trees</div></div><select class="match-sel" id="q20" onchange="onSel(20)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn21">21</span><div class="q-txt">improving overall quality
+
+
+ 
+
+
+by
+
+
+ 
+
+
+removing unwanted growth and invasive species</div></div><select class="match-sel" id="q21" onchange="onSel(21)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option></select></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 22–26 — Sentence Completion</h3><p>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn22">22</span><div class="q-txt">Salvage cuts can help to reduce the risk of <input class="fill-in" id="q22" oninput="onFill(22)" style="width:140px" placeholder="…"/> in the forest.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn23">23</span><div class="q-txt">Fallen logs and dead trees provide essential <input class="fill-in" id="q23" oninput="onFill(23)" style="width:140px" placeholder="…"/> to the forest floor as they decompose.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn24">24</span><div class="q-txt">Trees with <input class="fill-in" id="q24" oninput="onFill(24)" style="width:140px" placeholder="…"/> offer nesting sites and shelter for a wide range of wildlife.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn25">25</span><div class="q-txt">Small trees such as <input class="fill-in" id="q25" oninput="onFill(25)" style="width:140px" placeholder="…"/> and dogwood produce berries that are critical food sources for wildlife.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn26">26</span><div class="q-txt">Species that are <input class="fill-in" id="q26" oninput="onFill(26)" style="width:140px" placeholder="…"/> in a given area should be left to grow to add to the genetic diversity.</div></div></div>
+          </div>
+        </div>
+
+        <!-- PART 3 -->
+        <div id="sec3" style="display:none">
+          <div class="q-sec-hd"><h3>Questions 27–31 — Matching Information</h3><p>Reading Passage 3 has seven paragraphs, <strong>A–G</strong>. Which paragraph contains the following information? Write the correct letter, A–G.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn27">27</span><div class="q-txt">a
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+description
+
+
+ 
+
+
+
+
+
+of
+
+
+ 
+
+
+
+
+
+how
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+the
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+tracking
+
+
+ 
+
+
+of
+
+
+ 
+
+
+very small
+
+
+ 
+
+
+debris is currently
+
+
+ 
+
+
+limited</div></div><select class="match-sel" id="q27" onchange="onSel(27)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn28">28</span><div class="q-txt">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mention
+
+
+ 
+
+
+of
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+measures
+
+
+ 
+
+
+that
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+should
+
+
+ 
+
+
+prevent
+
+
+ 
+
+
+
+
+
+old
+
+
+ 
+
+
+rockets
+
+
+ 
+
+
+from
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+producing
+
+
+ 
+
+
+new debris</div></div><select class="match-sel" id="q28" onchange="onSel(28)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn29">29</span><div class="q-txt">
+
+
+an
+
+
+ 
+
+
+
+
+
+explanation
+
+
+ 
+
+
+of
+
+
+ 
+
+
+why
+
+
+ 
+
+
+satellite
+
+
+ 
+
+
+operators
+
+
+ 
+
+
+cannot
+
+
+ 
+
+
+always
+
+
+ 
+
+
+avoid
+
+
+ 
+
+
+collisions</div></div><select class="match-sel" id="q29" onchange="onSel(29)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn30">30</span><div class="q-txt">
+
+
+
+
+
+
+
+
+concerns
+
+
+ 
+
+
+about the
+
+
+ 
+
+
+
+
+
+potential misuse
+
+
+ 
+
+
+of
+
+
+ 
+
+
+cleanup technology</div></div><select class="match-sel" id="q30" onchange="onSel(30)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn31">31</span><div class="q-txt">an
+
+
+ 
+
+
+overview
+
+
+ 
+
+
+of
+
+
+ 
+
+
+three
+
+
+ 
+
+
+broad
+
+
+ 
+
+
+approaches
+
+
+ 
+
+
+to
+
+
+ 
+
+
+
+
+
+tackling
+
+
+ 
+
+
+the debris problem</div></div><select class="match-sel" id="q31" onchange="onSel(31)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option></select></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 32–35 — Summary Completion</h3><p>Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p><p style="font-size:13px;font-weight:700;color:var(--navy);margin-top:8px">Key challenges in tackling space debris</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn32">32</span><div class="q-txt">The sheer cost of active debris removal makes it crucial to develop <input class="fill-in" id="q32" oninput="onFill(32)" style="width:140px" placeholder="…"/> practices.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn33">33</span><div class="q-txt">Satellite operators can't steer away from every potential crash because each move consumes time and <input class="fill-in" id="q33" oninput="onFill(33)" style="width:140px" placeholder="…"/>.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn34">34</span><div class="q-txt">Measures should be taken to prevent <input class="fill-in" id="q34" oninput="onFill(34)" style="width:140px" placeholder="…"/> of old rocket bodies, which are a major source of new fragments.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn35">35</span><div class="q-txt">Some analysts have proposed requiring satellite operators to post a bond, so that if a company goes <input class="fill-in" id="q35" oninput="onFill(35)" style="width:140px" placeholder="…"/>, funds are available for cleanup.</div></div></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 36–40 — Multiple Choice</h3><p>Choose the correct letter, <strong>A, B, C or D</strong>.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn36">36</span><div class="q-txt">What does the writer say about the ESA's ClearSpace-1 mission?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(36,'A')"><input type="radio" name="q36" id="q36A"/><label>A &nbsp;It
+
+
+ 
+
+
+
+
+
+will
+
+
+ 
+
+
+be the
+
+
+ 
+
+
+first time debris has been
+
+
+ 
+
+
+deliberately
+
+
+ 
+
+
+removed.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(36,'B')"><input type="radio" name="q36" id="q36B"/><label>B &nbsp;It
+
+
+ 
+
+
+is
+
+
+ 
+
+
+expected to
+
+
+ 
+
+
+cost
+
+
+ 
+
+
+less
+
+
+ 
+
+
+than other
+
+
+ 
+
+
+proposed
+
+
+ 
+
+
+missions.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(36,'C')"><input type="radio" name="q36" id="q36C"/><label>C &nbsp;It plans to use a spacecraft with robotic arms to capture debris.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(36,'D')"><input type="radio" name="q36" id="q36D"/><label>D &nbsp;It aims to remove all the debris from a single rocket launch.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn37">37</span><div class="q-txt">According to the passage, what is the main legal problem with removing space junk?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(37,'A')"><input type="radio" name="q37" id="q37A"/><label>A &nbsp;There
+
+
+ 
+
+
+is
+
+
+ 
+
+
+no
+
+
+ 
+
+
+international
+
+
+ 
+
+
+law
+
+
+ 
+
+
+governing
+
+
+ 
+
+
+space.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(37,'B')"><input type="radio" name="q37" id="q37B"/><label>B &nbsp;Countries disagree about who should pay for cleanup.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(37,'C')"><input type="radio" name="q37" id="q37C"/><label>C &nbsp;Nations cannot remove another country's space objects without permission.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(37,'D')"><input type="radio" name="q37" id="q37D"/><label>D &nbsp;Nations retain ownership of their space objects even when they are defunct.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn38">38</span><div class="q-txt">What is 'Kessler syndrome'?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(38,'A')"><input type="radio" name="q38" id="q38A"/><label>A &nbsp;A
+
+
+ 
+
+
+type
+
+
+ 
+
+
+of
+
+
+ 
+
+
+collision
+
+
+ 
+
+
+involving
+
+
+ 
+
+
+two
+
+
+ 
+
+
+working
+
+
+ 
+
+
+satellites.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(38,'B')"><input type="radio" name="q38" id="q38B"/><label>B &nbsp;A chain reaction of collisions caused by growing amounts of debris.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(38,'C')"><input type="radio" name="q38" id="q38C"/><label>C &nbsp;A
+
+
+ 
+
+
+theory
+
+
+ 
+
+
+about
+
+
+ 
+
+
+the
+
+
+ 
+
+
+rate at
+
+
+ 
+
+
+which
+
+
+ 
+
+
+satellites
+
+
+ 
+
+
+deteriorate.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(38,'D')"><input type="radio" name="q38" id="q38D"/><label>D &nbsp;A
+
+
+ 
+
+
+method for
+
+
+ 
+
+
+tracking
+
+
+ 
+
+
+very
+
+
+ 
+
+
+small
+
+
+ 
+
+
+pieces
+
+
+ 
+
+
+of
+
+
+ 
+
+
+space debris.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn39">39</span><div class="q-txt">What concern does the writer raise about large satellite constellations?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(39,'A')"><input type="radio" name="q39" id="q39A"/><label>A &nbsp;They
+
+
+ 
+
+
+could
+
+
+ 
+
+
+interfere
+
+
+ 
+
+
+with
+
+
+ 
+
+
+astronomical
+
+
+ 
+
+
+observations.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(39,'B')"><input type="radio" name="q39" id="q39B"/><label>B &nbsp;They
+
+
+ 
+
+
+may
+
+
+ 
+
+
+be
+
+
+ 
+
+
+too expensive to
+
+
+ 
+
+
+maintain.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(39,'C')"><input type="radio" name="q39" id="q39C"/><label>C &nbsp;They are unlikely to receive government funding.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(39,'D')"><input type="radio" name="q39" id="q39D"/><label>D &nbsp;Even a small percentage of failures could significantly worsen the debris problem.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn40">40</span><div class="q-txt">What is the writer's overall conclusion?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(40,'A')"><input type="radio" name="q40" id="q40A"/><label>A &nbsp;A combination of approaches will be needed to prevent the debris problem from becoming catastrophic.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(40,'B')"><input type="radio" name="q40" id="q40B"/><label>B &nbsp;Active debris removal is the only realistic solution to the space junk problem.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(40,'C')"><input type="radio" name="q40" id="q40C"/><label>C &nbsp;International cooperation is unlikely to happen soon enough.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(40,'D')"><input type="radio" name="q40" id="q40D"/><label>D &nbsp;The problem has already passed the tipping point described by Kessler.</label></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /q-scroll -->
+    </div><!-- /q-panel -->
+
+    <!-- NOTES -->
+    <div id="notesPanel">
+      <div class="notes-hd"><span>📝 Notes</span><span style="cursor:pointer" onclick="toggleNotes()">✕</span></div>
+      <textarea id="notesTA" placeholder="Select text in passage or questions, then right-click → Add to Notes. Or type here freely."></textarea>
+    </div>
+  </div><!-- /exam-main -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bot-nav">
+    <div class="q-nav-groups">
+      <div class="q-part-row">
+        <span class="q-part-lbl cur" id="plbl1">Part 1</span>
+        <div class="q-part-btns" id="pg1"></div>
+      </div>
+      <div class="q-part-row">
+        <span class="q-part-lbl" id="plbl2">Part 2</span>
+        <div class="q-part-btns" id="pg2"></div>
+      </div>
+      <div class="q-part-row">
+        <span class="q-part-lbl" id="plbl3">Part 3</span>
+        <div class="q-part-btns" id="pg3"></div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-legend">
+        <span><span class="leg-dot" style="background:var(--green)"></span>Done</span>
+        <span><span class="leg-dot" style="background:var(--amber);border-radius:50%"></span>Review</span>
+        <span><span class="leg-dot" style="background:#dde2ec"></span>Blank</span>
+      </div>
+      <div class="nav-acts">
+        <button class="btn-flg" id="flagBtn" onclick="toggleFlag()">👁 Review</button>
+        <button class="btn-nav" onclick="prevQ()">◀</button>
+        <button class="btn-nav" onclick="nextQ()">▶</button>
+      </div>
+    </div>
+  </div>
+</div><!-- /screenExam -->
+
+<!-- ══════ SCREEN 3: RESULTS ══════ -->
+<div id="screenResults" class="screen">
+  <div class="res-card" id="resCard"></div>
+</div>
+
+<!-- ══════ SCREEN 4: ADMIN LOGIN ══════ -->
+<div id="screenAdminLogin" class="screen">
+  <div class="login-card">
+    <div class="login-dmi-top">
+      <img class="login-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div><div class="login-dmi-org">DMI Computer Education</div><div class="login-dmi-sub">IELTS Admin Portal</div></div>
+    </div>
+    <h2>Admin Login</h2>
+    <p class="sub">Enter the teacher password to access the student results dashboard.</p>
+    <div class="login-field"><label>Password</label><input type="password" id="adminPw" placeholder="Enter admin password…" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="login-err" id="loginErr">❌ Incorrect password. Please try again.</div>
+    <button class="btn-login" onclick="doLogin()">Access Dashboard →</button>
+    <div class="back-link" onclick="showScreen('screenLanding')">← Back to Registration</div>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 5: ADMIN DASHBOARD ══════ -->
+<div id="screenAdmin" class="screen">
+  <div class="admin-top">
+    <div style="display:flex;align-items:center;gap:14px">
+      <img class="admin-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div><div class="admin-org">DMI <span>Computer Education</span></div><div class="admin-org-sub">IELTS Reading · Book 18 Test 1 · Teacher Dashboard</div></div>
+      <div class="admin-tag">Admin Panel</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="tb-btn" onclick="exportCSV()" style="background:rgba(255,255,255,.1)">⬇ CSV</button>
+      <button class="tb-btn" onclick="window.print()" style="background:rgba(255,255,255,.1)">🖨 Print</button>
+      <button class="tb-btn" onclick="clearAll()" style="background:rgba(192,32,42,.2);border-color:rgba(192,32,42,.4)">🗑 Clear All</button>
+      <button class="tb-btn" onclick="showScreen('screenLanding')">← Exit</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    <div class="admin-scroll">
+      <div class="admin-stats" id="adminStats"></div>
+      <div class="admin-panel">
+        <div class="ap-header"><h2>Student Exam Results</h2>
+          <div class="ap-tools">
+            <button class="ap-tool" onclick="sortR('name')">↕ Name</button>
+            <button class="ap-tool" onclick="sortR('score')">↕ Score</button>
+            <button class="ap-tool" onclick="sortR('date')">↕ Date</button>
+            <button class="ap-tool" onclick="sortR('branch')">↕ Branch</button>
+            <button class="ap-tool green" onclick="exportCSV()">⬇ CSV</button>
+            <button class="ap-tool prim" onclick="loadAdmin()">🔄 Refresh</button>
+          </div>
+        </div>
+        <div class="search-row"><input class="search-input" type="text" id="searchBox" placeholder="Search by name, ID, branch or email…" oninput="renderTable()"/></div>
+        <div id="tableWrap"></div>
+      </div>
+      <div style="text-align:center;padding:14px;font-size:11px;color:var(--muted)">DMI Computer Education · <a href="https://www.dmi.lk" target="_blank" style="color:var(--sky)">www.dmi.lk</a> · 0777 173 517 · <a href="mailto:info@dmi.lk" style="color:inherit">info@dmi.lk</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- Submit modal -->
+<div class="modal-ov" id="subModal">
+  <div class="modal">
+    <h2>Submit your test?</h2>
+    <p>Once submitted you cannot change your answers. Review flagged questions before submitting.</p>
+    <div class="modal-stats">
+      <div class="mstat"><div class="n" id="mAns">0</div><div class="l">Answered</div></div>
+      <div class="mstat"><div class="n" id="mUn">40</div><div class="l">Unanswered</div></div>
+      <div class="mstat"><div class="n" id="mFlg">0</div><div class="l">Flagged</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn sec" onclick="closeModal()">Continue Test</button>
+      <button class="mbtn prim" onclick="submitExam()">Submit Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div class="modal-ov" id="detailModal">
+  <div class="modal" style="max-width:640px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <img src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" style="width:36px;height:36px;border-radius:7px;object-fit:cover;border:2px solid var(--dmi-red)" onerror="this.style.display='none'"/>
+      <div><div style="font-size:14px;font-weight:700;color:var(--navy)">DMI Computer Education – Student Detail</div><div style="font-size:11px;color:var(--muted)">IELTS Academic Reading Exam Record (Book 18 Test 1)</div></div>
+    </div>
+    <div id="detailContent" class="detail-modal-content"></div>
+    <div class="modal-btns"><button class="mbtn prim" onclick="document.getElementById('detailModal').classList.remove('open')">Close</button></div>
+  </div>
+</div>
+
+<script>
+// ══ KEY ══
+const KEY={1:'lettuces',2:'1,000 kg',3:'consumption',4:'pesticides',5:'journeys',6:'producers',7:'flavour',8:'T',9:'NG',10:'F',11:'T',12:'F',13:'NG',14:'B',15:'A',16:'C',17:'E',18:'B',19:'B',20:'C',21:'A',22:'fire',23:'nutrients',24:'cavities',25:'hawthorn',26:'rare',27:'C',28:'F',29:'A',30:'E',31:'B',32:'sustainability',33:'fuel',34:'explosions',35:'bankrupt',36:'C',37:'D',38:'B',39:'D',40:'A'};
+
+// ══ STATE ══
+let student={}, answers={}, flagged=new Set(), curQ=1, curPart=1;
+let timeLeft=3600, timerInt, hlMode=false, fontSize=15;
+let allResults=[], sortKey='date';
+
+// ══ SCREEN ══
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+// ══ REGISTRATION ══
+function startExam(){
+  const req=[{id:'fname',fid:'f-fname',ok:v=>v.trim()},{id:'lname',fid:'f-lname',ok:v=>v.trim()},{id:'sid',fid:'f-sid',ok:v=>v.trim()},{id:'email',fid:'f-email',ok:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},{id:'school',fid:'f-school',ok:v=>v&&v!==''}];
+  let ok=true;
+  req.forEach(f=>{const el=document.getElementById(f.id),fe=document.getElementById(f.fid);if(!f.ok(el.value)){fe.classList.add('has-error');ok=false;}else fe.classList.remove('has-error');});
+  if(!ok){alert('Please fill in all required fields correctly before starting.');return;}
+  if(!document.getElementById('agree').checked){alert('Please tick the declaration checkbox to confirm you agree to the exam rules.');return;}
+  student={firstName:document.getElementById('fname').value.trim(),lastName:document.getElementById('lname').value.trim(),id:document.getElementById('sid').value.trim(),dob:document.getElementById('dob').value,email:document.getElementById('email').value.trim(),branch:document.getElementById('school').value,classGroup:document.getElementById('classgroup').value.trim(),nationality:document.getElementById('nationality').value.trim(),attempt:document.getElementById('attempt').value,startTime:new Date().toISOString(),uid:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+  document.getElementById('chipName').textContent=student.firstName+' '+student.lastName;
+  showScreen('screenExam');
+  buildNav();
+  startTimer();
+  gotoSec(1);
+}
+
+// ══ TIMER ══
+function startTimer(){
+  timerInt=setInterval(()=>{
+    timeLeft--;
+    const m=String(Math.floor(timeLeft/60)).padStart(2,'0'),s=String(timeLeft%60).padStart(2,'0');
+    const el=document.getElementById('timer');
+    el.textContent=m+':'+s;
+    el.className='timer-box'+(timeLeft<=300?' danger':timeLeft<=600?' warn':'');
+    if(timeLeft<=0){clearInterval(timerInt);submitExam();}
+  },1000);
+}
+
+// ══ NAVIGATION ══
+function buildNav(){
+  const parts=[[1,13,1],[14,26,2],[27,40,3]];
+  parts.forEach(([s,e,p])=>{
+    const grid=document.getElementById('pg'+p);
+    grid.innerHTML='';
+    for(let i=s;i<=e;i++){
+      const b=document.createElement('button');
+      b.id='gn'+i; b.textContent=i; b.className='qg-btn'+(i===curQ?' cur':'');
+      if(flagged.has(i)) b.classList.add('flg');
+      else if(answers[i]!==undefined) b.classList.add('ans');
+      b.onclick=()=>goQ(i);
+      grid.appendChild(b);
+    }
+  });
+  refreshPartLabels();
+}
+
+function refreshPartLabels(){
+  for(let p=1;p<=3;p++) document.getElementById('plbl'+p).classList.toggle('cur',p===curPart);
+}
+
+function updateNavBtn(q){
+  const b=document.getElementById('gn'+q); if(!b) return;
+  b.classList.remove('ans','flg');
+  if(flagged.has(q)) b.classList.add('flg');
+  else if(answers[q]!==undefined) b.classList.add('ans');
+  document.getElementById('ansCount').textContent=Object.keys(answers).length;
+}
+
+function goQ(n){
+  const part=n<=13?1:n<=26?2:3;
+  if(part!==curPart) _switchSec(part);
+  const old=document.getElementById('gn'+curQ); if(old) old.classList.remove('cur');
+  curQ=n;
+  const cur=document.getElementById('gn'+n); if(cur){cur.classList.add('cur');cur.scrollIntoView({block:'nearest'});}
+  const qel=document.getElementById('qn'+n);
+  if(qel) setTimeout(()=>qel.scrollIntoView({behavior:'smooth',block:'center'}),60);
+  document.getElementById('flagBtn').classList.toggle('on',flagged.has(n));
+}
+
+function prevQ(){if(curQ>1) goQ(curQ-1);}
+function nextQ(){if(curQ<40) goQ(curQ+1);}
+function toggleFlag(){flagged.has(curQ)?flagged.delete(curQ):flagged.add(curQ);updateNavBtn(curQ);document.getElementById('flagBtn').classList.toggle('on',flagged.has(curQ));}
+
+// ══ SECTION SWITCH ══
+function gotoSec(s){
+  _switchSec(s);
+  const firstQ=s===1?1:s===2?14:27;
+  const old=document.getElementById('gn'+curQ); if(old) old.classList.remove('cur');
+  curQ=firstQ;
+  const cur=document.getElementById('gn'+curQ); if(cur) cur.classList.add('cur');
+  document.getElementById('flagBtn').classList.toggle('on',flagged.has(curQ));
+  document.getElementById('qScroll').scrollTop=0;
+  document.getElementById('pScroll').scrollTop=0;
+}
+
+function _switchSec(s){
+  curPart=s;
+  const pNames={1:'Passage 1 – Urban Farming',2:'Passage 2 – Forest management in Pennsylvania, USA',3:'Passage 3 – Conquering Earth\'s space junk problem'};
+  const qNames={1:'Part 1 – Questions 1–13',2:'Part 2 – Questions 14–26',3:'Part 3 – Questions 27–40'};
+  document.getElementById('pTitle').textContent=pNames[s];
+  document.getElementById('qPanelTitle').textContent=qNames[s];
+  ['p1','p2','p3'].forEach((id,i)=>document.getElementById(id).style.display=i===s-1?'':'none');
+  ['sec1','sec2','sec3'].forEach((id,i)=>document.getElementById(id).style.display=i===s-1?'':'none');
+  for(let t=1;t<=3;t++) document.getElementById('tab'+t).classList.toggle('active',t===s);
+  refreshPartLabels();
+}
+
+// ══ HIGHLIGHT SYSTEM ══
+function toggleHL(){
+  hlMode=!hlMode;
+  const lbl='🖊 '+(hlMode?'ON':'OFF');
+  document.getElementById('hlTopBtn').textContent='🖊 Highlight: '+(hlMode?'ON':'OFF');
+  document.getElementById('hlTopBtn').classList.toggle('hl-active',hlMode);
+  document.getElementById('hlPassBtn').textContent=lbl;
+  document.getElementById('hlPassBtn').classList.toggle('hl-on',hlMode);
+}
+
+function doHighlight(){
+  const sel=window.getSelection();
+  if(!sel||sel.isCollapsed||!sel.toString().trim()) return false;
+  const range=sel.getRangeAt(0);
+  const examMain=document.getElementById('examMain');
+  if(!examMain.contains(range.commonAncestorContainer)) return false;
+  try{
+    const span=document.createElement('mark');
+    span.className='hl-mark';
+    span.title='Click to remove highlight';
+    span.addEventListener('click',function(){
+      const parent=this.parentNode;
+      while(this.firstChild) parent.insertBefore(this.firstChild,this);
+      parent.removeChild(this);
+    });
+    range.surroundContents(span);
+  }catch(e){
+    try{
+      const frag=range.extractContents();
+      const span=document.createElement('mark');
+      span.className='hl-mark';
+      span.title='Click to remove highlight';
+      span.addEventListener('click',function(){const p=this.parentNode;while(this.firstChild)p.insertBefore(this.firstChild,this);p.removeChild(this);});
+      span.appendChild(frag);
+      range.insertNode(span);
+    }catch(e2){}
+  }
+  sel.removeAllRanges();
+  return true;
+}
+
+document.addEventListener('mouseup',function(e){
+  if(!document.getElementById('screenExam').classList.contains('active')) return;
+  if(!hlMode) return;
+  if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)) return;
+  const examMain=document.getElementById('examMain');
+  if(!examMain.contains(e.target)) return;
+  doHighlight();
+});
+
+// ══ CUSTOM CONTEXT MENU ══
+const ctxMenu=document.getElementById('ctxMenu');
+let ctxClickedSpan=null;
+
+document.addEventListener('contextmenu',function(e){
+  if(!document.getElementById('screenExam').classList.contains('active')) return;
+  const examMain=document.getElementById('examMain');
+  if(!examMain.contains(e.target)) return;
+  if(['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+
+  e.preventDefault();
+
+  const sel=window.getSelection();
+  const hasSelection=sel&&!sel.isCollapsed&&sel.toString().trim().length>0;
+  const isHL=e.target.classList.contains('hl-mark')||e.target.closest&&e.target.closest('.hl-mark');
+  ctxClickedSpan=isHL?(e.target.classList.contains('hl-mark')?e.target:e.target.closest('.hl-mark')):null;
+
+  document.getElementById('ctxHL').style.display=hasSelection&&!isHL?'flex':'none';
+  document.getElementById('ctxRemHL').style.display=isHL?'flex':'none';
+  document.getElementById('ctxNote').style.display='flex';
+
+  let x=e.clientX+4, y=e.clientY+4;
+  ctxMenu.style.visibility='hidden'; ctxMenu.style.display='block';
+  const cw=ctxMenu.offsetWidth, ch=ctxMenu.offsetHeight;
+  ctxMenu.style.display='none'; ctxMenu.style.visibility='';
+  if(x+cw>window.innerWidth-8) x=window.innerWidth-cw-8;
+  if(y+ch>window.innerHeight-8) y=window.innerHeight-ch-8;
+  ctxMenu.style.left=x+'px'; ctxMenu.style.top=y+'px';
+  ctxMenu.classList.add('visible');
+});
+
+document.getElementById('ctxHL').addEventListener('click',function(){
+  doHighlight();
+  hideCtx();
+});
+document.getElementById('ctxRemHL').addEventListener('click',function(){
+  if(ctxClickedSpan){const p=ctxClickedSpan.parentNode;while(ctxClickedSpan.firstChild)p.insertBefore(ctxClickedSpan.firstChild,ctxClickedSpan);p.removeChild(ctxClickedSpan);}
+  hideCtx();
+});
+document.getElementById('ctxNote').addEventListener('click',function(){
+  const sel=window.getSelection();
+  const txt=sel?sel.toString().trim():'';
+  if(txt){
+    const ta=document.getElementById('notesTA');
+    ta.value+=(ta.value?'\n\n':'')+'"'+txt+'"';
+    document.getElementById('notesPanel').style.display='flex';
+  }
+  hideCtx();
+});
+function hideCtx(){ctxMenu.classList.remove('visible');}
+document.addEventListener('click',()=>hideCtx());
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideCtx();});
+
+// ══ ANSWERS ══
+function onFill(n){const inp=document.getElementById('q'+n),v=inp.value.trim();if(v){answers[n]=v;inp.classList.add('got');}else{delete answers[n];inp.classList.remove('got');}document.getElementById('qn'+n).classList.toggle('ans',!!v);updateNavBtn(n);}
+function selMCQ(n,v){answers[n]=v;document.querySelectorAll(`.mcq-opt input[name="q${n}"]`).forEach(r=>r.parentElement.classList.remove('sel'));const r=document.getElementById('q'+n+v);if(r){r.checked=true;r.parentElement.classList.add('sel');}document.getElementById('qn'+n).classList.add('ans');updateNavBtn(n);}
+function selTFNG(n,elOrVal){
+  const v=(typeof elOrVal==='string')?elOrVal:elOrVal.value;
+  const sel=document.getElementById('ts'+n);
+  if(sel){
+    sel.className='tfng-sel';
+    if(v==='T') sel.classList.add('sT');
+    else if(v==='F') sel.classList.add('sF');
+    else if(v==='NG') sel.classList.add('sN');
+  }
+  if(v){answers[n]=v;document.getElementById('qn'+n).classList.add('ans');}
+  else{delete answers[n];document.getElementById('qn'+n).classList.remove('ans');}
+  updateNavBtn(n);
+}
+function onSel(n){const sel=document.getElementById('q'+n),v=sel.value;if(v){answers[n]=v;sel.classList.add('got');document.getElementById('qn'+n).classList.add('ans');}else{delete answers[n];sel.classList.remove('got');document.getElementById('qn'+n).classList.remove('ans');}updateNavBtn(n);}
+
+// ══ TOOLS ══
+function toggleNotes(){const n=document.getElementById('notesPanel');n.style.display=n.style.display==='none'||!n.style.display?'flex':'none';}
+function chFS(d){fontSize=Math.min(20,Math.max(12,fontSize+d));document.getElementById('pScroll').style.fontSize=fontSize+'px';}
+
+// ══ SPLITTER ══
+(()=>{const sp=document.getElementById('splitter'),pp=document.getElementById('passagePanel');let dr=false,sx,sw;sp.addEventListener('mousedown',e=>{dr=true;sx=e.clientX;sw=pp.offsetWidth;sp.classList.add('drag');document.body.style.userSelect='none';});document.addEventListener('mousemove',e=>{if(!dr)return;pp.style.width=Math.min(Math.max(280,sw+e.clientX-sx),window.innerWidth-280)+'px';});document.addEventListener('mouseup',()=>{dr=false;sp.classList.remove('drag');document.body.style.userSelect='';});})();
+
+// ══ MODALS ══
+function showSubmitModal(){const a=Object.keys(answers).length;document.getElementById('mAns').textContent=a;document.getElementById('mUn').textContent=40-a;document.getElementById('mFlg').textContent=flagged.size;document.getElementById('subModal').classList.add('open');}
+function closeModal(){document.getElementById('subModal').classList.remove('open');}
+document.getElementById('subModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+
+// ══ SCORING ══
+function calcBand(c){if(c>=39)return 9;if(c>=37)return 8.5;if(c>=35)return 8;if(c>=33)return 7.5;if(c>=30)return 7;if(c>=27)return 6.5;if(c>=23)return 6;if(c>=19)return 5.5;if(c>=15)return 5;if(c>=13)return 4.5;if(c>=10)return 4;return 3;}
+
+// ══ SUBMIT ══
+function submitExam(){
+  clearInterval(timerInt);
+  document.getElementById('subModal').classList.remove('open');
+  const endTime=new Date().toISOString(),taken=3600-timeLeft;
+  let correct=0;const rows=[];
+  for(let i=1;i<=40;i++){const ua=answers[i],ca=KEY[i];let ok=false;if(ua!==undefined){const u=String(ua).trim().toLowerCase().replace(/[,.']/g,''),c=String(ca).trim().toLowerCase().replace(/[,.']/g,'');ok=u===c||u.includes(c)||c.includes(u);}if(ok)correct++;rows.push({q:i,ua,ca,ok});}
+  const band=calcBand(correct),pct=Math.round(correct/40*100);
+  const record={...student,endTime,timeTakenMin:Math.floor(taken/60),timeTakenSec:taken%60,correct,total:40,band,pct,answers:JSON.parse(JSON.stringify(answers)),rows};
+  try{const raw=safeGet('dmi:ielts:b18t1:results');const list=raw?JSON.parse(raw):[];list.push(record);localStorage.setItem('dmi:ielts:b18t1:results',JSON.stringify(list));}catch(e){console.warn('Storage:',e);}
+  showScreen('screenResults');
+  renderResults(record,rows,correct,band,pct,Math.floor(taken/60),taken%60);
+}
+function safeGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+
+// ══ RESULTS ══
+function renderResults(rec,rows,correct,band,pct,mins,secs){
+  const bc=band>=7?'var(--green)':band>=5?'var(--amber)':'var(--dmi-red)';
+  const bg=band>=7?'var(--green-l)':band>=5?'var(--amber-l)':'var(--dmi-red-light)';
+  const dateStr=new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('resCard').innerHTML=`
+    <div class="res-dmi-header"><div class="res-dmi-left"><img class="res-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/><div><div class="res-dmi-org">DMI Computer Education</div><div class="res-dmi-sub">IELTS Academic Reading – Cambridge Book 18 Test 1</div></div></div><div class="res-dmi-right">📞 0777 173 517<br>✉️ Info@dmi.lk<br>🌐 www.dmi.lk</div></div>
+    <div class="res-title"><div class="tag">✓ Test Submitted</div><h2>Your Reading Results</h2><p>${dateStr}</p></div>
+    <div class="res-scores"><div class="res-score-box" style="background:var(--bg)"><div class="big">${correct}<span style="font-size:18px;color:var(--muted)">/40</span></div><div class="lbl">Correct Answers</div></div><div class="res-score-box" style="background:${bg}"><div class="big" style="color:${bc}">Band ${band}</div><div class="lbl">Estimated Band Score</div></div><div class="res-score-box" style="background:var(--bg)"><div class="big">${pct}%</div><div class="lbl">Accuracy</div></div></div>
+    <div class="student-info-box">
+      <div class="si-item"><div class="k">Name</div><div class="v">${rec.firstName} ${rec.lastName}</div></div>
+      <div class="si-item"><div class="k">Student ID</div><div class="v">${rec.id}</div></div>
+      <div class="si-item"><div class="k">DMI Branch</div><div class="v">${rec.branch}</div></div>
+      <div class="si-item"><div class="k">Email</div><div class="v">${rec.email}</div></div>
+      <div class="si-item"><div class="k">Time Taken</div><div class="v">${mins}m ${secs}s</div></div>
+      <div class="si-item"><div class="k">Attempt</div><div class="v">${rec.attempt}</div></div>
+      ${rec.classGroup?`<div class="si-item"><div class="k">Class</div><div class="v">${rec.classGroup}</div></div>`:''}
+      ${rec.nationality?`<div class="si-item"><div class="k">Nationality</div><div class="v">${rec.nationality}</div></div>`:''}
+    </div>
+    <div class="review-section"><h3>Answer Review – All 40 Questions</h3>${rows.map(r=>`<div class="rev-row ${r.ok?'ok':r.ua===undefined?'skip':'bad'}"><span class="rev-qn">Q${r.q}</span><div class="rev-detail">Your answer: <strong style="color:${r.ok?'var(--green)':r.ua===undefined?'#999':'var(--dmi-red)'}">${r.ua||'—'}</strong>${!r.ok?` · Correct: <strong style="color:var(--green)">${r.ca}</strong>`:''}</div><span>${r.ok?'✅':r.ua===undefined?'⬜':'❌'}</span></div>`).join('')}</div>
+    <div class="res-actions"><button class="res-btn sec" onclick="location.reload()">Take Test Again</button><button class="res-btn prim" onclick="window.print()">🖨 Print Results</button></div>
+    <div class="res-footer-note">This result is generated by DMI Computer Education's IELTS Practice Portal.<br>For official IELTS registration, contact us at <strong>0777 173 517</strong> or visit <strong>www.dmi.lk</strong><br>Branches: Jaffna · Nelliady · Chunnakam · Sandilipay · Chavakachcheri · Kilinochchi</div>`;
+}
+
+// ══ ADMIN ══
+function showAdminLogin(){showScreen('screenAdminLogin');document.getElementById('adminPw').value='';document.getElementById('loginErr').style.display='none';}
+function doLogin(){if(document.getElementById('adminPw').value==='admin123'){showScreen('screenAdmin');loadAdmin();}else document.getElementById('loginErr').style.display='block';}
+function loadAdmin(){try{const r=safeGet('dmi:ielts:b18t1:results');allResults=r?JSON.parse(r):[];}catch(e){allResults=[];}renderAdminStats();renderTable();}
+function renderAdminStats(){const t=allResults.length,avg=t?Math.round(allResults.reduce((s,r)=>s+r.correct,0)/t):0,avgB=t?(allResults.reduce((s,r)=>s+r.band,0)/t).toFixed(1):0,top=t?Math.max(...allResults.map(r=>r.correct)):0;document.getElementById('adminStats').innerHTML=`<div class="a-stat"><div class="a-stat-icon red">👥</div><div><div class="a-stat-val">${t}</div><div class="a-stat-lbl">Total Students</div></div></div><div class="a-stat"><div class="a-stat-icon green">✅</div><div><div class="a-stat-val">${avg}<span style="font-size:14px;color:var(--muted)">/40</span></div><div class="a-stat-lbl">Avg. Score</div></div></div><div class="a-stat"><div class="a-stat-icon amber">🎯</div><div><div class="a-stat-val">B${avgB}</div><div class="a-stat-lbl">Avg. Band Score</div></div></div><div class="a-stat"><div class="a-stat-icon blue">🏆</div><div><div class="a-stat-val">${top}<span style="font-size:14px;color:var(--muted)">/40</span></div><div class="a-stat-lbl">Top Score</div></div></div>`;}
+function sortR(k){sortKey=k;renderTable();}
+function renderTable(){
+  const q=(document.getElementById('searchBox').value||'').toLowerCase();
+  let data=[...allResults];
+  if(q) data=data.filter(r=>(r.firstName+' '+r.lastName).toLowerCase().includes(q)||r.id.toLowerCase().includes(q)||(r.branch||'').toLowerCase().includes(q)||r.email.toLowerCase().includes(q));
+  if(sortKey==='name') data.sort((a,b)=>(a.lastName+a.firstName).localeCompare(b.lastName+b.firstName));
+  else if(sortKey==='score') data.sort((a,b)=>b.correct-a.correct);
+  else if(sortKey==='branch') data.sort((a,b)=>(a.branch||'').localeCompare(b.branch||''));
+  else data.sort((a,b)=>new Date(b.startTime)-new Date(a.startTime));
+  const wrap=document.getElementById('tableWrap');
+  if(!data.length){wrap.innerHTML=`<div class="no-data"><div class="icon">📋</div><p>${allResults.length?'No results match your search.':'No students have completed the exam yet.'}</p></div>`;return;}
+  wrap.innerHTML=`<table class="results-table"><thead><tr><th>#</th><th>Student Name</th><th>ID</th><th>DMI Branch</th><th>Email</th><th>Score</th><th>Band</th><th>%</th><th>Time</th><th>Date</th><th>Actions</th></tr></thead><tbody>${data.map((r,i)=>{const bc=r.band>=7?'bhi':r.band>=5?'bmid':'blo';const d=new Date(r.startTime).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});const oi=allResults.indexOf(r);return`<tr><td style="color:var(--muted)">${i+1}</td><td style="font-weight:600;color:var(--navy)">${r.firstName} ${r.lastName}</td><td style="font-family:monospace;color:var(--sky);font-size:12px">${r.id}</td><td style="font-size:12px">${r.branch||'—'}${r.classGroup?' · '+r.classGroup:''}</td><td style="color:var(--muted);font-size:11px">${r.email}</td><td><div class="score-bar-wrap"><div class="score-bar"><div class="score-bar-fill" style="width:${r.pct}%"></div></div><span style="font-weight:700;min-width:34px">${r.correct}/40</span></div></td><td><span class="band-pill ${bc}">Band ${r.band}</span></td><td style="font-weight:600">${r.pct}%</td><td style="font-size:11px;color:var(--muted)">${r.timeTakenMin}m${r.timeTakenSec}s</td><td style="font-size:11px;color:var(--muted)">${d}</td><td><button class="detail-btn" onclick="showDetail(${oi})">View</button><button class="delete-btn" onclick="deleteR(${oi})">Del</button></td></tr>`}).join('')}</tbody></table>`;
+}
+function showDetail(idx){const r=allResults[idx];if(!r)return;document.getElementById('detailContent').innerHTML=`<div class="dm-grid"><div class="dm-item"><div class="k">Full Name</div><div class="v">${r.firstName} ${r.lastName}</div></div><div class="dm-item"><div class="k">Student ID</div><div class="v">${r.id}</div></div><div class="dm-item"><div class="k">Email</div><div class="v">${r.email}</div></div><div class="dm-item"><div class="k">DMI Branch</div><div class="v">${r.branch||'—'}</div></div>${r.classGroup?`<div class="dm-item"><div class="k">Class</div><div class="v">${r.classGroup}</div></div>`:''}${r.dob?`<div class="dm-item"><div class="k">Date of Birth</div><div class="v">${r.dob}</div></div>`:''}${r.nationality?`<div class="dm-item"><div class="k">Nationality</div><div class="v">${r.nationality}</div></div>`:''}<div class="dm-item"><div class="k">Attempt</div><div class="v">${r.attempt}</div></div><div class="dm-item"><div class="k">Score / Band</div><div class="v">${r.correct}/40 · Band ${r.band}</div></div><div class="dm-item"><div class="k">Accuracy</div><div class="v">${r.pct}%</div></div><div class="dm-item"><div class="k">Time Taken</div><div class="v">${r.timeTakenMin}m ${r.timeTakenSec}s</div></div><div class="dm-item"><div class="k">Start Time</div><div class="v">${new Date(r.startTime).toLocaleString()}</div></div></div><div class="dm-answers"><table><thead><tr><th>Q</th><th>Student Answer</th><th>Correct</th><th>Result</th></tr></thead><tbody>${(r.rows||[]).map(row=>`<tr class="${row.ok?'ok':row.ua===undefined?'':'bad'}"><td>${row.q}</td><td>${row.ua||'—'}</td><td>${row.ca}</td><td>${row.ok?'✅':row.ua===undefined?'⬜':'❌'}</td></tr>`).join('')}</tbody></table></div>`;document.getElementById('detailModal').classList.add('open');}
+function deleteR(idx){if(!confirm('Delete this student record?'))return;allResults.splice(idx,1);localStorage.setItem('dmi:ielts:b18t1:results',JSON.stringify(allResults));renderAdminStats();renderTable();}
+function clearAll(){if(!confirm('Delete ALL student records? This cannot be undone.'))return;allResults=[];localStorage.setItem('dmi:ielts:b18t1:results','[]');renderAdminStats();renderTable();}
+function exportCSV(){
+  if(!allResults.length){alert('No results to export.');return;}
+  const h=['Name','Student ID','Email','DMI Branch','Class','Nationality','Attempt','Score','Band','Accuracy%','TimeTaken','Start','End'];
+  const rows=allResults.map(r=>[
+    '"'+r.firstName+' '+r.lastName+'"',
+    r.id,r.email,r.branch||'',r.classGroup||'',r.nationality||'',
+    r.attempt,r.correct+'/40',r.band,r.pct+'%',
+    r.timeTakenMin+'m'+r.timeTakenSec+'s',
+    new Date(r.startTime).toLocaleString(),
+    r.endTime?new Date(r.endTime).toLocaleString():''
+  ].join(','));
+  const csv=[h.join(','),...rows].join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='DMI_IELTS_Book18T1_Results_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+</script>
+</body>
+</html>

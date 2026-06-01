@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DMI Computer Education – IELTS Listening (Book 17 Test 2)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dmi-red:#c0202a;--dmi-red-dark:#8f1118;--dmi-red-light:#fde8e9;
+  --navy:#0f1e2d;--blue:#1a3a5c;--sky:#2a7abf;
+  --border:#d5dce8;--text:#1e2d40;--muted:#6b7a90;
+  --bg:#f2f5f9;--white:#fff;
+  --green:#1e7a45;--green-l:#e6f4ec;
+  --amber:#d97706;--amber-l:#fef3cd;
+  --highlight:#ffe566;--gold:#c9903a;
+}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* ── LANDING ── */
+#screenLanding{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 50%,#0f2236 100%);position:relative;overflow-y:auto;align-items:stretch}
+#screenLanding::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 10% 20%,rgba(192,32,42,.18) 0%,transparent 55%),radial-gradient(ellipse at 90% 75%,rgba(42,122,191,.15) 0%,transparent 50%)}
+.land-header{position:relative;z-index:2;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:12px 50px}
+.dmi-logo-wrap{display:flex;align-items:center;gap:12px}
+.dmi-logo-img{width:44px;height:44px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+.dmi-logo-text .name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:white;line-height:1.1}
+.dmi-logo-text .tagline{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:1.2px;text-transform:uppercase}
+.land-header-right{display:flex;align-items:center;gap:20px;font-size:12px;color:rgba(255,255,255,.6)}
+.land-header-right a{color:rgba(255,255,255,.8);text-decoration:none}.land-header-right a:hover{color:white}
+.land-body{display:grid;grid-template-columns:1fr 1fr;flex:1;position:relative;z-index:1}
+.land-left{display:flex;flex-direction:column;justify-content:center;padding:50px 50px 60px 70px;color:white}
+.land-since{display:inline-flex;align-items:center;gap:8px;background:rgba(192,32,42,.2);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:24px;width:fit-content}
+.land-since::before{content:'';width:7px;height:7px;background:var(--dmi-red);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.land-dept{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:600}
+.land-h1{font-family:'Playfair Display',serif;font-size:clamp(34px,3.5vw,54px);line-height:1.1;color:white;margin-bottom:8px}
+.land-h1 em{font-style:italic;color:var(--gold)}
+.land-sub{font-size:15px;color:rgba(255,255,255,.62);line-height:1.75;max-width:400px;margin-bottom:36px}
+.award-badge{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 16px;margin-bottom:32px;max-width:400px}
+.award-icon{font-size:24px;flex-shrink:0}
+.award-text .t{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.8px}
+.award-text .s{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;line-height:1.4}
+.land-stats{display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;width:fit-content}
+.lst{padding:14px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.lst:last-child{border-right:none}
+.lst .n{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:white;line-height:1}
+.lst .l{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.land-right{display:flex;align-items:center;justify-content:center;padding:40px 60px 40px 30px}
+.reg-card{background:white;border-radius:20px;padding:36px 36px 32px;width:100%;max-width:450px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .5s cubic-bezier(.2,.8,.3,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.card-dmi-header{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.card-dmi-logo{width:48px;height:48px;border-radius:10px;object-fit:cover;border:2px solid var(--dmi-red)}
+.card-dmi-info .org{font-size:14px;font-weight:800;color:var(--navy);letter-spacing:.3px}
+.card-dmi-info .dept{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.card-dmi-info .sub{font-size:11px;color:var(--muted);margin-top:1px}
+.reg-card h2{font-size:19px;color:var(--navy);font-weight:700;margin-bottom:3px}
+.reg-card .sub{font-size:12.5px;color:var(--muted);margin-bottom:22px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px}
+.field input,.field select{border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--text);outline:none;transition:border .15s;background:var(--bg)}
+.field input:focus,.field select:focus{border-color:var(--sky);background:white;box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.field.has-error input,.field.has-error select{border-color:var(--dmi-red)}
+.err-msg{color:var(--dmi-red);font-size:11px;display:none}
+.field.has-error .err-msg{display:block}
+.agree-row{display:flex;align-items:flex-start;gap:9px;margin:14px 0}
+.agree-row input{margin-top:3px;accent-color:var(--dmi-red);flex-shrink:0}
+.agree-row label{font-size:12px;color:var(--muted);line-height:1.5}
+.btn-start{width:100%;padding:13px;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));box-shadow:0 6px 20px rgba(192,32,42,.35);transition:all .2s}
+.btn-start:hover{transform:translateY(-2px)}
+.admin-link{text-align:center;margin-top:12px;font-size:12px;color:var(--muted)}
+.admin-link a{color:var(--sky);text-decoration:none;font-weight:600;cursor:pointer}
+.land-footer{position:relative;z-index:2;background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.07);padding:10px 50px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35)}
+
+/* ── CBT EXAM ROOM ── */
+#screenExam {
+  background: #e4e8eb;
+  overflow: hidden;
+  height: 100vh;
+  display: none;
+  flex-direction: column;
+}
+#screenExam.active {
+  display: flex;
+}
+.topbar {
+  background: #0f1e2d !important;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 52px;
+  flex-shrink: 0;
+  border-bottom: 1.5px solid rgba(255,255,255,0.15) !important;
+  z-index: 10;
+  position: relative;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.dmi-badge-sm {
+  background: var(--dmi-red);
+  color: white;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+.student-chip {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 100px;
+  padding: 3px 11px;
+  font-size: 12px;
+  color: rgba(255,255,255,.85);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.student-chip .dot {
+  width: 6px;
+  height: 6px;
+  background: #4caf50;
+  border-radius: 50%;
+}
+.candidate-details {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.timer-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+.cbt-timer {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ff4d4d !important; /* Always Red timer as requested */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.08) !important;
+  transition: background 0.15s;
+}
+.cbt-timer:hover {
+  background: rgba(255,255,255,0.15) !important;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cbt-volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 12px;
+}
+.cbt-vol-slider {
+  width: 90px;
+  accent-color: var(--dmi-red);
+  cursor: pointer;
+  background: rgba(255,255,255,0.2);
+}
+.cbt-btn {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,0.3) !important;
+  color: white !important;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.cbt-btn:hover {
+  background: rgba(255,255,255,0.1) !important;
+  border-color: rgba(255,255,255,0.5) !important;
+}
+.cbt-btn.danger {
+  background: var(--dmi-red) !important;
+  border-color: var(--dmi-red) !important;
+  color: white !important;
+  font-weight: 700 !important;
+}
+.cbt-btn.danger:hover {
+  background: var(--dmi-red-dark) !important;
+  border-color: var(--dmi-red-dark) !important;
+}
+
+/* Audio CBT Panel */
+.audio-cbt-panel {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.audio-cbt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.audio-cbt-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.audio-cbt-sources {
+  display: flex;
+  gap: 6px;
+}
+.audio-src-tab {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  transition: all 0.15s;
+}
+.audio-src-tab.active {
+  background: #e0f2fe;
+  border-color: #0284c7;
+  color: #0369a1;
+}
+.audio-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.audio-play-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #2563eb;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: background 0.15s;
+}
+.audio-play-btn:hover {
+  background: #1d4ed8;
+}
+.audio-progress-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.audio-progress {
+  flex: 1;
+  accent-color: #2563eb;
+  height: 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.audio-time-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+  min-width: 76px;
+  text-align: right;
+}
+.audio-status-text {
+  font-size: 11px;
+  font-style: italic;
+  color: #64748b;
+  margin-top: 4px;
+}
+.youtube-backup-wrap {
+  margin-top: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  height: 72px;
+  border: 1.5px solid #cbd5e1;
+  display: none;
+}
+.youtube-backup-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* CBT Question Sheet */
+.questions-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  background: #e4e8eb;
+}
+.questions-container::-webkit-scrollbar {
+  width: 12px; /* Prominent scrollbar as requested! */
+}
+.questions-container::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 6px;
+}
+.questions-container::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 6px;
+  border: 2.5px solid #e2e8f0;
+}
+.questions-container::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+.cbt-sheet {
+  max-width: 900px;
+  margin: 0 auto 30px;
+  background: #ffffff;
+  padding: 36px 44px;
+  border: 1px solid #b8c5d6;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+.q-title-cbt {
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.q-sub-cbt {
+  font-size: 13.5px;
+  color: #475569;
+  margin-bottom: 24px;
+  border-bottom: 1.5px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+/* Question formats */
+.notes-box {
+  background: #fafbfd;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 28px;
+  margin-bottom: 24px;
+}
+.notes-box h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 14px;
+  text-align: center;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 8px;
+}
+.notes-box ul {
+  list-style: none;
+  padding-left: 0;
+}
+.notes-box li {
+  margin-bottom: 12px;
+  position: relative;
+}
+.notes-box li.bullet::before {
+  content: "\2022";
+  color: var(--sky);
+  font-weight: bold;
+  display: inline-block; 
+  width: 1em;
+  margin-left: -1em;
+}
+.notes-box li.sub-bullet {
+  padding-left: 20px;
+}
+.notes-box li.sub-bullet::before {
+  content: "-";
+  color: var(--muted);
+  display: inline-block; 
+  width: 1em;
+  margin-left: -1em;
+}
+
+.fill-input {
+  border: none;
+  border-bottom: 1.5px solid var(--border);
+  outline: none;
+  padding: 0 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  background: transparent;
+  width: 130px;
+  text-align: center;
+  transition: border-color 0.15s;
+}
+.fill-input:focus {
+  border-color: var(--sky);
+  background: #f0f7ff;
+}
+
+.mc-option-group {
+  margin-bottom: 18px;
+  padding-left: 10px;
+}
+.mc-question-text {
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.mc-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.mc-option input {
+  margin-top: 5px;
+  accent-color: var(--blue);
+}
+
+.map-q-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.map-q-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fafbfd;
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 6px;
+}
+.map-q-num {
+  font-weight: 800;
+  color: var(--blue);
+  font-size: 15px;
+}
+.map-q-label {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+.map-select {
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  background: white;
+  width: 110px;
+}
+.map-select:focus {
+  border-color: var(--sky);
+}
+
+.match-box {
+  background: #f8fafc;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.match-option-title {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.match-list-item {
+  font-size: 13.5px;
+  margin-bottom: 4px;
+  padding-left: 8px;
+  border-left: 3px solid var(--gold);
+}
+
+/* ── BOTTOM BAR ── */
+.bot-nav {
+  background: #0f1e2d !important;
+  border-top: 1.5px solid rgba(255,255,255,0.15) !important;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white !important;
+}
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.review-chk-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: white !important;
+  font-size: 13px;
+  font-weight: 600;
+}
+.review-chk-wrap input {
+  accent-color: #c0202a;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+.nav-center {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+  overflow-x: auto; /* Single horizontal scrollable view as requested! */
+  white-space: nowrap;
+  padding: 6px 10px;
+}
+.nav-center::-webkit-scrollbar {
+  height: 5px;
+}
+.nav-center::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+}
+.nav-center::-webkit-scrollbar-track {
+  background: transparent;
+}
+.nav-grp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0; /* Prevent buttons from wrapping or shrinking */
+}
+.grp-lbl {
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.6) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  min-width: 48px;
+}
+.grp-lbl.cur {
+  color: #ffe566 !important;
+}
+.grp-btns {
+  display: flex;
+  gap: 4px;
+}
+.grp-btns button {
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255,255,255,0.3) !important;
+  background: transparent !important;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  color: rgba(255,255,255,0.85) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+.grp-btns button:hover {
+  border-color: var(--sky) !important;
+  color: white !important;
+  background: rgba(255,255,255,0.1) !important;
+}
+.grp-btns button.answered {
+  background: #1e7a45 !important;
+  border-color: #1e7a45 !important;
+  color: white !important;
+}
+.grp-btns button.flagged {
+  background: #d97706 !important;
+  border-color: #d97706 !important;
+  color: white !important;
+  border-radius: 50% !important;
+}
+.grp-btns button.active {
+  background: white !important;
+  color: #0f1e2d !important;
+  border: 2px solid #c0202a !important;
+  font-weight: bold !important;
+}
+.nav-right {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.nav-arrow {
+  background: rgba(255,255,255,0.08) !important;
+  border: 1.5px solid rgba(255,255,255,0.25) !important;
+  color: white !important;
+  border-radius: 50% !important; /* Circular buttons as requested! */
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.nav-arrow:hover {
+  background: var(--dmi-red) !important;
+  border-color: var(--dmi-red) !important;
+  color: white !important;
+  transform: scale(1.05);
+}
+
+/* ── RESULTS ── */
+#screenResults{background:var(--bg);overflow-y:auto;align-items:center;padding:36px 20px}
+.res-card{background:white;border-radius:20px;padding:36px;max-width:780px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.1);animation:cardIn .5s both}
+.res-dmi-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.res-dmi-left{display:flex;align-items:center;gap:12px}
+.res-dmi-logo{width:52px;height:52px;border-radius:10px;object-fit:cover;border:2px solid var(--dmi-red)}
+.res-dmi-org{font-size:15px;font-weight:800;color:var(--navy)}
+.res-dmi-sub{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.res-dmi-right{text-align:right;font-size:11px;color:var(--muted);line-height:1.7}
+.res-title{text-align:center;margin-bottom:24px}
+.res-title .tag{display:inline-block;background:var(--green-l);color:var(--green);font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 12px;border-radius:100px;margin-bottom:10px;text-transform:uppercase}
+.res-title h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--navy);margin-bottom:4px}
+.res-title p{color:var(--muted);font-size:13px}
+.res-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.res-score-box{text-align:center;border-radius:12px;padding:18px;border:1px solid var(--border)}
+.res-score-box .big{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--navy)}
+.res-score-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+.student-info-box{background:var(--bg);border-radius:10px;padding:14px 18px;margin-bottom:22px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.si-item .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.si-item .v{font-size:13px;font-weight:600;color:var(--navy)}
+.review-section{margin-bottom:18px}
+.review-section h3{font-size:14px;color:var(--navy);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.res-actions{display:flex;gap:12px;margin-top:24px;justify-content:center;flex-wrap:wrap}
+.res-btn{padding:11px 26px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;border:none}
+.res-btn.prim{background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:white;box-shadow:0 4px 14px rgba(192,32,42,.3)}
+.res-btn.sec{background:white;color:var(--blue);border:2px solid var(--blue)}
+.res-footer-note{text-align:center;margin-top:20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:14px;line-height:1.6}
+
+/* Grading colors */
+.ans-card {
+  border-radius: 8px;
+  padding: 12px 18px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  font-size: 13.5px;
+}
+.ans-card.correct {
+  background: var(--green-l);
+  border-color: #c2e7d1;
+}
+.ans-card.incorrect {
+  background: var(--dmi-red-light);
+  border-color: #f8d7da;
+}
+.ans-card .status-icon {
+  font-weight: bold;
+  margin-right: 6px;
+}
+.ans-card.correct .status-icon { color: var(--green); }
+.ans-card.incorrect .status-icon { color: var(--dmi-red); }
+
+/* ── ADMIN ── */
+#screenAdminLogin{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 60%,#0f2236 100%);align-items:center;justify-content:center;min-height:100vh;position:relative}
+#screenAdminLogin::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(192,32,42,.15) 0%,transparent 55%)}
+.login-card{background:white;border-radius:18px;padding:40px 38px;width:100%;max-width:380px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .4s both;position:relative;z-index:1}
+.login-dmi-top{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:18px;border-bottom:2px solid var(--bg)}
+.login-dmi-logo{width:46px;height:46px;border-radius:9px;object-fit:cover;border:2px solid var(--dmi-red)}
+.login-dmi-org{font-size:14px;font-weight:800;color:var(--navy)}
+.login-dmi-sub{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.login-card h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:3px}
+.login-card .sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.login-field input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;font-size:14px;font-family:inherit;outline:none;transition:all .15s}
+.login-field input:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.login-err{color:var(--dmi-red);font-size:12px;margin-top:9px;display:none;background:var(--dmi-red-light);padding:8px 12px;border-radius:6px}
+.btn-login{width:100%;padding:12px;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 14px rgba(192,32,42,.3)}
+.btn-login:hover{transform:translateY(-1px)}
+.back-link{text-align:center;margin-top:14px;font-size:12px;color:var(--muted);cursor:pointer}
+.back-link:hover{color:var(--blue)}
+#screenAdmin{background:var(--bg);overflow:hidden;height:100vh}
+.admin-top{background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.admin-dmi-logo{width:36px;height:36px;border-radius:7px;object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+.admin-org{font-size:14px;font-weight:700;color:white;line-height:1}
+.admin-org span{color:var(--gold)}
+.admin-org-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;letter-spacing:.5px}
+.admin-tag{background:rgba(192,32,42,.3);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:3px 11px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.admin-scroll{flex:1;overflow-y:auto;padding:24px}
+.admin-scroll::-webkit-scrollbar{width:6px}.admin-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.a-stat{background:white;border-radius:12px;padding:18px 20px;border:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.a-stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.a-stat-icon.red{background:var(--dmi-red-light)}.a-stat-icon.green{background:var(--green-l)}.a-stat-icon.amber{background:var(--amber-l)}.a-stat-icon.blue{background:#e8f0fb}
+.a-stat-val{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy);line-height:1}
+.a-stat-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+.admin-panel{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px}
+.ap-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:#fafbfd}
+.ap-header h2{font-size:15px;font-weight:700;color:var(--navy)}
+.ap-tools{display:flex;gap:7px}
+.ap-tool{background:white;border:1.5px solid var(--border);border-radius:7px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .15s}
+.ap-tool:hover{border-color:var(--sky);color:var(--blue);background:#f0f7ff}
+.ap-tool.prim{background:var(--dmi-red);color:white;border-color:var(--dmi-red)}
+.ap-tool.green{background:var(--green);color:white;border-color:var(--green)}
+.results-table{width:100%;border-collapse:collapse;font-size:13px}
+.results-table th{background:#f0f4fb;color:var(--navy);padding:10px 14px;text-align:left;font-weight:700;font-size:11px;letter-spacing:.4px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.results-table td{padding:10px 14px;border-bottom:1px solid #eef1f6;vertical-align:middle}
+.results-table tr:last-child td{border-bottom:none}
+.results-table tr:hover td{background:#f8fafd}
+.no-data{text-align:center;padding:44px 20px;color:var(--muted)}
+.no-data .icon{font-size:40px;margin-bottom:10px}
+.detail-btn{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);font-family:inherit}
+.detail-btn:hover{background:#e8f0fb;border-color:var(--sky)}
+.delete-btn{background:var(--dmi-red-light);border:1px solid var(--dmi-red);border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--dmi-red);font-family:inherit;margin-left:4px}
+.delete-btn:hover{background:var(--dmi-red);color:white}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9000;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:14px;padding:30px 34px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);transform:scale(.95);transition:transform .2s}
+.modal-ov.open .modal{transform:scale(1)}
+.modal h2{font-size:19px;color:var(--navy);margin-bottom:8px}
+.modal p{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.modal-stats{display:flex;gap:14px;margin-bottom:22px}
+.mstat{flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:12px}
+.mstat .n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy)}
+.mstat .l{font-size:11px;color:var(--muted);margin-top:2px}
+.modal-btns{display:flex;gap:10px}
+.mbtn{flex:1;border-radius:8px;padding:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;border:none}
+.mbtn.sec{background:white;border:1.5px solid var(--border);color:var(--muted)}
+.mbtn.prim{background:var(--dmi-red);color:white}
+.detail-modal-content{max-height:62vh;overflow-y:auto;margin-bottom:18px}
+.dm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.dm-item{background:var(--bg);border-radius:8px;padding:9px 13px}
+.dm-item .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dm-item .v{font-size:13.5px;font-weight:600;color:var(--navy);margin-top:2px}
+@media print{.res-actions,.bot-nav,.topbar,.sec-bar,.audio-sticky-box{display:none!important}body{background:white}.res-card{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+
+<!-- ══════ SCREEN 1: LANDING ══════ -->
+<div id="screenLanding" class="screen active">
+  <div class="land-header">
+    <div class="dmi-logo-wrap">
+      <img class="dmi-logo-img" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div class="dmi-logo-text"><div class="name">DMI Computer Education</div><div class="tagline">Since 2008 · Northern Sri Lanka</div></div>
+    </div>
+    <div class="land-header-right">
+      <span>📞 <a href="tel:0777173517">0777 173 517</a></span>
+      <span>✉️ <a href="mailto:info@dmi.lk">info@dmi.lk</a></span>
+      <span>🌐 <a href="https://www.dmi.lk" target="_blank">www.dmi.lk</a></span>
+    </div>
+  </div>
+  <div class="land-body">
+    <div class="land-left">
+      <div class="land-since">🏆 British Council Registered Centre</div>
+      <div class="land-dept">IELTS Department · Academic Module</div>
+      <h1 class="land-h1">IELTS Listening<br><em>Exam Portal</em></h1>
+      <p class="land-sub">DMI Computer Education's official computer-based IELTS Listening practice test. Complete 40 questions in 30 minutes (plus 2 minutes checking time).<br><strong style="color:var(--gold)">Cambridge IELTS 17 – Test 2</strong></p>
+      <div class="award-badge">
+        <div class="award-icon">🥇</div>
+        <div class="award-text">
+          <div class="t">Award of Excellence – IELTS Partners Forum 2023</div>
+          <div class="s">Recognised by British Council as a top-performing IELTS test registration centre in Sri Lanka for 15+ years.</div>
+        </div>
+      </div>
+      <div class="land-stats">
+        <div class="lst"><div class="n">4</div><div class="l">Parts</div></div>
+        <div class="lst"><div class="n">40</div><div class="l">Questions</div></div>
+        <div class="lst"><div class="n">30+2</div><div class="l">Minutes</div></div>
+        <div class="lst"><div class="n">Band</div><div class="l">Score 1-9</div></div>
+      </div>
+    </div>
+    <div class="land-right">
+      <div class="reg-card">
+        <div class="card-dmi-header">
+          <img class="card-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+          <div class="card-dmi-info"><div class="org">DMI Computer Education</div><div class="dept">IELTS Listening Test</div><div class="sub">Cambridge IELTS 17 – Test 2</div></div>
+        </div>
+        <h2>Student Registration</h2>
+        <p class="sub">Fill in your details carefully before starting the exam.</p>
+        <div class="form-row">
+          <div class="field" id="f-fname"><label>First Name *</label><input type="text" id="fname" placeholder="e.g. Arun"/><div class="err-msg">Required</div></div>
+          <div class="field" id="f-lname"><label>Last Name *</label><input type="text" id="lname" placeholder="e.g. Kumar"/><div class="err-msg">Required</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="f-sid"><label>Student ID *</label><input type="text" id="sid" placeholder="e.g. DMI-2024-001"/><div class="err-msg">Required</div></div>
+          <div class="field"><label>Date of Birth</label><input type="date" id="dob"/></div>
+        </div>
+        <div class="form-row full">
+          <div class="field" id="f-email"><label>Email Address *</label><input type="email" id="email" placeholder="e.g. student@email.com"/><div class="err-msg">Valid email required</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="f-school"><label>DMI Branch *</label>
+            <select id="school"><option value="">Select branch…</option><option>Jaffna (Head Office)</option><option>Nelliady</option><option>Chunnakam</option><option>Sandilipay</option><option>Chavakachcheri</option><option>Kilinochchi</option><option>Other</option></select>
+            <div class="err-msg">Please select a branch</div>
+          </div>
+          <div class="field"><label>Class / Group</label><input type="text" id="classgroup" placeholder="e.g. IELTS Batch 3"/></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Nationality</label><input type="text" id="nationality" placeholder="e.g. Sri Lankan"/></div>
+          <div class="field"><label>Test Attempt</label>
+            <select id="attempt"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4+">4th+</option></select>
+          </div>
+        </div>
+        <div class="agree-row">
+          <input type="checkbox" id="agree"/>
+          <label for="agree">I confirm my details are accurate and I will complete this test independently using my own headphones, under DMI exam rules.</label>
+        </div>
+        <button class="btn-start" onclick="startExam()">Begin IELTS Listening Test &#x2192;</button>
+        <div class="admin-link"><a onclick="showAdminLogin()">🔐 Teacher / Admin Dashboard</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="land-footer">
+    <span>© 2024 DMI Computer Education · www.dmi.lk · Since 2008</span>
+    <span>Jaffna · Nelliady · Chunnakam · Sandilipay · Chavakachcheri · Kilinochchi</span>
+    <span>Hotline: 0777 173 517 · <a href="mailto:info@dmi.lk" style="color:rgba(255,255,255,.5)">info@dmi.lk</a></span>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 2: EXAM ══════ -->
+<div id="screenExam" class="screen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1.5px solid rgba(255,255,255,0.2)" onerror="this.style.display='none'"/>
+      <div class="dmi-badge-sm">DMI</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5)">IELTS Listening &middot; Book 17</div>
+      <div class="student-chip"><span class="dot"></span><span id="chipName">CANDIDATE NAME - ID</span></div>
+    </div>
+    <div class="timer-wrap">
+      <div class="cbt-timer" onclick="toggleTimerDisplay()">
+        <span id="timerIcon">&#x23F0;</span> <span id="timerText">40:00 remaining</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="cbt-volume-wrap">
+        <button class="cbt-btn" onclick="playBeep()" style="padding: 2px; border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; border-color: rgba(255,255,255,0.3);">&#x1F3A7;</button>
+        <input type="range" class="cbt-vol-slider" id="headerVol" min="0" max="100" value="80" oninput="changeVolume(this.value)"/>
+      </div>
+      <button class="cbt-btn danger" onclick="showSubmitModal()">Submit</button>
+      <button class="cbt-btn" style="margin-left: 4px;" onclick="alert('IELTS Computer Delivered Practice Room:\n- Clicking navigation buttons at the bottom switches Parts and focuses/scrolls questions.\n- Answers are saved automatically.\n- To review any question, check the Review checkbox at the bottom left.')">Help</button>
+    </div>
+  </div>
+
+  <audio id="examAudio" style="display:none"></audio>
+
+  <div class="exam-main" id="examMain">
+    <div class="questions-container" id="qContainer">
+      <div class="cbt-sheet">
+        
+        <!-- Audio CBT Control Panel -->
+        <div class="audio-cbt-panel">
+          <div class="audio-cbt-header">
+            <div class="audio-cbt-title">&#x1F3A7; IELTS Official Practice Room Audio Settings</div>
+            <div class="audio-cbt-sources">
+              <div class="audio-src-tab active" id="tabSrcLocalFolder" onclick="switchAudioSource('localFolder')">Local Audio File (Folder)</div>
+              <div class="audio-src-tab" id="tabSrcStream" onclick="switchAudioSource('stream')">Online Stream (MP3)</div>
+              <div class="audio-src-tab" id="tabSrcLocal" onclick="document.getElementById('localAudioFile').click()">Choose File (Disk)</div>
+              <div class="audio-src-tab" id="tabSrcYT" onclick="switchAudioSource('youtube')">YouTube Backup</div>
+            </div>
+          </div>
+          
+          <input type="file" id="localAudioFile" accept="audio/*" style="display:none" onchange="loadLocalAudio(event)"/>
+          
+          <div class="audio-controls-row">
+            <button class="audio-play-btn" id="audioPlayBtn" onclick="toggleAudioPlayback()">&#x25B6;</button>
+            <div class="audio-progress-wrap">
+              <input type="range" class="audio-progress" id="audioScrubber" min="0" max="100" value="0" oninput="scrubAudio(this.value)"/>
+              <span class="audio-time-label" id="audioTimeLbl">00:00 / 00:00</span>
+            </div>
+          </div>
+          <div class="audio-status-text" id="audioStatusText">Mode: Local Folder Audio (Part 1)</div>
+          
+          <div class="youtube-backup-wrap" id="youtubeBackupWrap">
+            <iframe id="ytIframe" src="https://www.youtube.com/embed/5cQ_qG2Vwio?rel=0&amp;showinfo=0&amp;controls=1&amp;enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <!-- PART 1 -->
+        <div class="q-part" id="part1">
+          <div class="q-title-cbt">Part 1: Questions 1-10</div>
+          <div class="q-sub-cbt">Complete the notes below. Write ONE WORD ONLY for each answer.</div>
+          <div class="inst-box"><strong>Opportunities for voluntary work in Southoe village</strong></div>
+          
+          <div class="notes-box">
+            <h4>Library</h4>
+            <ul>
+              <li class="bullet">Help with <strong>1.</strong> <input type="text" class="fill-input" id="q1" placeholder="[fill-in]" oninput="autoSaveData()"/> books (times to be arranged).</li>
+              <li class="bullet">Help needed to keep <strong>2.</strong> <input type="text" class="fill-input" id="q2" placeholder="[fill-in]" oninput="autoSaveData()"/> of books up to date.</li>
+              <li class="bullet">Library is in the <strong>3.</strong> <input type="text" class="fill-input" id="q3" placeholder="[fill-in]" oninput="autoSaveData()"/> Room in the village hall.</li>
+            </ul>
+            
+            <h4 style="margin-top:20px;">Lunch club</h4>
+            <ul>
+              <li class="bullet">Help by providing <strong>4.</strong> <input type="text" class="fill-input" id="q4" placeholder="[fill-in]" oninput="autoSaveData()"/>.</li>
+              <li class="bullet">Help with hobby groups, especially <strong>5.</strong> <input type="text" class="fill-input" id="q5" placeholder="[fill-in]" oninput="autoSaveData()"/>.</li>
+            </ul>
+
+            <h4 style="margin-top:20px;">Help for individuals needed next week</h4>
+            <ul>
+              <li class="bullet">Mrs. Carroll needs a lift to the <strong>6.</strong> <input type="text" class="fill-input" id="q6" placeholder="[fill-in]" oninput="autoSaveData()"/>.</li>
+              <li class="bullet">Help with weeding the <strong>7.</strong> <input type="text" class="fill-input" id="q7" placeholder="[fill-in]" oninput="autoSaveData()"/> for Mr. Selsbury.</li>
+            </ul>
+          </div>
+
+          <div class="q-sub-cbt" style="margin-top:30px;">Questions 8-10: Complete the table below. Write ONE WORD ONLY for each answer.</div>
+          
+          <div class="notes-box">
+            <table style="width:100%; border-collapse:collapse; font-size:14px; text-align:left;">
+              <thead>
+                <tr style="background:#f1f5f9;">
+                  <th style="padding:10px; border:1px solid #cbd5e1;">Date</th>
+                  <th style="padding:10px; border:1px solid #cbd5e1;">Event</th>
+                  <th style="padding:10px; border:1px solid #cbd5e1;">Requirement</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">19 October</td>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">Village <strong>8.</strong> <input type="text" class="fill-input" id="q8" placeholder="[fill-in]" oninput="autoSaveData()"/></td>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">Provide refreshments</td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">18 November</td>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">Dance in village hall</td>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">Check <strong>9.</strong> <input type="text" class="fill-input" id="q9" placeholder="[fill-in]" oninput="autoSaveData()"/></td>
+                </tr>
+                <tr>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">New Year's Party</td>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">Party at hotel</td>
+                  <td style="padding:10px; border:1px solid #cbd5e1;">Design <strong>10.</strong> <input type="text" class="fill-input" id="q10" placeholder="[fill-in]" oninput="autoSaveData()"/></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PART 2 -->
+        <div class="q-part" id="part2" style="display:none">
+          <div class="q-title-cbt">Part 2: Questions 11-20</div>
+          <div class="q-sub-cbt">Questions 11-14: Choose the correct letter, A, B or C.</div>
+          
+          <div class="notes-box">
+            <div class="mc-question-text">11. Many past owners made changes to:</div>
+            <div class="mc-option-group">
+              <label class="mc-option"><input type="radio" name="q11" value="A" onchange="autoSaveData()"/> A. the gardens.</label>
+              <label class="mc-option"><input type="radio" name="q11" value="B" onchange="autoSaveData()"/> B. the house.</label>
+              <label class="mc-option"><input type="radio" name="q11" value="C" onchange="autoSaveData()"/> C. the farm.</label>
+            </div>
+
+            <div class="mc-question-text">12. Sir Edward Downes built Oniton Hall because he wanted:</div>
+            <div class="mc-option-group">
+              <label class="mc-option"><input type="radio" name="q12" value="A" onchange="autoSaveData()"/> A. a place for discussing politics.</label>
+              <label class="mc-option"><input type="radio" name="q12" value="B" onchange="autoSaveData()"/> B. a place to display his wealth.</label>
+              <label class="mc-option"><input type="radio" name="q12" value="C" onchange="autoSaveData()"/> C. a place for artists and writers.</label>
+            </div>
+
+            <div class="mc-question-text">13. Visitors can learn about the work of servants in the past from:</div>
+            <div class="mc-option-group">
+              <label class="mc-option"><input type="radio" name="q13" value="A" onchange="autoSaveData()"/> A. audio guides.</label>
+              <label class="mc-option"><input type="radio" name="q13" value="B" onchange="autoSaveData()"/> B. photographs.</label>
+              <label class="mc-option"><input type="radio" name="q13" value="C" onchange="autoSaveData()"/> C. people in costume.</label>
+            </div>
+
+            <div class="mc-question-text">14. What is new for children at Oniton Hall?</div>
+            <div class="mc-option-group">
+              <label class="mc-option"><input type="radio" name="q14" value="A" onchange="autoSaveData()"/> A. clothes for dressing up.</label>
+              <label class="mc-option"><input type="radio" name="q14" value="B" onchange="autoSaveData()"/> B. mini tractors.</label>
+              <label class="mc-option"><input type="radio" name="q14" value="C" onchange="autoSaveData()"/> C. the adventure playground.</label>
+            </div>
+          </div>
+
+          <div class="q-sub-cbt" style="margin-top:30px;">Questions 15-20: Match the location on the farm to the activity offered. Choose the correct letter, A-G, from the dropdowns below.</div>
+          
+          <div class="notes-box">
+            <div class="match-box">
+              <div class="match-option-title">Activities:</div>
+              <div class="match-list-item"><strong>A.</strong> Shopping</div>
+              <div class="match-list-item"><strong>B.</strong> Doing arts and crafts</div>
+              <div class="match-list-item"><strong>C.</strong> Seeing old farming equipment</div>
+              <div class="match-list-item"><strong>D.</strong> Eating and drinking</div>
+              <div class="match-list-item"><strong>E.</strong> Starting a trip</div>
+              <div class="match-list-item"><strong>F.</strong> Seeing rare breeds of animals</div>
+              <div class="match-list-item"><strong>G.</strong> Helping to look after animals</div>
+            </div>
+            
+            <div class="map-q-row">
+              <div class="map-q-item">
+                <span class="map-q-num">15</span>
+                <span class="map-q-label">Dairy</span>
+                <select class="map-select" id="q15" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+              <div class="map-q-item">
+                <span class="map-q-num">16</span>
+                <span class="map-q-label">Large barn</span>
+                <select class="map-select" id="q16" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+            </div>
+            <div class="map-q-row">
+              <div class="map-q-item">
+                <span class="map-q-num">17</span>
+                <span class="map-q-label">Small barn</span>
+                <select class="map-select" id="q17" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+              <div class="map-q-item">
+                <span class="map-q-num">18</span>
+                <span class="map-q-label">Stables</span>
+                <select class="map-select" id="q18" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+            </div>
+            <div class="map-q-row">
+              <div class="map-q-item">
+                <span class="map-q-num">19</span>
+                <span class="map-q-label">Shed</span>
+                <select class="map-select" id="q19" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+              <div class="map-q-item">
+                <span class="map-q-num">20</span>
+                <span class="map-q-label">Parkland</span>
+                <select class="map-select" id="q20" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PART 3 -->
+        <div class="q-part" id="part3" style="display:none">
+          <div class="q-title-cbt">Part 3: Questions 21-30</div>
+          
+          <div class="q-sub-cbt">Questions 21-22: Choose TWO letters, A-E. Which TWO things do the students agree they need to include in their reviews?</div>
+          <div class="notes-box">
+            <div class="mc-option-group">
+              <div style="margin-bottom: 12px;">
+                <strong>First selection:</strong>
+                <select class="map-select" id="q21" onchange="autoSaveData()" style="width: 250px;">
+                  <option value="">Select...</option>
+                  <option value="A">A. a summary of the plot</option>
+                  <option value="B">B. a brief history of the play</option>
+                  <option value="C">C. a comparison with other productions</option>
+                  <option value="D">D. a personal reaction</option>
+                  <option value="E">E. a reference to particular scenes</option>
+                </select>
+              </div>
+              <div>
+                <strong>Second selection:</strong>
+                <select class="map-select" id="q22" onchange="autoSaveData()" style="width: 250px;">
+                  <option value="">Select...</option>
+                  <option value="A">A. a summary of the plot</option>
+                  <option value="B">B. a brief history of the play</option>
+                  <option value="C">C. a comparison with other productions</option>
+                  <option value="D">D. a personal reaction</option>
+                  <option value="E">E. a reference to particular scenes</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="q-sub-cbt" style="margin-top:30px;">Questions 23-27: Which opinion do the speakers give about each of the following aspects of the production? Choose the correct letter, A-G, from the dropdowns below.</div>
+          
+          <div class="match-box">
+            <div class="match-option-title">Opinions:</div>
+            <div class="match-list-item"><strong>A.</strong> They both expected this to be more traditional.</div>
+            <div class="match-list-item"><strong>B.</strong> They both thought this was original.</div>
+            <div class="match-list-item"><strong>C.</strong> They agree this created the right atmosphere.</div>
+            <div class="match-list-item"><strong>D.</strong> They agree this was a major strength.</div>
+            <div class="match-list-item"><strong>E.</strong> They were both disappointed by this.</div>
+            <div class="match-list-item"><strong>F.</strong> They disagree about why this was an issue.</div>
+            <div class="match-list-item"><strong>G.</strong> They disagree about how this could be improved.</div>
+          </div>
+
+          <div class="notes-box">
+            <div class="map-q-row">
+              <div class="map-q-item">
+                <span class="map-q-num">23</span>
+                <span class="map-q-label">The set</span>
+                <select class="map-select" id="q23" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+              <div class="map-q-item">
+                <span class="map-q-num">24</span>
+                <span class="map-q-label">The lighting</span>
+                <select class="map-select" id="q24" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+            </div>
+            <div class="map-q-row">
+              <div class="map-q-item">
+                <span class="map-q-num">25</span>
+                <span class="map-q-label">The costume design</span>
+                <select class="map-select" id="q25" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+              <div class="map-q-item">
+                <span class="map-q-num">26</span>
+                <span class="map-q-label">The music</span>
+                <select class="map-select" id="q26" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+            </div>
+            <div style="max-width:50%; margin: 0 auto;">
+              <div class="map-q-item">
+                <span class="map-q-num">27</span>
+                <span class="map-q-label">The actors' delivery</span>
+                <select class="map-select" id="q27" onchange="autoSaveData()">
+                  <option value="">Select...</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="q-sub-cbt" style="margin-top:30px;">Questions 28-30: Choose the correct letter, A, B or C.</div>
+          
+          <div class="notes-box">
+            <div class="mc-question-text">28. The students think the story of Romeo and Juliet is still relevant for young people today because:</div>
+            <div class="mc-option-group">
+              <label class="mc-option"><input type="radio" name="q28" value="A" onchange="autoSaveData()"/> A. it shows how peer pressure works.</label>
+              <label class="mc-option"><input type="radio" name="q28" value="B" onchange="autoSaveData()"/> B. it deals with problems that families experience.</label>
+              <label class="mc-option"><input type="radio" name="q28" value="C" onchange="autoSaveData()"/> C. it explores how intense relationships can be.</label>
+            </div>
+
+            <div class="mc-question-text">29. The students found watching Romeo and Juliet in another language:</div>
+            <div class="mc-option-group">
+              <label class="mc-option"><input type="radio" name="q29" value="A" onchange="autoSaveData()"/> A. confusing.</label>
+              <label class="mc-option"><input type="radio" name="q29" value="B" onchange="autoSaveData()"/> B. boring.</label>
+              <label class="mc-option"><input type="radio" name="q29" value="C" onchange="autoSaveData()"/> C. moving.</label>
+            </div>
+
+            <div class="mc-question-text">30. Why do the students think Shakespeare's plays have such international appeal?</div>
+            <div class="mc-option-group">
+              <label class="mc-option"><input type="radio" name="q30" value="A" onchange="autoSaveData()"/> A. They are easy to translate.</label>
+              <label class="mc-option"><input type="radio" name="q30" value="B" onchange="autoSaveData()"/> B. They feature universal characters.</label>
+              <label class="mc-option"><input type="radio" name="q30" value="C" onchange="autoSaveData()"/> C. They can be interpreted in many ways.</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- PART 4 -->
+        <div class="q-part" id="part4" style="display:none">
+          <div class="q-title-cbt">Part 4: Questions 31-40</div>
+          <div class="q-sub-cbt">Complete the notes below. Write ONE WORD AND/OR A NUMBER for each answer.</div>
+          <div class="inst-box"><strong>The Impact of Digital Technology on the Icelandic Language</strong></div>
+          
+          <div class="notes-box">
+            <h4>The Icelandic language</h4>
+            <ul>
+              <li class="bullet">Has approximately <strong>31.</strong> <input type="text" class="fill-input" id="q31" placeholder="[fill-in]" oninput="autoSaveData()"/> speakers.</li>
+              <li class="bullet">Has a <strong>32.</strong> <input type="text" class="fill-input" id="q32" placeholder="[fill-in]" oninput="autoSaveData()"/> that is still growing.</li>
+              <li class="bullet">Has its own words for computer-based concepts, such as "web browser" and <strong>33.</strong> <input type="text" class="fill-input" id="q33" placeholder="[fill-in]" oninput="autoSaveData()"/>.</li>
+            </ul>
+            
+            <h4 style="margin-top:20px;">Young speakers</h4>
+            <ul>
+              <li class="bullet">Are big users of digital technology, such as <strong>34.</strong> <input type="text" class="fill-input" id="q34" placeholder="[fill-in]" oninput="autoSaveData()"/>.</li>
+              <li class="bullet">Are becoming <strong>35.</strong> <input type="text" class="fill-input" id="q35" placeholder="[fill-in]" oninput="autoSaveData()"/> very quickly.</li>
+              <li class="bullet">Are having discussions using only English while they are in the <strong>36.</strong> <input type="text" class="fill-input" id="q36" placeholder="[fill-in]" oninput="autoSaveData()"/> at school.</li>
+              <li class="bullet">Are better able to identify the content of a <strong>37.</strong> <input type="text" class="fill-input" id="q37" placeholder="[fill-in]" oninput="autoSaveData()"/> in English than Icelandic.</li>
+            </ul>
+
+            <h4 style="margin-top:20px;">Technology and internet companies</h4>
+            <ul>
+              <li class="bullet">Write very little in Icelandic because of the small number of speakers and because of how complicated its <strong>38.</strong> <input type="text" class="fill-input" id="q38" placeholder="[fill-in]" oninput="autoSaveData()"/> is.</li>
+            </ul>
+
+            <h4 style="margin-top:20px;">The Icelandic government</h4>
+            <ul>
+              <li class="bullet">Is worried that young Icelanders may lose their <strong>39.</strong> <input type="text" class="fill-input" id="q39" placeholder="[fill-in]" oninput="autoSaveData()"/> as Icelanders.</li>
+              <li class="bullet">Is worried about the consequences of children not being <strong>40.</strong> <input type="text" class="fill-input" id="q40" placeholder="[fill-in]" oninput="autoSaveData()"/> in either Icelandic or English.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="bot-nav">
+    <div class="nav-left">
+      <label class="review-chk-wrap">
+        <input type="checkbox" id="reviewChk" onchange="toggleReview()"/>
+        <span>Review</span>
+      </label>
+    </div>
+    <div class="nav-center">
+      <div class="nav-grp">
+        <span class="grp-lbl">Part 1</span>
+        <div class="grp-btns">
+          <button id="nav-q1" onclick="navToQ(1)">1</button>
+          <button id="nav-q2" onclick="navToQ(2)">2</button>
+          <button id="nav-q3" onclick="navToQ(3)">3</button>
+          <button id="nav-q4" onclick="navToQ(4)">4</button>
+          <button id="nav-q5" onclick="navToQ(5)">5</button>
+          <button id="nav-q6" onclick="navToQ(6)">6</button>
+          <button id="nav-q7" onclick="navToQ(7)">7</button>
+          <button id="nav-q8" onclick="navToQ(8)">8</button>
+          <button id="nav-q9" onclick="navToQ(9)">9</button>
+          <button id="nav-q10" onclick="navToQ(10)">10</button>
+        </div>
+      </div>
+      <div class="nav-grp">
+        <span class="grp-lbl">Part 2</span>
+        <div class="grp-btns">
+          <button id="nav-q11" onclick="navToQ(11)">11</button>
+          <button id="nav-q12" onclick="navToQ(12)">12</button>
+          <button id="nav-q13" onclick="navToQ(13)">13</button>
+          <button id="nav-q14" onclick="navToQ(14)">14</button>
+          <button id="nav-q15" onclick="navToQ(15)">15</button>
+          <button id="nav-q16" onclick="navToQ(16)">16</button>
+          <button id="nav-q17" onclick="navToQ(17)">17</button>
+          <button id="nav-q18" onclick="navToQ(18)">18</button>
+          <button id="nav-q19" onclick="navToQ(19)">19</button>
+          <button id="nav-q20" onclick="navToQ(20)">20</button>
+        </div>
+      </div>
+      <div class="nav-grp">
+        <span class="grp-lbl">Part 3</span>
+        <div class="grp-btns">
+          <button id="nav-q21" onclick="navToQ(21)">21</button>
+          <button id="nav-q22" onclick="navToQ(22)">22</button>
+          <button id="nav-q23" onclick="navToQ(23)">23</button>
+          <button id="nav-q24" onclick="navToQ(24)">24</button>
+          <button id="nav-q25" onclick="navToQ(25)">25</button>
+          <button id="nav-q26" onclick="navToQ(26)">26</button>
+          <button id="nav-q27" onclick="navToQ(27)">27</button>
+          <button id="nav-q28" onclick="navToQ(28)">28</button>
+          <button id="nav-q29" onclick="navToQ(29)">29</button>
+          <button id="nav-q30" onclick="navToQ(30)">30</button>
+        </div>
+      </div>
+      <div class="nav-grp">
+        <span class="grp-lbl">Part 4</span>
+        <div class="grp-btns">
+          <button id="nav-q31" onclick="navToQ(31)">31</button>
+          <button id="nav-q32" onclick="navToQ(32)">32</button>
+          <button id="nav-q33" onclick="navToQ(33)">33</button>
+          <button id="nav-q34" onclick="navToQ(34)">34</button>
+          <button id="nav-q35" onclick="navToQ(35)">35</button>
+          <button id="nav-q36" onclick="navToQ(36)">36</button>
+          <button id="nav-q37" onclick="navToQ(37)">37</button>
+          <button id="nav-q38" onclick="navToQ(38)">38</button>
+          <button id="nav-q39" onclick="navToQ(39)">39</button>
+          <button id="nav-q40" onclick="navToQ(40)">40</button>
+        </div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-arrow" onclick="navPrevQ()">&#x25C0;</button>
+      <button class="nav-arrow" onclick="navNextQ()">&#x25B6;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 3: RESULTS ══════ -->
+<div id="screenResults" class="screen">
+  <div class="res-card" id="resCard"></div>
+</div>
+
+<!-- ══════ SCREEN 4: ADMIN LOGIN ══════ -->
+<div id="screenAdminLogin" class="screen">
+  <div class="login-card">
+    <div class="login-dmi-top">
+      <img class="login-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div><div class="login-dmi-org">DMI Computer Education</div><div class="login-dmi-sub">IELTS Admin Portal</div></div>
+    </div>
+    <h2>Admin Login</h2>
+    <p class="sub">Enter the teacher password to access the student listening submissions.</p>
+    <div class="login-field"><label>Password</label><input type="password" id="adminPw" placeholder="Enter admin password…" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="login-err" id="loginErr">❌ Incorrect password. Please try again.</div>
+    <button class="btn-login" onclick="doLogin()">Access Dashboard →</button>
+    <div class="back-link" onclick="showScreen('screenLanding')">← Back to Registration</div>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 5: ADMIN DASHBOARD ══════ -->
+<div id="screenAdmin" class="screen">
+  <div class="admin-top">
+    <div style="display:flex;align-items:center;gap:14px">
+      <img class="admin-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div><div class="admin-org">DMI <span>Computer Education</span></div><div class="admin-org-sub">IELTS Listening · Book 17 Test 2 · Teacher Dashboard</div></div>
+      <div class="admin-tag">Admin Panel</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="tb-btn" onclick="exportCSV()" style="background:rgba(255,255,255,.1)">⬇ CSV</button>
+      <button class="tb-btn" onclick="window.print()" style="background:rgba(255,255,255,.1)">🖨 Print</button>
+      <button class="tb-btn" onclick="clearAll()" style="background:rgba(192,32,42,.2);border-color:rgba(192,32,42,.4)">🗑 Clear All</button>
+      <button class="tb-btn" onclick="showScreen('screenLanding')">← Exit</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    <div class="admin-scroll">
+      <div class="admin-stats" id="adminStats"></div>
+      <div class="admin-panel">
+        <div class="ap-header"><h2>📝 Student Listening Submissions</h2>
+          <div class="ap-tools">
+            <button class="ap-tool" onclick="sortR('name')">↕ Name</button>
+            <button class="ap-tool" onclick="sortR('score')">↕ Score</button>
+            <button class="ap-tool green" onclick="exportCSV()">⬇ CSV</button>
+            <button class="ap-tool prim" onclick="loadAdmin()">🔄 Refresh</button>
+          </div>
+        </div>
+        <div id="tableWrap"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Submit modal -->
+<div class="modal-ov" id="subModal">
+  <div class="modal">
+    <h2>Submit your listening test?</h2>
+    <p>Once submitted, you will receive an automatic band score. Ensure you have answered as many questions as possible.</p>
+    <div class="modal-btns">
+      <button class="mbtn sec" onclick="closeModal()">Continue Test</button>
+      <button class="mbtn prim" onclick="submitExam()">Submit Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div class="modal-ov" id="detailModal">
+  <div class="modal" style="max-width:700px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <img src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" style="width:36px;height:36px;border-radius:7px;object-fit:cover;border:2px solid var(--dmi-red)" onerror="this.style.display='none'"/>
+      <div><div style="font-size:14px;font-weight:700;color:var(--navy)">DMI Computer Education – Student Detail</div><div style="font-size:11px;color:var(--muted)">IELTS Listening (Book 17 Test 2)</div></div>
+    </div>
+    <div id="detailContent" class="detail-modal-content"></div>
+    <div class="modal-btns"><button class="mbtn prim" onclick="document.getElementById('detailModal').classList.remove('open')">Close</button></div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'dmi:ielts:b17t2:listening';
+const KEY = {
+  1: 'collecting', 2: 'records', 3: 'West', 4: 'transport', 5: 'art',
+  6: 'hospital', 7: 'garden', 8: 'quiz', 9: 'tickets', 10: 'poster',
+  11: 'B', 12: 'C', 13: 'C', 14: 'B',
+  15: 'D', 16: 'C', 17: 'G', 18: 'A', 19: 'E', 20: 'F',
+  21: 'D', 22: 'E', 23: 'D', 24: 'C', 25: 'A', 26: 'E', 27: 'F', 28: 'B', 29: 'C', 30: 'C',
+  31: '321,000', 32: 'vocabulary', 33: 'podcast', 34: 'smartphones', 35: 'bilingual',
+  36: 'playground', 37: 'picture', 38: 'grammar', 39: 'identity', 40: 'fluent'
+};
+
+const PART_AUDIO_LOCAL = {
+  1: './cam17-test2-part1.mp3',
+  2: './cam17-test2-part2.mp3',
+  3: './cam17-test2-part3.mp3',
+  4: './cam17-test2-part4.mp3'
+};
+
+const PART_AUDIO_ONLINE = {
+  1: 'https://ieltstrainingonline.com/wp-content/uploads/2022/06/cam17-test2-part1.mp3',
+  2: 'https://ieltstrainingonline.com/wp-content/uploads/2022/06/cam17-test2-part2.mp3',
+  3: 'https://ieltstrainingonline.com/wp-content/uploads/2022/06/cam17-test2-part3.mp3',
+  4: 'https://ieltstrainingonline.com/wp-content/uploads/2022/06/cam17-test2-part4.mp3'
+};
+
+let student = {}, curPart = 1, timeLeft = 2400, timerInt;
+let allResults = [], sortKey = 'date';
+let audioMode = 'localFolder'; // 'localFolder', 'stream', 'local', 'youtube'
+let activeQ = 1;
+let reviewFlags = {};
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startExam() {
+  const req = [
+    {id: 'fname', fid: 'f-fname', ok: v => v.trim()},
+    {id: 'lname', fid: 'f-lname', ok: v => v.trim()},
+    {id: 'sid', fid: 'f-sid', ok: v => v.trim()},
+    {id: 'email', fid: 'f-email', ok: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
+    {id: 'school', fid: 'f-school', ok: v => v && v !== ''}
+  ];
+  let ok = true;
+  req.forEach(f => {
+    const el = document.getElementById(f.id), fe = document.getElementById(f.fid);
+    if (!f.ok(el.value)) { fe.classList.add('has-error'); ok = false; } else fe.classList.remove('has-error');
+  });
+  if (!ok) { alert('Please fill in all required fields correctly.'); return; }
+  if (!document.getElementById('agree').checked) { alert('Please tick the declaration checkbox.'); return; }
+  
+  student = {
+    firstName: document.getElementById('fname').value.trim(),
+    lastName: document.getElementById('lname').value.trim(),
+    id: document.getElementById('sid').value.trim(),
+    dob: document.getElementById('dob').value,
+    email: document.getElementById('email').value.trim(),
+    branch: document.getElementById('school').value,
+    classGroup: document.getElementById('classgroup').value.trim(),
+    nationality: document.getElementById('nationality').value.trim(),
+    attempt: document.getElementById('attempt').value,
+    startTime: new Date().toISOString()
+  };
+  
+  const cName = (student.firstName + ' ' + student.lastName).toUpperCase();
+  document.getElementById('chipName').textContent = cName + ' - ' + student.id;
+  
+  showScreen('screenExam');
+  drawMap();
+  startTimer();
+  showPart(1);
+  setActiveQ(1);
+  setupAudioListeners();
+  bindInputsFocus();
+}
+
+function startTimer() {
+  timerInt = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+    if (timeLeft <= 0) { clearInterval(timerInt); submitExam(); }
+  }, 1000);
+}
+
+let timerHidden = false;
+function toggleTimerDisplay() {
+  timerHidden = !timerHidden;
+  const timerText = document.getElementById('timerText');
+  if (timerHidden) {
+    timerText.textContent = 'Click to show';
+  } else {
+    updateTimerUI();
+  }
+}
+function updateTimerUI() {
+  if (timerHidden) return;
+  const m = String(Math.floor(timeLeft / 60)).padStart(2, '0');
+  const s = String(timeLeft % 60).padStart(2, '0');
+  const el = document.getElementById('timerText');
+  if (el) {
+    el.textContent = m + ':' + s + ' remaining';
+    el.style.color = '#ff4d4d'; /* Always Red timer */
+  }
+}
+
+function showPart(p) {
+  curPart = p;
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById('part' + i);
+    if (el) el.style.display = (i === p) ? '' : 'none';
+  }
+  
+  const audio = document.getElementById('examAudio');
+  const playBtn = document.getElementById('audioPlayBtn');
+  
+  if (audioMode === 'localFolder') {
+    if (audio) {
+      audio.src = PART_AUDIO_LOCAL[p];
+      audio.load();
+      playBtn.innerHTML = '&#x25B6;';
+      document.getElementById('audioStatusText').textContent = 'Mode: Local Folder Audio (Part ' + p + ')';
+    }
+  } else if (audioMode === 'stream') {
+    if (audio) {
+      audio.src = PART_AUDIO_ONLINE[p];
+      audio.load();
+      playBtn.innerHTML = '&#x25B6;';
+      document.getElementById('audioStatusText').textContent = 'Mode: Streaming MP3 (Part ' + p + ')';
+    }
+  }
+  updateNavIndicators();
+  document.querySelectorAll('.grp-lbl').forEach((lbl, idx) => {
+    lbl.classList.toggle('cur', (idx + 1) === p);
+  });
+  document.getElementById('qContainer').scrollTop = 0;
+}
+
+function getAnswer(q) {
+  const el = document.getElementById('q' + q);
+  if (el) {
+    if (el.tagName === 'SELECT') return el.value.trim();
+    if (el.tagName === 'INPUT') return el.value.trim();
+  }
+  const radios = document.getElementsByName('q' + q);
+  if (radios.length) {
+    for (let r of radios) {
+      if (r.checked) return r.value;
+    }
+  }
+  return '';
+}
+
+function autoSaveData() {
+  updateNavIndicators();
+}
+function manualSave() {
+  alert('Exam progress saved locally.');
+}
+
+function getScore(answers) {
+  let score = 0;
+  for (let i = 1; i <= 40; i++) {
+    if (i === 21 || i === 22) continue; // handle below
+    const ans = (answers[i] || '').toLowerCase().replace(/^(the|a|an)\s+/, '').trim();
+    const keyVal = KEY[i].toLowerCase().trim();
+    if (ans === keyVal) score++;
+  }
+  
+  // Handle Q21-22 order independence
+  const ans21 = (answers[21] || '').toUpperCase().trim();
+  const ans22 = (answers[22] || '').toUpperCase().trim();
+  if ((ans21 === 'D' && ans22 === 'E') || (ans21 === 'E' && ans22 === 'D')) {
+    score += 2;
+  } else if (ans21 === 'D' || ans21 === 'E' || ans22 === 'D' || ans22 === 'E') {
+    if (ans21 !== ans22 && (ans21 === 'D' || ans21 === 'E' || ans22 === 'D' || ans22 === 'E')) {
+      score += 1;
+    }
+  }
+  return score;
+}
+
+function getBand(score) {
+  if (score >= 39) return '9.0';
+  if (score >= 37) return '8.5';
+  if (score >= 35) return '8.0';
+  if (score >= 32) return '7.5';
+  if (score >= 30) return '7.0';
+  if (score >= 26) return '6.5';
+  if (score >= 23) return '6.0';
+  if (score >= 20) return '5.5';
+  if (score >= 16) return '5.0';
+  if (score >= 13) return '4.5';
+  if (score >= 10) return '4.0';
+  if (score >= 8) return '3.5';
+  if (score >= 6) return '3.0';
+  if (score >= 4) return '2.5';
+  return '2.0';
+}
+
+function showSubmitModal() { document.getElementById('subModal').classList.add('open'); }
+function closeModal() { document.getElementById('subModal').classList.remove('open'); }
+document.getElementById('subModal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
+document.getElementById('detailModal').addEventListener('click', function (e) { if (e.target === this) this.classList.remove('open'); });
+
+function submitExam() {
+  clearInterval(timerInt);
+  document.getElementById('subModal').classList.remove('open');
+  
+  const audio = document.getElementById('examAudio');
+  if (audio) audio.pause();
+  
+  const taken = 2400 - timeLeft;
+  const answers = {};
+  for (let i = 1; i <= 40; i++) answers[i] = getAnswer(i);
+  
+  const score = getScore(answers);
+  const band = getBand(score);
+  
+  const record = { ...student, endTime: new Date().toISOString(), timeTakenMin: Math.floor(taken / 60), timeTakenSec: taken % 60, answers, score, band };
+  
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const list = raw ? JSON.parse(raw) : [];
+    list.push(record);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  } catch (e) {}
+  
+  showScreen('screenResults'); renderResults(record);
+}
+
+function renderResults(rec) {
+  const dateStr = new Date().toLocaleDateString('en-GB', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  
+  let reviewHTML = '';
+  const ans21 = (rec.answers[21] || '').toUpperCase().trim();
+  const ans22 = (rec.answers[22] || '').toUpperCase().trim();
+  const q21Correct = (ans21 === 'D' || ans21 === 'E');
+  const q22Correct = (ans22 === 'D' || ans22 === 'E') && (ans21 !== ans22);
+
+  for (let i = 1; i <= 40; i++) {
+    const stAns = rec.answers[i] || '—';
+    let isCorrect = false;
+    if (i === 21) {
+      isCorrect = q21Correct;
+    } else if (i === 22) {
+      isCorrect = q22Correct;
+    } else {
+      isCorrect = (stAns.toLowerCase().replace(/^(the|a|an)\s+/, '').trim() === KEY[i].toLowerCase().trim());
+    }
+    
+    let keyShow = KEY[i];
+    if (i === 21 || i === 22) {
+      keyShow = 'D or E (must be different)';
+    }
+    
+    reviewHTML += `<div class="ans-card ${isCorrect ? 'correct' : 'incorrect'}"><span class="status-icon">${isCorrect ? '✓' : '✗'}</span><strong>Question ${i}:</strong> Your answer: <code style="font-weight:700;">${esc(stAns)}</code> | Correct answer: <code style="font-weight:700;">${keyShow}</code></div>`;
+  }
+  
+  document.getElementById('resCard').innerHTML = `
+    <div class="res-dmi-header"><div class="res-dmi-left"><img class="res-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/><div><div class="res-dmi-org">DMI Computer Education</div><div class="res-dmi-sub">IELTS Listening – Cambridge Book 17 Test 2</div></div></div><div class="res-dmi-right">📞 0777 173 517<br>✉️ info@dmi.lk<br>🌐 www.dmi.lk</div></div>
+    <div class="res-title"><div class="tag">✓ Test Submitted</div><h2>Listening Test Complete</h2><p>${dateStr}</p></div>
+    <div class="res-scores">
+      <div class="res-score-box"><div class="big">${rec.score} / 40</div><div class="lbl">Total Correct Answers</div></div>
+      <div class="res-score-box" style="background:var(--green-l)"><div class="big" style="color:var(--green)">Band ${rec.band}</div><div class="lbl">Estimated Listening Band</div></div>
+      <div class="res-score-box"><div class="big">${rec.timeTakenMin}m ${rec.timeTakenSec}s</div><div class="lbl">Time Taken</div></div>
+    </div>
+    <div class="student-info-box">
+      <div class="si-item"><div class="k">Name</div><div class="v">${rec.firstName} ${rec.lastName}</div></div>
+      <div class="si-item"><div class="k">Student ID</div><div class="v">${rec.id}</div></div>
+      <div class="si-item"><div class="k">DMI Branch</div><div class="v">${rec.branch}</div></div>
+      <div class="si-item"><div class="k">Email</div><div class="v">${rec.email}</div></div>
+    </div>
+    <div class="review-section">
+      <h3>📝 Answers Review & Corrections</h3>
+      <div style="max-height:400px; overflow-y:auto; padding-right:8px; border:1px solid var(--border); border-radius:8px; padding:12px;">
+        ${reviewHTML}
+      </div>
+    </div>
+    <div class="res-actions"><button class="res-btn sec" onclick="location.reload()">Take Test Again</button><button class="res-btn prim" onclick="window.print()">🖨 Print Results</button></div>
+    <div class="res-footer-note">DMI Computer Education · <a href="https://www.dmi.lk" target="_blank" style="color:var(--sky)">www.dmi.lk</a> · 0777 173 517<br>Jaffna · Nelliady · Chunnakam · Sandilipay · Chavakachcheri · Kilinochchi</div>`;
+}
+
+function esc(s) { if (!s) return ''; return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+// ══ NATIVE AUDIO PLAYER LOGIC ══
+function setupAudioListeners() {
+  const audio = document.getElementById('examAudio');
+  if (!audio) return;
+  
+  audio.ontimeupdate = () => {
+    const scrubber = document.getElementById('audioScrubber');
+    const timeLbl = document.getElementById('audioTimeLbl');
+    if (!audio.duration) return;
+    
+    const pct = (audio.currentTime / audio.duration) * 100;
+    if (scrubber) scrubber.value = pct;
+    
+    const curM = String(Math.floor(audio.currentTime / 60)).padStart(2, '0');
+    const curS = String(Math.floor(audio.currentTime % 60)).padStart(2, '0');
+    const durM = String(Math.floor(audio.duration / 60)).padStart(2, '0');
+    const durS = String(Math.floor(audio.duration % 60)).padStart(2, '0');
+    if (timeLbl) timeLbl.textContent = `${curM}:${curS} / ${durM}:${durS}`;
+  };
+  
+  audio.onended = () => {
+    document.getElementById('audioPlayBtn').innerHTML = '&#x25B6;';
+  };
+}
+
+function toggleAudioPlayback() {
+  const audio = document.getElementById('examAudio');
+  const playBtn = document.getElementById('audioPlayBtn');
+  if (!audio) return;
+  
+  if (audio.paused) {
+    audio.play().then(() => {
+      playBtn.innerHTML = '&#x23F8;';
+    }).catch(err => {
+      alert('Please click Play again to confirm audio start!');
+    });
+  } else {
+    audio.pause();
+    playBtn.innerHTML = '&#x25B6;';
+  }
+}
+
+function scrubAudio(val) {
+  const audio = document.getElementById('examAudio');
+  if (audio && audio.duration) {
+    audio.currentTime = (val / 100) * audio.duration;
+  }
+}
+
+function changeVolume(val) {
+  const audio = document.getElementById('examAudio');
+  if (audio) audio.volume = val / 100;
+  const slider = document.getElementById('headerVol');
+  if (slider) slider.value = val;
+}
+
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    const vol = parseFloat(document.getElementById('headerVol').value) / 100;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.8);
+  } catch (e) {}
+}
+
+function switchAudioSource(mode) {
+  audioMode = mode;
+  const tabs = ['localFolder', 'stream', 'local', 'youtube'];
+  tabs.forEach(t => {
+    const tabName = 'tabSrc' + t.charAt(0).toUpperCase() + t.slice(1);
+    const tab = document.getElementById(tabName);
+    if (tab) tab.classList.toggle('active', t === mode);
+  });
+  
+  const audio = document.getElementById('examAudio');
+  const playBtn = document.getElementById('audioPlayBtn');
+  const ytWrap = document.getElementById('youtubeBackupWrap');
+  
+  if (mode === 'localFolder') {
+    ytWrap.style.display = 'none';
+    if (audio) {
+      audio.src = PART_AUDIO_LOCAL[curPart];
+      audio.load();
+      playBtn.innerHTML = '&#x25B6;';
+      document.getElementById('audioStatusText').textContent = 'Mode: Local Folder Audio (Part ' + curPart + ')';
+    }
+  } else if (mode === 'stream') {
+    ytWrap.style.display = 'none';
+    if (audio) {
+      audio.src = PART_AUDIO_ONLINE[curPart];
+      audio.load();
+      playBtn.innerHTML = '&#x25B6;';
+      document.getElementById('audioStatusText').textContent = 'Mode: Streaming MP3 (Part ' + curPart + ')';
+    }
+  } else if (mode === 'youtube') {
+    if (audio) audio.pause();
+    playBtn.innerHTML = '&#x25B6;';
+    ytWrap.style.display = 'block';
+    document.getElementById('audioStatusText').textContent = 'Mode: YouTube Backup Enabled';
+  }
+}
+
+function loadLocalAudio(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  audioMode = 'local';
+  const tabs = ['localFolder', 'stream', 'local', 'youtube'];
+  tabs.forEach(t => {
+    const tabName = 'tabSrc' + t.charAt(0).toUpperCase() + t.slice(1);
+    const tab = document.getElementById(tabName);
+    if (tab) tab.classList.toggle('active', t === 'local');
+  });
+  
+  document.getElementById('youtubeBackupWrap').style.display = 'none';
+  
+  const audio = document.getElementById('examAudio');
+  const playBtn = document.getElementById('audioPlayBtn');
+  if (audio) {
+    audio.src = URL.createObjectURL(file);
+    audio.load();
+    audio.play().then(() => {
+      playBtn.innerHTML = '&#x23F8;';
+    });
+    document.getElementById('audioStatusText').textContent = 'Loaded Local: ' + file.name;
+  }
+}
+
+// ══ CBT NAVIGATION LOGIC ══
+function setActiveQ(q) {
+  activeQ = q;
+  document.getElementById('reviewChk').checked = !!reviewFlags[q];
+  updateNavIndicators();
+}
+
+function toggleReview() {
+  if (!activeQ) return;
+  const chk = document.getElementById('reviewChk');
+  reviewFlags[activeQ] = chk.checked;
+  const btn = document.getElementById('nav-q' + activeQ);
+  if (btn) {
+    btn.classList.toggle('flagged', chk.checked);
+  }
+}
+
+function updateNavIndicators() {
+  for (let i = 1; i <= 40; i++) {
+    const btn = document.getElementById('nav-q' + i);
+    if (!btn) continue;
+    
+    const ans = getAnswer(i);
+    if (ans && ans !== '') {
+      btn.classList.add('answered');
+    } else {
+      btn.classList.remove('answered');
+    }
+    
+    btn.classList.toggle('active', activeQ === i);
+    btn.classList.toggle('flagged', !!reviewFlags[i]);
+  }
+}
+
+function navPrevQ() {
+  let target = activeQ ? activeQ - 1 : 1;
+  if (target < 1) target = 40;
+  navToQ(target);
+}
+
+function navNextQ() {
+  let target = activeQ ? activeQ + 1 : 1;
+  if (target > 40) target = 1;
+  navToQ(target);
+}
+
+function navToQ(q) {
+  let p = 1;
+  if (q > 30) p = 4;
+  else if (q > 20) p = 3;
+  else if (q > 10) p = 2;
+  
+  showPart(p);
+  setActiveQ(q);
+  
+  setTimeout(() => {
+    const el = document.getElementById('q' + q);
+    if (el) {
+      el.focus();
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      const radios = document.getElementsByName('q' + q);
+      if (radios.length) {
+        radios[0].focus();
+        radios[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  }, 100);
+}
+
+function bindInputsFocus() {
+  document.querySelectorAll('.fill-input').forEach(el => {
+    const idStr = el.id;
+    if (idStr && idStr.startsWith('q')) {
+      const qNum = parseInt(idStr.substring(1));
+      el.addEventListener('focus', () => setActiveQ(qNum));
+      el.addEventListener('input', () => updateNavIndicators());
+    }
+  });
+  
+  document.querySelectorAll('input[type="radio"]').forEach(el => {
+    const nameStr = el.name;
+    if (nameStr && nameStr.startsWith('q')) {
+      const qNum = parseInt(nameStr.substring(1));
+      el.addEventListener('click', () => {
+        setActiveQ(qNum);
+        autoSaveData();
+      });
+    }
+  });
+  
+  document.querySelectorAll('.map-select, select').forEach(el => {
+    const idStr = el.id;
+    if (idStr && idStr.startsWith('q')) {
+      const qNum = parseInt(idStr.substring(1));
+      el.addEventListener('focus', () => setActiveQ(qNum));
+      el.addEventListener('change', () => {
+        setActiveQ(qNum);
+        autoSaveData();
+      });
+    }
+  });
+}
+
+function drawMap() {
+  // Empty, no map canvas needed for Section 2 in this test.
+}
+
+// ── ADMIN ──
+function showAdminLogin(){showScreen('screenAdminLogin');document.getElementById('adminPw').value='';document.getElementById('loginErr').style.display='none';}
+function doLogin(){if(document.getElementById('adminPw').value==='admin123'){showScreen('screenAdmin');loadAdmin();}else document.getElementById('loginErr').style.display='block';}
+function loadAdmin(){try{const r=localStorage.getItem(STORAGE_KEY);allResults=r?JSON.parse(r):[];}catch(e){allResults=[];}renderAdminStats();renderTable();}
+function renderAdminStats(){
+  const t=allResults.length;
+  const avg=t?Math.round(allResults.reduce((s,r)=>s+r.score,0)/t*10)/10:0;
+  const high=t?Math.max(...allResults.map(r=>r.score)):0;
+  document.getElementById('adminStats').innerHTML=`<div class="a-stat"><div class="a-stat-icon red">👤</div><div><div class="a-stat-val">${t}</div><div class="a-stat-lbl">Total Students</div></div></div><div class="a-stat"><div class="a-stat-icon green">📊</div><div><div class="a-stat-val">${avg}/40</div><div class="a-stat-lbl">Avg Score</div></div></div><div class="a-stat"><div class="a-stat-icon amber">🏆</div><div><div class="a-stat-val">Band ${t?getBand(Math.round(avg)):'0.0'}</div><div class="a-stat-lbl">Avg Band Score</div></div></div><div class="a-stat"><div class="a-stat-icon blue">🥇</div><div><div class="a-stat-val">${high}</div><div class="a-stat-lbl">Highest Correct</div></div></div>`;
+}
+function sortR(k){sortKey=k;renderTable();}
+function renderTable(){
+  let data=[...allResults];
+  if(sortKey==='name')data.sort((a,b)=>(a.lastName+a.firstName).localeCompare(b.lastName+b.firstName));
+  else if(sortKey==='score')data.sort((a,b)=>b.score - a.score);
+  else data.sort((a,b)=>new Date(b.startTime)-new Date(a.startTime));
+  const wrap=document.getElementById('tableWrap');
+  if(!data.length){wrap.innerHTML=`<div class="no-data"><div class="icon">📝</div><p>No listening submissions yet.</p></div>`;return;}
+  wrap.innerHTML=`<table class="results-table"><thead><tr><th>#</th><th>Student</th><th>ID</th><th>Branch</th><th>Correct</th><th>Band Score</th><th>Time</th><th>Date</th><th>Actions</th></tr></thead><tbody>${data.map((r,i)=>{const d=new Date(r.startTime).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});const oi=allResults.indexOf(r);return`<tr><td style="color:var(--muted)">${i+1}</td><td style="font-weight:600;color:var(--navy)">${r.firstName} ${r.lastName}</td><td style="font-family:monospace;color:var(--sky);font-size:12px">${r.id}</td><td style="font-size:12px">${r.branch||'—'}</td><td><span style="font-weight:700;color:var(--green)">${r.score}</span> / 40</td><td><span style="font-weight:800;color:var(--blue)">Band ${r.band}</span></td><td style="font-size:11px;color:var(--muted)">${r.timeTakenMin}m</td><td style="font-size:11px;color:var(--muted)">${d}</td><td><button class="detail-btn" onclick="showDetail(${oi})">View</button><button class="delete-btn" onclick="deleteR(${oi})">Del</button></td></tr>`}).join('')}</tbody></table>`;
+}
+function showDetail(idx){const r=allResults[idx];if(!r)return;
+  let qListHTML='';
+  const ans21 = (r.answers[21] || '').toUpperCase().trim();
+  const ans22 = (r.answers[22] || '').toUpperCase().trim();
+  const q21Correct = (ans21 === 'D' || ans21 === 'E');
+  const q22Correct = (ans22 === 'D' || ans22 === 'E') && (ans21 !== ans22);
+
+  for(let i=1;i<=40;i++){
+    const stAns=r.answers[i]||'—';
+    let isCorrect=false;
+    if (i === 21) isCorrect = q21Correct;
+    else if (i === 22) isCorrect = q22Correct;
+    else isCorrect = (stAns.toLowerCase().replace(/^(the|a|an)/, '').trim() === KEY[i].toLowerCase().trim());
+    
+    let keyShow = KEY[i];
+    if (i === 21 || i === 22) {
+      keyShow = 'D or E (must be different)';
+    }
+
+    qListHTML+=`<div style="font-size:12px; margin-bottom:4px; padding:3px 6px; border-radius:4px; border:1px solid ${isCorrect?'#c2e7d1':'#f8d7da'}; background:${isCorrect?'#e6f4ec':'#fde8e9'}; color:${isCorrect?'var(--green)':'var(--dmi-red)'}">Q${i}. Student: <b>${esc(stAns)}</b> | Correct: <b>${keyShow}</b></div>`;
+  }
+  document.getElementById('detailContent').innerHTML=`<div class="dm-grid"><div class="dm-item"><div class="k">Full Name</div><div class="v">${r.firstName} ${r.lastName}</div></div><div class="dm-item"><div class="k">Student ID</div><div class="v">${r.id}</div></div><div class="dm-item"><div class="k">Branch</div><div class="v">${r.branch||'—'}</div></div><div class="dm-item"><div class="k">Date & Time</div><div class="v">${new Date(r.startTime).toLocaleString()}</div></div><div class="dm-item"><div class="k">Score</div><div class="v">${r.score} / 40 (Band ${r.band})</div></div><div class="dm-item"><div class="k">Time Taken</div><div class="v">${r.timeTakenMin}m ${r.timeTakenSec}s</div></div></div><h3 style="font-size:13px;color:var(--navy);margin:14px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border)">Answers Log</h3><div style="max-height:220px; overflow-y:auto;">${qListHTML}</div>`;
+  document.getElementById('detailModal').classList.add('open');
+}
+function deleteR(idx){if(!confirm('Delete this submission?'))return;allResults.splice(idx,1);localStorage.setItem(STORAGE_KEY,JSON.stringify(allResults));renderAdminStats();renderTable();}
+function clearAll(){if(!confirm('Delete ALL submissions?'))return;allResults=[];localStorage.setItem(STORAGE_KEY,'[]');renderAdminStats();renderTable();}
+function exportCSV(){
+  if(!allResults.length){alert('No data.');return;}
+  const h=['Name','ID','Email','Branch','Score','Band','Time','Date'];
+  const rows=allResults.map(r=>['"'+r.firstName+' '+r.lastName+'"',r.id,r.email,r.branch||'',r.score,r.band,r.timeTakenMin+'m',new Date(r.startTime).toLocaleDateString()].join(','));
+  const csv=[h.join(','),...rows].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='DMI_Listening_B17T2_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+</script>
+</body>
+</html>

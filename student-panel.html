@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DMI LMS — My Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dmi-red:#c0202a;--dmi-red-dark:#8f1118;--dmi-red-light:#fde8e9;
+  --navy:#0f1e2d;--blue:#1a3a5c;--sky:#2a7abf;
+  --border:#d5dce8;--text:#1e2d40;--muted:#6b7a90;
+  --bg:#f2f5f9;--white:#fff;--gold:#c9903a;
+  --green:#1e7a45;--green-l:#e6f4ec;--amber:#d97706;--amber-l:#fef3cd;
+}
+html,body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text)}
+body{min-height:100vh}
+
+.topbar{background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 26px;height:62px;box-shadow:0 2px 8px rgba(15,30,45,.04);position:sticky;top:0;z-index:50}
+.tb-left{display:flex;align-items:center;gap:24px}
+.dmi-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.dmi-badge{background:#eef21d;color:var(--dmi-red);font-weight:900;font-size:13px;letter-spacing:.5px;padding:7px 11px;border-radius:6px;border:1.5px solid var(--dmi-red)}
+.brand-text{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--navy)}
+.tb-nav{display:flex;gap:4px}
+.tb-nav a{padding:8px 14px;font-size:13px;color:var(--muted);text-decoration:none;border-radius:6px;font-weight:600}
+.tb-nav a:hover{background:var(--bg);color:var(--navy)}
+.tb-nav a.active{background:var(--navy);color:#fff}
+.tb-right{display:flex;align-items:center;gap:14px}
+.who{font-size:13px;color:var(--muted)}
+.who b{color:var(--navy)}
+.logout{background:var(--dmi-red);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;text-decoration:none}
+.logout:hover{background:var(--dmi-red-dark)}
+
+.wrap{max-width:1180px;margin:0 auto;padding:24px}
+
+/* Welcome banner */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#1a2e45 60%,#0f2236 100%);color:#fff;border-radius:14px;padding:28px 30px;margin-bottom:22px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 90% 10%,rgba(192,32,42,.18) 0%,transparent 55%),radial-gradient(ellipse at 10% 100%,rgba(42,122,191,.15) 0%,transparent 50%)}
+.hero-content{position:relative;z-index:1}
+.hero .dept{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:8px}
+.hero h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:#fff;margin-bottom:6px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero p{color:rgba(255,255,255,.7);font-size:14px;max-width:560px;line-height:1.6}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--dmi-red)}
+.kpi.b::before{background:var(--blue)}.kpi.g::before{background:var(--green)}.kpi.a::before{background:var(--amber)}
+.kpi .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600}
+.kpi .v{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--navy);margin-top:8px}
+.kpi .v.sm{font-size:15px;font-family:'Outfit',sans-serif;color:var(--navy);font-weight:700}
+
+/* Card */
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px;box-shadow:0 1px 3px rgba(15,30,45,.04)}
+.card+.card{margin-top:14px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-hd h2{font-family:'Playfair Display',serif;font-size:19px;color:var(--navy);font-weight:700}
+.card-hd .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:22px;flex-wrap:wrap}
+.tab{padding:12px 22px;background:transparent;border:none;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab:hover{color:var(--navy)}
+.tab.active{color:var(--dmi-red);border-bottom-color:var(--dmi-red)}
+.panel{display:none}.panel.active{display:block}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px;margin-top:6px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{padding:12px 14px;border-bottom:1px solid var(--border);text-align:left;font-size:13px;vertical-align:top}
+th{background:var(--bg);font-weight:700;color:var(--navy);text-transform:uppercase;font-size:11px;letter-spacing:.5px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbfd}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;background:var(--bg);border:1px solid var(--border);color:var(--navy)}
+.badge.red{background:var(--dmi-red-light);border-color:#f5b9bf;color:var(--dmi-red-dark)}
+.badge.green{background:var(--green-l);border-color:#b6e3d2;color:var(--green)}
+.score-cell{font-family:'Playfair Display',serif;font-size:18px;color:var(--green);font-weight:700}
+.score-cell .pct{font-family:'Outfit',sans-serif;font-size:11px;color:var(--muted);font-weight:500;display:block;margin-top:2px}
+.empty{padding:32px;text-align:center;color:var(--muted);font-size:13.5px}
+.link{color:var(--sky);text-decoration:none;font-weight:600;font-size:12.5px}
+.link:hover{text-decoration:underline}
+
+/* Lesson card grid */
+.lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.lesson{background:#fff;border:1px solid var(--border);border-radius:10px;padding:16px;transition:all .15s}
+.lesson:hover{border-color:var(--sky);box-shadow:0 6px 18px rgba(15,30,45,.08);transform:translateY(-2px)}
+.lesson .course-tag{display:inline-block;background:var(--dmi-red-light);color:var(--dmi-red-dark);font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
+.lesson .lesson-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:12px;line-height:1.3}
+.lesson .actions{display:flex;gap:8px;flex-wrap:wrap}
+.lesson .actions a{flex:1;text-align:center;padding:8px 10px;font-size:12px;font-weight:700;border-radius:6px;text-decoration:none;border:1.5px solid var(--border);color:var(--muted);transition:all .15s}
+.lesson .actions a:hover{border-color:var(--sky);color:var(--blue);background:#f5fbff}
+.lesson .actions a.primary{background:var(--dmi-red);color:#fff;border-color:var(--dmi-red)}
+.lesson .actions a.primary:hover{background:var(--dmi-red-dark);color:#fff}
+
+@media (max-width:760px){.tb-nav{display:none}.hero h1{font-size:26px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <a class="dmi-brand" href="index.html">
+      <span class="dmi-badge">DMI</span>
+      <span class="brand-text">DMI LMS</span>
+    </a>
+    <nav class="tb-nav">
+      <a href="#" class="active">My Dashboard</a>
+      <a href="index.html">Practice Papers</a>
+    </nav>
+  </div>
+  <div class="tb-right">
+    <div class="who">Hi, <b id="who">…</b></div>
+    <a href="#" class="logout" id="logoutBtn">Logout</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="dept">Student Dashboard</div>
+      <h1>Welcome back, <em id="heroName">student</em></h1>
+      <p>Track your marks, review feedback from your teachers, and access your course lessons — all in one place.</p>
+      <div id="expiryBox" style="display:none;margin-top:18px;background:rgba(255,202,40,.18);border:1px solid rgba(255,202,40,.4);color:#ffe082;padding:10px 14px;border-radius:8px;font-size:13px;max-width:560px"></div>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="l">Tests Taken</div><div class="v" id="kTests">0</div></div>
+    <div class="kpi b"><div class="l">Average Score</div><div class="v" id="kAvg">—</div></div>
+    <div class="kpi g"><div class="l">Best Score</div><div class="v" id="kBest">—</div></div>
+    <div class="kpi a"><div class="l">Latest Test</div><div class="v sm" id="kLatest">—</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="marks">My Marks</button>
+    <button class="tab" data-tab="courses">My Courses</button>
+  </div>
+
+  <div class="panel active" id="panel-marks">
+    <div class="card">
+      <div class="card-hd"><div><h2>My marks</h2><div class="sub">All marks your teachers have posted, newest first</div></div></div>
+      <div id="marksBox"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-courses">
+    <div class="card">
+      <div class="card-hd"><div><h2>Course lessons</h2><div class="sub">Watch the video or download the PDF for each lesson</div></div></div>
+      <div id="coursesBox"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
+
+const user = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
+const role = localStorage.getItem('dmi_lms_role');
+if (!user || role !== 'student') { window.location.href = 'login.html'; }
+document.getElementById('who').textContent = user ? user.name : '';
+document.getElementById('heroName').textContent = user ? (user.name.split(' ')[0]||user.name) : 'student';
+
+// Expiry banner
+if (user && user.expiryDate) {
+  const exp = new Date(user.expiryDate);
+  const daysLeft = Math.ceil((exp - new Date())/(1000*60*60*24));
+  const box = document.getElementById('expiryBox');
+  if (daysLeft <= 7 && daysLeft > 0) {
+    box.style.display = 'block';
+    box.innerHTML = '⚠ Your access expires in <b>'+daysLeft+' day'+(daysLeft===1?'':'s')+'</b> ('+exp.toLocaleDateString()+'). Please contact the admin to renew.';
+  } else if (daysLeft <= 0) {
+    box.style.display = 'block';
+    box.innerHTML = '⚠ Your access has expired. Please contact the admin to renew your account.';
+  }
+}
+
+document.getElementById('logoutBtn').onclick = () => { localStorage.clear(); window.location.href = 'login.html'; };
+
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById('panel-'+t.dataset.tab).classList.add('active');
+});
+
+async function call(action, params={}){
+  const body = new URLSearchParams({action, ...params});
+  const r = await fetch(API_URL, {method:'POST', body});
+  return r.json();
+}
+
+async function loadMarks(){
+  const res = await call('listMarks', {studentEmail:user.email});
+  if (!res.ok){document.getElementById('marksBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  const data = res.data;
+  document.getElementById('kTests').textContent = data.length;
+  if (data.length){
+    const pcts = data.map(m => (Number(m.MaxScore)||0) ? (Number(m.Score)/Number(m.MaxScore))*100 : 0);
+    const avg = (pcts.reduce((a,b)=>a+b,0)/pcts.length).toFixed(0);
+    const best = Math.max(...pcts).toFixed(0);
+    document.getElementById('kAvg').textContent = avg + '%';
+    document.getElementById('kBest').textContent = best + '%';
+    document.getElementById('kLatest').textContent = (data[0].Test||'') + (data[0].Course ? ' — ' + data[0].Course : '');
+  }
+  if (!data.length){document.getElementById('marksBox').innerHTML='<div class="empty">No marks yet. Check back after your next test.</div>';return;}
+  document.getElementById('marksBox').innerHTML = `<div class="tbl-wrap"><table>
+    <thead><tr><th>Date</th><th>Course</th><th>Test</th><th>Score</th><th>Teacher</th><th>Comments</th></tr></thead>
+    <tbody>${data.map(m => {
+      const s=Number(m.Score)||0, mx=Number(m.MaxScore)||0;
+      const pct = mx ? Math.round((s/mx)*1000)/10 : null;
+      return `<tr>
+        <td>${m.Date ? new Date(m.Date).toLocaleDateString() : ''}</td>
+        <td>${m.Course?'<span class="badge red">'+m.Course+'</span>':''}</td>
+        <td><b>${m.Test||''}</b></td>
+        <td><div class="score-cell">${s}<span style="color:var(--muted);font-size:14px;font-weight:500"> / ${mx||'-'}</span>${pct!==null?'<span class="pct">'+pct+'%</span>':''}</div></td>
+        <td>${m.TeacherName||''}</td>
+        <td>${m.Comments||''}</td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
+}
+
+async function loadCourses(){
+  const res = await call('listCourses');
+  if (!res.ok){document.getElementById('coursesBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  const data = res.data;
+  if (!data.length){document.getElementById('coursesBox').innerHTML='<div class="empty">No lessons available yet.</div>';return;}
+  document.getElementById('coursesBox').innerHTML = `<div class="lessons">${data.map(c => `
+    <div class="lesson">
+      <span class="course-tag">${c.Course||'Course'}</span>
+      <div class="lesson-title">${c.Lesson||''}</div>
+      <div class="actions">
+        ${c.VideoURL ? `<a class="primary" href="${c.VideoURL}" target="_blank">▶ Watch Video</a>` : ''}
+        ${c.PDFURL   ? `<a href="${c.PDFURL}" target="_blank">📄 PDF</a>` : ''}
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+loadMarks();
+loadCourses();
+</script>
+</body>
+</html>

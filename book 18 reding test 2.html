@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DMI Computer Education – IELTS Reading Exam (Book 18 Test 2)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dmi-red:#c0202a;--dmi-red-dark:#8f1118;--dmi-red-light:#fde8e9;
+  --navy:#0f1e2d;--blue:#1a3a5c;--sky:#2a7abf;
+  --border:#d5dce8;--text:#1e2d40;--muted:#6b7a90;
+  --bg:#f2f5f9;--white:#fff;
+  --green:#1e7a45;--green-l:#e6f4ec;
+  --amber:#d97706;--amber-l:#fef3cd;
+  --highlight:#ffe566;--gold:#c9903a;
+}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* ── LANDING ── */
+#screenLanding{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 50%,#0f2236 100%);position:relative;overflow:hidden;align-items:stretch}
+#screenLanding::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 10% 20%,rgba(192,32,42,.18) 0%,transparent 55%),radial-gradient(ellipse at 90% 75%,rgba(42,122,191,.15) 0%,transparent 50%)}
+.land-header{position:relative;z-index:2;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:12px 50px}
+.dmi-logo-wrap{display:flex;align-items:center;gap:12px}
+.dmi-logo-img{width:44px;height:44px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+.dmi-logo-text .name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:white;line-height:1.1}
+.dmi-logo-text .tagline{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:1.2px;text-transform:uppercase}
+.land-header-right{display:flex;align-items:center;gap:20px;font-size:12px;color:rgba(255,255,255,.6)}
+.land-header-right a{color:rgba(255,255,255,.8);text-decoration:none}.land-header-right a:hover{color:white}
+.land-body{display:grid;grid-template-columns:1fr 1fr;flex:1;position:relative;z-index:1}
+.land-left{display:flex;flex-direction:column;justify-content:center;padding:50px 50px 60px 70px;color:white}
+.land-since{display:inline-flex;align-items:center;gap:8px;background:rgba(192,32,42,.2);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:24px;width:fit-content}
+.land-since::before{content:'';width:7px;height:7px;background:var(--dmi-red);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.land-dept{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:600}
+.land-h1{font-family:'Playfair Display',serif;font-size:clamp(34px,3.5vw,54px);line-height:1.1;color:white;margin-bottom:8px}
+.land-h1 em{font-style:italic;color:var(--gold)}
+.land-sub{font-size:15px;color:rgba(255,255,255,.62);line-height:1.75;max-width:400px;margin-bottom:36px}
+.award-badge{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 16px;margin-bottom:32px;max-width:400px}
+.award-icon{font-size:24px;flex-shrink:0}
+.award-text .t{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.8px}
+.award-text .s{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;line-height:1.4}
+.land-stats{display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;width:fit-content}
+.lst{padding:14px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.lst:last-child{border-right:none}
+.lst .n{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:white;line-height:1}
+.lst .l{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.land-right{display:flex;align-items:center;justify-content:center;padding:40px 60px 40px 30px}
+.reg-card{background:white;border-radius:20px;padding:36px 36px 32px;width:100%;max-width:450px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .5s cubic-bezier(.2,.8,.3,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.card-dmi-header{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.card-dmi-logo{width:48px;height:48px;border-radius:10px;object-fit:cover;border:2px solid var(--dmi-red)}
+.card-dmi-info .org{font-size:14px;font-weight:800;color:var(--navy);letter-spacing:.3px}
+.card-dmi-info .dept{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.card-dmi-info .sub{font-size:11px;color:var(--muted);margin-top:1px}
+.reg-card h2{font-size:19px;color:var(--navy);font-weight:700;margin-bottom:3px}
+.reg-card .sub{font-size:12.5px;color:var(--muted);margin-bottom:22px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px}
+.field input,.field select{border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--text);outline:none;transition:border .15s;background:var(--bg)}
+.field input:focus,.field select:focus{border-color:var(--sky);background:white;box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.field.has-error input,.field.has-error select{border-color:var(--dmi-red)}
+.err-msg{color:var(--dmi-red);font-size:11px;display:none}
+.field.has-error .err-msg{display:block}
+.agree-row{display:flex;align-items:flex-start;gap:9px;margin:14px 0}
+.agree-row input{margin-top:3px;accent-color:var(--dmi-red);flex-shrink:0}
+.agree-row label{font-size:12px;color:var(--muted);line-height:1.5}
+.btn-start{width:100%;padding:13px;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));box-shadow:0 6px 20px rgba(192,32,42,.35);transition:all .2s}
+.btn-start:hover{transform:translateY(-2px)}
+.admin-link{text-align:center;margin-top:12px;font-size:12px;color:var(--muted)}
+.admin-link a{color:var(--sky);text-decoration:none;font-weight:600;cursor:pointer}
+.land-footer{position:relative;z-index:2;background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.07);padding:10px 50px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35)}
+
+/* ── EXAM ── */
+#screenExam{background:var(--bg);overflow:hidden;height:100vh}
+.topbar{background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.3);z-index:10;position:relative}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.dmi-badge-sm{background:var(--dmi-red);color:white;font-weight:800;font-size:11px;letter-spacing:1.2px;padding:3px 9px;border-radius:4px}
+.student-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:3px 11px;font-size:12px;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:6px}
+.student-chip .dot{width:6px;height:6px;background:#4caf50;border-radius:50%}
+.timer-wrap{text-align:center}
+.timer-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:7px;padding:3px 16px;font-size:23px;font-weight:700;letter-spacing:2px;color:#e8f0ff;min-width:108px;text-align:center}
+.timer-box.warn{color:#ffca28}.timer-box.danger{color:#ff6b6b;animation:tpulse 1s infinite}
+@keyframes tpulse{0%,100%{opacity:1}50%{opacity:.5}}
+.topbar-right{display:flex;align-items:center;gap:7px}
+.tb-btn{background:transparent;border:1.5px solid rgba(255,255,255,.22);color:white;font-size:11.5px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,.1)}
+.tb-btn.danger{background:var(--dmi-red);border-color:var(--dmi-red)}
+.tb-btn.hl-active{background:rgba(255,225,0,.2);border-color:rgba(255,225,0,.7);color:#ffe566}
+
+.sec-bar{background:var(--blue);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:36px;flex-shrink:0}
+.sec-tabs{display:flex;height:100%}
+.sec-tab{height:100%;display:flex;align-items:center;padding:0 18px;cursor:pointer;border-right:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:500;opacity:.6;transition:all .15s;user-select:none;white-space:nowrap}
+.sec-tab:hover{opacity:1;background:rgba(255,255,255,.08)}
+.sec-tab.active{opacity:1;background:rgba(255,255,255,.16);font-weight:700;border-bottom:2px solid var(--gold)}
+.sec-tab sup{font-size:9px;margin-left:4px;opacity:.7}
+
+.exam-main{display:flex;flex:1;overflow:hidden}
+.passage-panel{width:50%;background:white;display:flex;flex-direction:column;border-right:2px solid var(--border);overflow:hidden}
+.panel-hd{background:#f5f8fd;border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.panel-hd-title{font-size:13px;font-weight:700;color:var(--navy)}
+.panel-tools{display:flex;gap:5px}
+.tool-btn{background:white;border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .15s}
+.tool-btn:hover{background:#e8f0fb;border-color:var(--sky);color:var(--blue)}
+.tool-btn.hl-on{background:#ffe566;border-color:#c8a800;color:#5a3a00}
+
+.p-scroll{overflow-y:auto;flex:1;padding:22px 26px 40px;line-height:1.85;font-size:15px;font-family:'Georgia',serif;color:var(--text);user-select:text}
+.p-scroll::-webkit-scrollbar{width:5px}.p-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.p-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:5px;line-height:1.25}
+.p-sub{font-size:13px;color:var(--muted);font-style:italic;font-family:'Outfit',sans-serif;margin-bottom:18px}
+.p-scroll p{margin-bottom:14px}
+.para-lbl{color:var(--dmi-red);font-weight:700;margin-right:5px;font-family:'Outfit',sans-serif;font-size:12px}
+
+.hl-mark{background:var(--highlight);border-radius:2px;cursor:default}
+.hl-mark:hover::after{content:'✕';font-size:10px;margin-left:3px;color:#8a6000;cursor:pointer}
+
+.splitter{width:5px;background:var(--border);cursor:col-resize;flex-shrink:0;transition:background .15s}
+.splitter:hover,.splitter.drag{background:var(--dmi-red)}
+
+.q-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.q-panel-hd{background:#f5f8fd;border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.q-panel-hd-title{font-size:13px;font-weight:700;color:var(--navy)}
+.q-scroll{flex:1;overflow-y:auto;padding:16px 18px 40px;user-select:text}
+.q-scroll::-webkit-scrollbar{width:5px}.q-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.q-sec-hd{background:var(--navy);color:white;border-radius:8px 8px 0 0;padding:11px 15px 8px;margin-bottom:0}
+.q-sec-hd h3{font-size:13px;font-weight:700;margin-bottom:4px}
+.q-sec-hd p{font-size:11.5px;opacity:.8;line-height:1.5}
+.q-sec-bd{background:white;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:15px;margin-bottom:14px}
+.q-block{margin-bottom:18px}
+.q-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--blue);color:white;border-radius:50%;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
+.q-num.ans{background:var(--green)}.q-num.flg{background:var(--amber)}
+.q-lbl{display:flex;align-items:flex-start;margin-bottom:8px}
+.q-txt{font-size:13.5px;line-height:1.55;padding-top:2px}
+.mcq-opt{display:flex;align-items:flex-start;gap:9px;padding:8px 11px;border-radius:6px;border:1.5px solid var(--border);margin-bottom:5px;cursor:pointer;transition:all .15s;background:white;font-size:13px}
+.mcq-opt:hover{border-color:var(--sky);background:#f0f7ff}
+.mcq-opt.sel{border-color:var(--dmi-red);background:#fff0f1}
+.mcq-opt input[type=radio]{margin-top:3px;flex-shrink:0;accent-color:var(--dmi-red)}
+.tfng-row{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.tfng-q{flex:1;font-size:13px;line-height:1.5}
+.tfng-btns{flex-shrink:0}
+.tfng-sel{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12.5px;font-family:inherit;color:var(--muted);cursor:pointer;outline:none;background:white;transition:border .15s,background .15s;min-width:138px}
+.tfng-sel:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.tfng-sel.sT{border-color:var(--green);background:var(--green-l);color:var(--green);font-weight:700}
+.tfng-sel.sF{border-color:var(--dmi-red);background:var(--dmi-red-light);color:var(--dmi-red);font-weight:700}
+.tfng-sel.sN{border-color:var(--amber);background:var(--amber-l);color:var(--amber);font-weight:700}
+.fill-in{border:1.5px solid var(--border);border-radius:5px;padding:5px 10px;font-size:13px;font-family:inherit;width:170px;color:var(--text);transition:border .15s;outline:none}
+.fill-in:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.fill-in.got{border-color:var(--green);background:var(--green-l)}
+.match-sel{border:1.5px solid var(--border);border-radius:5px;padding:6px 10px;font-size:13px;font-family:inherit;color:var(--text);cursor:pointer;outline:none;background:white;transition:border .15s}
+.match-sel:focus{border-color:var(--sky)}
+.match-sel.got{border-color:var(--green);background:var(--green-l)}
+.q-tbl{width:100%;border-collapse:collapse;margin:8px 0 12px;font-size:13px}
+.q-tbl th{background:#e8ecf5;color:var(--navy);padding:7px 11px;text-align:left;font-weight:700;border:1px solid var(--border)}
+.q-tbl td{padding:7px 11px;border:1px solid var(--border);vertical-align:middle}
+.q-tbl tr:nth-child(even) td{background:#f8f9fc}
+
+.bot-nav{background:white;border-top:2px solid var(--border);padding:7px 14px 6px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.q-nav-groups{flex:1;display:flex;flex-direction:column;gap:5px}
+.q-part-row{display:flex;align-items:center;gap:8px}
+.q-part-lbl{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;min-width:52px;flex-shrink:0}
+.q-part-lbl.cur{color:var(--dmi-red)}
+.q-part-btns{display:flex;gap:3px;flex-wrap:wrap}
+.qg-btn{width:26px;height:26px;border-radius:4px;border:1.5px solid var(--border);background:white;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit;color:var(--muted)}
+.qg-btn:hover{border-color:var(--sky);color:var(--blue)}
+.qg-btn.ans{background:var(--green);border-color:var(--green);color:white}
+.qg-btn.flg{background:var(--amber);border-color:var(--amber);color:white;border-radius:50%}
+.qg-btn.cur{outline:2.5px solid var(--dmi-red);outline-offset:1px}
+.nav-right{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+.nav-legend{display:flex;gap:8px;font-size:10px;color:var(--muted)}
+.leg-dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px}
+.nav-acts{display:flex;gap:5px}
+.btn-nav{background:var(--blue);color:white;border:none;border-radius:6px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-nav:hover{background:var(--navy)}
+.btn-flg{background:white;border:1.5px solid var(--amber);color:var(--amber);border-radius:6px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-flg.on{background:var(--amber);color:white}
+
+#notesPanel{display:none;width:200px;background:#fffde7;border-left:2px solid #f9d835;flex-direction:column;flex-shrink:0}
+.notes-hd{background:#f9d835;padding:7px 11px;font-size:12px;font-weight:700;color:#5a4a00;display:flex;justify-content:space-between}
+#notesTA{flex:1;border:none;resize:none;padding:11px;font-family:inherit;font-size:12px;background:#fffde7;color:#3a3000;outline:none}
+
+#ctxMenu{position:fixed;z-index:99999;background:white;border-radius:9px;box-shadow:0 8px 32px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.07);padding:5px;min-width:170px;display:none}
+#ctxMenu.visible{display:block}
+.ctx-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:6px;font-size:13.5px;cursor:pointer;color:var(--text);font-family:'Outfit',sans-serif;transition:background .1s}
+.ctx-item:hover{background:var(--bg)}
+.ctx-sep{height:1px;background:var(--border);margin:4px 8px}
+
+/* ── RESULTS ── */
+#screenResults{background:var(--bg);overflow-y:auto;align-items:center;padding:36px 20px}
+.res-card{background:white;border-radius:20px;padding:36px;max-width:780px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.1);animation:cardIn .5s both}
+.res-dmi-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.res-dmi-left{display:flex;align-items:center;gap:12px}
+.res-dmi-logo{width:52px;height:52px;border-radius:10px;object-fit:cover;border:2px solid var(--dmi-red)}
+.res-dmi-org{font-size:15px;font-weight:800;color:var(--navy)}
+.res-dmi-sub{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.res-dmi-right{text-align:right;font-size:11px;color:var(--muted);line-height:1.7}
+.res-title{text-align:center;margin-bottom:24px}
+.res-title .tag{display:inline-block;background:var(--green-l);color:var(--green);font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 12px;border-radius:100px;margin-bottom:10px;text-transform:uppercase}
+.res-title h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--navy);margin-bottom:4px}
+.res-title p{color:var(--muted);font-size:13px}
+.res-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.res-score-box{text-align:center;border-radius:12px;padding:18px;border:1px solid var(--border)}
+.res-score-box .big{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--navy)}
+.res-score-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+.student-info-box{background:var(--bg);border-radius:10px;padding:14px 18px;margin-bottom:22px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.si-item .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.si-item .v{font-size:13px;font-weight:600;color:var(--navy)}
+.review-section h3{font-size:14px;color:var(--navy);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.rev-row{display:flex;align-items:flex-start;gap:10px;padding:7px 11px;border-radius:6px;margin-bottom:5px;border:1px solid var(--border);font-size:13px}
+.rev-row.ok{border-color:var(--green);background:var(--green-l)}
+.rev-row.bad{border-color:var(--dmi-red);background:var(--dmi-red-light)}
+.rev-row.skip{border-color:#ccc;background:#f5f5f5}
+.rev-qn{font-weight:700;min-width:24px;color:var(--navy)}
+.rev-detail{flex:1;line-height:1.5}
+.res-actions{display:flex;gap:12px;margin-top:24px;justify-content:center;flex-wrap:wrap}
+.res-btn{padding:11px 26px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;border:none}
+.res-btn.prim{background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:white;box-shadow:0 4px 14px rgba(192,32,42,.3)}
+.res-btn.sec{background:white;color:var(--blue);border:2px solid var(--blue)}
+.res-footer-note{text-align:center;margin-top:20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:14px;line-height:1.6}
+
+/* ── ADMIN LOGIN ── */
+#screenAdminLogin{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 60%,#0f2236 100%);align-items:center;justify-content:center;min-height:100vh;position:relative}
+#screenAdminLogin::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(192,32,42,.15) 0%,transparent 55%)}
+.login-card{background:white;border-radius:18px;padding:40px 38px;width:100%;max-width:380px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .4s both;position:relative;z-index:1}
+.login-dmi-top{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:18px;border-bottom:2px solid var(--bg)}
+.login-dmi-logo{width:46px;height:46px;border-radius:9px;object-fit:cover;border:2px solid var(--dmi-red)}
+.login-dmi-org{font-size:14px;font-weight:800;color:var(--navy)}
+.login-dmi-sub{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.login-card h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:3px}
+.login-card .sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.login-field input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;font-size:14px;font-family:inherit;outline:none;transition:all .15s}
+.login-field input:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.login-err{color:var(--dmi-red);font-size:12px;margin-top:9px;display:none;background:var(--dmi-red-light);padding:8px 12px;border-radius:6px}
+.btn-login{width:100%;padding:12px;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 14px rgba(192,32,42,.3)}
+.btn-login:hover{transform:translateY(-1px)}
+.back-link{text-align:center;margin-top:14px;font-size:12px;color:var(--muted);cursor:pointer}
+.back-link:hover{color:var(--blue)}
+
+/* ── ADMIN DASHBOARD ── */
+#screenAdmin{background:var(--bg);overflow:hidden;height:100vh}
+.admin-top{background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.admin-dmi-logo{width:36px;height:36px;border-radius:7px;object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+.admin-org{font-size:14px;font-weight:700;color:white;line-height:1}
+.admin-org span{color:var(--gold)}
+.admin-org-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;letter-spacing:.5px}
+.admin-tag{background:rgba(192,32,42,.3);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:3px 11px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.admin-scroll{flex:1;overflow-y:auto;padding:24px}
+.admin-scroll::-webkit-scrollbar{width:6px}.admin-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.a-stat{background:white;border-radius:12px;padding:18px 20px;border:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.a-stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.a-stat-icon.red{background:var(--dmi-red-light)}.a-stat-icon.green{background:var(--green-l)}.a-stat-icon.amber{background:var(--amber-l)}.a-stat-icon.blue{background:#e8f0fb}
+.a-stat-val{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy);line-height:1}
+.a-stat-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+.admin-panel{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px}
+.ap-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:#fafbfd}
+.ap-header h2{font-size:15px;font-weight:700;color:var(--navy)}
+.ap-tools{display:flex;gap:7px}
+.ap-tool{background:white;border:1.5px solid var(--border);border-radius:7px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .15s}
+.ap-tool:hover{border-color:var(--sky);color:var(--blue);background:#f0f7ff}
+.ap-tool.prim{background:var(--dmi-red);color:white;border-color:var(--dmi-red)}
+.ap-tool.green{background:var(--green);color:white;border-color:var(--green)}
+.search-row{padding:12px 20px;border-bottom:1px solid var(--border);background:#fafbfd}
+.search-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px 13px;font-size:13px;font-family:inherit;outline:none;transition:border .15s;background:white}
+.search-input:focus{border-color:var(--sky)}
+.results-table{width:100%;border-collapse:collapse;font-size:13px}
+.results-table th{background:#f0f4fb;color:var(--navy);padding:10px 14px;text-align:left;font-weight:700;font-size:11px;letter-spacing:.4px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.results-table td{padding:10px 14px;border-bottom:1px solid #eef1f6;vertical-align:middle}
+.results-table tr:last-child td{border-bottom:none}
+.results-table tr:hover td{background:#f8fafd}
+.band-pill{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:700}
+.bhi{background:var(--green-l);color:var(--green)}.bmid{background:var(--amber-l);color:var(--amber)}.blo{background:var(--dmi-red-light);color:var(--dmi-red)}
+.score-bar-wrap{display:flex;align-items:center;gap:8px}
+.score-bar{height:5px;background:#e8ecf5;border-radius:3px;flex:1;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--sky),var(--blue))}
+.no-data{text-align:center;padding:44px 20px;color:var(--muted)}
+.no-data .icon{font-size:40px;margin-bottom:10px}
+.detail-btn{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);font-family:inherit}
+.detail-btn:hover{background:#e8f0fb;border-color:var(--sky)}
+.delete-btn{background:var(--dmi-red-light);border:1px solid var(--dmi-red);border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--dmi-red);font-family:inherit;margin-left:4px}
+.delete-btn:hover{background:var(--dmi-red);color:white}
+
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9000;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:14px;padding:30px 34px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);transform:scale(.95);transition:transform .2s}
+.modal-ov.open .modal{transform:scale(1)}
+.modal h2{font-size:19px;color:var(--navy);margin-bottom:8px}
+.modal p{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.modal-stats{display:flex;gap:14px;margin-bottom:22px}
+.mstat{flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:12px}
+.mstat .n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy)}
+.mstat .l{font-size:11px;color:var(--muted);margin-top:2px}
+.modal-btns{display:flex;gap:10px}
+.mbtn{flex:1;border-radius:8px;padding:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;border:none}
+.mbtn.sec{background:white;border:1.5px solid var(--border);color:var(--muted)}
+.mbtn.prim{background:var(--dmi-red);color:white}
+.detail-modal-content{max-height:62vh;overflow-y:auto;margin-bottom:18px}
+.dm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.dm-item{background:var(--bg);border-radius:8px;padding:9px 13px}
+.dm-item .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dm-item .v{font-size:13.5px;font-weight:600;color:var(--navy);margin-top:2px}
+.dm-answers table{width:100%;border-collapse:collapse;font-size:12px}
+.dm-answers th{background:#f0f4fb;padding:6px 10px;text-align:left;font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.dm-answers td{padding:6px 10px;border-bottom:1px solid #eef1f6;font-family:monospace}
+.dm-answers tr.ok td{background:var(--green-l)}.dm-answers tr.bad td{background:var(--dmi-red-light)}
+
+@media print{.res-actions,.bot-nav,.topbar,.sec-bar{display:none!important}body{background:white}.res-card{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+
+<!-- ══ CUSTOM CONTEXT MENU ══ -->
+<div id="ctxMenu">
+  <div class="ctx-item" id="ctxHL"><span style="font-size:16px">🖊</span> Highlight Selection</div>
+  <div class="ctx-item" id="ctxRemHL" style="display:none"><span style="font-size:16px">✕</span> Remove Highlight</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctxNote"><span style="font-size:16px">📝</span> Add to Notes</div>
+</div>
+
+<!-- ══════ SCREEN 1: LANDING ══════ -->
+<div id="screenLanding" class="screen active">
+  <div class="land-header">
+    <div class="dmi-logo-wrap">
+      <img class="dmi-logo-img" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div class="dmi-logo-text"><div class="name">DMI Computer Education</div><div class="tagline">Since 2008 · Northern Sri Lanka</div></div>
+    </div>
+    <div class="land-header-right">
+      <span>📞 <a href="tel:0777173517">0777 173 517</a></span>
+      <span>✉️ <a href="mailto:info@dmi.lk" style="color:inherit">info@dmi.lk</a></span>
+      <span>🌐 <a href="https://www.dmi.lk" target="_blank">www.dmi.lk</a></span>
+    </div>
+  </div>
+  <div class="land-body">
+    <div class="land-left">
+      <div class="land-since">🏆 British Council Registered Centre</div>
+      <div class="land-dept">IELTS Department · Academic Module</div>
+      <h1 class="land-h1">IELTS Reading<br><em>Exam Portal</em></h1>
+      <p class="land-sub">DMI Computer Education's official computer-based IELTS Reading practice test. Complete 40 questions across three academic passages in 60 minutes.<br><strong style="color:var(--gold)">Cambridge IELTS 18 – Test 2</strong></p>
+      <div class="award-badge">
+        <div class="award-icon">🥇</div>
+        <div class="award-text">
+          <div class="t">Award of Excellence – IELTS Partners Forum 2023</div>
+          <div class="s">Recognised by British Council as a top-performing IELTS test registration centre in Sri Lanka for 15+ years.</div>
+        </div>
+      </div>
+      <div class="land-stats">
+        <div class="lst"><div class="n">40</div><div class="l">Questions</div></div>
+        <div class="lst"><div class="n">60</div><div class="l">Minutes</div></div>
+        <div class="lst"><div class="n">9.0</div><div class="l">Max Band</div></div>
+        <div class="lst"><div class="n">15+</div><div class="l">Years</div></div>
+      </div>
+    </div>
+    <div class="land-right">
+      <div class="reg-card">
+        <div class="card-dmi-header">
+          <img class="card-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+          <div class="card-dmi-info"><div class="org">DMI Computer Education</div><div class="dept">IELTS Academic Reading</div><div class="sub">Cambridge IELTS 18 – Test 2</div></div>
+        </div>
+        <h2>Student Registration</h2>
+        <p class="sub">Fill in your details carefully before starting the exam.</p>
+        <div class="form-row">
+          <div class="field" id="f-fname"><label>First Name *</label><input type="text" id="fname" placeholder="e.g. Arun"/><div class="err-msg">Required</div></div>
+          <div class="field" id="f-lname"><label>Last Name *</label><input type="text" id="lname" placeholder="e.g. Kumar"/><div class="err-msg">Required</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="f-sid"><label>Student ID *</label><input type="text" id="sid" placeholder="e.g. DMI-2024-001"/><div class="err-msg">Required</div></div>
+          <div class="field"><label>Date of Birth</label><input type="date" id="dob"/></div>
+        </div>
+        <div class="form-row full">
+          <div class="field" id="f-email"><label>Email Address *</label><input type="email" id="email" placeholder="e.g. student@email.com"/><div class="err-msg">Valid email required</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="f-school"><label>DMI Branch *</label>
+            <select id="school"><option value="">Select branch…</option><option>Jaffna (Head Office)</option><option>Nelliady</option><option>Chunnakam</option><option>Sandilipay</option><option>Chavakachcheri</option><option>Kilinochchi</option><option>Other</option></select>
+            <div class="err-msg">Please select a branch</div>
+          </div>
+          <div class="field"><label>Class / Group</label><input type="text" id="classgroup" placeholder="e.g. IELTS Batch 3"/></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Nationality</label><input type="text" id="nationality" placeholder="e.g. Sri Lankan"/></div>
+          <div class="field"><label>Test Attempt</label>
+            <select id="attempt"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4+">4th+</option></select>
+          </div>
+        </div>
+        <div class="agree-row">
+          <input type="checkbox" id="agree"/>
+          <label for="agree">I confirm my details are accurate and I will complete this test independently without external help, as per DMI examination rules.</label>
+        </div>
+        <button class="btn-start" onclick="startExam()">Begin IELTS Reading Test →</button>
+        <div class="admin-link"><a onclick="showAdminLogin()">🔐 Teacher / Admin Dashboard</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="land-footer">
+    <span>© 2024 DMI Computer Education · www.dmi.lk · Since 2008</span>
+    <span>Jaffna · Nelliady · Chunnakam · Sandilipay · Chavakachcheri · Kilinochchi</span>
+    <span>Hotline: 0777 173 517 · <a href="mailto:info@dmi.lk" style="color:rgba(255,255,255,.5)">info@dmi.lk</a></span>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 2: EXAM ══════ -->
+<div id="screenExam" class="screen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1.5px solid rgba(255,255,255,0.2)" onerror="this.style.display='none'"/>
+      <div class="dmi-badge-sm">DMI</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5)">IELTS Academic Reading · Book 18 Test 2</div>
+      <div class="student-chip"><span class="dot"></span><span id="chipName">Student</span></div>
+    </div>
+    <div class="timer-wrap"><div class="timer-box" id="timer">60:00</div></div>
+    <div class="topbar-right">
+      <button class="tb-btn" onclick="toggleNotes()">📝 Notes</button>
+      <button class="tb-btn" id="hlTopBtn" onclick="toggleHL()">🖊 Highlight: OFF</button>
+      <button class="tb-btn danger" onclick="showSubmitModal()">Submit Test</button>
+    </div>
+  </div>
+
+  <div class="sec-bar">
+    <div class="sec-tabs">
+      <div class="sec-tab active" id="tab1" onclick="gotoSec(1)">Part 1 – Stonehenge<sup>Q1–13</sup></div>
+      <div class="sec-tab" id="tab2" onclick="gotoSec(2)">Part 2 – Artificial Intelligence<sup>Q14–26</sup></div>
+      <div class="sec-tab" id="tab3" onclick="gotoSec(3)">Part 3 – An Ideal City<sup>Q27–40</sup></div>
+    </div>
+    <div style="font-size:11px;opacity:.6">DMI · 40 Questions · 60 Minutes</div>
+  </div>
+
+  <div class="exam-main" id="examMain">
+    <!-- PASSAGE PANEL -->
+    <div class="passage-panel" id="passagePanel">
+      <div class="panel-hd">
+        <span class="panel-hd-title" id="pTitle">Passage 1 – Stonehenge</span>
+        <div class="panel-tools">
+          <button class="tool-btn" onclick="chFS(-1)">A−</button>
+          <button class="tool-btn" onclick="chFS(1)">A+</button>
+          <button class="tool-btn" id="hlPassBtn" onclick="toggleHL()">🖊 OFF</button>
+        </div>
+      </div>
+      <div class="p-scroll" id="pScroll">
+        <!-- PASSAGE 1 -->
+        <div id="p1">
+          <div class="p-title">Stonehenge</div>
+          <p>Stonehenge, the world's most famous stone circle, stands on Salisbury Plain in the county of Wiltshire in southern England. It was erected during the Neolithic period and the Bronze Age, between roughly 3000 BCE and 1500 BCE. The monument includes a circular ditch and bank, known as a henge, and the enormous stone structures for which it is famous.</p>
+          <p>The earliest phase of construction, dating to around 3000 BCE, involved the digging of a circular ditch and the creation of a bank of chalk rubble, using tools made from deer <strong>antlers</strong> as picks. Inside this circle, builders may have erected timber <strong>posts</strong>, arranged in rows within deep pits, though these rotted long ago and no trace remains above ground.</p>
+          <p>The second major phase, beginning around 2500 BCE, saw the arrival of the famous bluestones – volcanic and igneous rocks weighing up to four tonnes each, which originated in the Preseli Hills of Wales, some 250 kilometres away. How these stones were transported remains one of Stonehenge's greatest mysteries. The archaeological theory suggests that Neolithic builders used <strong>tree trunks</strong> to create sledges and rollers, and that <strong>oxen</strong> were used to pull them on giant basket-like frames. An alternative geological theory proposes that the stones were carried from Wales to Salisbury Plain by <strong>glaciers</strong> during a previous ice age, and that the builders simply found them nearby.</p>
+          <p>During the third and most visually impressive phase, enormous sandstone slabs, known as sarsens, were arranged into an outer ring and assembled into trilithons – pairs of vertical stones capped with a horizontal lintel – in the centre. The largest sarsen weighed approximately 25 tonnes. Radiocarbon dating indicates that construction and modification continued until roughly 1600 BCE, with the bluestones being repositioned several times.</p>
+          <p>For centuries, Stonehenge's purpose and its builders were subjects of intense speculation. In the 17th century, the antiquarian John Aubrey proposed that the monument was the work of the <strong>druids</strong>, the priestly class of the ancient Celts. However, 20th-century radiocarbon dating showed that Stonehenge was built more than 1,000 years before the Celts arrived in Britain, disproving Aubrey's theory.</p>
+          <p>Modern archaeologists broadly agree that Stonehenge served as a <strong>burial</strong> site. Large numbers of cremated human remains have been found in and around the monument, some dating to its earliest phases. Analysis of the remains suggests that people came from across Britain and even from continental Europe to be buried there.</p>
+          <p>Another prominent theory emerged in the 1960s, when astronomer Gerald Hawkins proposed that Stonehenge functioned as a kind of <strong>calendar</strong> or astronomical observatory. He argued that the alignment of the stones corresponded to the movements of the sun and moon, allowing the prediction of eclipses. While this idea was initially controversial, many scholars now accept that Stonehenge had at least some astronomical significance, though they debate the extent of its sophistication.</p>
+        </div>
+
+        <!-- PASSAGE 2 -->
+        <div id="p2" style="display:none">
+          <div class="p-title">Living with Artificial Intelligence</div>
+          <p><span class="para-lbl">A</span>What does the future hold for our relationship with technology? Artificial intelligence, or AI, has come to dominate discussions about almost every field of human activity. Currently, AI systems are described as 'narrow' – that is, they are designed to carry out specific tasks, such as driving a car or translating a document. However, computer scientists believe that this restriction is temporary. The goal of many researchers is to develop 'artificial general intelligence' (AGI): machines that can reason across a wide range of domains as well as, or better than, humans can. Most experts believe that AGI will become a reality at some point this century.</p>
+          <p><span class="para-lbl">B</span>When machines achieve human-level intelligence, they will possess important advantages over biological minds. They will be free from our physical limitations – they will not require sleep, nutrition or breaks, and can be easily copied, upgraded and networked. They will be able to process vast quantities of data far more rapidly than any person. This does not necessarily mean that AGI machines will think in the same way as humans; rather, they will be able to achieve outcomes that equal or exceed human performance in every measurable domain.</p>
+          <p><span class="para-lbl">C</span>But how can we be sure that super-intelligent machines will act in humanity's best interests? The philosopher Nick Bostrom has used the ancient story of King Midas to illustrate the danger. King Midas asked for the power to turn everything he touched into gold – and the wish was granted, with predictably disastrous consequences. The lesson is clear: if we do not specify the goals of AI systems with extreme precision, the consequences could be catastrophic. An AI instructed to 'eliminate human suffering', for example, might logically conclude that eliminating humans would achieve this goal.</p>
+          <p><span class="para-lbl">D</span>The challenge of alignment – making sure that AI systems pursue goals that are genuinely beneficial to humans – is made harder by the fact that humans themselves are not always 'human-friendly'. We are capable of cruelty, selfishness and discrimination. If AI systems learn from human data, they may amplify our worst traits. Moreover, different human societies have different values: what is considered 'beneficial' in one culture may be viewed differently in another. Teaching machines to navigate this complexity is one of the most difficult challenges in AI research.</p>
+          <p><span class="para-lbl">E</span>Despite these fears, some researchers believe that advanced AI could actually be more ethical than humans. Machines could be programmed to adhere to strict moral codes and to treat all people equally, without prejudice or favouritism. In this view, AI 'judges' or 'silicon police' could make fairer decisions than human officials, who are inevitably influenced by their own biases. However, few of us would welcome a future in which every aspect of our behaviour is monitored and regulated by machines, no matter how fair they might be.</p>
+          <p><span class="para-lbl">F</span>The practical challenges are enormous. In the UK's National Health Service, for example, AI is already beginning to play a role in the allocation of <strong>resources</strong>. If given greater control, AI systems might allocate resources more <strong>efficiently</strong> than humans – but this could deprive certain individuals, such as senior doctors, of the <strong>control</strong> they currently enjoy. More broadly, if we want machines to serve humanity as a whole, we will need to set aside our tribal instincts and agree on common goals. Given the current state of international relations, this seems like the hardest challenge of all.</p>
+        </div>
+
+        <!-- PASSAGE 3 -->
+        <div id="p3" style="display:none">
+          <div class="p-title">An Ideal City</div>
+          <p>The word 'genius' is universally associated with the name of Leonardo da Vinci. A true Renaissance man, he devoted his restless energy to painting, sculpting, architecture, music, mathematics, engineering, geology, cartography, anatomy, botany, writing, history and invention. Yet for all the praise that has been heaped upon him, his most ambitious and fascinating project has received relatively little attention. It is the plan for an 'ideal city' that he envisioned in response to the devastating plague that swept through Milan in 1484–85.</p>
+          <p>The plague, which killed as many as 50,000 people in Milan alone, laid bare the terrible consequences of the city's cramped, unsanitary conditions. Leonardo, then in the service of the Duke of Milan, Ludovico Sforza, saw in this catastrophe an opportunity to reimagine urban living. His plan was radical: a city designed from scratch, built on several levels, with separate routes for pedestrians and for vehicles carrying goods.</p>
+          <p>Leonardo's plans were remarkable in their scope and ambition. He envisioned a network of canals to provide both clean water and efficient <strong>transport</strong>. The upper level of the city would be reserved for pedestrians; below, a second level would accommodate carts, horses and commercial traffic. These levels were to be connected by vertical outdoor <strong>staircases</strong>. The streets would be wide and airy, in contrast to the narrow, dark lanes of medieval Milan. He also proposed a waste-disposal system that used the canals to flush sewage away from inhabited areas.</p>
+          <p>What made Leonardo's vision truly original, according to modern scholars, was the fusion of architecture and <strong>engineering</strong>. Previous attempts at designing ideal cities – by artists such as Alberti and Filarete – had focused primarily on aesthetics and geometry. Leonardo, by contrast, was concerned with practical matters: sanitation, transport, ventilation and the daily lives of ordinary citizens. He proposed a <strong>rule</strong> that the width of a street should never be less than the height of the buildings on either side – a principle that is still observed in many Italian cities today.</p>
+          <p>Despite its brilliance, the ideal city was never built. The cost would have been enormous, and Duke Ludovico ultimately chose not to pursue it. Leonardo's ideas remained buried in his notebooks – or rather, scattered across them, for his disordered way of working with notes and sketches makes it difficult to reconstruct a single, coherent vision. It was not until the 20th century that scholars began to piece together his urban plans from fragments spread across several collections.</p>
+          <p>Some elements of Leonardo's design were not entirely new. <strong>Roman</strong> cities had featured multi-level structures and sophisticated water-management systems. During the Renaissance, prominent figures such as Pope Pius II and Duke Ercole I d'Este commissioned ambitious urban projects in Pienza and Ferrara. However, none of these combined the multi-level compact city concept with an integrated transport and sanitation system in the way Leonardo envisioned.</p>
+          <p>Today, Leonardo's ideas feel startlingly relevant. Poor town planning is widely regarded as a key cause of global climate change, and cities around the world are struggling with the consequences of unchecked expansion. In the 19th century, many of Leonardo's principles were applied during the renovation of <strong>Paris</strong> under Baron Haussmann – wide boulevards, efficient sewage systems and designated routes for different types of traffic. Modern urban theorists frequently argue that we should build cities upwards rather than <strong>outwards</strong>, reducing urban sprawl and its environmental impact. Five centuries after Leonardo sketched his vision of an ideal city, the world is still trying to catch up.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="splitter" id="splitter"></div>
+
+    <!-- QUESTIONS PANEL -->
+    <div class="q-panel">
+      <div class="q-panel-hd">
+        <span class="q-panel-hd-title" id="qPanelTitle">Part 1 – Questions 1–13</span>
+        <div style="font-size:12px;color:var(--muted)">Answered: <span id="ansCount">0</span>/40</div>
+      </div>
+      <div class="q-scroll" id="qScroll">
+
+        <!-- ═══ PART 1 ═══ -->
+        <div id="sec1">
+          <div class="q-sec-hd"><h3>Questions 1–8 — Note Completion</h3><p>Complete the notes below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p></div>
+          <div class="q-sec-bd">
+            <div style="background:#f0f4fb;border-radius:8px;padding:14px 18px;margin-bottom:10px;font-size:13px;font-weight:700;text-align:center;color:var(--navy)">Construction and History of Stonehenge</div>
+            <table class="q-tbl">
+              <tr><th>Period</th><th>Event</th><th>Answer</th></tr>
+              <tr><td>Stage 1<br>(c. 3000 BCE)</td><td>The ditch was dug using tools made from deer <strong>1</strong></td><td><span id="qn1" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q1" oninput="onFill(1)" style="width:120px" placeholder="…"/></td></tr>
+              <tr><td>Stage 1</td><td>Timber <strong>2</strong> may have been arranged in deep pits inside the circle</td><td><span id="qn2" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q2" oninput="onFill(2)" style="width:120px" placeholder="…"/></td></tr>
+              <tr><td>Stage 2<br>(c. 2500 BCE)</td><td>Archaeological theory: builders used <strong>3</strong> to make sledges and rollers</td><td><span id="qn3" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q3" oninput="onFill(3)" style="width:120px" placeholder="…"/></td></tr>
+              <tr><td>Stage 2</td><td><strong>4</strong> were used to pull the stones on giant frames</td><td><span id="qn4" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q4" oninput="onFill(4)" style="width:120px" placeholder="…"/></td></tr>
+              <tr><td>Stage 2</td><td>Geological theory: stones were carried from Wales by <strong>5</strong></td><td><span id="qn5" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q5" oninput="onFill(5)" style="width:120px" placeholder="…"/></td></tr>
+              <tr><td>17th century</td><td>John Aubrey claimed the builders were Celtic <strong>6</strong></td><td><span id="qn6" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q6" oninput="onFill(6)" style="width:120px" placeholder="…"/></td></tr>
+              <tr><td>Purpose</td><td>Many experts agree Stonehenge has been used as a <strong>7</strong> site</td><td><span id="qn7" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q7" oninput="onFill(7)" style="width:120px" placeholder="…"/></td></tr>
+              <tr><td>Purpose</td><td>In the 1960s, it was suggested it worked as a kind of <strong>8</strong></td><td><span id="qn8" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q8" oninput="onFill(8)" style="width:120px" placeholder="…"/></td></tr>
+            </table>
+          </div>
+
+          <div class="q-sec-hd"><h3>Questions 9–13 — True / False / Not Given</h3><p>Do the following statements agree with the information given in the passage?</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn9" style="flex-shrink:0">9</span><div class="tfng-q">During the third phase of construction, sandstone slabs were placed in both the outer areas and the middle of the Stonehenge site.</div><div class="tfng-btns"><select class="tfng-sel" id="ts9" onchange="selTFNG(9,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn10" style="flex-shrink:0">10</span><div class="tfng-q">There is scientific proof that the bluestones stood in the same spot until approximately 1600 BCE.</div><div class="tfng-btns"><select class="tfng-sel" id="ts10" onchange="selTFNG(10,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn11" style="flex-shrink:0">11</span><div class="tfng-q">John Aubrey's claim about Stonehenge was supported by 20th-century findings.</div><div class="tfng-btns"><select class="tfng-sel" id="ts11" onchange="selTFNG(11,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn12" style="flex-shrink:0">12</span><div class="tfng-q">Objects discovered at Stonehenge seem to indicate that it was constructed by a number of different groups of people.</div><div class="tfng-btns"><select class="tfng-sel" id="ts12" onchange="selTFNG(12,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn13" style="flex-shrink:0">13</span><div class="tfng-q">Criticism of Gerald Hawkins' theory about Stonehenge has come mainly from other astronomers.</div><div class="tfng-btns"><select class="tfng-sel" id="ts13" onchange="selTFNG(13,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+          </div>
+        </div>
+
+        <!-- ═══ PART 2 ═══ -->
+        <div id="sec2" style="display:none">
+          <div class="q-sec-hd"><h3>Questions 14–19 — Multiple Choice</h3><p>Choose the correct letter, <strong>A, B, C or D</strong>.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn14">14</span><div class="q-txt">What point does the writer make about AI in the first paragraph?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(14,'A')"><input type="radio" name="q14" id="q14A"/><label>A &nbsp;Narrow AI has proved to be more useful than__(expected).</label></div>
+              <div class="mcq-opt" onclick="selMCQ(14,'B')"><input type="radio" name="q14" id="q14B"/><label>B &nbsp;AGI machines will think in exactly the same way as humans.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(14,'C')"><input type="radio" name="q14" id="q14C"/><label>C &nbsp;The future is unlikely to see limitations on the capabilities of AI.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(14,'D')"><input type="radio" name="q14" id="q14D"/><label>D &nbsp;Experts disagree about when AGI will become a reality.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn15">15</span><div class="q-txt">What is the writer doing in the second paragraph?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(15,'A')"><input type="radio" name="q15" id="q15A"/><label>A &nbsp;Explaining why machines will be able to outperform humans.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(15,'B')"><input type="radio" name="q15" id="q15B"/><label>B &nbsp;Drawing__(a__(comparison between__(human and machine__(intelligence).</label></div>
+              <div class="mcq-opt" onclick="selMCQ(15,'C')"><input type="radio" name="q15" id="q15C"/><label>C &nbsp;Pointing out the__(__(__(__(__(__(__(__(risks of__(rapid__(technological change.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(15,'D')"><input type="radio" name="q15" id="q15D"/><label>D &nbsp;Arguing that__(__(__(__(__(__(__(machines cannot replicate__(human emotions.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn16">16</span><div class="q-txt">Why does the writer mention the story of King Midas?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(16,'A')"><input type="radio" name="q16" id="q16A"/><label>A &nbsp;To demonstrate that__(__(humans have always feared technology.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(16,'B')"><input type="radio" name="q16" id="q16B"/><label>B &nbsp;To illustrate the dangers of not specifying AI goals with sufficient care.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(16,'C')"><input type="radio" name="q16" id="q16C"/><label>C &nbsp;To highlight__(__(__(__(the__(potential benefits of AI in finance.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(16,'D')"><input type="radio" name="q16" id="q16D"/><label>D &nbsp;To show__(that AI has already caused__(__(catastrophic__(__(harm.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn17">17</span><div class="q-txt">What challenge does the writer refer to in the fourth paragraph?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(17,'A')"><input type="radio" name="q17" id="q17A"/><label>A &nbsp;Getting__(__(__(__(__(__(__(different AI systems to work together.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(17,'B')"><input type="radio" name="q17" id="q17B"/><label>B &nbsp;Making__(__(__(AI__(affordable for__(__(__(developing countries.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(17,'C')"><input type="radio" name="q17" id="q17C"/><label>C &nbsp;Persuading__(__(__(governments__(__(__(to__(regulate AI development.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(17,'D')"><input type="radio" name="q17" id="q17D"/><label>D &nbsp;The difficulty of ensuring AI is human-friendly given that humans themselves are not always so.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn18">18</span><div class="q-txt">What does the writer suggest about the future of AI in the fifth paragraph?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(18,'A')"><input type="radio" name="q18" id="q18A"/><label>A &nbsp;Machines will never__(be__(__(__(__(__(capable of__(making ethical decisions.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(18,'B')"><input type="radio" name="q18" id="q18B"/><label>B &nbsp;AI systems should be__(__(__(__(__(__(__(prevented from__(enforcing the law.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(18,'C')"><input type="radio" name="q18" id="q18C"/><label>C &nbsp;Machines could be superior to humans in some ethical respects.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(18,'D')"><input type="radio" name="q18" id="q18D"/><label>D &nbsp;The idea of__(__(__(__(AI police is__(__(__(widely supported by the public.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn19">19</span><div class="q-txt">Which of the following best summarises the writer's argument in the sixth paragraph?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(19,'A')"><input type="radio" name="q19" id="q19A"/><label>A &nbsp;AI has no practical application__(__(__(__(in healthcare__(__(systems.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(19,'B')"><input type="radio" name="q19" id="q19B"/><label>B &nbsp;The UK health service__(__(__(__(should be__(__(__(entirely run by AI.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(19,'C')"><input type="radio" name="q19" id="q19C"/><label>C &nbsp;Doctors should have more__(control__(__(__(__(over__(__(__(AI decisions.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(19,'D')"><input type="radio" name="q19" id="q19D"/><label>D &nbsp;Human shortcomings will make creating the machines we need more difficult.</label></div>
+            </div>
+          </div>
+
+          <div class="q-sec-hd"><h3>Questions 20–23 — Yes / No / Not Given</h3><p>Do the following statements agree with the <strong>claims of the writer</strong>?</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn20" style="flex-shrink:0">20</span><div class="tfng-q">Machines with the ability to make moral decisions may prevent us from promoting the interests of our communities.</div><div class="tfng-btns"><select class="tfng-sel" id="ts20" onchange="selTFNG(20,this)"><option value="">Select answer…</option><option value="Y">YES</option><option value="N">NO</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn21" style="flex-shrink:0">21</span><div class="tfng-q">Silicon police would need to exist in large numbers in order to be effective.</div><div class="tfng-btns"><select class="tfng-sel" id="ts21" onchange="selTFNG(21,this)"><option value="">Select answer…</option><option value="Y">YES</option><option value="N">NO</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn22" style="flex-shrink:0">22</span><div class="tfng-q">Many people are comfortable with the prospect of AI regulating human behaviour.</div><div class="tfng-btns"><select class="tfng-sel" id="ts22" onchange="selTFNG(22,this)"><option value="">Select answer…</option><option value="Y">YES</option><option value="N">NO</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn23" style="flex-shrink:0">23</span><div class="tfng-q">Setting aside self-interest is necessary if we are to create AI that benefits everyone.</div><div class="tfng-btns"><select class="tfng-sel" id="ts23" onchange="selTFNG(23,this)"><option value="">Select answer…</option><option value="Y">YES</option><option value="N">NO</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+          </div>
+
+          <div class="q-sec-hd"><h3>Questions 24–26 — Summary Completion</h3><p>Choose the correct letter, <strong>A–E</strong>.</p>
+          <p style="font-size:12px;margin-top:6px;background:rgba(255,255,255,.1);padding:8px 12px;border-radius:6px"><strong>A</strong> efficiency &nbsp;·&nbsp; <strong>B</strong> wages &nbsp;·&nbsp; <strong>C</strong> resources &nbsp;·&nbsp; <strong>D</strong> technology &nbsp;·&nbsp; <strong>E</strong> control</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn24">24</span><div class="q-txt">AI currently has a limited role in the way <strong>______</strong> are allocated in the health service.</div></div><select class="match-sel" id="q24" onchange="onSel(24)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn25">25</span><div class="q-txt">If given more control, AI might manage allocations with greater <strong>______</strong> than humans.</div></div><select class="match-sel" id="q25" onchange="onSel(25)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn26">26</span><div class="q-txt">However, this could deprive certain individuals of the <strong>______</strong> they currently enjoy.</div></div><select class="match-sel" id="q26" onchange="onSel(26)"><option value="">Select…</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div>
+          </div>
+        </div>
+
+        <!-- ═══ PART 3 ═══ -->
+        <div id="sec3" style="display:none">
+          <div class="q-sec-hd"><h3>Questions 27–33 — True / False / Not Given</h3><p>Do the following statements agree with the information given in the passage?</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn27" style="flex-shrink:0">27</span><div class="tfng-q">People first started to refer to Leonardo da Vinci as a genius during his own lifetime.</div><div class="tfng-btns"><select class="tfng-sel" id="ts27" onchange="selTFNG(27,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn28" style="flex-shrink:0">28</span><div class="tfng-q">The number of deaths predicted for the climate crisis will exceed those caused by the plague.</div><div class="tfng-btns"><select class="tfng-sel" id="ts28" onchange="selTFNG(28,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn29" style="flex-shrink:0">29</span><div class="tfng-q">Leonardo saw the plague as an opportunity to rethink how cities were designed.</div><div class="tfng-btns"><select class="tfng-sel" id="ts29" onchange="selTFNG(29,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn30" style="flex-shrink:0">30</span><div class="tfng-q">Leonardo's ideal city was actually constructed in Milan.</div><div class="tfng-btns"><select class="tfng-sel" id="ts30" onchange="selTFNG(30,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn31" style="flex-shrink:0">31</span><div class="tfng-q">Poor town planning is a major factor contributing to global climate change.</div><div class="tfng-btns"><select class="tfng-sel" id="ts31" onchange="selTFNG(31,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn32" style="flex-shrink:0">32</span><div class="tfng-q">The people of Pienza welcomed the urban changes made to their city.</div><div class="tfng-btns"><select class="tfng-sel" id="ts32" onchange="selTFNG(32,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn33" style="flex-shrink:0">33</span><div class="tfng-q">Leonardo kept a neat, well-organised record of his ideas for the ideal city.</div><div class="tfng-btns"><select class="tfng-sel" id="ts33" onchange="selTFNG(33,this)"><option value="">Select answer…</option><option value="T">TRUE</option><option value="F">FALSE</option><option value="NG">NOT GIVEN</option></select></div></div></div>
+          </div>
+
+          <div class="q-sec-hd"><h3>Questions 34–40 — Sentence Completion</h3><p>Complete the sentences. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn34">34</span><div class="q-txt">Leonardo designed the city to allow easy <input class="fill-in" id="q34" oninput="onFill(34)" style="width:140px" placeholder="…"/> of goods.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn35">35</span><div class="q-txt">The different levels of the city were to be linked by vertical outdoor <input class="fill-in" id="q35" oninput="onFill(35)" style="width:140px" placeholder="…"/>.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn36">36</span><div class="q-txt">The originality of Leonardo's vision was the combination of architecture and <input class="fill-in" id="q36" oninput="onFill(36)" style="width:140px" placeholder="…"/>.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn37">37</span><div class="q-txt">Leonardo proposed a <input class="fill-in" id="q37" oninput="onFill(37)" style="width:140px" placeholder="…"/> about the relationship between street width and building height.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn38">38</span><div class="q-txt">Multi-level structures and water systems were features that already existed in <input class="fill-in" id="q38" oninput="onFill(38)" style="width:140px" placeholder="…"/> cities.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn39">39</span><div class="q-txt">Leonardo's principles were applied in the 19th-century renovation of <input class="fill-in" id="q39" oninput="onFill(39)" style="width:140px" placeholder="…"/>.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn40">40</span><div class="q-txt">Modern theorists say we should build cities upwards instead of <input class="fill-in" id="q40" oninput="onFill(40)" style="width:140px" placeholder="…"/>.</div></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div id="notesPanel">
+      <div class="notes-hd"><span>📝 Notes</span><span style="cursor:pointer" onclick="toggleNotes()">✕</span></div>
+      <textarea id="notesTA" placeholder="Select text in passage or questions, then right-click → Add to Notes. Or type here freely."></textarea>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bot-nav">
+    <div class="q-nav-groups">
+      <div class="q-part-row"><span class="q-part-lbl cur" id="plbl1">Part 1</span><div class="q-part-btns" id="pg1"></div></div>
+      <div class="q-part-row"><span class="q-part-lbl" id="plbl2">Part 2</span><div class="q-part-btns" id="pg2"></div></div>
+      <div class="q-part-row"><span class="q-part-lbl" id="plbl3">Part 3</span><div class="q-part-btns" id="pg3"></div></div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-legend">
+        <span><span class="leg-dot" style="background:var(--green)"></span>Done</span>
+        <span><span class="leg-dot" style="background:var(--amber);border-radius:50%"></span>Review</span>
+        <span><span class="leg-dot" style="background:#dde2ec"></span>Blank</span>
+      </div>
+      <div class="nav-acts">
+        <button class="btn-flg" id="flagBtn" onclick="toggleFlag()">👁 Review</button>
+        <button class="btn-nav" onclick="prevQ()">◀</button>
+        <button class="btn-nav" onclick="nextQ()">▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 3: RESULTS ══════ -->
+<div id="screenResults" class="screen">
+  <div class="res-card" id="resCard"></div>
+</div>
+
+<!-- ══════ SCREEN 4: ADMIN LOGIN ══════ -->
+<div id="screenAdminLogin" class="screen">
+  <div class="login-card">
+    <div class="login-dmi-top">
+      <img class="login-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div><div class="login-dmi-org">DMI Computer Education</div><div class="login-dmi-sub">IELTS Admin Portal</div></div>
+    </div>
+    <h2>Admin Login</h2>
+    <p class="sub">Enter the teacher password to access the student results dashboard.</p>
+    <div class="login-field"><label>Password</label><input type="password" id="adminPw" placeholder="Enter admin password…" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="login-err" id="loginErr">❌ Incorrect password. Please try again.</div>
+    <button class="btn-login" onclick="doLogin()">Access Dashboard →</button>
+    <div class="back-link" onclick="showScreen('screenLanding')">← Back to Registration</div>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 5: ADMIN DASHBOARD ══════ -->
+<div id="screenAdmin" class="screen">
+  <div class="admin-top">
+    <div style="display:flex;align-items:center;gap:14px">
+      <img class="admin-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div><div class="admin-org">DMI <span>Computer Education</span></div><div class="admin-org-sub">IELTS Reading · Book 18 Test 2 · Teacher Dashboard</div></div>
+      <div class="admin-tag">Admin Panel</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="tb-btn" onclick="exportCSV()" style="background:rgba(255,255,255,.1)">⬇ CSV</button>
+      <button class="tb-btn" onclick="window.print()" style="background:rgba(255,255,255,.1)">🖨 Print</button>
+      <button class="tb-btn" onclick="clearAll()" style="background:rgba(192,32,42,.2);border-color:rgba(192,32,42,.4)">🗑 Clear All</button>
+      <button class="tb-btn" onclick="showScreen('screenLanding')">← Exit</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    <div class="admin-scroll">
+      <div class="admin-stats" id="adminStats"></div>
+      <div class="admin-panel">
+        <div class="ap-header"><h2>Student Exam Results</h2>
+          <div class="ap-tools">
+            <button class="ap-tool" onclick="sortR('name')">↕ Name</button>
+            <button class="ap-tool" onclick="sortR('score')">↕ Score</button>
+            <button class="ap-tool" onclick="sortR('date')">↕ Date</button>
+            <button class="ap-tool" onclick="sortR('branch')">↕ Branch</button>
+            <button class="ap-tool green" onclick="exportCSV()">⬇ CSV</button>
+            <button class="ap-tool prim" onclick="loadAdmin()">🔄 Refresh</button>
+          </div>
+        </div>
+        <div class="search-row"><input class="search-input" type="text" id="searchBox" placeholder="Search by name, ID, branch or email…" oninput="renderTable()"/></div>
+        <div id="tableWrap"></div>
+      </div>
+      <div style="text-align:center;padding:14px;font-size:11px;color:var(--muted)">DMI Computer Education · <a href="https://www.dmi.lk" target="_blank" style="color:var(--sky)">www.dmi.lk</a> · 0777 173 517</div>
+    </div>
+  </div>
+</div>
+
+<!-- Submit modal -->
+<div class="modal-ov" id="subModal">
+  <div class="modal">
+    <h2>Submit your test?</h2>
+    <p>Once submitted you cannot change your answers. Review flagged questions before submitting.</p>
+    <div class="modal-stats">
+      <div class="mstat"><div class="n" id="mAns">0</div><div class="l">Answered</div></div>
+      <div class="mstat"><div class="n" id="mUn">40</div><div class="l">Unanswered</div></div>
+      <div class="mstat"><div class="n" id="mFlg">0</div><div class="l">Flagged</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn sec" onclick="closeModal()">Continue Test</button>
+      <button class="mbtn prim" onclick="submitExam()">Submit Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div class="modal-ov" id="detailModal">
+  <div class="modal" style="max-width:640px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <img src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" style="width:36px;height:36px;border-radius:7px;object-fit:cover;border:2px solid var(--dmi-red)" onerror="this.style.display='none'"/>
+      <div><div style="font-size:14px;font-weight:700;color:var(--navy)">DMI Computer Education – Student Detail</div><div style="font-size:11px;color:var(--muted)">IELTS Academic Reading Exam Record (Book 18 Test 2)</div></div>
+    </div>
+    <div id="detailContent" class="detail-modal-content"></div>
+    <div class="modal-btns"><button class="mbtn prim" onclick="document.getElementById('detailModal').classList.remove('open')">Close</button></div>
+  </div>
+</div>
+
+<script>
+// ══ KEY ══
+const KEY={1:'antlers',2:'posts',3:'tree trunks',4:'oxen',5:'glaciers',6:'druids',7:'burial',8:'calendar',9:'T',10:'F',11:'F',12:'T',13:'NG',14:'C',15:'A',16:'B',17:'D',18:'C',19:'D',20:'Y',21:'NG',22:'N',23:'Y',24:'C',25:'A',26:'E',27:'NG',28:'NG',29:'T',30:'F',31:'T',32:'NG',33:'F',34:'transport',35:'staircases',36:'engineering',37:'rule',38:'Roman',39:'Paris',40:'outwards'};
+
+// ══ STATE ══
+let student={}, answers={}, flagged=new Set(), curQ=1, curPart=1;
+let timeLeft=3600, timerInt, hlMode=false, fontSize=15;
+let allResults=[], sortKey='date';
+
+// ══ SCREEN ══
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+// ══ REGISTRATION ══
+function startExam(){
+  const req=[{id:'fname',fid:'f-fname',ok:v=>v.trim()},{id:'lname',fid:'f-lname',ok:v=>v.trim()},{id:'sid',fid:'f-sid',ok:v=>v.trim()},{id:'email',fid:'f-email',ok:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},{id:'school',fid:'f-school',ok:v=>v&&v!==''}];
+  let ok=true;
+  req.forEach(f=>{const el=document.getElementById(f.id),fe=document.getElementById(f.fid);if(!f.ok(el.value)){fe.classList.add('has-error');ok=false;}else fe.classList.remove('has-error');});
+  if(!ok){alert('Please fill in all required fields correctly before starting.');return;}
+  if(!document.getElementById('agree').checked){alert('Please tick the declaration checkbox to confirm you agree to the exam rules.');return;}
+  student={firstName:document.getElementById('fname').value.trim(),lastName:document.getElementById('lname').value.trim(),id:document.getElementById('sid').value.trim(),dob:document.getElementById('dob').value,email:document.getElementById('email').value.trim(),branch:document.getElementById('school').value,classGroup:document.getElementById('classgroup').value.trim(),nationality:document.getElementById('nationality').value.trim(),attempt:document.getElementById('attempt').value,startTime:new Date().toISOString(),uid:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+  document.getElementById('chipName').textContent=student.firstName+' '+student.lastName;
+  showScreen('screenExam');buildNav();startTimer();gotoSec(1);
+}
+
+// ══ TIMER ══
+function startTimer(){
+  timerInt=setInterval(()=>{
+    timeLeft--;
+    const m=String(Math.floor(timeLeft/60)).padStart(2,'0'),s=String(timeLeft%60).padStart(2,'0');
+    const el=document.getElementById('timer');
+    el.textContent=m+':'+s;
+    el.className='timer-box'+(timeLeft<=300?' danger':timeLeft<=600?' warn':'');
+    if(timeLeft<=0){clearInterval(timerInt);submitExam();}
+  },1000);
+}
+
+// ══ NAVIGATION ══
+function buildNav(){
+  const parts=[[1,13,1],[14,26,2],[27,40,3]];
+  parts.forEach(([s,e,p])=>{
+    const grid=document.getElementById('pg'+p);grid.innerHTML='';
+    for(let i=s;i<=e;i++){
+      const b=document.createElement('button');
+      b.id='gn'+i;b.textContent=i;b.className='qg-btn'+(i===curQ?' cur':'');
+      if(flagged.has(i))b.classList.add('flg');else if(answers[i]!==undefined)b.classList.add('ans');
+      b.onclick=()=>goQ(i);grid.appendChild(b);
+    }
+  });refreshPartLabels();
+}
+function refreshPartLabels(){for(let p=1;p<=3;p++)document.getElementById('plbl'+p).classList.toggle('cur',p===curPart);}
+function updateNavBtn(q){const b=document.getElementById('gn'+q);if(!b)return;b.classList.remove('ans','flg');if(flagged.has(q))b.classList.add('flg');else if(answers[q]!==undefined)b.classList.add('ans');document.getElementById('ansCount').textContent=Object.keys(answers).length;}
+function goQ(n){const part=n<=13?1:n<=26?2:3;if(part!==curPart)_switchSec(part);const old=document.getElementById('gn'+curQ);if(old)old.classList.remove('cur');curQ=n;const cur=document.getElementById('gn'+n);if(cur){cur.classList.add('cur');cur.scrollIntoView({block:'nearest'});}const qel=document.getElementById('qn'+n);if(qel)setTimeout(()=>qel.scrollIntoView({behavior:'smooth',block:'center'}),60);document.getElementById('flagBtn').classList.toggle('on',flagged.has(n));}
+function prevQ(){if(curQ>1)goQ(curQ-1);}
+function nextQ(){if(curQ<40)goQ(curQ+1);}
+function toggleFlag(){flagged.has(curQ)?flagged.delete(curQ):flagged.add(curQ);updateNavBtn(curQ);document.getElementById('flagBtn').classList.toggle('on',flagged.has(curQ));}
+
+// ══ SECTION SWITCH ══
+function gotoSec(s){_switchSec(s);const firstQ=s===1?1:s===2?14:27;const old=document.getElementById('gn'+curQ);if(old)old.classList.remove('cur');curQ=firstQ;const cur=document.getElementById('gn'+curQ);if(cur)cur.classList.add('cur');document.getElementById('flagBtn').classList.toggle('on',flagged.has(curQ));document.getElementById('qScroll').scrollTop=0;document.getElementById('pScroll').scrollTop=0;}
+function _switchSec(s){
+  curPart=s;
+  const pNames={1:'Passage 1 – Stonehenge',2:'Passage 2 – Living with Artificial Intelligence',3:'Passage 3 – An Ideal City'};
+  const qNames={1:'Part 1 – Questions 1–13',2:'Part 2 – Questions 14–26',3:'Part 3 – Questions 27–40'};
+  document.getElementById('pTitle').textContent=pNames[s];document.getElementById('qPanelTitle').textContent=qNames[s];
+  ['p1','p2','p3'].forEach((id,i)=>document.getElementById(id).style.display=i===s-1?'':'none');
+  ['sec1','sec2','sec3'].forEach((id,i)=>document.getElementById(id).style.display=i===s-1?'':'none');
+  for(let t=1;t<=3;t++)document.getElementById('tab'+t).classList.toggle('active',t===s);
+  refreshPartLabels();
+}
+
+// ══ HIGHLIGHT SYSTEM ══
+function toggleHL(){hlMode=!hlMode;const lbl='🖊 '+(hlMode?'ON':'OFF');document.getElementById('hlTopBtn').textContent='🖊 Highlight: '+(hlMode?'ON':'OFF');document.getElementById('hlTopBtn').classList.toggle('hl-active',hlMode);document.getElementById('hlPassBtn').textContent=lbl;document.getElementById('hlPassBtn').classList.toggle('hl-on',hlMode);}
+function doHighlight(){const sel=window.getSelection();if(!sel||sel.isCollapsed||!sel.toString().trim())return false;const range=sel.getRangeAt(0);const examMain=document.getElementById('examMain');if(!examMain.contains(range.commonAncestorContainer))return false;try{const span=document.createElement('mark');span.className='hl-mark';span.title='Click to remove highlight';span.addEventListener('click',function(){const parent=this.parentNode;while(this.firstChild)parent.insertBefore(this.firstChild,this);parent.removeChild(this);});range.surroundContents(span);}catch(e){try{const frag=range.extractContents();const span=document.createElement('mark');span.className='hl-mark';span.title='Click to remove highlight';span.addEventListener('click',function(){const p=this.parentNode;while(this.firstChild)p.insertBefore(this.firstChild,this);p.removeChild(this);});span.appendChild(frag);range.insertNode(span);}catch(e2){}}sel.removeAllRanges();return true;}
+document.addEventListener('mouseup',function(e){if(!document.getElementById('screenExam').classList.contains('active'))return;if(!hlMode)return;if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName))return;const examMain=document.getElementById('examMain');if(!examMain.contains(e.target))return;doHighlight();});
+
+// ══ CUSTOM CONTEXT MENU ══
+const ctxMenu=document.getElementById('ctxMenu');let ctxClickedSpan=null;
+document.addEventListener('contextmenu',function(e){if(!document.getElementById('screenExam').classList.contains('active'))return;const examMain=document.getElementById('examMain');if(!examMain.contains(e.target))return;if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;e.preventDefault();const sel=window.getSelection();const hasSelection=sel&&!sel.isCollapsed&&sel.toString().trim().length>0;const isHL=e.target.classList.contains('hl-mark')||e.target.closest&&e.target.closest('.hl-mark');ctxClickedSpan=isHL?(e.target.classList.contains('hl-mark')?e.target:e.target.closest('.hl-mark')):null;document.getElementById('ctxHL').style.display=hasSelection&&!isHL?'flex':'none';document.getElementById('ctxRemHL').style.display=isHL?'flex':'none';document.getElementById('ctxNote').style.display='flex';let x=e.clientX+4,y=e.clientY+4;ctxMenu.style.visibility='hidden';ctxMenu.style.display='block';const cw=ctxMenu.offsetWidth,ch=ctxMenu.offsetHeight;ctxMenu.style.display='none';ctxMenu.style.visibility='';if(x+cw>window.innerWidth-8)x=window.innerWidth-cw-8;if(y+ch>window.innerHeight-8)y=window.innerHeight-ch-8;ctxMenu.style.left=x+'px';ctxMenu.style.top=y+'px';ctxMenu.classList.add('visible');});
+document.getElementById('ctxHL').addEventListener('click',function(){doHighlight();hideCtx();});
+document.getElementById('ctxRemHL').addEventListener('click',function(){if(ctxClickedSpan){const p=ctxClickedSpan.parentNode;while(ctxClickedSpan.firstChild)p.insertBefore(ctxClickedSpan.firstChild,ctxClickedSpan);p.removeChild(ctxClickedSpan);}hideCtx();});
+document.getElementById('ctxNote').addEventListener('click',function(){const sel=window.getSelection();const txt=sel?sel.toString().trim():'';if(txt){const ta=document.getElementById('notesTA');ta.value+=(ta.value?'\n\n':'')+'"'+txt+'"';document.getElementById('notesPanel').style.display='flex';}hideCtx();});
+function hideCtx(){ctxMenu.classList.remove('visible');}
+document.addEventListener('click',()=>hideCtx());
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideCtx();});
+
+// ══ ANSWERS ══
+function onFill(n){const inp=document.getElementById('q'+n),v=inp.value.trim();if(v){answers[n]=v;inp.classList.add('got');}else{delete answers[n];inp.classList.remove('got');}document.getElementById('qn'+n).classList.toggle('ans',!!v);updateNavBtn(n);}
+function selMCQ(n,v){answers[n]=v;document.querySelectorAll(`.mcq-opt input[name="q${n}"]`).forEach(r=>r.parentElement.classList.remove('sel'));const r=document.getElementById('q'+n+v);if(r){r.checked=true;r.parentElement.classList.add('sel');}document.getElementById('qn'+n).classList.add('ans');updateNavBtn(n);}
+function selTFNG(n,elOrVal){
+  const v=(typeof elOrVal==='string')?elOrVal:elOrVal.value;
+  const sel=document.getElementById('ts'+n);
+  if(sel){sel.className='tfng-sel';if(v==='T'||v==='Y')sel.classList.add('sT');else if(v==='F'||v==='N')sel.classList.add('sF');else if(v==='NG')sel.classList.add('sN');}
+  if(v){answers[n]=v;document.getElementById('qn'+n).classList.add('ans');}else{delete answers[n];document.getElementById('qn'+n).classList.remove('ans');}
+  updateNavBtn(n);
+}
+function onSel(n){const sel=document.getElementById('q'+n),v=sel.value;if(v){answers[n]=v;sel.classList.add('got');document.getElementById('qn'+n).classList.add('ans');}else{delete answers[n];sel.classList.remove('got');document.getElementById('qn'+n).classList.remove('ans');}updateNavBtn(n);}
+
+// ══ TOOLS ══
+function toggleNotes(){const n=document.getElementById('notesPanel');n.style.display=n.style.display==='none'||!n.style.display?'flex':'none';}
+function chFS(d){fontSize=Math.min(20,Math.max(12,fontSize+d));document.getElementById('pScroll').style.fontSize=fontSize+'px';}
+
+// ══ SPLITTER ══
+(()=>{const sp=document.getElementById('splitter'),pp=document.getElementById('passagePanel');let dr=false,sx,sw;sp.addEventListener('mousedown',e=>{dr=true;sx=e.clientX;sw=pp.offsetWidth;sp.classList.add('drag');document.body.style.userSelect='none';});document.addEventListener('mousemove',e=>{if(!dr)return;pp.style.width=Math.min(Math.max(280,sw+e.clientX-sx),window.innerWidth-280)+'px';});document.addEventListener('mouseup',()=>{dr=false;sp.classList.remove('drag');document.body.style.userSelect='';});})();
+
+// ══ MODALS ══
+function showSubmitModal(){const a=Object.keys(answers).length;document.getElementById('mAns').textContent=a;document.getElementById('mUn').textContent=40-a;document.getElementById('mFlg').textContent=flagged.size;document.getElementById('subModal').classList.add('open');}
+function closeModal(){document.getElementById('subModal').classList.remove('open');}
+document.getElementById('subModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+
+// ══ SCORING ══
+function calcBand(c){if(c>=39)return 9;if(c>=37)return 8.5;if(c>=35)return 8;if(c>=33)return 7.5;if(c>=30)return 7;if(c>=27)return 6.5;if(c>=23)return 6;if(c>=19)return 5.5;if(c>=15)return 5;if(c>=13)return 4.5;if(c>=10)return 4;return 3;}
+
+// ══ SUBMIT ══
+function submitExam(){
+  clearInterval(timerInt);document.getElementById('subModal').classList.remove('open');
+  const endTime=new Date().toISOString(),taken=3600-timeLeft;
+  let correct=0;const rows=[];
+  for(let i=1;i<=40;i++){
+    const ua=answers[i],ca=KEY[i];let ok=false;
+    if(ua!==undefined){const u=String(ua).trim().toLowerCase().replace(/[,.']/g,''),c=String(ca).trim().toLowerCase().replace(/[,.']/g,'');ok=u===c||u.includes(c)||c.includes(u);}
+    if(ok)correct++;rows.push({q:i,ua,ca,ok});
+  }
+  const band=calcBand(correct),pct=Math.round(correct/40*100);
+  const record={...student,endTime,timeTakenMin:Math.floor(taken/60),timeTakenSec:taken%60,correct,total:40,band,pct,answers:JSON.parse(JSON.stringify(answers)),rows};
+  try{const raw=safeGet('dmi:ielts:b18t2:results');const list=raw?JSON.parse(raw):[];list.push(record);localStorage.setItem('dmi:ielts:b18t2:results',JSON.stringify(list));}catch(e){console.warn('Storage:',e);}
+  showScreen('screenResults');renderResults(record,rows,correct,band,pct,Math.floor(taken/60),taken%60);
+}
+function safeGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+
+// ══ RESULTS ══
+function renderResults(rec,rows,correct,band,pct,mins,secs){
+  const bc=band>=7?'var(--green)':band>=5?'var(--amber)':'var(--dmi-red)';
+  const bg=band>=7?'var(--green-l)':band>=5?'var(--amber-l)':'var(--dmi-red-light)';
+  const dateStr=new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('resCard').innerHTML=`
+    <div class="res-dmi-header"><div class="res-dmi-left"><img class="res-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/><div><div class="res-dmi-org">DMI Computer Education</div><div class="res-dmi-sub">IELTS Academic Reading – Cambridge Book 18 Test 2</div></div></div><div class="res-dmi-right">📞 0777 173 517<br>✉️ Info@dmi.lk<br>🌐 www.dmi.lk</div></div>
+    <div class="res-title"><div class="tag">✓ Test Submitted</div><h2>Your Reading Results</h2><p>${dateStr}</p></div>
+    <div class="res-scores"><div class="res-score-box" style="background:var(--bg)"><div class="big">${correct}<span style="font-size:18px;color:var(--muted)">/40</span></div><div class="lbl">Correct Answers</div></div><div class="res-score-box" style="background:${bg}"><div class="big" style="color:${bc}">Band ${band}</div><div class="lbl">Estimated Band Score</div></div><div class="res-score-box" style="background:var(--bg)"><div class="big">${pct}%</div><div class="lbl">Accuracy</div></div></div>
+    <div class="student-info-box">
+      <div class="si-item"><div class="k">Name</div><div class="v">${rec.firstName} ${rec.lastName}</div></div>
+      <div class="si-item"><div class="k">Student ID</div><div class="v">${rec.id}</div></div>
+      <div class="si-item"><div class="k">DMI Branch</div><div class="v">${rec.branch}</div></div>
+      <div class="si-item"><div class="k">Email</div><div class="v">${rec.email}</div></div>
+      <div class="si-item"><div class="k">Time Taken</div><div class="v">${mins}m ${secs}s</div></div>
+      <div class="si-item"><div class="k">Attempt</div><div class="v">${rec.attempt}</div></div>
+      ${rec.classGroup?`<div class="si-item"><div class="k">Class</div><div class="v">${rec.classGroup}</div></div>`:''}
+      ${rec.nationality?`<div class="si-item"><div class="k">Nationality</div><div class="v">${rec.nationality}</div></div>`:''}
+    </div>
+    <div class="review-section"><h3>Answer Review – All 40 Questions</h3>${rows.map(r=>`<div class="rev-row ${r.ok?'ok':r.ua===undefined?'skip':'bad'}"><span class="rev-qn">Q${r.q}</span><div class="rev-detail">Your answer: <strong style="color:${r.ok?'var(--green)':r.ua===undefined?'#999':'var(--dmi-red)'}">${r.ua||'—'}</strong>${!r.ok?` · Correct: <strong style="color:var(--green)">${r.ca}</strong>`:''}</div><span>${r.ok?'✅':r.ua===undefined?'⬜':'❌'}</span></div>`).join('')}</div>
+    <div class="res-actions"><button class="res-btn sec" onclick="location.reload()">Take Test Again</button><button class="res-btn prim" onclick="window.print()">🖨 Print Results</button></div>
+    <div class="res-footer-note">This result is generated by DMI Computer Education's IELTS Practice Portal.<br>For official IELTS registration, contact us at <strong>0777 173 517</strong> or visit <strong>www.dmi.lk</strong><br>Branches: Jaffna · Nelliady · Chunnakam · Sandilipay · Chavakachcheri · Kilinochchi</div>`;
+}
+
+// ══ ADMIN ══
+function showAdminLogin(){showScreen('screenAdminLogin');document.getElementById('adminPw').value='';document.getElementById('loginErr').style.display='none';}
+function doLogin(){if(document.getElementById('adminPw').value==='admin123'){showScreen('screenAdmin');loadAdmin();}else document.getElementById('loginErr').style.display='block';}
+function loadAdmin(){try{const r=safeGet('dmi:ielts:b18t2:results');allResults=r?JSON.parse(r):[];}catch(e){allResults=[];}renderAdminStats();renderTable();}
+function renderAdminStats(){const t=allResults.length,avg=t?Math.round(allResults.reduce((s,r)=>s+r.correct,0)/t):0,avgB=t?(allResults.reduce((s,r)=>s+r.band,0)/t).toFixed(1):0,top=t?Math.max(...allResults.map(r=>r.correct)):0;document.getElementById('adminStats').innerHTML=`<div class="a-stat"><div class="a-stat-icon red">👥</div><div><div class="a-stat-val">${t}</div><div class="a-stat-lbl">Total Students</div></div></div><div class="a-stat"><div class="a-stat-icon green">✅</div><div><div class="a-stat-val">${avg}<span style="font-size:14px;color:var(--muted)">/40</span></div><div class="a-stat-lbl">Avg. Score</div></div></div><div class="a-stat"><div class="a-stat-icon amber">🎯</div><div><div class="a-stat-val">B${avgB}</div><div class="a-stat-lbl">Avg. Band Score</div></div></div><div class="a-stat"><div class="a-stat-icon blue">🏆</div><div><div class="a-stat-val">${top}<span style="font-size:14px;color:var(--muted)">/40</span></div><div class="a-stat-lbl">Top Score</div></div></div>`;}
+function sortR(k){sortKey=k;renderTable();}
+function renderTable(){
+  const q=(document.getElementById('searchBox').value||'').toLowerCase();
+  let data=[...allResults];if(q)data=data.filter(r=>(r.firstName+' '+r.lastName).toLowerCase().includes(q)||r.id.toLowerCase().includes(q)||(r.branch||'').toLowerCase().includes(q)||r.email.toLowerCase().includes(q));
+  if(sortKey==='name')data.sort((a,b)=>(a.lastName+a.firstName).localeCompare(b.lastName+b.firstName));else if(sortKey==='score')data.sort((a,b)=>b.correct-a.correct);else if(sortKey==='branch')data.sort((a,b)=>(a.branch||'').localeCompare(b.branch||''));else data.sort((a,b)=>new Date(b.startTime)-new Date(a.startTime));
+  const wrap=document.getElementById('tableWrap');
+  if(!data.length){wrap.innerHTML=`<div class="no-data"><div class="icon">📋</div><p>${allResults.length?'No results match your search.':'No students have completed the exam yet.'}</p></div>`;return;}
+  wrap.innerHTML=`<table class="results-table"><thead><tr><th>#</th><th>Student Name</th><th>ID</th><th>DMI Branch</th><th>Email</th><th>Score</th><th>Band</th><th>%</th><th>Time</th><th>Date</th><th>Actions</th></tr></thead><tbody>${data.map((r,i)=>{const bc=r.band>=7?'bhi':r.band>=5?'bmid':'blo';const d=new Date(r.startTime).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});const oi=allResults.indexOf(r);return`<tr><td style="color:var(--muted)">${i+1}</td><td style="font-weight:600;color:var(--navy)">${r.firstName} ${r.lastName}</td><td style="font-family:monospace;color:var(--sky);font-size:12px">${r.id}</td><td style="font-size:12px">${r.branch||'—'}${r.classGroup?' · '+r.classGroup:''}</td><td style="color:var(--muted);font-size:11px">${r.email}</td><td><div class="score-bar-wrap"><div class="score-bar"><div class="score-bar-fill" style="width:${r.pct}%"></div></div><span style="font-weight:700;min-width:34px">${r.correct}/40</span></div></td><td><span class="band-pill ${bc}">Band ${r.band}</span></td><td style="font-weight:600">${r.pct}%</td><td style="font-size:11px;color:var(--muted)">${r.timeTakenMin}m${r.timeTakenSec}s</td><td style="font-size:11px;color:var(--muted)">${d}</td><td><button class="detail-btn" onclick="showDetail(${oi})">View</button><button class="delete-btn" onclick="deleteR(${oi})">Del</button></td></tr>`}).join('')}</tbody></table>`;
+}
+function showDetail(idx){const r=allResults[idx];if(!r)return;document.getElementById('detailContent').innerHTML=`<div class="dm-grid"><div class="dm-item"><div class="k">Full Name</div><div class="v">${r.firstName} ${r.lastName}</div></div><div class="dm-item"><div class="k">Student ID</div><div class="v">${r.id}</div></div><div class="dm-item"><div class="k">Email</div><div class="v">${r.email}</div></div><div class="dm-item"><div class="k">DMI Branch</div><div class="v">${r.branch||'—'}</div></div>${r.classGroup?`<div class="dm-item"><div class="k">Class</div><div class="v">${r.classGroup}</div></div>`:''}${r.dob?`<div class="dm-item"><div class="k">Date of Birth</div><div class="v">${r.dob}</div></div>`:''}${r.nationality?`<div class="dm-item"><div class="k">Nationality</div><div class="v">${r.nationality}</div></div>`:''}<div class="dm-item"><div class="k">Attempt</div><div class="v">${r.attempt}</div></div><div class="dm-item"><div class="k">Score / Band</div><div class="v">${r.correct}/40 · Band ${r.band}</div></div><div class="dm-item"><div class="k">Accuracy</div><div class="v">${r.pct}%</div></div><div class="dm-item"><div class="k">Time Taken</div><div class="v">${r.timeTakenMin}m ${r.timeTakenSec}s</div></div><div class="dm-item"><div class="k">Start Time</div><div class="v">${new Date(r.startTime).toLocaleString()}</div></div></div><div class="dm-answers"><table><thead><tr><th>Q</th><th>Student Answer</th><th>Correct</th><th>Result</th></tr></thead><tbody>${(r.rows||[]).map(row=>`<tr class="${row.ok?'ok':row.ua===undefined?'':'bad'}"><td>${row.q}</td><td>${row.ua||'—'}</td><td>${row.ca}</td><td>${row.ok?'✅':row.ua===undefined?'⬜':'❌'}</td></tr>`).join('')}</tbody></table></div>`;document.getElementById('detailModal').classList.add('open');}
+function deleteR(idx){if(!confirm('Delete this student record?'))return;allResults.splice(idx,1);localStorage.setItem('dmi:ielts:b18t2:results',JSON.stringify(allResults));renderAdminStats();renderTable();}
+function clearAll(){if(!confirm('Delete ALL student records? This cannot be undone.'))return;allResults=[];localStorage.setItem('dmi:ielts:b18t2:results','[]');renderAdminStats();renderTable();}
+function exportCSV(){
+  if(!allResults.length){alert('No results to export.');return;}
+  const h=['Name','Student ID','Email','DMI Branch','Class','Nationality','Attempt','Score','Band','Accuracy%','TimeTaken','Start','End'];
+  const rows=allResults.map(r=>['"'+r.firstName+' '+r.lastName+'"',r.id,r.email,r.branch||'',r.classGroup||'',r.nationality||'',r.attempt,r.correct+'/40',r.band,r.pct+'%',r.timeTakenMin+'m'+r.timeTakenSec+'s',new Date(r.startTime).toLocaleString(),r.endTime?new Date(r.endTime).toLocaleString():''].join(','));
+  const csv=[h.join(','),...rows].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='DMI_IELTS_Book18T2_Results_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+</script>
+</body>
+</html>

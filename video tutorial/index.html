@@ -1,0 +1,2907 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<title>DMI LMS — IELTS Band 7+</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="./course-data.js"></script>
+<style>
+  html,body { height: 100%; }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #f7f9fc; }
+  .ud-purple { background: #a435f0; }
+  .ud-purple-text { color: #a435f0; }
+  .ud-dark { background: #1c1d1f; }
+  .scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #c9cdd3; border-radius: 6px; }
+  .lecture-row:hover { background: #f3f4f6; }
+  .lecture-row.active { background: #e7e9eb; border-left: 3px solid #a435f0; }
+  .tab-btn { border-bottom: 3px solid transparent; padding: 12px 18px; font-weight: 600; color: #4b5563; }
+  .tab-btn.active { border-bottom-color: #1c1d1f; color: #1c1d1f; }
+  .checkbox-square { width: 18px; height: 18px; border: 2px solid #6b7280; border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; cursor: pointer; }
+  .checkbox-square.checked { background: #a435f0; border-color: #a435f0; color: white; }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  .modal-bg { background: rgba(0,0,0,.5); }
+  .video-wrap { aspect-ratio: 16/9; background: #000; color: #fff; display:flex; align-items:center; justify-content:center; }
+  input, textarea, select { font-family: inherit; }
+  .btn { padding: 8px 16px; border-radius: 4px; font-weight: 600; transition: all .15s; }
+  .btn-primary { background: #a435f0; color: white; }
+  .btn-primary:hover { background: #8710d8; }
+  .btn-dark { background: #1c1d1f; color: white; }
+  .btn-dark:hover { background: #303141; }
+  .btn-outline { border: 1px solid #1c1d1f; color: #1c1d1f; background: white; }
+  .btn-outline:hover { background: #f3f4f6; }
+  .btn-link { display: block; text-align: center; text-decoration: none; }
+  .badge { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+  .badge-quiz { background: #fef3c7; color: #92400e; }
+  .badge-assignment { background: #dbeafe; color: #1e40af; }
+  .badge-roleplay { background: #fde7f3; color: #9d174d; }
+  .badge-practice { background: #d1fae5; color: #065f46; }
+  .badge-article { background: #ede9fe; color: #5b21b6; }
+  .article-body { line-height: 1.7; max-width: 800px; }
+  .article-body h1, .article-body h2, .article-body h3 { font-weight: 700; margin-top: 1.2em; margin-bottom: 0.4em; }
+  .article-body h1 { font-size: 1.6em; }
+  .article-body h2 { font-size: 1.35em; }
+  .article-body h3 { font-size: 1.15em; }
+  .article-body p { margin: 0.7em 0; }
+  .article-body ul, .article-body ol { margin: 0.7em 0 0.7em 1.5em; }
+  .article-body ul { list-style: disc; }
+  .article-body ol { list-style: decimal; }
+  .article-body code { background: #f3f4f6; padding: 1px 4px; border-radius: 3px; font-family: monospace; }
+  .article-body pre { background: #1c1d1f; color: #f3f4f6; padding: 10px; border-radius: 6px; overflow-x: auto; }
+  .article-body img { max-width: 100%; border-radius: 6px; margin: 0.5em 0; }
+  .article-body blockquote { border-left: 4px solid #a435f0; padding-left: 12px; color: #4b5563; margin: 0.7em 0; }
+  :root {
+    --dmi-red: #c0202a;
+    --dmi-red-dark: #8f1118;
+    --navy: #0f1e2d;
+    --blue: #1a3a5c;
+    --sky: #2a7abf;
+    --gold: #c9903a;
+    --border: #d5dce8;
+    --text: #1e2d40;
+    --muted: #6b7a90;
+    --bg: #f2f5f9;
+  }
+
+  html,
+  body {
+    font-family: "Outfit", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .ud-purple { background: var(--dmi-red) !important; }
+  .ud-purple-text { color: var(--dmi-red) !important; }
+  .ud-dark { background: linear-gradient(135deg, rgba(15, 30, 45, 0.98), rgba(26, 58, 92, 0.98)) !important; }
+
+  .btn {
+    border-radius: 7px;
+    font-weight: 700;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--dmi-red), var(--dmi-red-dark)) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(192, 32, 42, 0.22);
+  }
+
+  .btn-primary:hover { background: linear-gradient(135deg, var(--dmi-red-dark), #6f0d12) !important; }
+  .btn-dark { background: var(--navy) !important; }
+  .btn-dark:hover { background: var(--blue) !important; }
+  .btn-outline {
+    border-color: var(--border) !important;
+    color: var(--navy) !important;
+    background: #ffffff !important;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--dmi-red) !important;
+    background: #fff5f5 !important;
+  }
+
+  input,
+  textarea,
+  select {
+    border-color: var(--border) !important;
+    border-radius: 7px !important;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--sky) !important;
+    box-shadow: 0 0 0 3px rgba(42, 122, 191, 0.12) !important;
+  }
+
+  #loginView {
+    background:
+      radial-gradient(ellipse at 12% 18%, rgba(192, 32, 42, 0.18), transparent 48%),
+      radial-gradient(ellipse at 88% 74%, rgba(42, 122, 191, 0.16), transparent 50%),
+      linear-gradient(150deg, var(--navy) 0%, #1a2e45 50%, #0f2236 100%) !important;
+    padding: 28px;
+  }
+
+  #loginView > div,
+  #signupModal > div,
+  #lectureModal > div,
+  #quizModal > div,
+  #adminMediaModal > div {
+    border-radius: 18px !important;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.34) !important;
+  }
+
+  .lms-login-logo,
+  .lms-brand-logo {
+    object-fit: cover;
+    border: 2px solid var(--dmi-red);
+    background: #fff;
+  }
+
+  .lms-login-logo {
+    width: 58px;
+    height: 58px;
+    border-radius: 12px;
+    margin: 0 auto 10px;
+  }
+
+  .lms-brand-logo {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+
+  #loginView h1,
+  #homeView h1,
+  #adminView h1 {
+    font-family: "Playfair Display", Georgia, serif;
+    color: var(--navy);
+  }
+
+  #appView {
+    min-height: 100vh;
+    background: var(--bg);
+  }
+
+  #appView > header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 6px 24px rgba(15, 30, 45, 0.24);
+  }
+
+  #appView > header a,
+  #appView > header button {
+    border-radius: 7px;
+  }
+
+  #appView > header .text-purple-300 {
+    color: var(--gold) !important;
+  }
+
+  #homeView > div,
+  #adminView > div {
+    max-width: 1180px;
+  }
+
+  .course-card {
+    border: 1px solid var(--border) !important;
+    border-radius: 14px !important;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 14px 34px rgba(15, 30, 45, 0.1);
+  }
+
+  .course-card:hover {
+    box-shadow: 0 22px 48px rgba(15, 30, 45, 0.16);
+  }
+
+  .course-card-banner {
+    height: 132px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(ellipse at 18% 20%, rgba(192, 32, 42, 0.32), transparent 46%),
+      linear-gradient(135deg, var(--navy), var(--blue));
+    color: #ffffff;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 42px;
+    font-weight: 900;
+  }
+
+  .video-wrap {
+    background: #ffffff;
+    color: #111827;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #playerArea .article-body {
+    width: min(920px, 100%);
+    max-width: 920px;
+    margin: 0 auto;
+    color: #111827;
+    background: #ffffff;
+  }
+
+  #playerArea .article-body h1,
+  #playerArea .article-body h2,
+  #playerArea .article-body h3,
+  #lectureTitleBig,
+  #ovTitle {
+    color: #111827;
+  }
+
+  #lectureMeta,
+  #ovDesc {
+    color: #374151 !important;
+  }
+
+  .student-empty-lesson {
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    background: #ffffff;
+    color: #111827;
+    text-align: center;
+  }
+
+  .student-empty-lesson .lesson-icon {
+    margin-bottom: 12px;
+    color: var(--dmi-red);
+    font-size: 42px;
+    line-height: 1;
+  }
+
+  .student-empty-lesson .lesson-title {
+    color: #111827;
+    font-size: 22px;
+    font-weight: 800;
+  }
+
+  .student-empty-lesson .lesson-hint {
+    max-width: 560px;
+    margin: 8px auto 0;
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .drive-source-card {
+    width: min(680px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--dmi-red);
+    border-radius: 12px;
+    background: #ffffff;
+    color: #111827;
+    box-shadow: 0 14px 34px rgba(15, 30, 45, 0.08);
+  }
+
+  .drive-source-card h3 {
+    margin: 0 0 8px;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .drive-source-card p {
+    margin: 0 0 16px;
+    color: #4b5563;
+    line-height: 1.65;
+  }
+
+  .drive-source-card a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 14px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, var(--dmi-red), var(--dmi-red-dark));
+    color: #ffffff;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .audio-player-card,
+  .media-message-card,
+  .resource-player-card {
+    width: min(680px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #ffffff;
+    color: #111827;
+    box-shadow: 0 14px 34px rgba(15, 30, 45, 0.08);
+  }
+
+  .audio-player-card {
+    border-left: 5px solid var(--gold);
+  }
+
+  .audio-player-card h3,
+  .media-message-card h3,
+  .resource-player-card h3 {
+    margin: 0 0 8px;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+  }
+
+  .audio-player-card p,
+  .media-message-card p,
+  .resource-player-card p {
+    margin: 0 0 16px;
+    color: #4b5563;
+    line-height: 1.65;
+  }
+
+  .audio-player-card audio {
+    width: 100%;
+  }
+
+  .resource-player-card a {
+    display: block;
+    margin-top: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: #f8fafc;
+    color: var(--navy);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .youtube-fallback-link {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 2;
+    padding: 8px 11px;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #111827;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .admin-media-area {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    min-height: 320px;
+  }
+
+  .tab-btn.active {
+    border-bottom-color: var(--dmi-red) !important;
+    color: var(--navy) !important;
+  }
+
+  .checkbox-square.checked {
+    background: var(--dmi-red) !important;
+    border-color: var(--dmi-red) !important;
+  }
+
+  .lecture-row:hover { background: #f6f9fd !important; }
+  .lecture-row.active {
+    background: #fff5f5 !important;
+    border-left: 3px solid var(--dmi-red) !important;
+  }
+
+  .lecture-row.media-ready {
+    align-items: center;
+  }
+
+  .course-play-btn {
+    flex: 0 0 auto;
+    min-width: 76px;
+    border: 0;
+    border-radius: 6px;
+    padding: 7px 10px;
+    background: var(--dmi-red);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    box-shadow: 0 8px 18px rgba(196, 20, 35, 0.22);
+  }
+
+  .course-play-btn:hover {
+    background: var(--dmi-red-dark);
+  }
+
+  .lesson-title-btn {
+    display: block;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .lesson-title-btn:hover {
+    color: var(--dmi-red);
+  }
+
+  .course-start-media {
+    margin-bottom: 18px;
+    padding: 14px;
+    border: 1px solid #f0c4c8;
+    border-left: 4px solid var(--dmi-red);
+    border-radius: 8px;
+    background: #fff7f7;
+  }
+
+  #courseView aside { border-left-color: var(--border) !important; }
+  #courseView summary,
+  #adminView summary { color: var(--navy); }
+
+  .badge {
+    border-radius: 999px;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-quiz { background: #fef3cd !important; color: #92400e !important; }
+  .badge-assignment { background: #e8f0fb !important; color: var(--blue) !important; }
+  .badge-roleplay { background: #fde8e9 !important; color: var(--dmi-red) !important; }
+  .badge-practice { background: #e6f4ec !important; color: #1e7a45 !important; }
+  .badge-article { background: #f2f5f9 !important; color: var(--navy) !important; }
+
+  .article-body blockquote { border-left-color: var(--dmi-red) !important; }
+  .modal-bg { background: rgba(15, 30, 45, 0.62) !important; }
+
+  @media (max-width: 760px) {
+    #appView > header > div {
+      height: auto;
+      min-height: 56px;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    #appView > header .text-sm {
+      flex-wrap: wrap;
+    }
+  }
+</style>
+</head>
+<body class="min-h-screen text-[#1c1d1f]">
+
+<!-- ============================================================
+     LOGIN VIEW
+============================================================ -->
+<div id="loginView" class="hidden min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-pink-500">
+  <div class="bg-white rounded-2xl shadow-2xl w-[420px] p-8">
+    <div class="text-center mb-6">
+      <img class="lms-login-logo" src="../dmi-logo.jfif" alt="DMI Computer Education logo">
+      <h1 class="text-2xl font-black">DMI Learning Platform</h1>
+      <p class="text-sm text-gray-500">Sign in to continue</p>
+    </div>
+    <div class="space-y-3">
+      <label class="block">
+        <span class="text-sm font-semibold">Username</span>
+        <input id="loginUser" class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g. student1 or admin" autocomplete="username" />
+      </label>
+      <label class="block">
+        <span class="text-sm font-semibold">Password</span>
+        <input id="loginPass" type="password" class="mt-1 w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Password" autocomplete="current-password" />
+      </label>
+      <div id="loginErr" class="text-red-600 text-sm hidden"></div>
+      <button onclick="login()" class="w-full btn btn-primary mt-2">Sign in</button>
+      <a href="../index.html" class="btn btn-outline btn-link">Open IELTS Practice Papers</a>
+      <div class="text-center text-sm">
+        Don't have an account?
+        <button onclick="showSignup()" class="ud-purple-text font-semibold hover:underline">Sign up</button>
+      </div>
+      <div class="text-xs text-gray-500 bg-gray-50 rounded p-2 mt-3">
+        <b>Default admin:</b> admin / admin123 &nbsp;|&nbsp; <b>Demo student:</b> student / student
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SIGNUP MODAL
+============================================================ -->
+<div id="signupModal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center">
+  <div class="bg-white rounded-xl w-[400px] p-6 shadow-2xl">
+    <h2 class="text-xl font-bold mb-4">Create student account</h2>
+    <div class="space-y-3">
+      <input id="suUser" class="w-full border rounded px-3 py-2" placeholder="Username" />
+      <input id="suPass" type="password" class="w-full border rounded px-3 py-2" placeholder="Password" />
+      <input id="suName" class="w-full border rounded px-3 py-2" placeholder="Full name" />
+      <div id="suErr" class="text-red-600 text-sm hidden"></div>
+      <div class="flex gap-2">
+        <button onclick="hideSignup()" class="flex-1 btn btn-outline">Cancel</button>
+        <button onclick="signup()" class="flex-1 btn btn-primary">Create account</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     APP VIEW (after login)
+============================================================ -->
+<div id="appView" class="hidden">
+
+  <!-- TOP NAV -->
+  <header class="ud-dark text-white">
+    <div class="flex items-center justify-between px-4 h-14">
+      <div class="flex items-center gap-4">
+        <div onclick="goHome()" class="cursor-pointer flex items-center gap-2">
+          <img class="lms-brand-logo" src="../dmi-logo.jfif" alt="DMI Computer Education logo">
+          <span class="font-bold tracking-tight">DMI <span class="text-purple-300">LMS</span></span>
+        </div>
+        <nav class="hidden md:flex items-center gap-2 text-sm ml-4">
+          <button onclick="navTo('home')" class="px-3 py-1.5 hover:bg-gray-700 rounded">My Courses</button>
+          <a href="../index.html" class="px-3 py-1.5 hover:bg-gray-700 rounded">Practice Papers</a>
+          <button id="adminNavBtn" onclick="navTo('admin')" class="hidden px-3 py-1.5 hover:bg-gray-700 rounded">Admin Panel</button>
+        </nav>
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        <span id="userBadge" class="text-gray-300"></span>
+        <a href="../index.html" class="px-3 py-1.5 border border-gray-500 rounded hover:bg-gray-700">Practice Papers</a>
+        <button onclick="logout()" class="px-3 py-1.5 border border-gray-500 rounded hover:bg-gray-700">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HOME / COURSE LIST -->
+  <div id="homeView" class="hidden">
+    <div class="max-w-6xl mx-auto p-6">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
+        <div>
+          <h1 class="text-3xl font-black mb-2">My Learning</h1>
+          <p class="text-gray-600">Pick a course to continue where you left off.</p>
+        </div>
+        <a href="../index.html" class="btn btn-outline btn-link md:inline-block">IELTS Practice Papers</a>
+      </div>
+      <div id="courseGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </div>
+  </div>
+
+  <!-- COURSE DETAIL (LMS style) -->
+  <div id="courseView" class="hidden">
+    <!-- Course header bar -->
+    <div class="ud-dark text-white">
+      <div class="px-6 py-3 flex items-center justify-between">
+        <div>
+          <div id="courseCrumb" class="text-xs text-gray-300"></div>
+          <h2 id="courseTitle" class="text-xl font-bold"></h2>
+        </div>
+        <div class="flex items-center gap-4 text-sm">
+          <div class="hidden md:block">
+            <div class="text-gray-300">Your progress</div>
+            <div class="w-48 h-2 bg-gray-700 rounded mt-1">
+              <div id="progressBar" class="h-2 ud-purple rounded" style="width:0%"></div>
+            </div>
+          </div>
+          <span id="progressText" class="font-semibold">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex" style="height: calc(100vh - 56px - 60px);">
+      <!-- MAIN -->
+      <div class="flex-1 flex flex-col bg-white overflow-hidden">
+        <!-- Player -->
+        <div id="playerArea" class="video-wrap shrink-0 relative">
+          <div id="playerInner" class="text-center px-6">
+            <div class="text-5xl mb-3">🎬</div>
+            <div id="lectureTitleBig" class="text-xl font-semibold">Select a lecture from the sidebar</div>
+            <div id="lectureMeta" class="text-sm text-gray-300 mt-1"></div>
+          </div>
+        </div>
+        <!-- Tabs -->
+        <div class="border-b bg-white shrink-0">
+          <nav class="flex overflow-x-auto px-4">
+            <button class="tab-btn active" data-tab="overview" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-btn" data-tab="qa" onclick="switchTab('qa')">Q&amp;A</button>
+            <button class="tab-btn" data-tab="notes" onclick="switchTab('notes')">Notes</button>
+            <button class="tab-btn" data-tab="announcements" onclick="switchTab('announcements')">Announcements</button>
+            <button class="tab-btn" data-tab="resources" onclick="switchTab('resources')">Resources</button>
+          </nav>
+        </div>
+        <!-- Tab content -->
+        <div class="flex-1 overflow-y-auto scrollbar-thin">
+          <div id="tab-overview" class="tab-panel p-6">
+            <h3 id="ovTitle" class="text-lg font-bold mb-2"></h3>
+            <div id="ovMeta" class="text-sm text-gray-500 mb-4"></div>
+            <p id="ovDesc" class="text-gray-700 leading-relaxed"></p>
+            <div id="quizArea" class="hidden mt-6 p-4 border rounded-lg bg-amber-50"></div>
+          </div>
+          <div id="tab-qa" class="tab-panel hidden p-6">
+            <div class="flex gap-2 mb-4">
+              <input id="qaInput" class="flex-1 border rounded px-3 py-2" placeholder="Ask a question about this lecture..." />
+              <button onclick="postQuestion()" class="btn btn-dark">Post</button>
+            </div>
+            <div id="qaList" class="space-y-3"></div>
+          </div>
+          <div id="tab-notes" class="tab-panel hidden p-6">
+            <p class="text-sm text-gray-500 mb-2">Your private notes for this lecture (auto-saved)</p>
+            <textarea id="notesArea" oninput="saveNotes()" class="w-full border rounded p-3 h-64" placeholder="Start typing..."></textarea>
+          </div>
+          <div id="tab-announcements" class="tab-panel hidden p-6">
+            <div id="announceList" class="space-y-3"></div>
+          </div>
+          <div id="tab-resources" class="tab-panel hidden p-6">
+            <ul id="resourceList" class="space-y-2 text-sm"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="w-[380px] border-l bg-white flex flex-col shrink-0">
+        <div class="p-3 border-b">
+          <div class="font-bold">Course content</div>
+          <input id="searchBox" oninput="renderSidebar()" class="mt-2 w-full border rounded px-2 py-1 text-sm" placeholder="Search lectures..." />
+        </div>
+        <div id="sidebarList" class="flex-1 overflow-y-auto scrollbar-thin"></div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ADMIN VIEW -->
+  <div id="adminView" class="hidden">
+    <div class="max-w-7xl mx-auto p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h1 class="text-3xl font-black">Admin Panel</h1>
+        <div class="flex gap-2">
+          <button onclick="exportData()" class="btn btn-outline">Export data</button>
+          <button onclick="document.getElementById('importFile').click()" class="btn btn-outline">Import data</button>
+          <input id="importFile" type="file" accept=".json" class="hidden" onchange="importData(event)" />
+          <button onclick="resetData()" class="btn btn-outline text-red-600">Reset all</button>
+        </div>
+      </div>
+      <div class="bg-white rounded-lg border">
+        <nav class="flex border-b">
+          <button onclick="adminTab('courses')" data-atab="courses" class="atab tab-btn active">Courses</button>
+          <button onclick="adminTab('users')" data-atab="users" class="atab tab-btn">Users</button>
+          <button onclick="adminTab('quizzes')" data-atab="quizzes" class="atab tab-btn">Quiz Builder</button>
+          <button onclick="adminTab('announce')" data-atab="announce" class="atab tab-btn">Announcements</button>
+        </nav>
+        <div class="p-5">
+          <div id="atab-courses" class="apanel"></div>
+          <div id="atab-users" class="apanel hidden"></div>
+          <div id="atab-quizzes" class="apanel hidden"></div>
+          <div id="atab-announce" class="apanel hidden"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     LECTURE EDIT MODAL (admin)
+============================================================ -->
+<div id="lectureModal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="p-5 border-b flex items-center justify-between">
+      <h3 class="font-bold text-lg">Edit lecture</h3>
+      <button onclick="closeLectureModal()" class="text-gray-500 text-xl">×</button>
+    </div>
+    <div class="p-5 space-y-3" id="lectureModalBody"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     QUIZ EDIT MODAL (admin)
+============================================================ -->
+<div id="quizModal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg w-full max-w-3xl shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="p-5 border-b flex items-center justify-between">
+      <h3 class="font-bold text-lg">Quiz builder</h3>
+      <button onclick="closeQuizModal()" class="text-gray-500 text-xl">×</button>
+    </div>
+    <div class="p-5" id="quizModalBody"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN MEDIA PREVIEW MODAL
+============================================================ -->
+<div id="adminMediaModal" class="hidden fixed inset-0 modal-bg z-50 flex items-center justify-center p-4">
+  <div class="bg-white rounded-lg w-full max-w-4xl shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div class="p-5 border-b flex items-center justify-between">
+      <div>
+        <h3 id="adminMediaTitle" class="font-bold text-lg">Media preview</h3>
+        <div id="adminMediaMeta" class="text-xs text-gray-500 mt-1"></div>
+      </div>
+      <button onclick="closeAdminMediaPreview()" class="text-gray-500 text-xl">×</button>
+    </div>
+    <div class="p-5">
+      <div id="adminMediaArea" class="video-wrap admin-media-area">
+        <div class="text-gray-400 text-sm p-4">Select a media lesson to preview.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// STATE / STORAGE
+// ============================================================
+const LS = {
+  USERS: 'lms_users',
+  COURSES: 'lms_courses',
+  SESSION: 'lms_session',
+  ANNOUNCE: c => `lms_announce_${c}`,
+  PROGRESS: u => `lms_progress_${u}`,
+  NOTES: u => `lms_notes_${u}`,
+  QA: c => `lms_qa_${c}`,
+};
+
+const state = {
+  user: null,
+  courseId: null,
+  lectureId: null,
+  tab: 'overview',
+  adminTab: 'courses',
+};
+
+const DEFAULT_LECTURE_VIDEO_URLS = {
+  'lec-2-s1': 'video/2/2Course Description and Introduction \u2014 9min.mp4',
+};
+
+const OLD_UNPLAYABLE_MEDIA_URLS = new Set([
+  'https://drive.google.com/drive/u/0/folders/13r3T12qVM24qU5ENvXQx6iJnSpc6kLyZ',
+]);
+
+const DMI_SPEAKING_ROLEPLAY_BODY = `# DMI Speaking Role Play Practice Now Available
+
+Dear DMI IELTS Students,
+
+DMI Computer Education has added Speaking Role Play practice to the IELTS Band 7+ Preparation Course. These activities help you practise in an exam-style setting with realistic IELTS Speaking questions, especially for Part 1.
+
+## Why This Helps
+
+- Practise answering naturally under time pressure.
+- Build confidence, fluency, pronunciation awareness, and timing.
+- Reduce fear before the real Speaking test.
+- Train with questions that follow IELTS speaking expectations.
+
+## How DMI Uses This Feature
+
+This is not only a video lesson. It is active speaking practice. Students should speak out loud, repeat answers when needed, and use teacher feedback during class or lab practice to improve.
+
+## What To Do
+
+- Open the Speaking section of the DMI LMS.
+- Complete each speaking role play activity.
+- Answer aloud as if you are in the real IELTS test.
+- Ask your DMI teacher for guidance after practice.
+
+Use these role plays regularly to build fluency and exam confidence. DMI Computer Education is here to support your progress toward Band 7 and beyond.
+
+DMI IELTS Department
+DMI Computer Education`;
+
+const DMI_WHY_CHOOSE_BODY = `# Why Choose the DMI IELTS Band 7+ Preparation Course?
+
+DMI Computer Education supports IELTS students with guided lessons, practice materials, mock exam preparation, and registration support.
+
+## What This Course Gives You
+
+- Clear IELTS preparation guidance for Academic and General Training.
+- Reading, Writing, Listening, and Speaking practice in one LMS.
+- Course resources and notes for important lessons.
+- Support from DMI's IELTS teaching team.
+- Practice papers and video lessons for regular revision.
+
+Use this LMS step by step. Start from the course overview, complete each lesson, and use the Resources tab whenever notes or downloadable materials are attached.`;
+
+const DMI_IELTS_2026_NOTICE_BODY = `# Notification: About Alleged IELTS Exam 2026 Format Update
+
+Dear DMI IELTS Students,
+
+You may see messages online claiming that the IELTS exam format has changed for 2026. Please do not depend on rumours, forwarded posts, or unofficial social media updates.
+
+## DMI Guidance
+
+- IELTS format changes should be accepted only when they are announced by official IELTS organisations such as the British Council, IDP, Cambridge English, or IELTS.org.
+- DMI Computer Education will update students if any confirmed IELTS format change affects classroom practice, LMS practice, or mock tests.
+- Until an official change is confirmed, continue practising the current IELTS Listening, Reading, Writing, and Speaking format.
+
+## What Students Should Do
+
+- Follow your DMI teacher's instructions.
+- Practise with the current test format in this LMS.
+- Check official IELTS sources before believing any online claim.
+- Ask DMI staff if you are unsure about a message you received.
+
+DMI IELTS Department
+DMI Computer Education`;
+
+const DMI_QUIZ1_QUESTIONS = [
+  {
+    type: 'mcq',
+    question: 'Who should take the IELTS General Training test?',
+    options: [
+      'Students applying for a university abroad',
+      'People who want to live and work in an English-speaking country',
+      'Scientists presenting at a conference',
+      'Professors moving to another university',
+    ],
+    answer: 1,
+  },
+  {
+    type: 'mcq',
+    question: 'In the IELTS Academic Reading section, the reading passages are taken from:',
+    options: [
+      'Brochures and advertisements',
+      'Personal emails and blog posts',
+      'Books, magazines, and newspapers',
+      'Government application forms',
+    ],
+    answer: 2,
+  },
+  {
+    type: 'mcq',
+    question: 'What kind of material is used in the IELTS General Training Reading section?',
+    options: [
+      'Brochures, advertisements, and everyday materials',
+      'Academic textbooks',
+      'Research articles',
+      'Scientific journals',
+    ],
+    answer: 0,
+  },
+  {
+    type: 'mcq',
+    question: 'Which IELTS test is usually required for undergraduate or postgraduate study?',
+    options: [
+      'IELTS General Training',
+      'IELTS Academic',
+      'IELTS Life Skills',
+      'IELTS Speaking only',
+    ],
+    answer: 1,
+  },
+  {
+    type: 'mcq',
+    question: 'Which IELTS test is commonly used for migration, work, or training purposes?',
+    options: [
+      'IELTS Academic',
+      'IELTS General Training',
+      'IELTS for teachers only',
+      'IELTS Reading only',
+    ],
+    answer: 1,
+  },
+  {
+    type: 'mcq',
+    question: 'Which two IELTS sections are the same in Academic and General Training?',
+    options: [
+      'Reading and Writing',
+      'Listening and Speaking',
+      'Reading and Speaking',
+      'Listening and Writing',
+    ],
+    answer: 1,
+  },
+  {
+    type: 'mcq',
+    question: 'Which two IELTS sections are different in Academic and General Training?',
+    options: [
+      'Listening and Speaking',
+      'Reading and Writing',
+      'Speaking and Listening',
+      'Listening and Reading',
+    ],
+    answer: 1,
+  },
+  {
+    type: 'mcq',
+    question: 'In IELTS Academic Writing Task 1, candidates usually need to:',
+    options: [
+      'Write a personal letter',
+      'Describe visual information such as a chart, graph, table, map, or process',
+      'Write a job application',
+      'Answer short listening questions',
+    ],
+    answer: 1,
+  },
+  {
+    type: 'mcq',
+    question: 'In IELTS General Training Writing Task 1, candidates usually need to:',
+    options: [
+      'Write a letter',
+      'Describe a graph only',
+      'Write a research report',
+      'Summarise a scientific article',
+    ],
+    answer: 0,
+  },
+  {
+    type: 'mcq',
+    question: 'What is the main difference between computer-based IELTS and paper-based IELTS?',
+    options: [
+      'The speaking questions are easier',
+      'The test content is completely different',
+      'The delivery method is different, but the test format and scoring are the same',
+      'Computer-based IELTS has no writing test',
+    ],
+    answer: 2,
+  },
+  {
+    type: 'mcq',
+    question: 'In computer-based IELTS, which sections are usually completed on a computer?',
+    options: [
+      'Listening, Reading, and Writing',
+      'Speaking only',
+      'Reading and Speaking only',
+      'Writing and Speaking only',
+    ],
+    answer: 0,
+  },
+  {
+    type: 'mcq',
+    question: 'Which statement about the IELTS Speaking test is correct?',
+    options: [
+      'It is removed in computer-based IELTS',
+      'It is a speaking interview with an IELTS examiner',
+      'It is only a written grammar test',
+      'It is always taken before Listening',
+    ],
+    answer: 1,
+  },
+  {
+    type: 'mcq',
+    question: 'What does IELTS stand for?',
+    options: [
+      'International English Language Testing System',
+      'Internal English Learning Test Service',
+      'International Exam for Language Training Skills',
+      'Institute English Level Test System',
+    ],
+    answer: 0,
+  },
+  {
+    type: 'mcq',
+    question: 'Which IELTS Reading test has three long academic passages?',
+    options: [
+      'IELTS Academic Reading',
+      'IELTS General Training Reading',
+      'IELTS Listening',
+      'IELTS Speaking',
+    ],
+    answer: 0,
+  },
+  {
+    type: 'mcq',
+    question: 'In IELTS General Training Reading, which section commonly includes workplace-related texts?',
+    options: [
+      'Section 1',
+      'Section 2',
+      'Section 3',
+      'Speaking Part 2',
+    ],
+    answer: 1,
+  },
+];
+
+function load(key, fallback) {
+  const v = localStorage.getItem(key);
+  if (v === null) return fallback;
+  try { return JSON.parse(v); } catch { return fallback; }
+}
+function save(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+function applyDefaultLectureVideoUrls() {
+  const courses = load(LS.COURSES, []);
+  let changed = false;
+  for (const c of courses) {
+    for (const s of c.sections || []) {
+      for (const l of s.lectures || []) {
+        const defaultUrl = DEFAULT_LECTURE_VIDEO_URLS[l.id];
+        if (defaultUrl && (!l.video_url || OLD_UNPLAYABLE_MEDIA_URLS.has(l.video_url))) {
+          l.video_url = defaultUrl;
+          changed = true;
+        }
+      }
+    }
+  }
+  if (changed) save(LS.COURSES, courses);
+}
+
+function applyDmiCourseTextUpdates() {
+  const courses = load(LS.COURSES, []);
+  let changed = false;
+  for (const c of courses) {
+    for (const s of c.sections || []) {
+      for (const l of s.lectures || []) {
+        if (l.id === 'lec-1-s1' && /udemy|bestseller/i.test(l.title || '')) {
+          l.title = 'Why Choose the DMI IELTS Band 7+ Preparation Course?';
+          changed = true;
+        }
+        if (l.id === 'lec-3-s1') {
+          if (l.title !== 'DMI Speaking Role Play Practice Now Available') {
+            l.title = 'DMI Speaking Role Play Practice Now Available';
+            changed = true;
+          }
+          if (l.type !== 'article') {
+            l.type = 'article';
+            changed = true;
+          }
+          const oldBody = l.article_body || '';
+          if (!oldBody || /udemy|keino campbell|new feature alert|speaking role plays now available/i.test(oldBody)) {
+            l.article_body = DMI_SPEAKING_ROLEPLAY_BODY;
+            changed = true;
+          }
+          const dmiDesc = 'DMI speaking role play practice helps students prepare for IELTS Speaking with exam-style prompts and active speaking practice.';
+          if (l.description !== dmiDesc) {
+            l.description = dmiDesc;
+            changed = true;
+          }
+        }
+        if (l.id === 'lec-2-s2') {
+          if (l.type !== 'article') {
+            l.type = 'article';
+            changed = true;
+          }
+          if (!l.article_body || !/DMI Guidance|DMI IELTS Department/i.test(l.article_body)) {
+            l.article_body = DMI_IELTS_2026_NOTICE_BODY;
+            changed = true;
+          }
+          const noticeDesc = 'DMI notice about IELTS exam format rumours and how students should follow official updates.';
+          if (l.description !== noticeDesc) {
+            l.description = noticeDesc;
+            changed = true;
+          }
+        }
+      }
+    }
+  }
+  if (changed) save(LS.COURSES, courses);
+}
+
+function sameResources(current, expected) {
+  if (!Array.isArray(current) || current.length !== expected.length) return false;
+  return expected.every((item, index) => current[index]?.title === item.title && current[index]?.url === item.url);
+}
+
+function applyDmiSectionOneResourceUpdates() {
+  const courses = load(LS.COURSES, []);
+  const resourceMap = {
+    'lec-2-s1': [
+      { title: 'Course Description Resource 1', url: 'video/2/course-description-resource-1.docx' },
+      { title: 'Course Description Resource 2', url: 'video/2/course-description-resource-2.docx' },
+    ],
+    'lec-3-s1': [
+      { title: 'Speaking Role Play Note', url: 'video/2/speaking-role-play-note.txt' },
+    ],
+    'lec-4-s1': [
+      { title: 'IELTS Course Books Note', url: 'video/2/ielts-course-books-note.txt' },
+    ],
+  };
+  let changed = false;
+  for (const c of courses) {
+    for (const s of c.sections || []) {
+      for (const l of s.lectures || []) {
+        if (l.id === 'lec-1-s1') {
+          if (l.type !== 'article') {
+            l.type = 'article';
+            changed = true;
+          }
+          if (l.video_url) {
+            l.video_url = '';
+            changed = true;
+          }
+          if (l.article_body !== DMI_WHY_CHOOSE_BODY) {
+            l.article_body = DMI_WHY_CHOOSE_BODY;
+            changed = true;
+          }
+          if (Array.isArray(l.resources) && l.resources.length) {
+            l.resources = [];
+            changed = true;
+          }
+        }
+        if (l.id === 'lec-3-s1' || l.id === 'lec-4-s1') {
+          if (l.video_url) {
+            l.video_url = '';
+            changed = true;
+          }
+        }
+        if (resourceMap[l.id] && !sameResources(l.resources, resourceMap[l.id])) {
+          l.resources = resourceMap[l.id].map(r => ({ ...r }));
+          changed = true;
+        }
+      }
+    }
+  }
+  if (changed) save(LS.COURSES, courses);
+}
+
+function applyDmiQuizQuestionUpdates() {
+  const courses = load(LS.COURSES, []);
+  let changed = false;
+  for (const c of courses) {
+    for (const s of c.sections || []) {
+      for (const l of s.lectures || []) {
+        if (l.id !== 'lec-4-s2') continue;
+        const hasIncompleteQuestions = !Array.isArray(l.questions)
+          || l.questions.length < DMI_QUIZ1_QUESTIONS.length
+          || l.questions.some(q => !q.question || !(q.options || []).some(Boolean));
+        if (hasIncompleteQuestions) {
+          l.questions = DMI_QUIZ1_QUESTIONS.map(q => ({
+            type: q.type,
+            question: q.question,
+            options: [...q.options],
+            answer: q.answer,
+          }));
+          changed = true;
+        }
+      }
+    }
+  }
+  if (changed) save(LS.COURSES, courses);
+}
+
+// ---- IndexedDB: stores actual audio/video files for offline playback ----
+const IDB_NAME = 'lms_media', IDB_STORE = 'videos', IDB_VERSION = 2;
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(IDB_NAME, IDB_VERSION);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE);
+    };
+    req.onsuccess = () => {
+      const db = req.result;
+      if (!db.objectStoreNames.contains(IDB_STORE)) {
+        db.close();
+        reject(new Error('Offline storage needs a refresh. Please reload this LMS page and choose the file again.'));
+        return;
+      }
+      resolve(db);
+    };
+    req.onblocked = () => reject(new Error('Offline storage is open in another LMS tab. Close other LMS tabs, reload this page, and choose the file again.'));
+    req.onerror = () => reject(req.error || new Error('IndexedDB unavailable'));
+  });
+}
+async function idbPut(key, blob) {
+  const db = await idbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).put(blob, key);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error || new Error('write failed (storage may be full)'));
+  });
+}
+async function idbGet(key) {
+  const db = await idbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(IDB_STORE, 'readonly');
+    const r = tx.objectStore(IDB_STORE).get(key);
+    r.onsuccess = () => resolve(r.result || null);
+    r.onerror = () => reject(r.error);
+  });
+}
+async function idbDelete(key) {
+  try {
+    const db = await idbOpen();
+    await new Promise((resolve) => {
+      const tx = db.transaction(IDB_STORE, 'readwrite');
+      tx.objectStore(IDB_STORE).delete(key);
+      tx.oncomplete = resolve; tx.onerror = resolve;
+    });
+  } catch {}
+}
+async function idbList() {
+  try {
+    const db = await idbOpen();
+    return await new Promise((resolve) => {
+      const tx = db.transaction(IDB_STORE, 'readonly');
+      const r = tx.objectStore(IDB_STORE).getAllKeys();
+      r.onsuccess = () => resolve(r.result || []);
+      r.onerror = () => resolve([]);
+    });
+  } catch { return []; }
+}
+
+// Seed defaults if first run
+function seed() {
+  if (!localStorage.getItem(LS.USERS)) {
+    save(LS.USERS, [
+      { username: 'admin', password: 'admin123', name: 'Administrator', role: 'admin' },
+      { username: 'student', password: 'student', name: 'Demo Student', role: 'student' },
+    ]);
+  }
+  if (!localStorage.getItem(LS.COURSES)) {
+    save(LS.COURSES, window.SEED_COURSES || []);
+  }
+}
+seed();
+// One-shot migrations. These used to run on every page load and would overwrite
+// admin customizations (e.g. notes/resources added for lec-3-s1) on every refresh.
+// We now gate them behind a version flag so they only run once. Bump the version
+// number whenever you genuinely need to re-apply a fix-up across all installs.
+const DMI_MIGRATION_VERSION = 2;
+const DMI_MIGRATION_KEY = 'lms_dmi_migration_version';
+const appliedMigration = parseInt(localStorage.getItem(DMI_MIGRATION_KEY) || '0', 10) || 0;
+if (appliedMigration < 1) {
+  applyDefaultLectureVideoUrls();
+  applyDmiCourseTextUpdates();
+  applyDmiSectionOneResourceUpdates();
+  applyDmiQuizQuestionUpdates();
+}
+if (appliedMigration < 2) {
+  // v2: reseed courses from the latest baked-in SEED_COURSES so every browser
+  // picks up admin updates pushed via course-data.js. Student progress/notes
+  // live under different keys (lms_progress_*, lms_notes_*) and are untouched.
+  try {
+    if (window.SEED_COURSES && Array.isArray(window.SEED_COURSES)) {
+      save(LS.COURSES, window.SEED_COURSES);
+    }
+  } catch (e) { console.warn('v2 reseed failed', e); }
+}
+if (appliedMigration < DMI_MIGRATION_VERSION) {
+  localStorage.setItem(DMI_MIGRATION_KEY, String(DMI_MIGRATION_VERSION));
+}
+
+// ============================================================
+// AUTH
+// ============================================================
+function login() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const users = load(LS.USERS, []);
+  const found = users.find(x => x.username === u && x.password === p);
+  const err = document.getElementById('loginErr');
+  if (!found) { err.textContent = 'Invalid username or password'; err.classList.remove('hidden'); return; }
+  err.classList.add('hidden');
+  save(LS.SESSION, u);
+  state.user = found;
+  showApp();
+}
+function logout() {
+  localStorage.removeItem(LS.SESSION);
+  state.user = null;
+  state.courseId = null;
+  state.lectureId = null;
+  showLogin();
+}
+function showSignup() { document.getElementById('signupModal').classList.remove('hidden'); }
+function hideSignup() { document.getElementById('signupModal').classList.add('hidden'); }
+function signup() {
+  const u = document.getElementById('suUser').value.trim();
+  const p = document.getElementById('suPass').value;
+  const n = document.getElementById('suName').value.trim();
+  const err = document.getElementById('suErr');
+  const users = load(LS.USERS, []);
+  if (!u || !p) { err.textContent = 'Username and password required'; err.classList.remove('hidden'); return; }
+  if (users.some(x => x.username === u)) { err.textContent = 'Username already exists'; err.classList.remove('hidden'); return; }
+  users.push({ username: u, password: p, name: n || u, role: 'student' });
+  save(LS.USERS, users);
+  hideSignup();
+  document.getElementById('loginUser').value = u;
+  document.getElementById('loginPass').value = p;
+  login();
+}
+
+function showLogin() {
+  document.getElementById('loginView').classList.remove('hidden');
+  document.getElementById('appView').classList.add('hidden');
+}
+function showApp() {
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('appView').classList.remove('hidden');
+  document.getElementById('userBadge').textContent = `Hi, ${state.user.name}`;
+  document.getElementById('adminNavBtn').classList.toggle('hidden', state.user.role !== 'admin');
+  navTo('home');
+}
+
+// Restore session
+const sess = load(LS.SESSION, null);
+if (sess) {
+  const users = load(LS.USERS, []);
+  const u = users.find(x => x.username === sess);
+  if (u) { state.user = u; showApp(); } else { showLogin(); }
+} else { showLogin(); }
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function navTo(view) {
+  ['homeView','courseView','adminView'].forEach(v => document.getElementById(v).classList.add('hidden'));
+  if (view === 'home') { document.getElementById('homeView').classList.remove('hidden'); renderHome(); }
+  else if (view === 'course') { document.getElementById('courseView').classList.remove('hidden'); renderCourse(); }
+  else if (view === 'admin') {
+    if (state.user.role !== 'admin') return;
+    document.getElementById('adminView').classList.remove('hidden');
+    renderAdmin();
+  }
+}
+function goHome() { navTo('home'); }
+
+// ============================================================
+// HOME / COURSE LIST
+// ============================================================
+function renderHome() {
+  const grid = document.getElementById('courseGrid');
+  const courses = load(LS.COURSES, []);
+  grid.innerHTML = '';
+  if (!courses.length) {
+    grid.innerHTML = '<div class="col-span-3 text-gray-500">No courses yet.</div>';
+    return;
+  }
+  for (const c of courses) {
+    const stats = courseStats(c);
+    const prog = userProgress(state.user.username, c.id);
+    const completedLect = stats.lectureIds.filter(id => prog[id]?.completed).length;
+    const pct = stats.lectureIds.length ? Math.round(100*completedLect/stats.lectureIds.length) : 0;
+    const card = document.createElement('div');
+    card.className = 'course-card transition cursor-pointer';
+    card.onclick = () => openCourse(c.id);
+    card.innerHTML = `
+      <div class="course-card-banner">IELTS</div>
+      <div class="p-4">
+        <h3 class="font-bold leading-tight">${escapeHTML(c.title)}</h3>
+        <p class="text-xs text-gray-500 mt-1">${escapeHTML(c.instructor||'')}</p>
+        <div class="mt-3">
+          <div class="flex justify-between text-xs text-gray-600 mb-1">
+            <span>${completedLect} / ${stats.lectureIds.length} items</span>
+            <span>${pct}%</span>
+          </div>
+          <div class="h-1.5 bg-gray-200 rounded">
+            <div class="h-1.5 ud-purple rounded" style="width:${pct}%"></div>
+          </div>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">
+          ${c.sections.length} sections · ${Math.round(stats.totalMin/60)}h ${stats.totalMin%60}m total
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  }
+}
+function courseStats(c) {
+  const lectureIds = [];
+  let totalMin = 0;
+  for (const s of c.sections) for (const l of s.lectures) {
+    lectureIds.push(l.id);
+    totalMin += l.duration_min || 0;
+  }
+  return { lectureIds, totalMin };
+}
+function userProgress(uname, courseId) {
+  const all = load(LS.PROGRESS(uname), {});
+  if (!all[courseId]) all[courseId] = {};
+  return all[courseId];
+}
+function saveUserProgress(uname, courseId, prog) {
+  const all = load(LS.PROGRESS(uname), {});
+  all[courseId] = prog;
+  save(LS.PROGRESS(uname), all);
+}
+
+// ============================================================
+// COURSE VIEW
+// ============================================================
+function openCourse(courseId) {
+  state.courseId = courseId;
+  state.lectureId = null;
+  navTo('course');
+}
+function getCourse() {
+  return load(LS.COURSES, []).find(c => c.id === state.courseId);
+}
+function getLecture(lectureId) {
+  const c = getCourse();
+  if (!c) return null;
+  for (const s of c.sections) for (const l of s.lectures) if (l.id === lectureId) return { section: s, lecture: l };
+  return null;
+}
+
+function renderCourse() {
+  const c = getCourse();
+  if (!c) { navTo('home'); return; }
+  document.getElementById('courseCrumb').textContent = c.instructor || '';
+  document.getElementById('courseTitle').textContent = c.title;
+  // First lecture if nothing selected
+  if (!state.lectureId) {
+    const first = c.sections[0]?.lectures[0];
+    if (first) state.lectureId = first.id;
+  }
+  renderSidebar();
+  renderPlayer();
+  renderProgressBar();
+}
+
+function renderProgressBar() {
+  const c = getCourse(); if (!c) return;
+  const prog = userProgress(state.user.username, c.id);
+  const stats = courseStats(c);
+  const done = stats.lectureIds.filter(id => prog[id]?.completed).length;
+  const pct = stats.lectureIds.length ? Math.round(100*done/stats.lectureIds.length) : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressText').textContent = pct + '%';
+}
+
+function renderSidebar() {
+  const c = getCourse(); if (!c) return;
+  const list = document.getElementById('sidebarList');
+  const q = (document.getElementById('searchBox')?.value || '').toLowerCase();
+  const prog = userProgress(state.user.username, c.id);
+  list.innerHTML = '';
+  c.sections.forEach((s, i) => {
+    const filteredLectures = s.lectures.filter(l => !q || l.title.toLowerCase().includes(q));
+    if (q && !filteredLectures.length && !s.title.toLowerCase().includes(q)) return;
+    const doneCount = s.lectures.filter(l => prog[l.id]?.completed).length;
+    const totalMin = s.lectures.reduce((a,l)=>a+(l.duration_min||0),0);
+    const totalLabel = totalMin >= 60 ? `${Math.floor(totalMin/60)}hr ${totalMin%60}min` : `${totalMin}min`;
+    const det = document.createElement('details');
+    det.open = (state.lectureId && s.lectures.some(l => l.id === state.lectureId)) || q;
+    det.className = 'border-b';
+    det.dataset.sectionId = s.id;
+    det.innerHTML = `
+      <summary class="course-section-summary px-3 py-3 bg-gray-50 hover:bg-gray-100 flex justify-between items-start">
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold text-sm truncate">Section ${s.number}: ${escapeHTML(s.title)}</div>
+          <div class="text-xs text-gray-500 mt-0.5">${doneCount} / ${s.lectures.length} | ${totalLabel}</div>
+        </div>
+        <svg width="14" height="14" viewBox="0 0 20 20" class="text-gray-500 mt-1"><path d="M5 7l5 6 5-6" fill="currentColor"/></svg>
+      </summary>
+      <div class="bg-white"></div>
+    `;
+    det.querySelector('.course-section-summary').onclick = () => {
+      const first = filteredLectures[0] || s.lectures[0];
+      if (first) openCourseItem(first.id);
+    };
+    const lectWrap = det.querySelector('.bg-white');
+    filteredLectures.forEach(l => {
+      const done = !!prog[l.id]?.completed;
+      const row = document.createElement('div');
+      row.className = 'lecture-row flex items-start gap-2 px-3 py-2 text-sm cursor-pointer ' + (l.id === state.lectureId ? 'active ' : '') + (l.video_url ? 'media-ready' : '');
+      row.onclick = (e) => {
+        if (e.target.closest('.checkbox-square') || e.target.closest('.course-play-btn') || e.target.closest('.lesson-title-btn')) return;
+        openCourseItem(l.id);
+      };
+      const badge = badgeFor(l.type);
+      const dur = l.duration_min ? `${l.duration_min}min` : '';
+      const actionLabel = l.video_url ? 'Play' : (l.type === 'quiz' ? 'Start' : (l.type === 'article' ? 'Read' : 'Open'));
+      const actionHandler = l.video_url
+        ? `playLectureFromSidebar('${l.id}', event)`
+        : `openCourseItemFromButton('${l.id}', event)`;
+      row.innerHTML = `
+        <span class="checkbox-square ${done ? 'checked':''}" onclick="toggleComplete('${l.id}', event)">${done ? '✓' : ''}</span>
+        <div class="flex-1 min-w-0">
+          <button type="button" class="lesson-title-btn leading-tight" onclick="openCourseItem('${l.id}')">${l.label ? l.label+'. ' : ''}${escapeHTML(l.title)} ${badge}</button>
+          <div class="text-xs text-gray-500 mt-0.5">
+            <span>${typeIcon(l.type)} ${dur}</span>
+          </div>
+        </div>
+        <button type="button" onclick="${actionHandler}" class="course-play-btn">${actionLabel}</button>
+      `;
+      lectWrap.appendChild(row);
+    });
+    list.appendChild(det);
+  });
+}
+
+function selectLectureFromCourse(lectureId, options = {}) {
+  if (!lectureId) return;
+  state.lectureId = lectureId;
+  state.tab = 'overview';
+  document.getElementById('courseView')?.classList.remove('hidden');
+  renderSidebar();
+  renderPlayer();
+  renderProgressBar();
+  const found = getLecture(lectureId);
+  const tabScroller = document.querySelector('#courseView .flex-1.overflow-y-auto');
+  if (tabScroller) tabScroller.scrollTop = 0;
+  if (found?.lecture?.type === 'quiz' || (found?.lecture?.questions || []).length) {
+    setTimeout(() => {
+      const quiz = document.getElementById('quizArea');
+      if (quiz && !quiz.classList.contains('hidden')) quiz.scrollIntoView({ block: 'start', behavior: options.smooth ? 'smooth' : 'auto' });
+    }, 0);
+  }
+}
+
+function openCourseItem(lectureId) {
+  selectLectureFromCourse(lectureId, { smooth: true });
+}
+
+function openCourseItemFromButton(lectureId, ev) {
+  ev?.preventDefault();
+  ev?.stopPropagation();
+  selectLectureFromCourse(lectureId, { smooth: true });
+}
+
+function badgeFor(type) {
+  if (type==='quiz') return '<span class="badge badge-quiz">Quiz</span>';
+  if (type==='assignment') return '<span class="badge badge-assignment">Assignment</span>';
+  if (type==='roleplay') return '<span class="badge badge-roleplay">Role Play</span>';
+  if (type==='practice_test') return '<span class="badge badge-practice">Practice</span>';
+  if (type==='article') return '<span class="badge badge-article">Notes</span>';
+  return '';
+}
+function typeIcon(type) {
+  if (type==='quiz') return '📝';
+  if (type==='assignment') return '📋';
+  if (type==='roleplay') return '🎭';
+  if (type==='practice_test') return '🎯';
+  if (type==='article') return '📖';
+  return '▶';
+}
+
+function playLectureFromSidebar(lectureId, ev) {
+  ev?.stopPropagation();
+  selectLectureFromCourse(lectureId, { smooth: true });
+  openAdminMediaPreview(lectureId);
+}
+
+function firstMediaLectureId() {
+  const c = getCourse();
+  if (!c) return '';
+  for (const s of c.sections || []) {
+    const lesson = (s.lectures || []).find(l => l.video_url);
+    if (lesson) return lesson.id;
+  }
+  return '';
+}
+
+function scrollToQuizArea() {
+  // Make sure the Overview tab is showing — quiz lives inside it
+  switchTab('overview');
+  const quiz = document.getElementById('quizArea');
+  if (!quiz) return;
+  // Force the quiz panel visible in case it was hidden
+  quiz.classList.remove('hidden');
+  // The quiz is inside a nested .overflow-y-auto scroll container. scrollIntoView
+  // alone doesn't reliably scroll nested containers across browsers, so scroll
+  // the actual parent scroller explicitly.
+  const scroller = quiz.closest('.overflow-y-auto');
+  if (scroller) {
+    const target = Math.max(0, quiz.offsetTop - scroller.offsetTop);
+    scroller.scrollTo({ top: target, behavior: 'smooth' });
+  } else {
+    quiz.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+  // Brief amber flash so it's obvious where the quiz is
+  try {
+    quiz.animate(
+      [
+        { boxShadow: '0 0 0 4px rgba(245, 158, 11, 0.6)' },
+        { boxShadow: '0 0 0 0 rgba(245, 158, 11, 0)' },
+      ],
+      { duration: 900, easing: 'ease-out' }
+    );
+  } catch {}
+}
+
+function toggleComplete(lectureId, ev) {
+  ev?.stopPropagation();
+  const c = getCourse();
+  const prog = userProgress(state.user.username, c.id);
+  prog[lectureId] = prog[lectureId] || {};
+  prog[lectureId].completed = !prog[lectureId].completed;
+  saveUserProgress(state.user.username, c.id, prog);
+  selectLectureFromCourse(lectureId);
+  renderProgressBar();
+}
+
+function renderPlayer() {
+  const g = getLecture(state.lectureId);
+  if (!g) return;
+  const { section, lecture } = g;
+  const titleEl = document.getElementById('lectureTitleBig');
+  const metaEl = document.getElementById('lectureMeta');
+  const inner = document.getElementById('playerInner');
+  const area = document.getElementById('playerArea');
+  // Only #playerArea is required. The placeholder children (titleEl/metaEl/inner)
+  // exist only on the initial empty state — they're overwritten by area.innerHTML
+  // below, so on subsequent navigations they will be null. That used to make this
+  // function return early and silently skip rendering.
+  if (!area) return;
+  if (titleEl) titleEl.textContent = lecture.title;
+  if (metaEl) metaEl.textContent = `Section ${section.number} · ${typeLabel(lecture.type)}${lecture.duration_min? ' · '+lecture.duration_min+' min':''}`;
+  area.innerHTML = '';
+  area.style.aspectRatio = '16/9';
+  area.style.minHeight = '';
+
+  if (lecture.video_url) {
+    area.style.background = '#000';
+    area.style.color = '#fff';
+    area.style.alignItems = 'center';
+    area.style.justifyContent = 'center';
+    const raw = lecture.video_url.trim();
+    if (raw.startsWith('idb://')) {
+      // Media stored in the browser's offline database
+      area.innerHTML = `<div class="text-gray-400 text-sm p-4">Loading offline media…</div>`;
+      const key = 'vid_' + raw.slice(6);
+      const wantId = lecture.id;
+      idbGet(key).then(blob => {
+        if (state.lectureId !== wantId) return; // user navigated away
+        if (!blob) {
+          area.innerHTML = `<div class="media-message-card"><h3>Media not found</h3><p>This audio/video is not in offline storage on this browser profile. Open the Admin Panel and upload the file again for this item.</p></div>`;
+          return;
+        }
+        mountStoredMedia(area, blob, `offline file · ${(blob.size/1048576).toFixed(1)} MB · type "${blob.type||'unknown'}"`);
+      }).catch(e => {
+        area.innerHTML = `<div class="media-message-card"><h3>Could not load media</h3><p>${escapeHTML(e.message)}</p></div>`;
+      });
+    } else {
+      const url = normalizeMediaUrl(raw);
+      const drive = parseGoogleDrive(url);
+      const yt = parseYouTube(url);
+      if (drive?.type === 'file') {
+        area.innerHTML = `<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;" src="https://drive.google.com/file/d/${drive.id}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+      } else if (drive?.type === 'folder') {
+        area.style.aspectRatio = '';
+        area.style.minHeight = '320px';
+        area.style.background = '#fff';
+        area.style.color = '#111827';
+        area.innerHTML = `<div class="drive-source-card">
+          <h3>Google Drive folder linked</h3>
+          <p>This lesson is connected to a Drive folder. To play the video inside the LMS, open the folder, right-click the video file, choose share/copy link, and paste that video file link into this lesson.</p>
+          <a href="${escapeAttr(url)}" target="_blank" rel="noopener">Open Drive Folder</a>
+        </div>`;
+      } else if (yt) {
+        mountYouTube(area, yt);
+      } else if (isAudioUrl(raw) || isAudioUrl(url)) {
+        mountAudio(area, url, /^file:/.test(url) ? 'linked local audio path' : 'linked audio file');
+      } else if (isVideoUrl(raw) || isVideoUrl(url) || url.startsWith('file:') || url.startsWith('blob:')) {
+        mountVideo(area, url, /^file:/.test(url) ? 'linked local file path' : 'linked file');
+      } else {
+        area.innerHTML = `<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0;" src="${escapeAttr(url)}" allowfullscreen></iframe>`;
+      }
+    }
+  } else if (lecture.type === 'article') {
+    // Render article body in player area (no aspect ratio fixed)
+    area.style.aspectRatio = '';
+    area.style.background = '#fff';
+    area.style.color = '#1c1d1f';
+    area.style.minHeight = '360px';
+    area.style.alignItems = 'center';
+    area.style.justifyContent = 'flex-start';
+    const body = lecture.article_body || '<p class="text-gray-500 italic">No content yet. Open the Admin Panel to add notes/article body for this item.</p>';
+    area.innerHTML = `<div class="article-body p-8 overflow-y-auto w-full h-full max-h-[60vh]"><div class="text-sm font-semibold text-red-700 mb-3">Now showing: ${escapeHTML(lecture.label ? lecture.label + '. ' + lecture.title : lecture.title)}</div>${renderArticleBody(body)}</div>`;
+  } else if ((lecture.resources || []).length) {
+    area.style.background = '#fff';
+    area.style.color = '#111827';
+    area.style.aspectRatio = '';
+    area.style.minHeight = '320px';
+    area.style.alignItems = 'center';
+    area.style.justifyContent = 'center';
+    area.innerHTML = `<div class="resource-player-card">
+      <h3>${escapeHTML(lecture.title)}</h3>
+      <p>This lesson has downloadable slide/resource files.</p>
+      ${(lecture.resources || []).map(r => `<a href="${escapeAttr(normalizeMediaUrl(r.url || '#'))}" target="_blank" rel="noopener">${escapeHTML(r.title || r.url || 'Open resource')}</a>`).join('')}
+    </div>`;
+  } else if (lecture.type === 'quiz' || (lecture.questions || []).length) {
+    // Quiz lectures: use a compact header so the quiz questions below are immediately visible.
+    // The old layout used a tall placeholder card that pushed the quiz off-screen on
+    // larger viewports (worked only when DevTools shrank the viewport).
+    // IMPORTANT: aspectRatio must be 'auto' (not '') — empty string falls back to the
+    // .video-wrap CSS rule of 16/9, which makes the player area very tall on wide
+    // viewports and leaves the compact header floating with blank space below it.
+    area.style.background = '#fff';
+    area.style.color = '#111827';
+    area.style.aspectRatio = 'auto';
+    area.style.minHeight = '0';
+    area.style.height = 'auto';
+    area.style.display = 'block';
+    area.innerHTML = `<div class="w-full p-4 border-b" style="background:#fff;">
+      <div class="text-xs font-semibold text-red-700 uppercase tracking-wide mb-1">Quiz</div>
+      <h3 class="text-lg font-bold text-gray-900">${escapeHTML(lecture.label ? lecture.label + '. ' + lecture.title : lecture.title)}</h3>
+      <p class="text-sm text-gray-600 mt-1">Answer the questions below, then click <b>Submit quiz</b>.</p>
+    </div>`;
+  } else {
+    area.style.background = '#fff';
+    area.style.color = '#111827';
+    area.style.aspectRatio = '';
+    area.style.minHeight = '320px';
+    area.style.alignItems = 'center';
+    area.style.justifyContent = 'center';
+    const hint = 'No media set yet. Open the Admin Panel to add a YouTube link or local video file.';
+    const action = firstMediaLectureId() ? `<button type="button" onclick="playLectureFromSidebar('${firstMediaLectureId()}', event)" class="course-play-btn mt-4">Play video</button>` : '';
+    area.innerHTML = `<div class="student-empty-lesson">
+      <div>
+        <div class="lesson-icon">${typeIcon(lecture.type)}</div>
+        <div class="lesson-title">${escapeHTML(lecture.title)}</div>
+        <div class="lesson-hint">${escapeHTML(hint)}</div>
+        ${action}
+      </div>
+    </div>`;
+  }
+
+  // Overview tab
+  document.getElementById('ovTitle').textContent = (lecture.label?lecture.label+'. ':'') + lecture.title;
+  document.getElementById('ovMeta').textContent = `Section ${section.number}: ${section.title}${lecture.duration_min ? ' · '+lecture.duration_min+' min':''}`;
+  document.getElementById('ovDesc').textContent = lecture.description || (lecture.type==='article' ? '' : 'No description yet. (Admin can edit.)');
+  // Quiz panel (now shown for ANY lecture with questions)
+  renderQuizArea(lecture);
+  // Notes
+  document.getElementById('notesArea').value = getNote(state.user.username, lecture.id);
+  // Q&A & resources
+  renderQA();
+  renderResources(lecture);
+  renderAnnounce();
+  switchTab(state.tab);
+}
+
+function findLectureById(lid) {
+  const courses = load(LS.COURSES, []);
+  for (const c of courses) {
+    for (const s of c.sections || []) {
+      for (const l of s.lectures || []) {
+        if (l.id === lid) return { course: c, section: s, lecture: l };
+      }
+    }
+  }
+  return null;
+}
+
+function openAdminMediaPreview(lid) {
+  const found = findLectureById(lid);
+  if (!found) return;
+  const { section, lecture } = found;
+  document.getElementById('adminMediaTitle').textContent = lecture.title;
+  document.getElementById('adminMediaMeta').textContent = `Section ${section.number} · ${typeLabel(lecture.type)}${lecture.duration_min ? ' · ' + lecture.duration_min + ' min' : ''}`;
+  const area = document.getElementById('adminMediaArea');
+  area.dataset.lectureId = lecture.id;
+  document.getElementById('adminMediaModal').classList.remove('hidden');
+  renderAdminMediaArea(area, lecture);
+}
+
+function closeAdminMediaPreview() {
+  const area = document.getElementById('adminMediaArea');
+  if (area) {
+    area.innerHTML = '';
+    area.dataset.lectureId = '';
+  }
+  document.getElementById('adminMediaModal').classList.add('hidden');
+}
+
+function previewCurrentLectureMedia() {
+  const ref = window._editingLectureRef;
+  if (!ref) return;
+  saveLecture(ref.cid, ref.sid, ref.lid, true);
+  openAdminMediaPreview(ref.lid);
+}
+
+function renderAdminMediaArea(area, lecture) {
+  area.innerHTML = '';
+  area.style.aspectRatio = '16/9';
+  area.style.minHeight = '';
+  area.style.background = '#000';
+  area.style.color = '#fff';
+  area.style.alignItems = 'center';
+  area.style.justifyContent = 'center';
+  if (!lecture.video_url) {
+    area.style.aspectRatio = '';
+    area.style.minHeight = '260px';
+    area.style.background = '#fff';
+    area.style.color = '#111827';
+    area.innerHTML = `<div class="media-message-card"><h3>No media saved</h3><p>Add audio or video to this lesson first, then press Play again.</p></div>`;
+    return;
+  }
+  const raw = lecture.video_url.trim();
+  if (raw.startsWith('idb://')) {
+    area.innerHTML = `<div class="text-gray-400 text-sm p-4">Loading saved offline media...</div>`;
+    const key = 'vid_' + raw.slice(6);
+    idbGet(key).then(blob => {
+      if (area.dataset.lectureId !== lecture.id) return;
+      if (!blob) {
+        area.innerHTML = `<div class="media-message-card"><h3>Media not found</h3><p>This offline audio/video is not stored in this browser now. Open Edit and choose the file again.</p></div>`;
+        return;
+      }
+      mountStoredMedia(area, blob, `admin preview · offline file · ${(blob.size/1048576).toFixed(1)} MB`);
+    }).catch(e => {
+      area.innerHTML = `<div class="media-message-card"><h3>Could not load media</h3><p>${escapeHTML(e.message)}</p></div>`;
+    });
+    return;
+  }
+
+  const url = normalizeMediaUrl(raw);
+  const drive = parseGoogleDrive(url);
+  const yt = parseYouTube(url);
+  if (drive?.type === 'file') {
+    area.innerHTML = `<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;" src="https://drive.google.com/file/d/${drive.id}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  } else if (drive?.type === 'folder') {
+    area.style.aspectRatio = '';
+    area.style.minHeight = '320px';
+    area.style.background = '#fff';
+    area.style.color = '#111827';
+    area.innerHTML = `<div class="drive-source-card">
+      <h3>Google Drive folder linked</h3>
+      <p>This is a Drive folder. To play inside the LMS, paste the share link for one video file, not the folder link.</p>
+      <a href="${escapeAttr(url)}" target="_blank" rel="noopener">Open Drive Folder</a>
+    </div>`;
+  } else if (yt) {
+    mountYouTube(area, yt);
+  } else if (isAudioUrl(raw) || isAudioUrl(url)) {
+    mountAudio(area, url, /^file:/.test(url) ? 'admin preview · local audio path' : 'admin preview · audio link');
+  } else if (isVideoUrl(raw) || isVideoUrl(url) || url.startsWith('file:') || url.startsWith('blob:')) {
+    mountVideo(area, url, /^file:/.test(url) ? 'admin preview · local file path' : 'admin preview · video link');
+  } else {
+    area.innerHTML = `<iframe style="position:absolute;inset:0;width:100%;height:100%;border:0;" src="${escapeAttr(url)}" allowfullscreen></iframe>`;
+  }
+}
+
+// Convert a path/URL into something a browser can load.
+// Windows path "D:\a b\c—d.mp4" → "file:///D:/a%20b/c%E2%80%94d.mp4"
+function normalizeMediaUrl(url) {
+  if (!url) return url;
+  url = url.trim();
+  // Already a proper URL/scheme — leave it alone
+  if (/^(https?:|file:|blob:|data:|idb:)/i.test(url)) return url;
+  // Windows-style drive path → file:/// , URL-encoded so spaces & special chars work
+  if (/^[A-Za-z]:[\\/]/.test(url)) {
+    const fwd = url.replace(/\\/g, '/');
+    return 'file:///' + encodeURI(fwd).replace(/#/g, '%23').replace(/\?/g, '%3F');
+  }
+  // Unix absolute path
+  if (url.startsWith('/')) return 'file://' + encodeURI(url).replace(/#/g, '%23');
+  // Relative path (relative to lms/index.html, e.g. ../videos/lec1.mp4) — encode, keep relative
+  return encodeURI(url).replace(/#/g, '%23');
+}
+// Very small markdown-ish renderer for article body (admins type plain text or simple HTML)
+function renderArticleBody(text) {
+  if (!text) return '';
+  // If looks like HTML already, return as-is (admin's responsibility)
+  if (/<\w+[^>]*>/.test(text)) return text;
+  // Otherwise treat as simple markdown
+  let s = escapeHTML(text);
+  // Headings
+  s = s.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  s = s.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  s = s.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  // Bold / italic
+  s = s.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+  s = s.replace(/\*([^*]+)\*/g, '<i>$1</i>');
+  // Code
+  s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+  // Lists
+  s = s.replace(/(^|\n)- (.+)/g, '$1<li>$2</li>');
+  s = s.replace(/(<li>[\s\S]+?<\/li>)/g, '<ul>$1</ul>');
+  // Paragraphs (split on double newline)
+  s = s.split(/\n{2,}/).map(p => {
+    if (/^<(h\d|ul|ol|pre|blockquote)/.test(p.trim())) return p;
+    return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+  }).join('\n');
+  return s;
+}
+function typeLabel(t) { return ({lecture:'Lecture',quiz:'Quiz',assignment:'Assignment',roleplay:'Role Play',practice_test:'Practice Test',article:'Notes / Article'})[t]||'Item'; }
+function isAudioUrl(url) {
+  return /\.(mp3|m4a|aac|wav|ogg|oga|flac|webm)(\?|#|$)/i.test(url || '');
+}
+function isVideoUrl(url) {
+  return /\.(mp4|webm|ogg|ogv|m4v|mov)(\?|#|$)/i.test(url || '');
+}
+function parseYouTube(url) {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, '');
+    if (host === 'youtu.be') return u.pathname.split('/').filter(Boolean)[0] || null;
+    if (host.endsWith('youtube.com')) {
+      const watchId = u.searchParams.get('v');
+      if (watchId) return watchId;
+      const parts = u.pathname.split('/').filter(Boolean);
+      const marker = parts.findIndex(p => ['embed', 'shorts', 'live'].includes(p));
+      if (marker >= 0 && parts[marker + 1]) return parts[marker + 1];
+    }
+  } catch {}
+  const m = String(url).match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+function parseGoogleDrive(url) {
+  const fileMatch = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([A-Za-z0-9_-]+)/);
+  if (fileMatch) return { type: 'file', id: fileMatch[1] };
+  const folderMatch = url.match(/drive\.google\.com\/drive\/(?:u\/\d+\/)?folders\/([A-Za-z0-9_-]+)/);
+  if (folderMatch) return { type: 'folder', id: folderMatch[1] };
+  return null;
+}
+
+function mountStoredMedia(area, blob, sourceDesc) {
+  const src = URL.createObjectURL(blob);
+  const name = blob.name || '';
+  if (/^audio\//i.test(blob.type) || isAudioUrl(name)) {
+    mountAudio(area, src, sourceDesc);
+    return;
+  }
+  let playable = blob;
+  if (!blob.type || (!/^video\//i.test(blob.type) && isVideoUrl(name))) {
+    try { playable = blob.slice(0, blob.size, 'video/mp4'); } catch (e) {}
+  }
+  mountVideo(area, URL.createObjectURL(playable), sourceDesc);
+}
+
+function mountYouTube(area, videoId) {
+  area.innerHTML = `
+    <iframe style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#000;" src="https://www.youtube-nocookie.com/embed/${escapeAttr(videoId)}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <a class="youtube-fallback-link" href="https://www.youtube.com/watch?v=${escapeAttr(videoId)}" target="_blank" rel="noopener">Open on YouTube</a>
+  `;
+}
+
+function mountAudio(area, src, sourceDesc) {
+  area.innerHTML = '';
+  area.style.aspectRatio = '';
+  area.style.minHeight = '260px';
+  area.style.background = '#fff';
+  area.style.color = '#111827';
+  const wrap = document.createElement('div');
+  wrap.className = 'audio-player-card';
+  wrap.innerHTML = `<h3>Audio lesson</h3><p>${escapeHTML(sourceDesc)}</p>`;
+  const audio = document.createElement('audio');
+  audio.src = src;
+  audio.controls = true;
+  audio.preload = 'metadata';
+  audio.onerror = () => {
+    wrap.innerHTML = `<h3>Audio could not play</h3><p>The browser could not play this audio (${escapeHTML(sourceDesc)}). Upload it again using Option 1, or convert it to MP3/M4A.</p>`;
+  };
+  wrap.appendChild(audio);
+  area.appendChild(wrap);
+}
+
+// Create a <video> that fully fills the player area, and shows a clear
+// message (instead of a silent black screen) if the browser can't decode it.
+function mountVideo(area, src, sourceDesc) {
+  area.innerHTML = '';
+  area.style.aspectRatio = '16/9';
+  area.style.minHeight = '';
+  area.style.background = '#000';
+  area.style.color = '#fff';
+  const v = document.createElement('video');
+  v.src = src;
+  v.controls = true;
+  v.setAttribute('controlsList', 'nodownload');
+  v.setAttribute('playsinline', '');
+  v.preload = 'metadata';
+  v.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;';
+  v.onerror = () => {
+    area.innerHTML = `<div class="text-center px-6 text-sm text-white">`
+      + `<div class="text-4xl mb-2">⚠️</div>`
+      + `<div>The browser could not play this video (${escapeHTML(sourceDesc)}).</div>`
+      + `<div class="text-gray-400 mt-2">Likely causes: the file isn't an MP4/H.264 video, or — for a linked path — `
+      + `the file isn't at that exact location. Fix: Admin Panel → Edit the item → use <b>Option 1 (upload for offline playback)</b>.</div>`
+      + `</div>`;
+  };
+  area.appendChild(v);
+}
+
+// ============================================================
+// QUIZ ENGINE
+// ============================================================
+function renderQuizArea(lecture) {
+  const area = document.getElementById('quizArea');
+  const hasQuestions = lecture.questions && lecture.questions.length;
+  // Quiz-type items always show the panel, even when empty (admin nudge)
+  if (!hasQuestions && lecture.type !== 'quiz') {
+    area.classList.add('hidden');
+    return;
+  }
+  if (!hasQuestions && lecture.type === 'quiz') {
+    area.classList.remove('hidden');
+    area.innerHTML = `<div class="text-sm text-amber-900">This quiz has no questions yet. ${state.user.role==='admin'?'<a class="ud-purple-text font-semibold" href="javascript:openQuizEditor(\''+lecture.id+'\')">Add questions →</a>':'Ask your instructor.'}</div>`;
+    return;
+  }
+  area.classList.remove('hidden');
+  const prog = userProgress(state.user.username, getCourse().id);
+  const prev = prog[lecture.id]?.quizAttempt;
+  const header = lecture.type === 'quiz'
+    ? `${escapeHTML(lecture.title)} — ${lecture.questions.length} questions`
+    : `Check your understanding — ${lecture.questions.length} ${lecture.questions.length===1?'question':'questions'}`;
+  let html = `<h4 class="font-bold mb-3">${header}</h4>`;
+  html += `<form id="quizForm" class="space-y-4">`;
+  lecture.questions.forEach((q, qi) => {
+    html += `<div class="bg-white p-3 rounded border"><div class="font-semibold mb-2">Q${qi+1}. ${escapeHTML(q.question)}</div>`;
+    if (q.type === 'mcq' || q.type === 'tfng') {
+      (q.options || []).forEach((opt, oi) => {
+        html += `<label class="block py-1"><input type="radio" name="q${qi}" value="${oi}" class="mr-2" />${escapeHTML(opt)}</label>`;
+      });
+    } else if (q.type === 'fill') {
+      html += `<input name="q${qi}" class="border rounded px-2 py-1 w-full" placeholder="Your answer" />`;
+    }
+    html += `</div>`;
+  });
+  html += `<button type="button" onclick="submitQuiz('${lecture.id}')" class="btn btn-primary">Submit quiz</button>`;
+  if (prev) html += ` <span class="ml-3 text-sm text-amber-900">Last score: ${prev.score}/${prev.total}</span>`;
+  html += `</form><div id="quizResult" class="mt-3"></div>`;
+  area.innerHTML = html;
+}
+function submitQuiz(lectureId) {
+  const g = getLecture(lectureId); if (!g) return;
+  const { lecture } = g;
+  const form = document.getElementById('quizForm');
+  let score = 0;
+  const detail = [];
+  lecture.questions.forEach((q, qi) => {
+    let userAns = null;
+    let isCorrect = false;
+    if (q.type === 'mcq' || q.type === 'tfng') {
+      const r = form.querySelector(`input[name="q${qi}"]:checked`);
+      userAns = r ? parseInt(r.value, 10) : null;
+      isCorrect = userAns === q.answer;
+    } else if (q.type === 'fill') {
+      const v = (form.querySelector(`input[name="q${qi}"]`)?.value || '').trim().toLowerCase();
+      userAns = v;
+      const correct = (q.answer || '').trim().toLowerCase();
+      isCorrect = !!v && v === correct;
+    }
+    if (isCorrect) score++;
+    detail.push({ user: userAns, correct: q.answer, isCorrect });
+  });
+  const total = lecture.questions.length;
+  const prog = userProgress(state.user.username, getCourse().id);
+  prog[lectureId] = prog[lectureId] || {};
+  prog[lectureId].quizAttempt = { score, total, when: new Date().toISOString() };
+  if (score/total >= 0.7) prog[lectureId].completed = true;
+  saveUserProgress(state.user.username, getCourse().id, prog);
+
+  // Inline marking on the form: highlight each option as correct/wrong and reveal the right answer
+  lecture.questions.forEach((q, qi) => {
+    const d = detail[qi];
+    if (q.type === 'mcq' || q.type === 'tfng') {
+      (q.options || []).forEach((opt, oi) => {
+        const input = form.querySelector(`input[name="q${qi}"][value="${oi}"]`);
+        if (!input) return;
+        input.disabled = true;
+        const label = input.closest('label');
+        if (!label) return;
+        if (oi === q.answer) {
+          label.style.background = '#dcfce7';
+          label.style.color = '#065f46';
+          label.style.fontWeight = '600';
+          label.style.borderRadius = '4px';
+          label.style.padding = '2px 6px';
+          if (!label.querySelector('.ans-tag')) {
+            const tag = document.createElement('span');
+            tag.className = 'ans-tag ml-2 text-xs font-bold';
+            tag.textContent = '✓ Correct answer';
+            label.appendChild(tag);
+          }
+        } else if (d.user === oi) {
+          label.style.background = '#fee2e2';
+          label.style.color = '#991b1b';
+          label.style.borderRadius = '4px';
+          label.style.padding = '2px 6px';
+          if (!label.querySelector('.ans-tag')) {
+            const tag = document.createElement('span');
+            tag.className = 'ans-tag ml-2 text-xs font-bold';
+            tag.textContent = '✗ Your answer';
+            label.appendChild(tag);
+          }
+        }
+      });
+    } else if (q.type === 'fill') {
+      const input = form.querySelector(`input[name="q${qi}"]`);
+      if (input) {
+        input.disabled = true;
+        input.style.background = d.isCorrect ? '#dcfce7' : '#fee2e2';
+        input.style.color = d.isCorrect ? '#065f46' : '#991b1b';
+        input.style.fontWeight = '600';
+      }
+      const card = form.querySelectorAll('.bg-white')[qi];
+      if (card && !card.querySelector('.ans-reveal')) {
+        const reveal = document.createElement('div');
+        reveal.className = 'ans-reveal mt-2 text-sm';
+        reveal.innerHTML = d.isCorrect
+          ? `<span class="text-green-700 font-semibold">✓ Correct</span>`
+          : `<span class="text-red-700 font-semibold">✗ Correct answer:</span> <b>${escapeHTML(String(q.answer || ''))}</b>`;
+        card.appendChild(reveal);
+      }
+    }
+    // Add a small per-question status badge at the top of each card
+    const card = form.querySelectorAll('.bg-white')[qi];
+    if (card && !card.querySelector('.q-status')) {
+      const status = document.createElement('div');
+      status.className = 'q-status text-xs font-bold mb-1 ' + (d.isCorrect ? 'text-green-700' : 'text-red-700');
+      status.textContent = d.isCorrect ? '✓ Correct' : '✗ Incorrect';
+      card.insertBefore(status, card.firstChild);
+    }
+  });
+
+  // Disable submit button and add a Retry button to allow another attempt
+  const submitBtn = form.querySelector('button[onclick^="submitQuiz"]');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.5';
+    submitBtn.style.cursor = 'not-allowed';
+    if (!form.querySelector('.retry-btn')) {
+      const retry = document.createElement('button');
+      retry.type = 'button';
+      retry.className = 'retry-btn btn btn-outline ml-2';
+      retry.textContent = 'Retry quiz';
+      retry.onclick = () => renderQuizArea(lecture);
+      submitBtn.after(retry);
+    }
+  }
+
+  const pct = Math.round((score / total) * 100);
+  document.getElementById('quizResult').innerHTML = `<div class="p-4 rounded ${score/total>=0.7?'bg-green-100 text-green-900':'bg-red-100 text-red-900'}">
+    <div class="text-lg font-bold">Score: ${score} / ${total} (${pct}%)</div>
+    <div class="text-sm mt-1">${score/total>=0.7?'· Marked complete!':'· Need 70% to pass. Review the correct answers above and try again.'}</div>
+  </div>`;
+  renderSidebar(); renderProgressBar();
+  // Scroll the result into view
+  document.getElementById('quizResult')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+}
+
+// ============================================================
+// NOTES
+// ============================================================
+function getNote(uname, lectureId) {
+  const all = load(LS.NOTES(uname), {});
+  return all[lectureId] || '';
+}
+function saveNotes() {
+  const all = load(LS.NOTES(state.user.username), {});
+  all[state.lectureId] = document.getElementById('notesArea').value;
+  save(LS.NOTES(state.user.username), all);
+}
+
+// ============================================================
+// Q&A
+// ============================================================
+function getQA() { return load(LS.QA(state.courseId), []); }
+function setQA(arr) { save(LS.QA(state.courseId), arr); }
+function postQuestion() {
+  const txt = document.getElementById('qaInput').value.trim();
+  if (!txt) return;
+  const arr = getQA();
+  arr.unshift({
+    id: 'q'+Date.now(),
+    author: state.user.name,
+    username: state.user.username,
+    when: new Date().toISOString(),
+    lectureId: state.lectureId,
+    question: txt,
+    replies: []
+  });
+  setQA(arr);
+  document.getElementById('qaInput').value = '';
+  renderQA();
+}
+function postReply(qid) {
+  const txt = document.getElementById('reply_'+qid).value.trim();
+  if (!txt) return;
+  const arr = getQA();
+  const q = arr.find(x => x.id === qid);
+  if (!q) return;
+  q.replies.push({ author: state.user.name, username: state.user.username, when: new Date().toISOString(), text: txt });
+  setQA(arr);
+  renderQA();
+}
+function renderQA() {
+  const list = document.getElementById('qaList');
+  const arr = getQA().filter(q => !state.lectureId || q.lectureId === state.lectureId);
+  if (!arr.length) { list.innerHTML = '<div class="text-gray-500 text-sm">No questions yet. Be the first to ask.</div>'; return; }
+  list.innerHTML = arr.map(q => `
+    <div class="border rounded p-3 bg-white">
+      <div class="text-sm"><b>${escapeHTML(q.author)}</b> <span class="text-gray-400 text-xs">${new Date(q.when).toLocaleString()}</span></div>
+      <div class="mt-1 text-gray-800">${escapeHTML(q.question)}</div>
+      <div class="mt-2 space-y-1 pl-3 border-l-2 border-gray-200">
+        ${q.replies.map(r=>`<div class="text-sm"><b>${escapeHTML(r.author)}:</b> ${escapeHTML(r.text)}</div>`).join('')}
+      </div>
+      <div class="flex gap-2 mt-2">
+        <input id="reply_${q.id}" placeholder="Reply..." class="flex-1 border rounded px-2 py-1 text-sm" />
+        <button onclick="postReply('${q.id}')" class="btn btn-outline text-sm">Reply</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// ANNOUNCEMENTS
+// ============================================================
+function getAnnounce() { return load(LS.ANNOUNCE(state.courseId), []); }
+function setAnnounce(arr) { save(LS.ANNOUNCE(state.courseId), arr); }
+function renderAnnounce() {
+  const list = document.getElementById('announceList');
+  const arr = getAnnounce();
+  if (!arr.length) { list.innerHTML = '<div class="text-gray-500 text-sm">No announcements yet.</div>'; return; }
+  list.innerHTML = arr.map(a => `
+    <div class="border rounded p-3 bg-white">
+      <div class="font-bold">${escapeHTML(a.title)}</div>
+      <div class="text-xs text-gray-500">${escapeHTML(a.author)} · ${new Date(a.when).toLocaleString()}</div>
+      <div class="mt-2 text-gray-800 whitespace-pre-wrap">${escapeHTML(a.text)}</div>
+    </div>
+  `).join('');
+}
+function renderResources(lecture) {
+  const list = document.getElementById('resourceList');
+  if (!lecture.resources || !lecture.resources.length) { list.innerHTML = '<li class="text-gray-500">No resources for this lecture.</li>'; return; }
+  list.innerHTML = lecture.resources.map(r => `<li><a class="ud-purple-text underline" href="${escapeAttr(normalizeMediaUrl(r.url || '#'))}" target="_blank" rel="noopener">📎 ${escapeHTML(r.title || r.url)}</a></li>`).join('');
+}
+
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(tab) {
+  state.tab = tab;
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+  document.getElementById('tab-'+tab).classList.remove('hidden');
+}
+
+// ============================================================
+// ADMIN
+// ============================================================
+function renderAdmin() {
+  adminTab(state.adminTab);
+}
+function adminTab(name) {
+  state.adminTab = name;
+  document.querySelectorAll('.atab').forEach(b => b.classList.toggle('active', b.dataset.atab === name));
+  document.querySelectorAll('.apanel').forEach(p => p.classList.add('hidden'));
+  document.getElementById('atab-'+name).classList.remove('hidden');
+  if (name==='courses') renderAdminCourses();
+  if (name==='users') renderAdminUsers();
+  if (name==='quizzes') renderAdminQuizzes();
+  if (name==='announce') renderAdminAnnounce();
+}
+
+function renderAdminCourses() {
+  const courses = load(LS.COURSES, []);
+  const root = document.getElementById('atab-courses');
+  root.innerHTML = `
+    <div id="storageInfo" class="text-xs text-gray-600 bg-gray-50 border rounded p-2 mb-3">Checking offline video storage…</div>
+    <div class="flex justify-end mb-3"><button onclick="addCourse()" class="btn btn-primary">+ New course</button></div>
+    <div class="space-y-3" id="adminCoursesList"></div>
+  `;
+  updateStorageInfo();
+  const list = document.getElementById('adminCoursesList');
+  courses.forEach((c, ci) => {
+    const det = document.createElement('details');
+    det.className = 'border rounded';
+    det.innerHTML = `
+      <summary class="p-3 bg-gray-50 flex justify-between items-center">
+        <div>
+          <div class="font-bold">${escapeHTML(c.title)}</div>
+          <div class="text-xs text-gray-500">${c.sections.length} sections</div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="event.preventDefault();editCourseMeta('${c.id}')" class="btn btn-outline text-xs">Edit</button>
+          <button onclick="event.preventDefault();addSection('${c.id}')" class="btn btn-outline text-xs">+ Section</button>
+          <button onclick="event.preventDefault();deleteCourse('${c.id}')" class="btn btn-outline text-xs text-red-600">Delete</button>
+        </div>
+      </summary>
+      <div class="p-3 space-y-2">
+        ${c.sections.map(s => `
+          <details class="border rounded">
+            <summary class="p-2 bg-white flex justify-between items-center text-sm">
+              <span><b>Section ${s.number}:</b> ${escapeHTML(s.title)} <span class="text-gray-500">(${s.lectures.length})</span></span>
+              <span class="flex gap-1">
+                <button onclick="event.preventDefault();editSection('${c.id}','${s.id}')" class="btn btn-outline text-xs">Edit</button>
+                <button onclick="event.preventDefault();addLecture('${c.id}','${s.id}')" class="btn btn-outline text-xs">+ Item</button>
+                <button onclick="event.preventDefault();deleteSection('${c.id}','${s.id}')" class="btn btn-outline text-xs text-red-600">Del</button>
+              </span>
+            </summary>
+            <div class="bg-gray-50 p-2 space-y-1">
+              ${s.lectures.map(l => `
+                <div class="flex items-center justify-between bg-white p-2 rounded text-sm">
+                  <span class="truncate">${typeIcon(l.type)} ${l.label?l.label+'. ':''}${escapeHTML(l.title)} ${badgeFor(l.type)} ${l.video_url ? (l.video_url.startsWith('idb://') ? '<span class="text-green-600 text-xs">✓ offline media</span>' : '<span class="text-green-600 text-xs">✓ media link</span>') : ''} ${(l.questions&&l.questions.length)?'<span class="text-amber-600 text-xs">📝 '+l.questions.length+'q</span>':''}</span>
+                  <span class="flex gap-1 shrink-0">
+                    <button onclick="openLectureEditor('${c.id}','${s.id}','${l.id}')" class="btn btn-outline text-xs">Edit</button>
+                    ${l.video_url ? `<button onclick="openAdminMediaPreview('${l.id}')" class="btn btn-primary text-xs">Play</button>` : ''}
+                    ${l.type==='quiz'?`<button onclick="openQuizEditor('${l.id}')" class="btn btn-outline text-xs">Quiz</button>`:''}
+                    <button onclick="deleteLecture('${c.id}','${s.id}','${l.id}')" class="btn btn-outline text-xs text-red-600">Del</button>
+                  </span>
+                </div>
+              `).join('')}
+            </div>
+          </details>
+        `).join('')}
+      </div>
+    `;
+    list.appendChild(det);
+  });
+}
+async function updateStorageInfo() {
+  const el = document.getElementById('storageInfo');
+  if (!el) return;
+  const keys = await idbList();
+  let estTxt = '';
+  if (navigator.storage && navigator.storage.estimate) {
+    try {
+      const est = await navigator.storage.estimate();
+      const usedMB = (est.usage/1048576).toFixed(0);
+      const quotaGB = (est.quota/1073741824).toFixed(1);
+      estTxt = ` · using ${usedMB} MB of ~${quotaGB} GB available in this browser`;
+    } catch {}
+  }
+  el.innerHTML = `📦 Offline videos stored on this browser: <b>${keys.length}</b>${estTxt}. `
+    + `Offline videos live in this browser only — they are <b>not</b> included in Export/Import backups.`;
+}
+
+function addCourse() {
+  const title = prompt('Course title:');
+  if (!title) return;
+  const courses = load(LS.COURSES, []);
+  courses.push({ id: 'c'+Date.now(), title, subtitle:'', instructor:'', sections: [] });
+  save(LS.COURSES, courses);
+  renderAdminCourses();
+}
+function deleteCourse(id) {
+  if (!confirm('Delete this entire course?')) return;
+  save(LS.COURSES, load(LS.COURSES,[]).filter(c=>c.id!==id));
+  renderAdminCourses();
+}
+function editCourseMeta(cid) {
+  const courses = load(LS.COURSES, []);
+  const c = courses.find(x=>x.id===cid); if (!c) return;
+  const t = prompt('Course title:', c.title); if (t===null) return;
+  const sub = prompt('Subtitle:', c.subtitle||''); if (sub===null) return;
+  const inst = prompt('Instructor:', c.instructor||''); if (inst===null) return;
+  c.title = t; c.subtitle = sub; c.instructor = inst;
+  save(LS.COURSES, courses);
+  renderAdminCourses();
+}
+function addSection(cid) {
+  const title = prompt('Section title:'); if (!title) return;
+  const courses = load(LS.COURSES, []);
+  const c = courses.find(x=>x.id===cid); if (!c) return;
+  const nextNum = (c.sections[c.sections.length-1]?.number || 0) + 1;
+  c.sections.push({ id:'s'+Date.now(), number: nextNum, title, summary:'', lectures:[] });
+  save(LS.COURSES, courses);
+  renderAdminCourses();
+}
+function editSection(cid, sid) {
+  const courses = load(LS.COURSES, []);
+  const c = courses.find(x=>x.id===cid); const s = c?.sections.find(x=>x.id===sid); if (!s) return;
+  const t = prompt('Section title:', s.title); if (t===null) return;
+  s.title = t;
+  save(LS.COURSES, courses);
+  renderAdminCourses();
+}
+function deleteSection(cid, sid) {
+  if (!confirm('Delete this section and all its items?')) return;
+  const courses = load(LS.COURSES, []);
+  const c = courses.find(x=>x.id===cid); if (!c) return;
+  c.sections = c.sections.filter(s => s.id !== sid);
+  save(LS.COURSES, courses);
+  renderAdminCourses();
+}
+function addLecture(cid, sid) {
+  const courses = load(LS.COURSES, []);
+  const c = courses.find(x=>x.id===cid); const s = c?.sections.find(x=>x.id===sid); if (!s) return;
+  const kind = (prompt('Item type? (lecture / article / quiz / assignment / roleplay)', 'lecture') || 'lecture').toLowerCase();
+  const allowed = ['lecture','article','quiz','assignment','roleplay','practice_test'];
+  const type = allowed.includes(kind) ? kind : 'lecture';
+  const title = prompt('Title:', 'New '+typeLabel(type)) || 'New '+typeLabel(type);
+  s.lectures.push({
+    id:'l'+Date.now(),
+    type,
+    label:String(s.lectures.length+1),
+    title,
+    duration_min:0,
+    video_url:'',
+    article_body: type==='article' ? '# '+title+'\n\nWrite your notes here in markdown.' : '',
+    resources:[],
+    description:'',
+    questions: type==='quiz' ? [] : undefined
+  });
+  save(LS.COURSES, courses);
+  renderAdminCourses();
+}
+function deleteLecture(cid, sid, lid) {
+  if (!confirm('Delete this item?')) return;
+  const courses = load(LS.COURSES, []);
+  const c = courses.find(x=>x.id===cid); const s = c?.sections.find(x=>x.id===sid); if (!s) return;
+  s.lectures = s.lectures.filter(l => l.id !== lid);
+  save(LS.COURSES, courses);
+  idbDelete('vid_' + lid); // remove any offline video for this item
+  renderAdminCourses();
+}
+function openLectureEditor(cid, sid, lid) {
+  const courses = load(LS.COURSES, []);
+  const c = courses.find(x=>x.id===cid); const s = c?.sections.find(x=>x.id===sid); const l = s?.lectures.find(x=>x.id===lid);
+  if (!l) return;
+  window._editingLectureRef = { cid, sid, lid };
+  const body = document.getElementById('lectureModalBody');
+  body.innerHTML = `
+    <label class="block"><span class="text-sm font-semibold">Title</span><input id="le_title" class="w-full border rounded px-2 py-1.5 mt-1" value="${escapeAttr(l.title)}" /></label>
+    <label class="block"><span class="text-sm font-semibold">Type</span>
+      <select id="le_type" class="w-full border rounded px-2 py-1.5 mt-1" onchange="toggleLectureFields()">
+        <option value="lecture">Lecture (video)</option>
+        <option value="article">Notes / Article (text)</option>
+        <option value="quiz">Quiz</option>
+        <option value="assignment">Assignment</option>
+        <option value="roleplay">Role Play</option>
+        <option value="practice_test">Practice Test</option>
+      </select>
+    </label>
+    <div class="grid grid-cols-2 gap-3">
+      <label class="block"><span class="text-sm font-semibold">Number/label</span><input id="le_label" class="w-full border rounded px-2 py-1.5 mt-1" value="${escapeAttr(l.label||'')}" /></label>
+      <label class="block"><span class="text-sm font-semibold">Duration (min)</span><input id="le_dur" type="number" class="w-full border rounded px-2 py-1.5 mt-1" value="${l.duration_min||0}" /></label>
+    </div>
+
+    <!-- VIDEO FIELDS -->
+    <div id="le_videoBlock" class="space-y-3 p-3 border rounded bg-gray-50">
+      <div class="flex items-center justify-between gap-2">
+        <div class="text-sm font-semibold">Video source</div>
+        <button type="button" onclick="previewCurrentLectureMedia()" class="btn btn-primary text-xs">Play saved media</button>
+      </div>
+
+      <div class="p-2 bg-white border rounded">
+        <div class="text-xs font-semibold text-green-700 mb-1">✓ Option 1 — Upload audio/video for offline playback (recommended, always works)</div>
+        <label for="le_localFile" class="btn btn-outline text-xs cursor-pointer inline-flex">Choose/change audio or video</label>
+        <input type="file" id="le_localFile" accept="video/*,audio/*" class="sr-only" onchange="onLocalFilePicked(event)" />
+        <div class="text-xs text-gray-600 mt-1">Pick an .mp4 video or .mp3/.m4a audio file from your computer. It is copied into the browser's own offline storage and saved to this lesson automatically.</div>
+        <div id="le_videoPreview" class="text-xs mt-1"></div>
+      </div>
+
+      <div class="p-2 bg-white border rounded">
+        <div class="text-xs font-semibold text-gray-700 mb-1">Option 2 — Link to a path or URL</div>
+        <input id="le_video" class="w-full border rounded px-2 py-1.5" value="${escapeAttr(l.video_url||'')}" placeholder="https://youtube.com/watch?v=...   or   D:\\ielts CRM\\cava\\videos\\lec1.mp4" />
+        <div class="text-xs text-gray-600 mt-1">
+          Accepts a YouTube link, a Google Drive file link, an <code>https</code> media URL, a full Windows path, or a path relative to the <code>lms</code> folder such as <code>../videos/lec1.mp4</code>.
+          If a path-linked local file won't play, use Option 1 instead.
+        </div>
+      </div>
+    </div>
+
+    <!-- ARTICLE FIELDS -->
+    <div id="le_articleBlock" class="space-y-2 p-3 border rounded bg-purple-50 hidden">
+      <div class="text-sm font-semibold">Article / Notes body</div>
+      <div class="text-xs text-gray-600">Markdown supported: <code># Heading</code>, <code>**bold**</code>, <code>*italic*</code>, <code>- bullet</code>, <code>\`code\`</code>. Plain HTML also works.</div>
+      <textarea id="le_article" class="w-full border rounded px-2 py-1.5 mt-1 h-48 font-mono text-sm">${escapeHTML(l.article_body||'')}</textarea>
+    </div>
+
+    <label class="block"><span class="text-sm font-semibold">Short description (shown on Overview tab)</span><textarea id="le_desc" class="w-full border rounded px-2 py-1.5 mt-1 h-20">${escapeHTML(l.description||'')}</textarea></label>
+
+    <!-- INLINE QUESTIONS (available on ANY type) -->
+    <div class="p-3 border rounded bg-amber-50">
+      <div class="flex justify-between items-center">
+        <div class="text-sm font-semibold">Questions attached to this item</div>
+        <button type="button" onclick="openQuizEditorFromLecture()" class="btn btn-outline text-xs">Edit questions →</button>
+      </div>
+      <div id="le_qSummary" class="text-xs text-gray-600 mt-1">${(l.questions||[]).length} question(s) attached</div>
+    </div>
+
+    <div>
+      <span class="text-sm font-semibold">Downloadable resources</span>
+      <div id="le_resList" class="space-y-1 mt-1"></div>
+      <button onclick="addResourceRow()" class="text-sm ud-purple-text font-semibold">+ Add resource</button>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-3 border-t">
+      <button onclick="closeLectureModal()" class="btn btn-outline">Cancel</button>
+      <button onclick="saveLecture('${cid}','${sid}','${lid}')" class="btn btn-primary">Save</button>
+    </div>
+  `;
+  document.getElementById('le_type').value = l.type;
+  window._editingResources = JSON.parse(JSON.stringify(l.resources || []));
+  renderResEditor();
+  toggleLectureFields();
+  refreshSavedMediaPreview(lid);
+  document.getElementById('lectureModal').classList.remove('hidden');
+}
+
+async function refreshSavedMediaPreview(lid) {
+  const preview = document.getElementById('le_videoPreview');
+  const input = document.getElementById('le_video');
+  if (!preview || !input) return;
+  const value = (input.value || '').trim();
+  if (value.startsWith('idb://')) {
+    preview.innerHTML = '<span class="text-green-700">Checking saved offline media...</span>';
+    try {
+      const blob = await idbGet('vid_' + value.slice(6));
+      if (!blob) {
+        preview.innerHTML = '<span class="text-red-600">This lesson points to offline media, but the stored file was not found. Please choose the file again.</span>';
+        return;
+      }
+      const mb = (blob.size / 1048576).toFixed(1);
+      const mediaKind = /^audio\//i.test(blob.type || '') || isAudioUrl(blob.name || '') ? 'audio' : 'video';
+      const name = blob.name || 'saved local file';
+      preview.innerHTML = `<span class="text-green-700">Saved offline ${mediaKind}: <b>${escapeHTML(name)}</b> (${mb} MB). The file picker above may still say "No file chosen"; that is normal after reopening.</span>`;
+    } catch (e) {
+      preview.innerHTML = `<span class="text-red-600">Could not check saved media: ${escapeHTML(e.message)}</span>`;
+    }
+  } else if (value) {
+    preview.innerHTML = '<span class="text-blue-700">Saved linked media source in Option 2.</span>';
+  } else {
+    preview.innerHTML = '<span class="text-gray-500">No media saved yet.</span>';
+  }
+}
+
+function toggleLectureFields() {
+  const t = document.getElementById('le_type').value;
+  const isArticle = t === 'article';
+  const hasVideo = (t === 'lecture' || t === 'roleplay' || t === 'practice_test' || t === 'assignment');
+  document.getElementById('le_videoBlock').classList.toggle('hidden', isArticle || t === 'quiz');
+  document.getElementById('le_articleBlock').classList.toggle('hidden', !isArticle);
+}
+
+async function onLocalFilePicked(ev) {
+  const f = ev.target.files[0]; if (!f) return;
+  const ref = window._editingLectureRef;
+  const preview = document.getElementById('le_videoPreview');
+  if (!ref) { preview.innerHTML = '<span class="text-red-600">Open the item editor first.</span>'; return; }
+  const mb = (f.size/1048576).toFixed(1);
+  preview.innerHTML = `<span class="text-gray-600">Copying "<b>${escapeHTML(f.name)}</b>" (${mb} MB) into offline storage…</span>`;
+  try {
+    await idbPut('vid_' + ref.lid, f);
+    document.getElementById('le_video').value = 'idb://' + ref.lid;
+    saveLecture(ref.cid, ref.sid, ref.lid, true);
+    const mediaKind = f.type.startsWith('audio/') ? 'audio' : 'video';
+    preview.innerHTML = `<span class="text-green-700">✓ Stored and saved offline ${mediaKind}: <b>${escapeHTML(f.name)}</b> (${mb} MB). It will play offline and survive restarts.</span>`;
+  } catch (e) {
+    // Fallback: session-only preview + tell the user to use a real path
+    const blobUrl = URL.createObjectURL(f);
+    preview.innerHTML = `<span class="text-red-600">Couldn't store offline (${escapeHTML(e.message)}).</span> <a class="ud-purple-text" href="${blobUrl}" target="_blank">Preview (this session only)</a>. Try a smaller MP4/MP3 file or use Option 2 with a hosted link.`;
+  }
+}
+
+function openQuizEditorFromLecture() {
+  const ref = window._editingLectureRef; if (!ref) return;
+  // Save current edits to the lecture before jumping
+  saveLecture(ref.cid, ref.sid, ref.lid, /*keepModal*/ true);
+  closeLectureModal();
+  openQuizEditor(ref.lid);
+}
+function renderResEditor() {
+  const wrap = document.getElementById('le_resList');
+  wrap.innerHTML = window._editingResources.map((r,i)=>`
+    <div class="flex gap-1">
+      <input value="${escapeAttr(r.title||'')}" placeholder="Title" onchange="_editingResources[${i}].title=this.value" class="flex-1 border rounded px-2 py-1 text-sm" />
+      <input value="${escapeAttr(r.url||'')}" placeholder="URL" onchange="_editingResources[${i}].url=this.value" class="flex-1 border rounded px-2 py-1 text-sm" />
+      <button onclick="_editingResources.splice(${i},1);renderResEditor()" class="px-2 text-red-600">×</button>
+    </div>
+  `).join('');
+}
+function addResourceRow() { window._editingResources.push({ title:'', url:'' }); renderResEditor(); }
+function saveLecture(cid, sid, lid, keepModal) {
+  const courses = load(LS.COURSES, []);
+  const c = courses.find(x=>x.id===cid); const s = c?.sections.find(x=>x.id===sid); const l = s?.lectures.find(x=>x.id===lid);
+  if (!l) return;
+  l.title = document.getElementById('le_title').value;
+  l.type = document.getElementById('le_type').value;
+  l.label = document.getElementById('le_label').value;
+  l.duration_min = parseInt(document.getElementById('le_dur').value)||0;
+  l.video_url = document.getElementById('le_video') ? document.getElementById('le_video').value : (l.video_url||'');
+  l.description = document.getElementById('le_desc').value;
+  l.article_body = document.getElementById('le_article') ? document.getElementById('le_article').value : (l.article_body||'');
+  l.resources = window._editingResources;
+  if ((l.type === 'quiz' || (l.questions||[]).length) && !l.questions) l.questions = [];
+  save(LS.COURSES, courses);
+  if (state.lectureId === lid && document.getElementById('playerArea')) renderPlayer();
+  if (!keepModal) {
+    closeLectureModal();
+    renderAdminCourses();
+  }
+}
+function closeLectureModal() { document.getElementById('lectureModal').classList.add('hidden'); }
+
+// QUIZ EDITOR
+function openQuizEditor(lid) {
+  let found = null;
+  const courses = load(LS.COURSES, []);
+  for (const c of courses) for (const s of c.sections) for (const l of s.lectures) if (l.id === lid) found = { c, s, l };
+  if (!found) return;
+  window._editingQuiz = { ...found };
+  if (!found.l.questions) found.l.questions = [];
+  renderQuizEditor();
+  document.getElementById('quizModal').classList.remove('hidden');
+}
+function renderQuizEditor() {
+  const { l } = window._editingQuiz;
+  const body = document.getElementById('quizModalBody');
+  body.innerHTML = `
+    <div class="text-sm text-gray-500 mb-2">Quiz: <b>${escapeHTML(l.title)}</b></div>
+    <div id="qz_list" class="space-y-3"></div>
+    <button onclick="addQuestion()" class="btn btn-outline mt-3">+ Add question</button>
+    <div class="flex justify-end gap-2 pt-3 border-t mt-3">
+      <button onclick="closeQuizModal()" class="btn btn-outline">Cancel</button>
+      <button onclick="saveQuiz()" class="btn btn-primary">Save quiz</button>
+    </div>
+  `;
+  const wrap = document.getElementById('qz_list');
+  l.questions.forEach((q, qi) => {
+    const div = document.createElement('div');
+    div.className = 'border rounded p-3 bg-gray-50';
+    let inner = `
+      <div class="flex justify-between items-start mb-2">
+        <b>Q${qi+1}</b>
+        <button onclick="removeQuestion(${qi})" class="text-red-600 text-sm">Remove</button>
+      </div>
+      <label class="block text-sm">Type
+        <select onchange="changeQType(${qi}, this.value)" class="w-full border rounded px-2 py-1 mt-1">
+          <option value="mcq" ${q.type==='mcq'?'selected':''}>Multiple choice</option>
+          <option value="tfng" ${q.type==='tfng'?'selected':''}>True / False / Not Given</option>
+          <option value="fill" ${q.type==='fill'?'selected':''}>Fill the blank</option>
+        </select>
+      </label>
+      <label class="block text-sm mt-2">Question
+        <textarea onchange="window._editingQuiz.l.questions[${qi}].question=this.value" class="w-full border rounded px-2 py-1 mt-1 h-16">${escapeHTML(q.question||'')}</textarea>
+      </label>
+    `;
+    if (q.type === 'mcq' || q.type === 'tfng') {
+      if (q.type === 'tfng' && (!q.options || !q.options.length)) q.options = ['True','False','Not Given'];
+      inner += `<div class="mt-2"><div class="text-sm font-semibold mb-1">Options (select correct)</div>`;
+      (q.options||[]).forEach((opt, oi) => {
+        inner += `
+          <div class="flex gap-1 items-center mb-1">
+            <input type="radio" name="ans_${qi}" ${q.answer===oi?'checked':''} onchange="window._editingQuiz.l.questions[${qi}].answer=${oi}" />
+            <input value="${escapeAttr(opt)}" onchange="window._editingQuiz.l.questions[${qi}].options[${oi}]=this.value" class="flex-1 border rounded px-2 py-1 text-sm" />
+            ${q.type==='mcq'?`<button onclick="window._editingQuiz.l.questions[${qi}].options.splice(${oi},1);renderQuizEditor()" class="px-2 text-red-600">×</button>`:''}
+          </div>
+        `;
+      });
+      if (q.type === 'mcq') inner += `<button onclick="window._editingQuiz.l.questions[${qi}].options.push('');renderQuizEditor()" class="text-sm ud-purple-text font-semibold">+ Option</button>`;
+      inner += `</div>`;
+    } else if (q.type === 'fill') {
+      inner += `<label class="block text-sm mt-2">Correct answer
+        <input value="${escapeAttr(q.answer||'')}" onchange="window._editingQuiz.l.questions[${qi}].answer=this.value" class="w-full border rounded px-2 py-1 mt-1" />
+      </label>`;
+    }
+    div.innerHTML = inner;
+    wrap.appendChild(div);
+  });
+}
+function addQuestion() {
+  window._editingQuiz.l.questions.push({ type:'mcq', question:'', options:['',''], answer:0 });
+  renderQuizEditor();
+}
+function removeQuestion(qi) {
+  window._editingQuiz.l.questions.splice(qi,1);
+  renderQuizEditor();
+}
+function changeQType(qi, t) {
+  const q = window._editingQuiz.l.questions[qi];
+  q.type = t;
+  if (t === 'mcq') { q.options = q.options && q.options.length ? q.options : ['','']; q.answer = 0; }
+  if (t === 'tfng') { q.options = ['True','False','Not Given']; q.answer = 0; }
+  if (t === 'fill') { q.options = []; q.answer = ''; }
+  renderQuizEditor();
+}
+function saveQuiz() {
+  const courses = load(LS.COURSES, []);
+  const ref = window._editingQuiz;
+  for (const c of courses) if (c.id === ref.c.id) for (const s of c.sections) if (s.id === ref.s.id) for (const l of s.lectures) if (l.id === ref.l.id) {
+    l.questions = ref.l.questions;
+  }
+  save(LS.COURSES, courses);
+  closeQuizModal();
+  renderAdminCourses();
+  if (state.lectureId === ref.l.id && document.getElementById('playerArea')) renderPlayer();
+}
+function closeQuizModal() { document.getElementById('quizModal').classList.add('hidden'); }
+
+// USERS
+function renderAdminUsers() {
+  const users = load(LS.USERS, []);
+  document.getElementById('atab-users').innerHTML = `
+    <div class="flex justify-end mb-3"><button onclick="addUser()" class="btn btn-primary">+ Add user</button></div>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 border-b"><tr><th class="text-left p-2">Username</th><th class="text-left p-2">Name</th><th class="text-left p-2">Role</th><th class="p-2">Actions</th></tr></thead>
+      <tbody>
+        ${users.map(u => `
+          <tr class="border-b">
+            <td class="p-2 font-mono">${escapeHTML(u.username)}</td>
+            <td class="p-2">${escapeHTML(u.name||'')}</td>
+            <td class="p-2"><span class="badge ${u.role==='admin'?'badge-quiz':'badge-assignment'}">${u.role}</span></td>
+            <td class="p-2 text-center">
+              <button onclick="editUser('${u.username}')" class="btn btn-outline text-xs">Edit</button>
+              <button onclick="deleteUser('${u.username}')" class="btn btn-outline text-xs text-red-600">Del</button>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+function addUser() {
+  const u = prompt('Username:'); if (!u) return;
+  const p = prompt('Password:'); if (!p) return;
+  const n = prompt('Full name:') || u;
+  const r = prompt('Role (admin or student):', 'student') || 'student';
+  const users = load(LS.USERS, []);
+  if (users.some(x=>x.username===u)) return alert('Username already exists');
+  users.push({ username:u, password:p, name:n, role: r==='admin'?'admin':'student' });
+  save(LS.USERS, users);
+  renderAdminUsers();
+}
+function editUser(uname) {
+  const users = load(LS.USERS, []);
+  const u = users.find(x=>x.username===uname); if (!u) return;
+  const p = prompt('New password (leave blank to keep):'); if (p) u.password = p;
+  const n = prompt('Name:', u.name||''); if (n!==null) u.name = n;
+  const r = prompt('Role (admin / student):', u.role); if (r) u.role = r==='admin'?'admin':'student';
+  save(LS.USERS, users);
+  renderAdminUsers();
+}
+function deleteUser(uname) {
+  if (uname === state.user.username) return alert("You can't delete yourself.");
+  if (!confirm('Delete user ' + uname + '?')) return;
+  save(LS.USERS, load(LS.USERS,[]).filter(u=>u.username!==uname));
+  localStorage.removeItem(LS.PROGRESS(uname));
+  localStorage.removeItem(LS.NOTES(uname));
+  renderAdminUsers();
+}
+
+// QUIZ DIRECTORY — lists quizzes AND any item that has questions attached
+function renderAdminQuizzes() {
+  const courses = load(LS.COURSES, []);
+  const rows = [];
+  for (const c of courses) for (const s of c.sections) for (const l of s.lectures) {
+    if (l.type === 'quiz' || (l.questions && l.questions.length)) {
+      rows.push({ c, s, l });
+    }
+  }
+  document.getElementById('atab-quizzes').innerHTML = `
+    <div class="text-sm text-gray-500 mb-3">${rows.length} item(s) with questions. You can attach questions to any item, not just Quiz-type items.</div>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 border-b"><tr><th class="text-left p-2">Course</th><th class="text-left p-2">Section</th><th class="text-left p-2">Item</th><th class="text-center p-2">Type</th><th class="text-center p-2">Questions</th><th class="p-2"></th></tr></thead>
+      <tbody>
+        ${rows.map(r=>`
+          <tr class="border-b">
+            <td class="p-2">${escapeHTML(r.c.title)}</td>
+            <td class="p-2">Sec ${r.s.number}</td>
+            <td class="p-2">${escapeHTML(r.l.title)}</td>
+            <td class="p-2 text-center">${badgeFor(r.l.type)||'<span class="badge badge-assignment">Lecture</span>'}</td>
+            <td class="p-2 text-center">${(r.l.questions||[]).length}</td>
+            <td class="p-2 text-center"><button onclick="openQuizEditor('${r.l.id}')" class="btn btn-primary text-xs">Edit</button></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// ANNOUNCEMENTS ADMIN
+function renderAdminAnnounce() {
+  const courses = load(LS.COURSES, []);
+  document.getElementById('atab-announce').innerHTML = `
+    <div class="mb-3 flex gap-2">
+      <select id="aaCourse" class="border rounded px-2 py-1">${courses.map(c=>`<option value="${c.id}">${escapeHTML(c.title)}</option>`).join('')}</select>
+      <input id="aaTitle" placeholder="Announcement title" class="border rounded px-2 py-1 flex-1" />
+    </div>
+    <textarea id="aaText" placeholder="Body..." class="w-full border rounded p-2 h-24 mb-2"></textarea>
+    <div class="flex justify-end mb-4"><button onclick="postAnnounce()" class="btn btn-primary">Post announcement</button></div>
+    <div id="aaList"></div>
+  `;
+  refreshAnnounceList();
+  document.getElementById('aaCourse').addEventListener('change', refreshAnnounceList);
+}
+function refreshAnnounceList() {
+  const cid = document.getElementById('aaCourse').value;
+  const arr = load(LS.ANNOUNCE(cid), []);
+  document.getElementById('aaList').innerHTML = arr.map((a,i)=>`
+    <div class="border rounded p-3 mb-2">
+      <div class="flex justify-between"><b>${escapeHTML(a.title)}</b><button onclick="delAnnounce('${cid}',${i})" class="text-red-600 text-sm">Delete</button></div>
+      <div class="text-xs text-gray-500">${escapeHTML(a.author)} · ${new Date(a.when).toLocaleString()}</div>
+      <div class="mt-2 whitespace-pre-wrap">${escapeHTML(a.text)}</div>
+    </div>
+  `).join('') || '<div class="text-gray-500 text-sm">No announcements for this course.</div>';
+}
+function postAnnounce() {
+  const cid = document.getElementById('aaCourse').value;
+  const title = document.getElementById('aaTitle').value.trim();
+  const text = document.getElementById('aaText').value.trim();
+  if (!title || !text) return alert('Title and body required');
+  const arr = load(LS.ANNOUNCE(cid), []);
+  arr.unshift({ title, text, author: state.user.name, when: new Date().toISOString() });
+  save(LS.ANNOUNCE(cid), arr);
+  document.getElementById('aaTitle').value=''; document.getElementById('aaText').value='';
+  refreshAnnounceList();
+}
+function delAnnounce(cid, i) {
+  const arr = load(LS.ANNOUNCE(cid), []);
+  arr.splice(i,1);
+  save(LS.ANNOUNCE(cid), arr);
+  refreshAnnounceList();
+}
+
+// DATA EXPORT/IMPORT
+function exportData() {
+  const dump = {};
+  for (let i=0;i<localStorage.length;i++) {
+    const k = localStorage.key(i);
+    if (k.startsWith('lms_')) dump[k] = localStorage.getItem(k);
+  }
+  const blob = new Blob([JSON.stringify(dump, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dmi-lms-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+function importData(ev) {
+  const f = ev.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      if (!confirm('This will overwrite ALL current LMS data. Continue?')) return;
+      for (const k of Object.keys(localStorage)) if (k.startsWith('lms_')) localStorage.removeItem(k);
+      for (const [k,v] of Object.entries(data)) localStorage.setItem(k, v);
+      location.reload();
+    } catch(e) { alert('Invalid file: ' + e.message); }
+  };
+  r.readAsText(f);
+}
+function resetData() {
+  if (!confirm('Wipe ALL LMS data (users, courses, progress, AND offline videos)? This re-seeds the IELTS course.')) return;
+  for (const k of Object.keys(localStorage)) if (k.startsWith('lms_')) localStorage.removeItem(k);
+  try { indexedDB.deleteDatabase(IDB_NAME); } catch {}
+  location.reload();
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function escapeHTML(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) { return escapeHTML(s); }
+</script>
+
+<!-- ===== DMI LMS auth gate ===== -->
+<script>
+(function () {
+  function getUser() {
+    try {
+      var u = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
+      var r = localStorage.getItem('dmi_lms_role');
+      if (!u) return { state: 'anon' };
+      if (r === 'teacher') return { state: 'teacher', user: u };
+      if (u.expiryDate && new Date(u.expiryDate) < new Date()) return { state: 'expired', user: u };
+      return { state: 'active', user: u };
+    } catch (e) { return { state: 'anon' }; }
+  }
+
+  var info = getUser();
+  var next = encodeURIComponent(location.href);
+
+  // Anonymous or expired → block whole page
+  if (info.state === 'anon' || info.state === 'expired') {
+    document.body.innerHTML =
+      '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#0f1e2d 0%,#1a2e45 60%,#0f2236 100%);font-family:Arial,Helvetica,sans-serif;color:#fff;padding:20px">' +
+      '<div style="background:#fff;color:#1e2d40;border-radius:14px;padding:40px;max-width:440px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.4)">' +
+      '<div style="background:#eef21d;color:#c0202a;font-weight:900;display:inline-block;padding:8px 14px;border-radius:8px;border:2px solid #c0202a;margin-bottom:18px">DMI</div>' +
+      '<h2 style="font-size:22px;color:#0f1e2d;margin:0 0 8px">' +
+        (info.state === 'expired' ? 'Your access has expired' : 'Sign in required') +
+      '</h2>' +
+      '<p style="color:#6b7a90;font-size:14px;line-height:1.6;margin:0 0 22px">' +
+        (info.state === 'expired'
+          ? 'Your DMI LMS access expired on ' + new Date(info.user.expiryDate).toLocaleDateString() + '. Please contact the admin to renew.'
+          : 'The DMI Video Tutorial library is available only to enrolled DMI students. Please sign in to continue.') +
+      '</p>' +
+      '<a href="../login.html?next=' + next + '" style="display:inline-block;background:linear-gradient(135deg,#c0202a,#8f1118);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:700;box-shadow:0 6px 20px rgba(192,32,42,.35)">Sign in →</a>' +
+      '<div style="margin-top:18px"><a href="../index.html" style="color:#2a7abf;text-decoration:none;font-size:13px;font-weight:600">← Back to home</a></div>' +
+      '</div></div>';
+    document.title = 'Sign in — DMI LMS';
+    return;
+  }
+
+  // Active student or teacher → show a small "signed in" bar at the top
+  var bar = document.createElement('div');
+  bar.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#0f1e2d;color:#fff;' +
+    'padding:6px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;display:flex;' +
+    'align-items:center;justify-content:space-between;gap:12px;z-index:99998;border-bottom:2px solid #c0202a';
+  var rightLink = info.state === 'teacher'
+    ? '<a href="../teacher-panel.html" style="background:#1a3a5c;color:#fff;padding:4px 12px;border-radius:5px;text-decoration:none;font-weight:700;font-size:12px;margin-right:6px">Teacher Panel</a>'
+    : '<a href="../student-panel.html" style="background:#1e7a45;color:#fff;padding:4px 12px;border-radius:5px;text-decoration:none;font-weight:700;font-size:12px;margin-right:6px">My Dashboard</a>';
+  bar.innerHTML =
+    '<span>✓ Signed in as <b>' + info.user.name + '</b>' + (info.state === 'teacher' ? ' (Teacher)' : '') + '</span>' +
+    '<span>' + rightLink +
+      '<a href="#" id="dmiLogoutBtn" style="background:#c0202a;color:#fff;padding:4px 12px;border-radius:5px;text-decoration:none;font-weight:700;font-size:12px">Logout</a>' +
+    '</span>';
+  document.body.insertBefore(bar, document.body.firstChild);
+  document.body.style.paddingTop = '36px';
+  document.getElementById('dmiLogoutBtn').onclick = function (e) {
+    e.preventDefault();
+    localStorage.removeItem('dmi_lms_user');
+    localStorage.removeItem('dmi_lms_role');
+    location.href = '../login.html';
+  };
+})();
+</script>
+</body>
+</html>

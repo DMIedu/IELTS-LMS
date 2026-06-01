@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DMI Computer Education – IELTS Reading Exam (Book 20 Test 3)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dmi-red:#c0202a;--dmi-red-dark:#8f1118;--dmi-red-light:#fde8e9;
+  --navy:#0f1e2d;--blue:#1a3a5c;--sky:#2a7abf;
+  --border:#d5dce8;--text:#1e2d40;--muted:#6b7a90;
+  --bg:#f2f5f9;--white:#fff;
+  --green:#1e7a45;--green-l:#e6f4ec;
+  --amber:#d97706;--amber-l:#fef3cd;
+  --highlight:#ffe566;--gold:#c9903a;
+}
+html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+
+/* ── LANDING ── */
+#screenLanding{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 50%,#0f2236 100%);position:relative;overflow-y:auto;align-items:stretch}
+#screenLanding::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 10% 20%,rgba(192,32,42,.18) 0%,transparent 55%),radial-gradient(ellipse at 90% 75%,rgba(42,122,191,.15) 0%,transparent 50%)}
+.land-header{position:relative;z-index:2;background:rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:12px 50px}
+.dmi-logo-wrap{display:flex;align-items:center;gap:12px}
+.dmi-logo-img{width:44px;height:44px;border-radius:8px;object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+.dmi-logo-text .name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:white;line-height:1.1}
+.dmi-logo-text .tagline{font-size:10px;color:rgba(255,255,255,.55);letter-spacing:1.2px;text-transform:uppercase}
+.land-header-right{display:flex;align-items:center;gap:20px;font-size:12px;color:rgba(255,255,255,.6)}
+.land-header-right a{color:rgba(255,255,255,.8);text-decoration:none}.land-header-right a:hover{color:white}
+.land-body{display:grid;grid-template-columns:1fr 1fr;flex:1;position:relative;z-index:1}
+.land-left{display:flex;flex-direction:column;justify-content:center;padding:50px 50px 60px 70px;color:white}
+.land-since{display:inline-flex;align-items:center;gap:8px;background:rgba(192,32,42,.2);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.85);margin-bottom:24px;width:fit-content}
+.land-since::before{content:'';width:7px;height:7px;background:var(--dmi-red);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.land-dept{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:600}
+.land-h1{font-family:'Playfair Display',serif;font-size:clamp(34px,3.5vw,54px);line-height:1.1;color:white;margin-bottom:8px}
+.land-h1 em{font-style:italic;color:var(--gold)}
+.land-sub{font-size:15px;color:rgba(255,255,255,.62);line-height:1.75;max-width:400px;margin-bottom:36px}
+.award-badge{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:12px 16px;margin-bottom:32px;max-width:400px}
+.award-icon{font-size:24px;flex-shrink:0}
+.award-text .t{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.8px}
+.award-text .s{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;line-height:1.4}
+.land-stats{display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;width:fit-content}
+.lst{padding:14px 24px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.lst:last-child{border-right:none}
+.lst .n{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:white;line-height:1}
+.lst .l{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.land-right{display:flex;align-items:center;justify-content:center;padding:40px 60px 40px 30px}
+.reg-card{background:white;border-radius:20px;padding:36px 36px 32px;width:100%;max-width:450px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .5s cubic-bezier(.2,.8,.3,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+.card-dmi-header{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.card-dmi-logo{width:48px;height:48px;border-radius:10px;object-fit:cover;border:2px solid var(--dmi-red)}
+.card-dmi-info .org{font-size:14px;font-weight:800;color:var(--navy);letter-spacing:.3px}
+.card-dmi-info .dept{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.card-dmi-info .sub{font-size:11px;color:var(--muted);margin-top:1px}
+.reg-card h2{font-size:19px;color:var(--navy);font-weight:700;margin-bottom:3px}
+.reg-card .sub{font-size:12.5px;color:var(--muted);margin-bottom:22px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px}
+.field input,.field select{border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--text);outline:none;transition:border .15s;background:var(--bg)}
+.field input:focus,.field select:focus{border-color:var(--sky);background:white;box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.field.has-error input,.field.has-error select{border-color:var(--dmi-red)}
+.err-msg{color:var(--dmi-red);font-size:11px;display:none}
+.field.has-error .err-msg{display:block}
+.agree-row{display:flex;align-items:flex-start;gap:9px;margin:14px 0}
+.agree-row input{margin-top:3px;accent-color:var(--dmi-red);flex-shrink:0}
+.agree-row label{font-size:12px;color:var(--muted);line-height:1.5}
+.btn-start{width:100%;padding:13px;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));box-shadow:0 6px 20px rgba(192,32,42,.35);transition:all .2s}
+.btn-start:hover{transform:translateY(-2px)}
+.admin-link{text-align:center;margin-top:12px;font-size:12px;color:var(--muted)}
+.admin-link a{color:var(--sky);text-decoration:none;font-weight:600;cursor:pointer}
+.land-footer{position:relative;z-index:2;background:rgba(0,0,0,.3);border-top:1px solid rgba(255,255,255,.07);padding:10px 50px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.35)}
+
+/* ── EXAM ── */
+#screenExam{background:var(--bg);overflow:hidden;height:100vh}
+.topbar{background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.3);z-index:10;position:relative}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.dmi-badge-sm{background:var(--dmi-red);color:white;font-weight:800;font-size:11px;letter-spacing:1.2px;padding:3px 9px;border-radius:4px}
+.student-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:3px 11px;font-size:12px;color:rgba(255,255,255,.85);display:flex;align-items:center;gap:6px}
+.student-chip .dot{width:6px;height:6px;background:#4caf50;border-radius:50%}
+.timer-wrap{text-align:center}
+.timer-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:7px;padding:3px 16px;font-size:23px;font-weight:700;letter-spacing:2px;color:#e8f0ff;min-width:108px;text-align:center}
+.timer-box.warn{color:#ffca28}.timer-box.danger{color:#ff6b6b;animation:tpulse 1s infinite}
+@keyframes tpulse{0%,100%{opacity:1}50%{opacity:.5}}
+.topbar-right{display:flex;align-items:center;gap:7px}
+.tb-btn{background:transparent;border:1.5px solid rgba(255,255,255,.22);color:white;font-size:11.5px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s;white-space:nowrap}
+.tb-btn:hover{background:rgba(255,255,255,.1)}
+.tb-btn.danger{background:var(--dmi-red);border-color:var(--dmi-red)}
+.tb-btn.hl-active{background:rgba(255,225,0,.2);border-color:rgba(255,225,0,.7);color:#ffe566}
+
+/* Part tabs */
+.sec-bar{background:var(--blue);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:36px;flex-shrink:0}
+.sec-tabs{display:flex;height:100%}
+.sec-tab{height:100%;display:flex;align-items:center;padding:0 18px;cursor:pointer;border-right:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:500;opacity:.6;transition:all .15s;user-select:none;white-space:nowrap}
+.sec-tab:hover{opacity:1;background:rgba(255,255,255,.08)}
+.sec-tab.active{opacity:1;background:rgba(255,255,255,.16);font-weight:700;border-bottom:2px solid var(--gold)}
+.sec-tab sup{font-size:9px;margin-left:4px;opacity:.7}
+
+/* Split layout */
+.exam-main{display:flex;flex:1;overflow:hidden}
+.passage-panel{width:50%;background:white;display:flex;flex-direction:column;border-right:2px solid var(--border);overflow:hidden}
+.panel-hd{background:#f5f8fd;border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.panel-hd-title{font-size:13px;font-weight:700;color:var(--navy)}
+.panel-tools{display:flex;gap:5px}
+.tool-btn{background:white;border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .15s}
+.tool-btn:hover{background:#e8f0fb;border-color:var(--sky);color:var(--blue)}
+.tool-btn.hl-on{background:#ffe566;border-color:#c8a800;color:#5a3a00}
+
+/* Passage text */
+.p-scroll{overflow-y:auto;flex:1;padding:22px 26px 40px;line-height:1.85;font-size:15px;font-family:'Georgia',serif;color:var(--text);user-select:text}
+.p-scroll::-webkit-scrollbar{width:5px}.p-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.p-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:5px;line-height:1.25}
+.p-sub{font-size:13px;color:var(--muted);font-style:italic;font-family:'Outfit',sans-serif;margin-bottom:18px}
+.p-scroll p{margin-bottom:14px}
+.p-scroll strong{font-weight:normal}
+.para-lbl{color:var(--dmi-red);font-weight:700;margin-right:5px;font-family:'Outfit',sans-serif;font-size:12px}
+
+/* Highlight spans */
+.hl-mark{background:var(--highlight);border-radius:2px;cursor:default}
+.hl-mark:hover::after{content:'✕';font-size:10px;margin-left:3px;color:#8a6000;cursor:pointer}
+
+.splitter{width:5px;background:var(--border);cursor:col-resize;flex-shrink:0;transition:background .15s}
+.splitter:hover,.splitter.drag{background:var(--dmi-red)}
+
+/* Questions panel */
+.q-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.q-panel-hd{background:#f5f8fd;border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.q-panel-hd-title{font-size:13px;font-weight:700;color:var(--navy)}
+.q-scroll{flex:1;overflow-y:auto;padding:16px 18px 40px;user-select:text}
+.q-scroll::-webkit-scrollbar{width:5px}.q-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.q-sec-hd{background:var(--navy);color:white;border-radius:8px 8px 0 0;padding:11px 15px 8px;margin-bottom:0}
+.q-sec-hd h3{font-size:13px;font-weight:700;margin-bottom:4px}
+.q-sec-hd p{font-size:11.5px;opacity:.8;line-height:1.5}
+.q-sec-bd{background:white;border:1px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:15px;margin-bottom:14px}
+.q-block{margin-bottom:18px}
+.q-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;background:var(--blue);color:white;border-radius:50%;font-size:11px;font-weight:700;margin-right:7px;flex-shrink:0}
+.q-num.ans{background:var(--green)}.q-num.flg{background:var(--amber)}
+.q-lbl{display:flex;align-items:flex-start;margin-bottom:8px}
+.q-txt{font-size:13.5px;line-height:1.55;padding-top:2px}
+.mcq-opt{display:flex;align-items:flex-start;gap:9px;padding:8px 11px;border-radius:6px;border:1.5px solid var(--border);margin-bottom:5px;cursor:pointer;transition:all .15s;background:white;font-size:13px}
+.mcq-opt:hover{border-color:var(--sky);background:#f0f7ff}
+.mcq-opt.sel{border-color:var(--dmi-red);background:#fff0f1}
+.mcq-opt input[type=radio]{margin-top:3px;flex-shrink:0;accent-color:var(--dmi-red)}
+.tfng-row{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.tfng-q{flex:1;font-size:13px;line-height:1.5}
+.tfng-btns{flex-shrink:0}
+.tfng-sel{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12.5px;font-family:inherit;color:var(--muted);cursor:pointer;outline:none;background:white;transition:border .15s,background .15s;min-width:138px}
+.tfng-sel:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.tfng-sel.sT{border-color:var(--green);background:var(--green-l);color:var(--green);font-weight:700}
+.tfng-sel.sF{border-color:var(--dmi-red);background:var(--dmi-red-light);color:var(--dmi-red);font-weight:700}
+.tfng-sel.sN{border-color:var(--amber);background:var(--amber-l);color:var(--amber);font-weight:700}
+.fill-in{border:1.5px solid var(--border);border-radius:5px;padding:5px 10px;font-size:13px;font-family:inherit;width:170px;color:var(--text);transition:border .15s;outline:none}
+.fill-in:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.fill-in.got{border-color:var(--green);background:var(--green-l)}
+.match-sel{border:1.5px solid var(--border);border-radius:5px;padding:6px 10px;font-size:13px;font-family:inherit;color:var(--text);cursor:pointer;outline:none;background:white;transition:border .15s}
+.match-sel:focus{border-color:var(--sky)}
+.match-sel.got{border-color:var(--green);background:var(--green-l)}
+.q-tbl{width:100%;border-collapse:collapse;margin:8px 0 12px;font-size:13px}
+.q-tbl th{background:#e8ecf5;color:var(--navy);padding:7px 11px;text-align:left;font-weight:700;border:1px solid var(--border)}
+.q-tbl td{padding:7px 11px;border:1px solid var(--border);vertical-align:middle}
+.q-tbl tr:nth-child(even) td{background:#f8f9fc}
+
+/* ── BOTTOM NAV ── */
+.bot-nav{background:white;border-top:2px solid var(--border);padding:7px 14px 6px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.q-nav-groups{flex:1;display:flex;flex-direction:column;gap:5px}
+.q-part-row{display:flex;align-items:center;gap:8px}
+.q-part-lbl{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;min-width:52px;flex-shrink:0}
+.q-part-lbl.cur{color:var(--dmi-red)}
+.q-part-btns{display:flex;gap:3px;flex-wrap:wrap}
+.qg-btn{width:26px;height:26px;border-radius:4px;border:1.5px solid var(--border);background:white;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;font-family:inherit;color:var(--muted)}
+.qg-btn:hover{border-color:var(--sky);color:var(--blue)}
+.qg-btn.ans{background:var(--green);border-color:var(--green);color:white}
+.qg-btn.flg{background:var(--amber);border-color:var(--amber);color:white;border-radius:50%}
+.qg-btn.cur{outline:2.5px solid var(--dmi-red);outline-offset:1px}
+.nav-right{display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0}
+.nav-legend{display:flex;gap:8px;font-size:10px;color:var(--muted)}
+.leg-dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px}
+.nav-acts{display:flex;gap:5px}
+.btn-nav{background:var(--blue);color:white;border:none;border-radius:6px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn-nav:hover{background:var(--navy)}
+.btn-flg{background:white;border:1.5px solid var(--amber);color:var(--amber);border-radius:6px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.btn-flg.on{background:var(--amber);color:white}
+
+/* Notes panel */
+#notesPanel{display:none;width:200px;background:#fffde7;border-left:2px solid #f9d835;flex-direction:column;flex-shrink:0}
+.notes-hd{background:#f9d835;padding:7px 11px;font-size:12px;font-weight:700;color:#5a4a00;display:flex;justify-content:space-between}
+#notesTA{flex:1;border:none;resize:none;padding:11px;font-family:inherit;font-size:12px;background:#fffde7;color:#3a3000;outline:none}
+
+/* ── CUSTOM CONTEXT MENU ── */
+#ctxMenu{position:fixed;z-index:99999;background:white;border-radius:9px;box-shadow:0 8px 32px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.07);padding:5px;min-width:170px;display:none}
+#ctxMenu.visible{display:block}
+.ctx-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:6px;font-size:13.5px;cursor:pointer;color:var(--text);font-family:'Outfit',sans-serif;transition:background .1s}
+.ctx-item:hover{background:var(--bg)}
+.ctx-sep{height:1px;background:var(--border);margin:4px 8px}
+
+/* ── RESULTS ── */
+#screenResults{background:var(--bg);overflow-y:auto;align-items:center;padding:36px 20px}
+.res-card{background:white;border-radius:20px;padding:36px;max-width:780px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.1);animation:cardIn .5s both}
+.res-dmi-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:20px;margin-bottom:20px;border-bottom:2px solid var(--bg)}
+.res-dmi-left{display:flex;align-items:center;gap:12px}
+.res-dmi-logo{width:52px;height:52px;border-radius:10px;object-fit:cover;border:2px solid var(--dmi-red)}
+.res-dmi-org{font-size:15px;font-weight:800;color:var(--navy)}
+.res-dmi-sub{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+.res-dmi-right{text-align:right;font-size:11px;color:var(--muted);line-height:1.7}
+.res-title{text-align:center;margin-bottom:24px}
+.res-title .tag{display:inline-block;background:var(--green-l);color:var(--green);font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 12px;border-radius:100px;margin-bottom:10px;text-transform:uppercase}
+.res-title h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--navy);margin-bottom:4px}
+.res-title p{color:var(--muted);font-size:13px}
+.res-scores{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.res-score-box{text-align:center;border-radius:12px;padding:18px;border:1px solid var(--border)}
+.res-score-box .big{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;color:var(--navy)}
+.res-score-box .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+.student-info-box{background:var(--bg);border-radius:10px;padding:14px 18px;margin-bottom:22px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.si-item .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.si-item .v{font-size:13px;font-weight:600;color:var(--navy)}
+.review-section h3{font-size:14px;color:var(--navy);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.rev-row{display:flex;align-items:flex-start;gap:10px;padding:7px 11px;border-radius:6px;margin-bottom:5px;border:1px solid var(--border);font-size:13px}
+.rev-row.ok{border-color:var(--green);background:var(--green-l)}
+.rev-row.bad{border-color:var(--dmi-red);background:var(--dmi-red-light)}
+.rev-row.skip{border-color:#ccc;background:#f5f5f5}
+.rev-qn{font-weight:700;min-width:24px;color:var(--navy)}
+.rev-detail{flex:1;line-height:1.5}
+.res-actions{display:flex;gap:12px;margin-top:24px;justify-content:center;flex-wrap:wrap}
+.res-btn{padding:11px 26px;border-radius:9px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;border:none}
+.res-btn.prim{background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:white;box-shadow:0 4px 14px rgba(192,32,42,.3)}
+.res-btn.sec{background:white;color:var(--blue);border:2px solid var(--blue)}
+.res-footer-note{text-align:center;margin-top:20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:14px;line-height:1.6}
+
+/* ── ADMIN LOGIN ── */
+#screenAdminLogin{background:linear-gradient(150deg,var(--navy) 0%,#1a2e45 60%,#0f2236 100%);align-items:center;justify-content:center;min-height:100vh;position:relative}
+#screenAdminLogin::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(192,32,42,.15) 0%,transparent 55%)}
+.login-card{background:white;border-radius:18px;padding:40px 38px;width:100%;max-width:380px;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:cardIn .4s both;position:relative;z-index:1}
+.login-dmi-top{display:flex;align-items:center;gap:12px;padding-bottom:18px;margin-bottom:18px;border-bottom:2px solid var(--bg)}
+.login-dmi-logo{width:46px;height:46px;border-radius:9px;object-fit:cover;border:2px solid var(--dmi-red)}
+.login-dmi-org{font-size:14px;font-weight:800;color:var(--navy)}
+.login-dmi-sub{font-size:11px;color:var(--dmi-red);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.login-card h2{font-family:'Playfair Display',serif;font-size:22px;color:var(--navy);margin-bottom:3px}
+.login-card .sub{font-size:13px;color:var(--muted);margin-bottom:22px}
+.login-field{margin-bottom:14px}
+.login-field label{display:block;font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.login-field input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;font-size:14px;font-family:inherit;outline:none;transition:all .15s}
+.login-field input:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(42,122,191,.12)}
+.login-err{color:var(--dmi-red);font-size:12px;margin-top:9px;display:none;background:var(--dmi-red-light);padding:8px 12px;border-radius:6px}
+.btn-login{width:100%;padding:12px;background:linear-gradient(135deg,var(--dmi-red),var(--dmi-red-dark));color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;box-shadow:0 4px 14px rgba(192,32,42,.3)}
+.btn-login:hover{transform:translateY(-1px)}
+.back-link{text-align:center;margin-top:14px;font-size:12px;color:var(--muted);cursor:pointer}
+.back-link:hover{color:var(--blue)}
+
+/* ── ADMIN DASHBOARD ── */
+#screenAdmin{background:var(--bg);overflow:hidden;height:100vh}
+.admin-top{background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.admin-dmi-logo{width:36px;height:36px;border-radius:7px;object-fit:cover;border:2px solid rgba(255,255,255,.2)}
+.admin-org{font-size:14px;font-weight:700;color:white;line-height:1}
+.admin-org span{color:var(--gold)}
+.admin-org-sub{font-size:10px;color:rgba(255,255,255,.45);margin-top:1px;letter-spacing:.5px}
+.admin-tag{background:rgba(192,32,42,.3);border:1px solid rgba(192,32,42,.4);border-radius:100px;padding:3px 11px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.8)}
+.admin-scroll{flex:1;overflow-y:auto;padding:24px}
+.admin-scroll::-webkit-scrollbar{width:6px}.admin-scroll::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+.admin-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.a-stat{background:white;border-radius:12px;padding:18px 20px;border:1px solid var(--border);display:flex;align-items:center;gap:14px}
+.a-stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.a-stat-icon.red{background:var(--dmi-red-light)}.a-stat-icon.green{background:var(--green-l)}.a-stat-icon.amber{background:var(--amber-l)}.a-stat-icon.blue{background:#e8f0fb}
+.a-stat-val{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--navy);line-height:1}
+.a-stat-lbl{font-size:11px;color:var(--muted);margin-top:3px}
+.admin-panel{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;margin-bottom:18px}
+.ap-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);background:#fafbfd}
+.ap-header h2{font-size:15px;font-weight:700;color:var(--navy)}
+.ap-tools{display:flex;gap:7px}
+.ap-tool{background:white;border:1.5px solid var(--border);border-radius:7px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);font-family:inherit;transition:all .15s}
+.ap-tool:hover{border-color:var(--sky);color:var(--blue);background:#f0f7ff}
+.ap-tool.prim{background:var(--dmi-red);color:white;border-color:var(--dmi-red)}
+.ap-tool.green{background:var(--green);color:white;border-color:var(--green)}
+.search-row{padding:12px 20px;border-bottom:1px solid var(--border);background:#fafbfd}
+.search-input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:8px 13px;font-size:13px;font-family:inherit;outline:none;transition:border .15s;background:white}
+.search-input:focus{border-color:var(--sky)}
+.results-table{width:100%;border-collapse:collapse;font-size:13px}
+.results-table th{background:#f0f4fb;color:var(--navy);padding:10px 14px;text-align:left;font-weight:700;font-size:11px;letter-spacing:.4px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.results-table td{padding:10px 14px;border-bottom:1px solid #eef1f6;vertical-align:middle}
+.results-table tr:last-child td{border-bottom:none}
+.results-table tr:hover td{background:#f8fafd}
+.band-pill{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:700}
+.bhi{background:var(--green-l);color:var(--green)}.bmid{background:var(--amber-l);color:var(--amber)}.blo{background:var(--dmi-red-light);color:var(--dmi-red)}
+.score-bar-wrap{display:flex;align-items:center;gap:8px}
+.score-bar{height:5px;background:#e8ecf5;border-radius:3px;flex:1;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--sky),var(--blue))}
+.no-data{text-align:center;padding:44px 20px;color:var(--muted)}
+.no-data .icon{font-size:40px;margin-bottom:10px}
+.detail-btn{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--blue);font-family:inherit}
+.detail-btn:hover{background:#e8f0fb;border-color:var(--sky)}
+.delete-btn{background:var(--dmi-red-light);border:1px solid var(--dmi-red);border-radius:5px;padding:3px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--dmi-red);font-family:inherit;margin-left:4px}
+.delete-btn:hover{background:var(--dmi-red);color:white}
+
+/* modals */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9000;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-ov.open{opacity:1;pointer-events:all}
+.modal{background:white;border-radius:14px;padding:30px 34px;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.3);transform:scale(.95);transition:transform .2s}
+.modal-ov.open .modal{transform:scale(1)}
+.modal h2{font-size:19px;color:var(--navy);margin-bottom:8px}
+.modal p{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.modal-stats{display:flex;gap:14px;margin-bottom:22px}
+.mstat{flex:1;text-align:center;background:var(--bg);border-radius:8px;padding:12px}
+.mstat .n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--navy)}
+.mstat .l{font-size:11px;color:var(--muted);margin-top:2px}
+.modal-btns{display:flex;gap:10px}
+.mbtn{flex:1;border-radius:8px;padding:10px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;border:none}
+.mbtn.sec{background:white;border:1.5px solid var(--border);color:var(--muted)}
+.mbtn.prim{background:var(--dmi-red);color:white}
+.detail-modal-content{max-height:62vh;overflow-y:auto;margin-bottom:18px}
+.dm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px}
+.dm-item{background:var(--bg);border-radius:8px;padding:9px 13px}
+.dm-item .k{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.dm-item .v{font-size:13.5px;font-weight:600;color:var(--navy);margin-top:2px}
+.dm-answers table{width:100%;border-collapse:collapse;font-size:12px}
+.dm-answers th{background:#f0f4fb;padding:6px 10px;text-align:left;font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.dm-answers td{padding:6px 10px;border-bottom:1px solid #eef1f6;font-family:monospace}
+.dm-answers tr.ok td{background:var(--green-l)}.dm-answers tr.bad td{background:var(--dmi-red-light)}
+
+@media print{.res-actions,.bot-nav,.topbar,.sec-bar{display:none!important}body{background:white}.res-card{box-shadow:none;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+
+<!-- ══ CUSTOM CONTEXT MENU ══ -->
+<div id="ctxMenu">
+  <div class="ctx-item" id="ctxHL"><span style="font-size:16px">🖊</span> Highlight Selection</div>
+  <div class="ctx-item" id="ctxRemHL" style="display:none"><span style="font-size:16px">✕</span> Remove Highlight</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctxNote"><span style="font-size:16px">📝</span> Add to Notes</div>
+</div>
+
+<!-- ══════ SCREEN 1: LANDING ══════ -->
+<div id="screenLanding" class="screen active">
+  <div class="land-header">
+    <div class="dmi-logo-wrap">
+      <img class="dmi-logo-img" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div class="dmi-logo-text"><div class="name">DMI Computer Education</div><div class="tagline">Since 2008 · Northern Sri Lanka</div></div>
+    </div>
+    <div class="land-header-right">
+      <span>📞 <a href="tel:0777173517">0777 173 517</a></span>
+      <span>✉️ <a href="mailto:info@dmi.lk" style="color:inherit">info@dmi.lk</a></span>
+      <span>🌐 <a href="https://www.dmi.lk" target="_blank">www.dmi.lk</a></span>
+    </div>
+  </div>
+  <div class="land-body">
+    <div class="land-left">
+      <div class="land-since">🏆 British Council Registered Centre</div>
+      <div class="land-dept">IELTS Department · Academic Module</div>
+      <h1 class="land-h1">IELTS Reading<br><em>Exam Portal</em></h1>
+      <p class="land-sub">DMI Computer Education's official computer-based IELTS Reading practice test. Complete 40 questions across three academic passages in 60 minutes.<br><strong style="color:var(--gold)">Cambridge IELTS 20 – Test 3</strong></p>
+      <div class="award-badge">
+        <div class="award-icon">🥇</div>
+        <div class="award-text">
+          <div class="t">Award of Excellence – IELTS Partners Forum 2023</div>
+          <div class="s">Recognised by British Council as a top-performing IELTS test registration centre in Sri Lanka for 15+ years.</div>
+        </div>
+      </div>
+      <div class="land-stats">
+        <div class="lst"><div class="n">40</div><div class="l">Questions</div></div>
+        <div class="lst"><div class="n">60</div><div class="l">Minutes</div></div>
+        <div class="lst"><div class="n">9.0</div><div class="l">Max Band</div></div>
+        <div class="lst"><div class="n">15+</div><div class="l">Years</div></div>
+      </div>
+    </div>
+    <div class="land-right">
+      <div class="reg-card">
+        <div class="card-dmi-header">
+          <img class="card-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+          <div class="card-dmi-info"><div class="org">DMI Computer Education</div><div class="dept">IELTS Academic Reading</div><div class="sub">Cambridge IELTS 20 – Test 3</div></div>
+        </div>
+        <h2>Student Registration</h2>
+        <p class="sub">Fill in your details carefully before starting the exam.</p>
+        <div class="form-row">
+          <div class="field" id="f-fname"><label>First Name *</label><input type="text" id="fname" placeholder="e.g. Arun"/><div class="err-msg">Required</div></div>
+          <div class="field" id="f-lname"><label>Last Name *</label><input type="text" id="lname" placeholder="e.g. Kumar"/><div class="err-msg">Required</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="f-sid"><label>Student ID *</label><input type="text" id="sid" placeholder="e.g. DMI-2024-001"/><div class="err-msg">Required</div></div>
+          <div class="field"><label>Date of Birth</label><input type="date" id="dob"/></div>
+        </div>
+        <div class="form-row full">
+          <div class="field" id="f-email"><label>Email Address *</label><input type="email" id="email" placeholder="e.g. student@email.com"/><div class="err-msg">Valid email required</div></div>
+        </div>
+        <div class="form-row">
+          <div class="field" id="f-school"><label>DMI Branch *</label>
+            <select id="school"><option value="">Select branch…</option><option>Jaffna (Head Office)</option><option>Nelliady</option><option>Chunnakam</option><option>Sandilipay</option><option>Chavakachcheri</option><option>Kilinochchi</option><option>Other</option></select>
+            <div class="err-msg">Please select a branch</div>
+          </div>
+          <div class="field"><label>Class / Group</label><input type="text" id="classgroup" placeholder="e.g. IELTS Batch 3"/></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Nationality</label><input type="text" id="nationality" placeholder="e.g. Sri Lankan"/></div>
+          <div class="field"><label>Test Attempt</label>
+            <select id="attempt"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4+">4th+</option></select>
+          </div>
+        </div>
+        <div class="agree-row">
+          <input type="checkbox" id="agree"/>
+          <label for="agree">I confirm my details are accurate and I will complete this test independently without external help, as per DMI examination rules.</label>
+        </div>
+        <button class="btn-start" onclick="startExam()">Begin IELTS Reading Test →</button>
+        <div class="admin-link"><a onclick="showAdminLogin()">🔐 Teacher / Admin Dashboard</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="land-footer">
+    <span>© 2024 DMI Computer Education · www.dmi.lk · Since 2008</span>
+    <span>Jaffna · Nelliady · Chunnakam · Sandilipay · Chavakachcheri · Kilinochchi</span>
+    <span>Hotline: 0777 173 517 · <a href="mailto:info@dmi.lk" style="color:rgba(255,255,255,.5)">info@dmi.lk</a></span>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 2: EXAM ══════ -->
+<div id="screenExam" class="screen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" style="width:32px;height:32px;border-radius:6px;object-fit:cover;border:1.5px solid rgba(255,255,255,0.2)" onerror="this.style.display='none'"/>
+      <div class="dmi-badge-sm">DMI</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5)">IELTS Academic Reading · Book 20</div>
+      <div class="student-chip"><span class="dot"></span><span id="chipName">Student</span></div>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-box" id="timer">60:00</div>
+      <div class="timer-label"></div>
+    </div>
+    <div class="topbar-right">
+      <button class="tb-btn" onclick="toggleNotes()">📝 Notes</button>
+      <button class="tb-btn" id="hlTopBtn" onclick="toggleHL()">🖊 Highlight: OFF</button>
+      <button class="tb-btn danger" onclick="showSubmitModal()">Submit Test</button>
+    </div>
+  </div>
+
+  <div class="sec-bar">
+    <div class="sec-tabs">
+      <div class="sec-tab active" id="tab1" onclick="gotoSec(1)">Part 1 – Urban Farming<sup>Q1–13</sup></div>
+      <div class="sec-tab" id="tab2" onclick="gotoSec(2)">Part 2 – Forest Management<sup>Q14–26</sup></div>
+      <div class="sec-tab" id="tab3" onclick="gotoSec(3)">Part 3 – Space Junk<sup>Q27–40</sup></div>
+    </div>
+    <div style="font-size:11px;opacity:.6">DMI · 40 Questions · 60 Minutes</div>
+  </div>
+
+  <div class="exam-main" id="examMain">
+    <!-- PASSAGE PANEL -->
+    <div class="passage-panel" id="passagePanel">
+      <div class="panel-hd">
+        <span class="panel-hd-title" id="pTitle">Passage 1 – Frozen Food</span>
+        <div class="panel-tools">
+          <button class="tool-btn" onclick="chFS(-1)">A−</button>
+          <button class="tool-btn" onclick="chFS(1)">A+</button>
+          <button class="tool-btn" id="hlPassBtn" onclick="toggleHL()">🖊 OFF</button>
+        </div>
+      </div>
+      <div class="p-scroll" id="pScroll">
+        <div id="p1">
+          <div class="p-title">Frozen Food</div>
+          <div class="p-sub">A US perspective on the development of the frozen food industry</div>
+          <p>At some point in history, humans discovered that ice preserved food. There is evidence that winter ice was stored to preserve food in the summer as far back as 10,000 years ago. Two thousand years ago, the inhabitants of South America’s Andean mountains had a unique means of conserving potatoes for later consumption. They froze them overnight, then trampled them to squeeze out the moisture, then dried them in the sun. This preserved their nutritional value - if not their aesthetic appeal.</p>
+          <p>Natural ice remained the main form of refrigeration until late in the 19th century. In the early 1800s, ship owners from Boston, USA, had enormous blocks of Arctic ice towed all over the Atlantic for the purpose of food preservation. In 1851, railroads first began putting blocks of ice in insulated rail cars to send butter from Ogdensburg, New York, to Boston.</p>
+          <p>Finally, in 1870, Australian inventors found a way to make ‘mechanical ice’. They used a compressor to force a gas - ammonia at first and later Freon - through a condenser. The compressed gas gave up some of its heat as it moved through the condenser. Then the gas was released quickly into a low-pressure evaporator coil where it became liquid and cold. Air was blown over the evaporator coil and then this cooled air passed into an insulated compartment, lowering its temperature to freezing point.</p>
+          <p>Initially, this process was invented to keep Australian beer cool even in hot weather. But Australian cattlemen were quick to realize that, if they could put this new invention on a ship, they could export meat across the oceans. In 1880, a shipment of Australian beef and mutton was sent, frozen, to England. While the food frozen this way was still palatable, there was some deterioration. During the freezing process, crystals formed within the cells of the food, and when the ice expanded and the cells burst, this spoilt the flavor and texture of the food.</p>
+          <p>The modern frozen food industry began with the indigenous Inuit people of Canada. In 1912, a biology student in Massachusetts, USA, named Clarence Birdseye, ran out of money and went to Labrador in Canada to trap and trade furs. While he was there, he became fascinated with how the Inuit would quickly freeze fish in the Arctic air. The fish looked and tasted fresh even months later.</p>
+          <p>Birdseye returned to the USA in 1917 and began developing mechanical freezers capable of quick-freezing food. Birdseye methodically kept inventing better freezers and gradually built a business selling frozen fish from Gloucester, Massachusetts. In 1929, his business was sold and became General Foods, but he stayed with the company as director of research, and his division continued to innovate.</p>
+          <p>Birdseye was responsible for several key innovations that made the frozen food industry possible. He developed quick-freezing techniques that reduced the damage that crystals caused, as well as the technique of freezing the product in the package it was to be sold in. He also introduced the use of cellophane, the first transparent material for food packaging, which allowed consumers to see the quality of the product. Birdseye products also came in convenient size packages that could be prepared with a minimum of effort.</p>
+          <p>But there were still obstacles. In the 1930s, few grocery stores could afford to buy freezers for a market that wasn’t established yet. So, Birdseye leased inexpensive freezer cases to them. He also leased insulated railroad cars so that he could ship his products nationwide. However, few consumers had freezers large enough or efficient enough to take advantage of the products.</p>
+          <p>Sales increased in the early 1940s, when World War II gave a boost to the frozen food industry because tin was being used for munitions. Canned foods were rationed to save tin for the war effort, while frozen foods were abundant and cheap. Finally, by the 1950s, refrigerator technology had developed far enough to make these appliances affordable for the average family. By 1953, 33 million US families owned a refrigerator, and manufacturers were gradually increasing the size of the freezer compartments in them.</p>
+          <p>1950s families were also looking for convenience at mealtimes, so the moment was right for the arrival of the ‘TV Dinner’. Swanson Foods was a large, nationally recognized producer of canned and frozen poultry. In 1954, the company adapted some of Birdseye’s freezing techniques, and with the help of a clever name and a huge advertising budget, it launched the first ‘TV Dinner’. This consisted of frozen turkey, potatoes and vegetables served in the same segmented aluminum tray that was used by airlines. The product was an instant success. Within a year, Swanson had sold 13 million TV dinners. American consumers couldn’t resist the combination of a trusted brand name, a single-serving package and the convenience of a meal that could be ready after only 25 minutes in a hot oven. By 1959, Americans were spending $2.7 billion annually on frozen foods, and half a billion of that was spent on ready-prepared meals such as the TV Dinner.</p>
+          <p>Today, the US frozen food industry has a turnover of over $67 billion annually, with $26.6 billion of that sold to consumers for home consumption. The remaining $40 billion in frozen food sales come through restaurants, cafeterias, hospitals and schools, and that represents a third of the total food service sales.</p>
+        </div>
+        <div id="p2" style="display:none">
+          <div class="p-title">Can the planet’s coral reefs be saved?</div>
+          <p><span class="para-lbl">A</span>Conservationists have put the final touches to a giant artificial reef they have been assembling at the world-renowned Zoological Society of London (London Zoo). Samples of the planet’s most spectacular corals – vivid green branching coral, yellow scroll, blue ridge and many more species – have been added to the giant tank along with fish that thrive in their presence: blue tang, clownfish and many others. The reef is in the zoo’s new gallery, Tiny Giants, which is dedicated to the minuscule invertebrate creatures that sustain life across the planet. The coral reef tank and its seven-metre-wide window form the core of the exhibition.</p>
+          <p>‘Coral reefs are the most diverse ecosystems on Earth and we want to show people how wonderful they are,’ said Paul Pearce-Kelly, senior curator of invertebrates and fish at the Zoological Society of London. ‘However, we also want to highlight the research and conservation efforts that are now being carried out to try to save them from the threat of global warming.’ They want people to see what is being done to try to save these wonders.</p>
+          <p><span class="para-lbl">B</span>Corals are composed of tiny animals, known as polyps, with tentacles for capturing small marine creatures in the sea water. These polyps are transparent but get their brilliant tones of pink, orange, blue, green, etc. from algae that live within them, which in turn get protection, while their photosynthesising of the sun’s rays provides nutrients for the polyps. This comfortable symbiotic relationship has led to the growth of coral reefs that cover 0.1% of the planet’s ocean bed while providing homes for more than 25% of marine species, including fish, molluscs, sponges and shellfish.</p>
+          <p><span class="para-lbl">C</span>As a result, coral reefs are often described as the ‘rainforests of the sea’, though the comparison is dismissed by some naturalists, including David Attenborough. ‘People say you cannot beat the rainforest,’ Attenborough has stated. ‘But that is simply not true. You go there and the first thing you think is: where are the birds? Where are the animals? They are hiding in the trees, of course. No, if you want beauty and wildlife, you want a coral reef. Put on a mask and stick your head under the water. The sight is mind-blowing.’</p>
+          <p><span class="para-lbl">D</span>Unfortunately, these majestic sights are now under very serious threat, with the most immediate problem coming in the form of thermal stress. Rising ocean temperatures are triggering bleaching events that strip reefs of their colour and eventually kill them. And that is just the start. Other menaces include ocean acidification, sea level increase, pollution by humans, deoxygenation and ocean current changes, while the climate crisis is also increasing habitat destruction. As a result, vast areas – including massive chunks of Australia’s Great Barrier Reef – have already been destroyed, and scientists advise that more than 90% of reefs could be lost by 2050 unless urgent action is taken to tackle global heating and greenhouse gas emissions.</p>
+          <p>Pearce-Kelly says that coral reefs have to survive really harsh conditions – wave erosion and other factors. And ‘when things start to go wrong in the oceans, then corals will be the first to react. And that is exactly what we are seeing now. Coral reefs are dying and they are telling us that all is not well with our planet.’</p>
+          <p><span class="para-lbl">E</span>However, scientists are trying to pinpoint hardy types of coral that could survive our overheated oceans, and some of this research will be carried out at London Zoo. ‘Behind our … coral reef tank we have built laboratories where scientists will be studying coral species,’ said Pearce-Kelly. One aim will be to carry out research on species to find those that can survive best in warm, acidic waters. Another will be to try to increase coral breeding rates. ‘Coral spawn just once a year,’ he added. ‘However, aquarium-based research has enabled some corals to spawn artificially, which can assist coral reef restoration efforts. And if this can be extended for all species, we could consider the launching of coral-spawning programmes several times a year. That would be a big help in restoring blighted reefs.’</p>
+          <p><span class="para-lbl">F</span>Research in these fields is being conducted in laboratories around the world, with the London Zoo centre linked to this global network. Studies carried out in one centre can then be tested in others. The resulting young coral can then be displayed in the tank in Tiny Giants. ‘The crucial point is that the progress we make in making coral better able to survive in a warming world can be shown to the public and encourage them to believe that we can do something to save the planet’s reefs,’ said Pearce-Kelly. ‘Saving our coral reefs is now a critically important ecological goal.’</p>
+        </div>
+        <div id="p3" style="display:none">
+          <div class="p-title">Robots and us</div>
+          <p>Martin Rees, Daniel Wolpert and Kathleen Richardson discuss space colonisation, the nature of intelligence, and why robot research should be anchored in reality rather than science fiction.</p>
+          <p><strong>A (Martin Rees)</strong>: I think we will need robots in space, but they will be more like machines than humans. The idea of sending humans to colonise other planets is a waste of money. If we want to explore the solar system, we should send robots. They don’t need food, sleep or water, and they can survive in harsh environments. Humans are not suited to long-term space travel. Furthermore, space travel is highly risky and expensive, whereas sending machines is far safer and more cost-effective. AI is advancing quickly, and space exploration will benefit enormously from intelligent machines that can make autonomous decisions without human intervention.</p>
+          <p><strong>B (Daniel Wolpert)</strong>: Why do we have a brain? The answer is simple: to control movement. Movement is the only way we have of interacting with the world around us. Even our thoughts are only useful if they lead to movement. Many people think that chess playing or mathematical reasoning are the highest forms of intelligence, but from a biological perspective, they are easy. The hard part is controlling our bodies. A computer can easily beat a human at chess, but no robot can move a chess piece with the dexterity and flexibility of a child. If we want to understand human intelligence, we must study how the brain controls movement. Robots are still incredibly primitive in this respect. Teaching a machine to navigate a room or pick up an object is one of the most difficult challenges in AI research.</p>
+          <p><strong>C (Kathleen Richardson)</strong>: I believe we anthropomorphise machines too much. People are afraid that robots will take over the world or replace human relationships, but this is a fantasy inspired by science fiction. Robots are just tools, like hammers or computers. They do not have feelings, consciousness or desires. When we treat them as if they were alive, we diminish what it means to be human. The danger is not that robots will become human, but that humans will begin to treat each other like machines. We must anchor our robot research in reality and focus on the practical benefits of technology rather than our fears. Furthermore, science fiction has created a false divide between reality and fiction, making us fear technology rather than understanding its actual capabilities and limits.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="splitter" id="splitter"></div>
+    
+    <!-- QUESTIONS PANEL -->
+    <div class="q-panel">
+      <div class="q-panel-hd">
+        <span class="q-panel-hd-title" id="qPanelTitle">Part 1 – Questions 1–13</span>
+        <div style="font-size:12px;color:var(--muted)">Answered: <span id="ansCount">0</span>/40</div>
+      </div>
+      <div class="q-scroll" id="qScroll">
+        <!-- PART 1 -->
+        <div id="sec1">
+          <div class="q-sec-hd"><h3>Questions 1–7 — Note Completion</h3><p>Complete the notes below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p></div>
+          <div class="q-sec-bd">
+            <div style="background:#f0f4fb;border-radius:8px;padding:14px 18px;margin-bottom:10px;font-size:13px;font-weight:700;text-align:center;color:var(--navy)">History of frozen food</div>
+            <table class="q-tbl">
+              <tr><th>Period & Location</th><th>Detail</th><th>Answer</th></tr>
+              <tr><td>2,000 years ago, South America</td><td>People conserved the nutritional value of <strong>potatoes</strong>, using a method of freezing then drying.</td><td>—</td></tr>
+              <tr><td>1851, USA</td><td><strong>1</strong> was kept cool by ice during transportation in specially adapted trains.</td><td><span id="qn1" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q1" oninput="onFill(1)" style="width:140px" placeholder="answer…"/></td></tr>
+              <tr><td>1880, Australia</td><td>Two kinds of <strong>2</strong> were the first frozen food shipped to England.</td><td><span id="qn2" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q2" oninput="onFill(2)" style="width:140px" placeholder="answer…"/></td></tr>
+              <tr><td>1917 onwards, USA</td><td>Clarence Birdseye introduced quick-freezing methods, so that <strong>3</strong> did not spoil the food.</td><td><span id="qn3" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q3" oninput="onFill(3)" style="width:140px" placeholder="answer…"/></td></tr>
+              <tr><td>1917 onwards, USA</td><td>He packaged products using <strong>4</strong> so the product was visible.</td><td><span id="qn4" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q4" oninput="onFill(4)" style="width:140px" placeholder="answer…"/></td></tr>
+              <tr><td>Early 1940s, USA</td><td>He leased freezer cases to grocery stores and insulated railroad cars.</td><td>—</td></tr>
+              <tr><td>Early 1940s, USA</td><td>Frozen food became popular because of a shortage of <strong>5</strong>.</td><td><span id="qn5" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q5" oninput="onFill(5)" style="width:140px" placeholder="answer…"/></td></tr>
+              <tr><td>1950s, USA</td><td>A large number of homes now had a <strong>6</strong>.</td><td><span id="qn6" style="position:absolute;opacity:0;pointer-events:none"></span><input class="fill-in" id="q6" oninput="onFill(6)" style="width:140px" placeholder="answer…"/></td></tr>
+              <tr><td>1950s, USA</td><td>The TV Dinner became highly popular and Americans spent billions on it.</td><td>—</td></tr>
+            </table>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 7–13 — True / False / Not Given</h3><p>Do the following statements agree with the information given in Reading Passage 1?</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn7" style="flex-shrink:0">7</span><div class="tfng-q">The ice transportation business made some Boston ship owners very wealthy in the early 1800s.</div><div class="tfng-btns"><select class="tfng-sel" id="ts7" onchange="selTFNG(7,this)"><option value="">Select answer…</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn8" style="flex-shrink:0">8</span><div class="tfng-q">A disadvantage of the freezing process invented in Australia was that it affected the taste of food.</div><div class="tfng-btns"><select class="tfng-sel" id="ts8" onchange="selTFNG(8,this)"><option value="">Select answer…</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn9" style="flex-shrink:0">9</span><div class="tfng-q">Clarence Birdseye travelled to Labrador in order to learn how the Inuit people froze fish.</div><div class="tfng-btns"><select class="tfng-sel" id="ts9" onchange="selTFNG(9,this)"><option value="">Select answer…</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn10" style="flex-shrink:0">10</span><div class="tfng-q">Swanson Foods invested a great deal of money in the promotion of the TV Dinner.</div><div class="tfng-btns"><select class="tfng-sel" id="ts10" onchange="selTFNG(10,this)"><option value="">Select answer…</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn11" style="flex-shrink:0">11</span><div class="tfng-q">Swanson Foods developed a new style of container for the launch of the TV Dinner.</div><div class="tfng-btns"><select class="tfng-sel" id="ts11" onchange="selTFNG(11,this)"><option value="">Select answer…</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div></div></div>
+            <div class="q-block"><div class="tfng-row"><span class="q-num" id="qn12" style="flex-shrink:0">12</span><div class="tfng-q">The US frozen food industry is currently the largest in the world.</div><div class="tfng-btns"><select class="tfng-sel" id="ts12" onchange="selTFNG(12,this)"><option value="">Select answer…</option><option value="TRUE">TRUE</option><option value="FALSE">FALSE</option><option value="NOT GIVEN">NOT GIVEN</option></select></div></div></div>
+          </div>
+        </div>
+        
+        <!-- PART 2 -->
+        <div id="sec2" style="display:none">
+          <div class="q-sec-hd"><h3>Questions 13–18 — Matching Headings</h3><p>Choose the correct heading for sections <strong>A–F</strong> from the list of headings below. Choose the correct Roman Numeral from the dropdowns.</p><p style="font-size:12px;margin-top:6px"><strong>i</strong> Shared research &nbsp;·&nbsp; <strong>ii</strong> Symbiotic relationship &nbsp;·&nbsp; <strong>iii</strong> Future breeding &nbsp;·&nbsp; <strong>iv</strong> attenborough’s view<br><strong>v</strong> London Zoo exhibition &nbsp;·&nbsp; <strong>vi</strong> global goal &nbsp;·&nbsp; <strong>vii</strong> ocean threats</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn13">13</span><div class="q-txt">Section A: <select class="match-sel" id="q13" onchange="onSel(13)"><option value="">Select Option</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select></div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn14">14</span><div class="q-txt">Section B: <select class="match-sel" id="q14" onchange="onSel(14)"><option value="">Select Option</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select></div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn15">15</span><div class="q-txt">Section C: <select class="match-sel" id="q15" onchange="onSel(15)"><option value="">Select Option</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select></div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn16">16</span><div class="q-txt">Section D: <select class="match-sel" id="q16" onchange="onSel(16)"><option value="">Select Option</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select></div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn17">17</span><div class="q-txt">Section E: <select class="match-sel" id="q17" onchange="onSel(17)"><option value="">Select Option</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select></div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn18">18</span><div class="q-txt">Section F: <select class="match-sel" id="q18" onchange="onSel(18)"><option value="">Select Option</option><option>i</option><option>ii</option><option>iii</option><option>iv</option><option>v</option><option>vi</option><option>vii</option></select></div></div></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 19–22 — Multiple Choice (Select Two)</h3><p>Choose <strong>TWO</strong> letters, A–E.</p></div>
+          <div class="q-sec-bd">
+            <div style="font-weight:700;margin-bottom:8px;font-size:13px;color:var(--navy)">Questions 19-20: Which TWO of the following are mentioned as sources of reef damage?</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px"><strong>A</strong> water currents &nbsp;·&nbsp; <strong>B</strong> fish migration &nbsp;·&nbsp; <strong>C</strong> contamination by waste &nbsp;·&nbsp; <strong>D</strong> cold winds &nbsp;·&nbsp; <strong>E</strong> rising sea levels</div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn19">19</span><div class="q-txt">Consequence 1: <select class="match-sel" id="q19" onchange="onSel(19)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn20">20</span><div class="q-txt">Consequence 2: <select class="match-sel" id="q20" onchange="onSel(20)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div></div></div>
+            
+            <div style="font-weight:700;margin-top:20px;margin-bottom:8px;font-size:13px;color:var(--navy)">Questions 21-22: Which TWO goals do the researchers have for laboratory studies?</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:12px"><strong>A</strong> studying fish &nbsp;·&nbsp; <strong>B</strong> identifying resilient corals &nbsp;·&nbsp; <strong>C</strong> changing water quality &nbsp;·&nbsp; <strong>D</strong> spawning acceleration &nbsp;·&nbsp; <strong>E</strong> testing waves</div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn21">21</span><div class="q-txt">Goal 1: <select class="match-sel" id="q21" onchange="onSel(21)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn22">22</span><div class="q-txt">Goal 2: <select class="match-sel" id="q22" onchange="onSel(22)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option></select></div></div></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 23–26 — Sentence Completion</h3><p>Complete the sentences below. Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn23">23</span><div class="q-txt">Coral polyps use their <strong>23</strong> <input class="fill-in" id="q23" oninput="onFill(23)" style="width:130px" placeholder="answer…"/> to capture small marine creatures in the sea water.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn24">24</span><div class="q-txt">Algae live inside the polyps, providing nutrients in exchange for <strong>24</strong> <input class="fill-in" id="q24" oninput="onFill(24)" style="width:130px" placeholder="answer…"/>.</div></div></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn25">25</span><div class="q-txt">The transparent polyps get their brilliant <strong>25</strong> <input class="fill-in" id="q25" oninput="onFill(25)" style="width:130px" placeholder="answer…"/> from algae living within them.</div></div></div>
+          </div>
+        </div>
+        
+        <!-- PART 3 -->
+        <div id="sec3" style="display:none">
+          <div class="q-sec-hd"><h3>Questions 26–32 — Expert Matching</h3><p>Look at the following assertions (Questions 26–32) and the list of experts below. Match each assertion with the correct expert, <strong>A, B or C</strong>.</p><p style="font-size:12px;margin-top:6px"><strong>A</strong> Martin Rees &nbsp;·&nbsp; <strong>B</strong> Daniel Wolpert &nbsp;·&nbsp; <strong>C</strong> Kathleen Richardson</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn26">26</span><div class="q-txt">The primary purpose of human brains is to coordinate physical motion.</div></div><select class="match-sel" id="q26" onchange="onSel(26)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn27">27</span><div class="q-txt">Sending human crews to establish planetary colonies is a waste of financial resources.</div></div><select class="match-sel" id="q27" onchange="onSel(27)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn28">28</span><div class="q-txt">Humans are prone to attribute human emotions and thoughts to non-living machines.</div></div><select class="match-sel" id="q28" onchange="onSel(28)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn29">29</span><div class="q-txt">Space exploration should be conducted by robots due to safety and cost benefits.</div></div><select class="match-sel" id="q29" onchange="onSel(29)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn30">30</span><div class="q-txt">Robot designers should focus on actual tasks rather than unrealistic fears.</div></div><select class="match-sel" id="q30" onchange="onSel(30)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn31">31</span><div class="q-txt">Science fiction has created a false divide between reality and fiction.</div></div><select class="match-sel" id="q31" onchange="onSel(31)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn32">32</span><div class="q-txt">No computer system can match the dexterity of a child in manipulation.</div></div><select class="match-sel" id="q32" onchange="onSel(32)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option></select></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 33–36 — Sentence Ending Matching</h3><p>Complete each sentence with the correct ending, <strong>A–D</strong>, below. Choose the correct letter from the dropdowns.</p><p style="font-size:12px;margin-top:6px"><strong>A</strong> because space travel is highly risky &nbsp;·&nbsp; <strong>B</strong> because brains control movement<br><strong>C</strong> due to their physical and cost benefits &nbsp;·&nbsp; <strong>D</strong> because robots are primitive</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn33">33</span><div class="q-txt">Martin Rees argues that exploring space with robots is superior:</div></div><select class="match-sel" id="q33" onchange="onSel(33)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn34">34</span><div class="q-txt">Daniel Wolpert claims that understanding brains requires studying control:</div></div><select class="match-sel" id="q34" onchange="onSel(34)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn35">35</span><div class="q-txt">Kathleen Richardson urges that we reject fiction in robot research:</div></div><select class="match-sel" id="q35" onchange="onSel(35)"><option value="">Select Option</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+          </div>
+          <div class="q-sec-hd"><h3>Questions 36–40 — Multiple Choice</h3><p>Choose the correct letter, <strong>A, B, C or D</strong>.</p></div>
+          <div class="q-sec-bd">
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn36">36</span><div class="q-txt">What does Martin Rees argue about space exploration?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(36,'A')"><input type="radio" name="q36" id="q36A"/><label>A &nbsp;Sending humans is highly recommended.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(36,'B')"><input type="radio" name="q36" id="q36B"/><label>B &nbsp;Robots are far safer and cost-effective than human crews.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(36,'C')"><input type="radio" name="q36" id="q36C"/><label>C &nbsp;Space exploration funding should be doubled.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(36,'D')"><input type="radio" name="q36" id="q36D"/><label>D &nbsp;AI is too slow to help space missions.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn37">37</span><div class="q-txt">What is Daniel Wolpert’s perspective on human brain function?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(37,'A')"><input type="radio" name="q37" id="q37A"/><label>A &nbsp;Its primary role is to play complex board games like chess.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(37,'B')"><input type="radio" name="q37" id="q37B"/><label>B &nbsp;It is designed to coordinate bodily movement.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(37,'C')"><input type="radio" name="q37" id="q37C"/><label>C &nbsp;It functions independently from physical actions.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(37,'D')"><input type="radio" name="q37" id="q37D"/><label>D &nbsp;RRobots have surpassed human movement capabilities.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn38">38</span><div class="q-txt">What danger does Kathleen Richardson warn against?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(38,'A')"><input type="radio" name="q38" id="q38A"/><label>A &nbsp;Robots taking over human labor completely.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(38,'B')"><input type="radio" name="q38" id="q38B"/><label>B &nbsp;Humans beginning to treat each other like machines.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(38,'C')"><input type="radio" name="q38" id="q38C"/><label>C &nbsp;The lack of research funding for robotics.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(38,'D')"><input type="radio" name="q38" id="q38D"/><label>D &nbsp;Science fiction becoming actual reality.</label></div>
+            </div>
+            <div class="q-block"><div class="q-lbl"><span class="q-num" id="qn39">39</span><div class="q-txt">What is the overall conclusion of Passage 3?</div></div>
+              <div class="mcq-opt" onclick="selMCQ(39,'A')"><input type="radio" name="q39" id="q39A"/><label>A &nbsp;We must stop all robot development immediately.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(39,'B')"><input type="radio" name="q39" id="q39B"/><label>B &nbsp;Space colonization is highly recommended.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(39,'C')"><input type="radio" name="q39" id="q39C"/><label>C &nbsp;A realistic approach focusing on practical tasks is needed.</label></div>
+              <div class="mcq-opt" onclick="selMCQ(39,'D')"><input type="radio" name="q39" id="q39D"/><label>D &nbsp;Humans will soon be completely obsolete.</label></div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /q-scroll -->
+    </div><!-- /q-panel -->
+  </div><!-- /exam-main -->
+
+
+  <!-- BOTTOM NAV -->
+  <div class="bot-nav">
+    <div class="q-nav-groups">
+      <div class="q-part-row">
+        <span class="q-part-lbl cur" id="plbl1">Part 1</span>
+        <div class="q-part-btns" id="pg1"></div>
+      </div>
+      <div class="q-part-row">
+        <span class="q-part-lbl" id="plbl2">Part 2</span>
+        <div class="q-part-btns" id="pg2"></div>
+      </div>
+      <div class="q-part-row">
+        <span class="q-part-lbl" id="plbl3">Part 3</span>
+        <div class="q-part-btns" id="pg3"></div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="nav-legend">
+        <span><span class="leg-dot" style="background:var(--green)"></span>Done</span>
+        <span><span class="leg-dot" style="background:var(--amber);border-radius:50%"></span>Review</span>
+        <span><span class="leg-dot" style="background:#dde2ec"></span>Blank</span>
+      </div>
+      <div class="nav-acts">
+        <button class="btn-flg" id="flagBtn" onclick="toggleFlag()">👁 Review</button>
+        <button class="btn-nav" onclick="prevQ()">◀</button>
+        <button class="btn-nav" onclick="nextQ()">▶</button>
+      </div>
+    </div>
+  </div>
+</div><!-- /screenExam -->
+
+<!-- ══════ SCREEN 3: RESULTS ══════ -->
+<div id="screenResults" class="screen">
+  <div class="res-card" id="resCard"></div>
+</div>
+
+<!-- ══════ SCREEN 4: ADMIN LOGIN ══════ -->
+<div id="screenAdminLogin" class="screen">
+  <div class="login-card">
+    <div class="login-dmi-top">
+      <img class="login-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div><div class="login-dmi-org">DMI Computer Education</div><div class="login-dmi-sub">IELTS Admin Portal</div></div>
+    </div>
+    <h2>Admin Login</h2>
+    <p class="sub">Enter the teacher password to access the student results dashboard.</p>
+    <div class="login-field"><label>Password</label><input type="password" id="adminPw" placeholder="Enter admin password…" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="login-err" id="loginErr">❌ Incorrect password. Please try again.</div>
+    <button class="btn-login" onclick="doLogin()">Access Dashboard →</button>
+    <div class="back-link" onclick="showScreen('screenLanding')">← Back to Registration</div>
+  </div>
+</div>
+
+<!-- ══════ SCREEN 5: ADMIN DASHBOARD ══════ -->
+<div id="screenAdmin" class="screen">
+  <div class="admin-top">
+    <div style="display:flex;align-items:center;gap:14px">
+      <img class="admin-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/>
+      <div><div class="admin-org">DMI <span>Computer Education</span></div><div class="admin-org-sub">IELTS Reading · Book 20 Test 3 · Teacher Dashboard</div></div>
+      <div class="admin-tag">Admin Panel</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="tb-btn" onclick="exportCSV()" style="background:rgba(255,255,255,.1)">⬇ CSV</button>
+      <button class="tb-btn" onclick="window.print()" style="background:rgba(255,255,255,.1)">🖨 Print</button>
+      <button class="tb-btn" onclick="clearAll()" style="background:rgba(192,32,42,.2);border-color:rgba(192,32,42,.4)">🗑 Clear All</button>
+      <button class="tb-btn" onclick="showScreen('screenLanding')">← Exit</button>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    <div class="admin-scroll">
+      <div class="admin-stats" id="adminStats"></div>
+      <div class="admin-panel">
+        <div class="ap-header"><h2>Student Exam Results</h2>
+          <div class="ap-tools">
+            <button class="ap-tool" onclick="sortR('name')">↕ Name</button>
+            <button class="ap-tool" onclick="sortR('score')">↕ Score</button>
+            <button class="ap-tool" onclick="sortR('date')">↕ Date</button>
+            <button class="ap-tool" onclick="sortR('branch')">↕ Branch</button>
+            <button class="ap-tool green" onclick="exportCSV()">⬇ CSV</button>
+            <button class="ap-tool prim" onclick="loadAdmin()">🔄 Refresh</button>
+          </div>
+        </div>
+        <div class="search-row"><input class="search-input" type="text" id="searchBox" placeholder="Search by name, ID, branch or email…" oninput="renderTable()"/></div>
+        <div id="tableWrap"></div>
+      </div>
+      <div style="text-align:center;padding:14px;font-size:11px;color:var(--muted)">DMI Computer Education · <a href="https://www.dmi.lk" target="_blank" style="color:var(--sky)">www.dmi.lk</a> · 0777 173 517 · <a href="mailto:info@dmi.lk" style="color:inherit">info@dmi.lk</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- Submit modal -->
+<div class="modal-ov" id="subModal">
+  <div class="modal">
+    <h2>Submit your test?</h2>
+    <p>Once submitted you cannot change your answers. Review flagged questions before submitting.</p>
+    <div class="modal-stats">
+      <div class="mstat"><div class="n" id="mAns">0</div><div class="l">Answered</div></div>
+      <div class="mstat"><div class="n" id="mUn">40</div><div class="l">Unanswered</div></div>
+      <div class="mstat"><div class="n" id="mFlg">0</div><div class="l">Flagged</div></div>
+    </div>
+    <div class="modal-btns">
+      <button class="mbtn sec" onclick="closeModal()">Continue Test</button>
+      <button class="mbtn prim" onclick="submitExam()">Submit Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div class="modal-ov" id="detailModal">
+  <div class="modal" style="max-width:640px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+      <img src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" style="width:36px;height:36px;border-radius:7px;object-fit:cover;border:2px solid var(--dmi-red)" onerror="this.style.display='none'"/>
+      <div><div style="font-size:14px;font-weight:700;color:var(--navy)">DMI Computer Education – Student Detail</div><div style="font-size:11px;color:var(--muted)">IELTS Academic Reading Exam Record (Book 20 Test 3)</div></div>
+    </div>
+    <div id="detailContent" class="detail-modal-content"></div>
+    <div class="modal-btns"><button class="mbtn prim" onclick="document.getElementById('detailModal').classList.remove('open')">Close</button></div>
+  </div>
+</div>
+
+<script>
+// ══ KEY ══
+const KEY={1:'potatoes', 2:'butter', 3:'meat', 4:'crystals', 5:'cellophane', 6:'tin', 7:'refrigerator', 8:'NOT GIVEN', 9:'TRUE', 10:'FALSE', 11:'TRUE', 12:'FALSE', 13:'NOT GIVEN', 14:'v', 15:'ii', 16:'iv', 17:'vii', 18:'iii', 19:'vi', 20:'C', 21:'E', 22:'B', 23:'D', 24:'tentacles', 25:'protection', 26:'colour', 27:'A', 28:'C', 29:'B', 30:'A', 31:'B', 32:'A', 33:'C', 34:'C', 35:'B', 36:'D', 37:'B', 38:'C', 39:'B', 40:'C'};
+
+// ══ STATE ══
+let student={}, answers={}, flagged=new Set(), curQ=1, curPart=1;
+let timeLeft=3600, timerInt, hlMode=false, fontSize=15;
+let allResults=[], sortKey='date';
+
+// ══ SCREEN ══
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+// ══ REGISTRATION ══
+function startExam(){
+  const req=[{id:'fname',fid:'f-fname',ok:v=>v.trim()},{id:'lname',fid:'f-lname',ok:v=>v.trim()},{id:'sid',fid:'f-sid',ok:v=>v.trim()},{id:'email',fid:'f-email',ok:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},{id:'school',fid:'f-school',ok:v=>v&&v!==''}];
+  let ok=true;
+  req.forEach(f=>{const el=document.getElementById(f.id),fe=document.getElementById(f.fid);if(!f.ok(el.value)){fe.classList.add('has-error');ok=false;}else fe.classList.remove('has-error');});
+  if(!ok){alert('Please fill in all required fields correctly before starting.');return;}
+  if(!document.getElementById('agree').checked){alert('Please tick the declaration checkbox to confirm you agree to the exam rules.');return;}
+  student={firstName:document.getElementById('fname').value.trim(),lastName:document.getElementById('lname').value.trim(),id:document.getElementById('sid').value.trim(),dob:document.getElementById('dob').value,email:document.getElementById('email').value.trim(),branch:document.getElementById('school').value,classGroup:document.getElementById('classgroup').value.trim(),nationality:document.getElementById('nationality').value.trim(),attempt:document.getElementById('attempt').value,startTime:new Date().toISOString(),uid:Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+  document.getElementById('chipName').textContent=student.firstName+' '+student.lastName;
+  showScreen('screenExam');
+  buildNav();
+  startTimer();
+  gotoSec(1);
+}
+
+// ══ TIMER ══
+function startTimer(){
+  timerInt=setInterval(()=>{
+    timeLeft--;
+    const m=String(Math.floor(timeLeft/60)).padStart(2,'0'),s=String(timeLeft%60).padStart(2,'0');
+    const el=document.getElementById('timer');
+    el.textContent=m+':'+s;
+    el.className='timer-box'+(timeLeft<=300?' danger':timeLeft<=600?' warn':'');
+    if(timeLeft<=0){clearInterval(timerInt);submitExam();}
+  },1000);
+}
+
+// ══ NAVIGATION ══
+function buildNav(){
+  const parts=[[1,13,1],[14,26,2],[27,40,3]];
+  parts.forEach(([s,e,p])=>{
+    const grid=document.getElementById('pg'+p);
+    grid.innerHTML='';
+    for(let i=s;i<=e;i++){
+      const b=document.createElement('button');
+      b.id='gn'+i; b.textContent=i; b.className='qg-btn'+(i===curQ?' cur':'');
+      if(flagged.has(i)) b.classList.add('flg');
+      else if(answers[i]!==undefined) b.classList.add('ans');
+      b.onclick=()=>goQ(i);
+      grid.appendChild(b);
+    }
+  });
+  refreshPartLabels();
+}
+
+function refreshPartLabels(){
+  for(let p=1;p<=3;p++) document.getElementById('plbl'+p).classList.toggle('cur',p===curPart);
+}
+
+function updateNavBtn(q){
+  const b=document.getElementById('gn'+q); if(!b) return;
+  b.classList.remove('ans','flg');
+  if(flagged.has(q)) b.classList.add('flg');
+  else if(answers[q]!==undefined) b.classList.add('ans');
+  document.getElementById('ansCount').textContent=Object.keys(answers).length;
+}
+
+function goQ(n){
+  const part=n<=13?1:n<=26?2:3;
+  if(part!==curPart) _switchSec(part);
+  const old=document.getElementById('gn'+curQ); if(old) old.classList.remove('cur');
+  curQ=n;
+  const cur=document.getElementById('gn'+n); if(cur){cur.classList.add('cur');cur.scrollIntoView({block:'nearest'});}
+  const qel=document.getElementById('qn'+n);
+  if(qel) setTimeout(()=>qel.scrollIntoView({behavior:'smooth',block:'center'}),60);
+  document.getElementById('flagBtn').classList.toggle('on',flagged.has(n));
+}
+
+function prevQ(){if(curQ>1) goQ(curQ-1);}
+function nextQ(){if(curQ<40) goQ(curQ+1);}
+function toggleFlag(){flagged.has(curQ)?flagged.delete(curQ):flagged.add(curQ);updateNavBtn(curQ);document.getElementById('flagBtn').classList.toggle('on',flagged.has(curQ));}
+
+// ══ SECTION SWITCH ══
+function gotoSec(s){
+  _switchSec(s);
+  const firstQ=s===1?1:s===2?14:27;
+  const old=document.getElementById('gn'+curQ); if(old) old.classList.remove('cur');
+  curQ=firstQ;
+  const cur=document.getElementById('gn'+curQ); if(cur) cur.classList.add('cur');
+  document.getElementById('flagBtn').classList.toggle('on',flagged.has(curQ));
+  document.getElementById('qScroll').scrollTop=0;
+  document.getElementById('pScroll').scrollTop=0;
+}
+
+function _switchSec(s){
+  curPart=s;
+  const pNames={1:'Passage 1 – Urban Farming',2:'Passage 2 – Forest management in Pennsylvania, USA',3:'Passage 3 – Conquering Earth\'s space junk problem'};
+  const qNames={1:'Part 1 – Questions 1–13',2:'Part 2 – Questions 14–26',3:'Part 3 – Questions 27–40'};
+  document.getElementById('pTitle').textContent=pNames[s];
+  document.getElementById('qPanelTitle').textContent=qNames[s];
+  ['p1','p2','p3'].forEach((id,i)=>document.getElementById(id).style.display=i===s-1?'':'none');
+  ['sec1','sec2','sec3'].forEach((id,i)=>document.getElementById(id).style.display=i===s-1?'':'none');
+  for(let t=1;t<=3;t++) document.getElementById('tab'+t).classList.toggle('active',t===s);
+  refreshPartLabels();
+}
+
+// ══ HIGHLIGHT SYSTEM ══
+function toggleHL(){
+  hlMode=!hlMode;
+  const lbl='🖊 '+(hlMode?'ON':'OFF');
+  document.getElementById('hlTopBtn').textContent='🖊 Highlight: '+(hlMode?'ON':'OFF');
+  document.getElementById('hlTopBtn').classList.toggle('hl-active',hlMode);
+  document.getElementById('hlPassBtn').textContent=lbl;
+  document.getElementById('hlPassBtn').classList.toggle('hl-on',hlMode);
+}
+
+function doHighlight(){
+  const sel=window.getSelection();
+  if(!sel||sel.isCollapsed||!sel.toString().trim()) return false;
+  const range=sel.getRangeAt(0);
+  const examMain=document.getElementById('examMain');
+  if(!examMain.contains(range.commonAncestorContainer)) return false;
+  try{
+    const span=document.createElement('mark');
+    span.className='hl-mark';
+    span.title='Click to remove highlight';
+    span.addEventListener('click',function(){
+      const parent=this.parentNode;
+      while(this.firstChild) parent.insertBefore(this.firstChild,this);
+      parent.removeChild(this);
+    });
+    range.surroundContents(span);
+  }catch(e){
+    try{
+      const frag=range.extractContents();
+      const span=document.createElement('mark');
+      span.className='hl-mark';
+      span.title='Click to remove highlight';
+      span.addEventListener('click',function(){const p=this.parentNode;while(this.firstChild)p.insertBefore(this.firstChild,this);p.removeChild(this);});
+      span.appendChild(frag);
+      range.insertNode(span);
+    }catch(e2){}
+  }
+  sel.removeAllRanges();
+  return true;
+}
+
+document.addEventListener('mouseup',function(e){
+  if(!document.getElementById('screenExam').classList.contains('active')) return;
+  if(!hlMode) return;
+  if(['INPUT','SELECT','TEXTAREA'].includes(e.target.tagName)) return;
+  const examMain=document.getElementById('examMain');
+  if(!examMain.contains(e.target)) return;
+  doHighlight();
+});
+
+// ══ CUSTOM CONTEXT MENU ══
+const ctxMenu=document.getElementById('ctxMenu');
+let ctxClickedSpan=null;
+
+document.addEventListener('contextmenu',function(e){
+  if(!document.getElementById('screenExam').classList.contains('active')) return;
+  const examMain=document.getElementById('examMain');
+  if(!examMain.contains(e.target)) return;
+  if(['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
+
+  e.preventDefault();
+
+  const sel=window.getSelection();
+  const hasSelection=sel&&!sel.isCollapsed&&sel.toString().trim().length>0;
+  const isHL=e.target.classList.contains('hl-mark')||e.target.closest&&e.target.closest('.hl-mark');
+  ctxClickedSpan=isHL?(e.target.classList.contains('hl-mark')?e.target:e.target.closest('.hl-mark')):null;
+
+  document.getElementById('ctxHL').style.display=hasSelection&&!isHL?'flex':'none';
+  document.getElementById('ctxRemHL').style.display=isHL?'flex':'none';
+  document.getElementById('ctxNote').style.display='flex';
+
+  let x=e.clientX+4, y=e.clientY+4;
+  ctxMenu.style.visibility='hidden'; ctxMenu.style.display='block';
+  const cw=ctxMenu.offsetWidth, ch=ctxMenu.offsetHeight;
+  ctxMenu.style.display='none'; ctxMenu.style.visibility='';
+  if(x+cw>window.innerWidth-8) x=window.innerWidth-cw-8;
+  if(y+ch>window.innerHeight-8) y=window.innerHeight-ch-8;
+  ctxMenu.style.left=x+'px'; ctxMenu.style.top=y+'px';
+  ctxMenu.classList.add('visible');
+});
+
+document.getElementById('ctxHL').addEventListener('click',function(){
+  doHighlight();
+  hideCtx();
+});
+document.getElementById('ctxRemHL').addEventListener('click',function(){
+  if(ctxClickedSpan){const p=ctxClickedSpan.parentNode;while(ctxClickedSpan.firstChild)p.insertBefore(ctxClickedSpan.firstChild,ctxClickedSpan);p.removeChild(ctxClickedSpan);}
+  hideCtx();
+});
+document.getElementById('ctxNote').addEventListener('click',function(){
+  const sel=window.getSelection();
+  const txt=sel?sel.toString().trim():'';
+  if(txt){
+    const ta=document.getElementById('notesTA');
+    ta.value+=(ta.value?'\n\n':'')+'"'+txt+'"';
+    document.getElementById('notesPanel').style.display='flex';
+  }
+  hideCtx();
+});
+function hideCtx(){ctxMenu.classList.remove('visible');}
+document.addEventListener('click',()=>hideCtx());
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideCtx();});
+
+// ══ ANSWERS ══
+function onFill(n){const inp=document.getElementById('q'+n),v=inp.value.trim();if(v){answers[n]=v;inp.classList.add('got');}else{delete answers[n];inp.classList.remove('got');}document.getElementById('qn'+n).classList.toggle('ans',!!v);updateNavBtn(n);}
+function selMCQ(n,v){answers[n]=v;document.querySelectorAll(`.mcq-opt input[name="q${n}"]`).forEach(r=>r.parentElement.classList.remove('sel'));const r=document.getElementById('q'+n+v);if(r){r.checked=true;r.parentElement.classList.add('sel');}document.getElementById('qn'+n).classList.add('ans');updateNavBtn(n);}
+function selTFNG(n,elOrVal){
+  const v=(typeof elOrVal==='string')?elOrVal:elOrVal.value;
+  const sel=document.getElementById('ts'+n);
+  if(sel){
+    sel.className='tfng-sel';
+    if(v==='T') sel.classList.add('sT');
+    else if(v==='F') sel.classList.add('sF');
+    else if(v==='NG') sel.classList.add('sN');
+  }
+  if(v){answers[n]=v;document.getElementById('qn'+n).classList.add('ans');}
+  else{delete answers[n];document.getElementById('qn'+n).classList.remove('ans');}
+  updateNavBtn(n);
+}
+function onSel(n){const sel=document.getElementById('q'+n),v=sel.value;if(v){answers[n]=v;sel.classList.add('got');document.getElementById('qn'+n).classList.add('ans');}else{delete answers[n];sel.classList.remove('got');document.getElementById('qn'+n).classList.remove('ans');}updateNavBtn(n);}
+
+// ══ TOOLS ══
+function toggleNotes(){const n=document.getElementById('notesPanel');n.style.display=n.style.display==='none'||!n.style.display?'flex':'none';}
+function chFS(d){fontSize=Math.min(20,Math.max(12,fontSize+d));document.getElementById('pScroll').style.fontSize=fontSize+'px';}
+
+// ══ SPLITTER ══
+(()=>{const sp=document.getElementById('splitter'),pp=document.getElementById('passagePanel');let dr=false,sx,sw;sp.addEventListener('mousedown',e=>{dr=true;sx=e.clientX;sw=pp.offsetWidth;sp.classList.add('drag');document.body.style.userSelect='none';});document.addEventListener('mousemove',e=>{if(!dr)return;pp.style.width=Math.min(Math.max(280,sw+e.clientX-sx),window.innerWidth-280)+'px';});document.addEventListener('mouseup',()=>{dr=false;sp.classList.remove('drag');document.body.style.userSelect='';});})();
+
+// ══ MODALS ══
+function showSubmitModal(){const a=Object.keys(answers).length;document.getElementById('mAns').textContent=a;document.getElementById('mUn').textContent=40-a;document.getElementById('mFlg').textContent=flagged.size;document.getElementById('subModal').classList.add('open');}
+function closeModal(){document.getElementById('subModal').classList.remove('open');}
+document.getElementById('subModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+
+// ══ SCORING ══
+function calcBand(c){if(c>=39)return 9;if(c>=37)return 8.5;if(c>=35)return 8;if(c>=33)return 7.5;if(c>=30)return 7;if(c>=27)return 6.5;if(c>=23)return 6;if(c>=19)return 5.5;if(c>=15)return 5;if(c>=13)return 4.5;if(c>=10)return 4;return 3;}
+
+// ══ SUBMIT ══
+function submitExam(){
+  clearInterval(timerInt);
+  document.getElementById('subModal').classList.remove('open');
+  const endTime=new Date().toISOString(),taken=3600-timeLeft;
+  let correct=0;const rows=[];
+  for(let i=1;i<=40;i++){const ua=answers[i],ca=KEY[i];let ok=false;if(ua!==undefined){if(i===20||i===21){const a20=(answers[20]||'').trim().toLowerCase();const a21=(answers[21]||'').trim().toLowerCase();ok=((a20==='c'||a20==='e')&&(a21==='c'||a21==='e')&&(a20!==a21));}else if(i===22||i===23){const a22=(answers[22]||'').trim().toLowerCase();const a23=(answers[23]||'').trim().toLowerCase();ok=((a22==='b'||a22==='d')&&(a23==='b'||a23==='d')&&(a22!==a23));}else{const u=String(ua).trim().toLowerCase().replace(/[,.']/g,''),c=String(ca).trim().toLowerCase().replace(/[,.']/g,'');ok=u===c||u.includes(c)||c.includes(u);}}if(ok)correct++;rows.push({q:i,ua,ca,ok});}
+  const band=calcBand(correct),pct=Math.round(correct/40*100);
+  const record={...student,endTime,timeTakenMin:Math.floor(taken/60),timeTakenSec:taken%60,correct,total:40,band,pct,answers:JSON.parse(JSON.stringify(answers)),rows};
+  try{const raw=safeGet('dmi:ielts:b20t3:results');const list=raw?JSON.parse(raw):[];list.push(record);localStorage.setItem('dmi:ielts:b20t3:results',JSON.stringify(list));}catch(e){console.warn('Storage:',e);}
+  showScreen('screenResults');
+  renderResults(record,rows,correct,band,pct,Math.floor(taken/60),taken%60);
+}
+function safeGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+
+// ══ RESULTS ══
+function renderResults(rec,rows,correct,band,pct,mins,secs){
+  const bc=band>=7?'var(--green)':band>=5?'var(--amber)':'var(--dmi-red)';
+  const bg=band>=7?'var(--green-l)':band>=5?'var(--amber-l)':'var(--dmi-red-light)';
+  const dateStr=new Date().toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('resCard').innerHTML=`
+    <div class="res-dmi-header"><div class="res-dmi-left"><img class="res-dmi-logo" src="https://www.dmi.lk/wp/wp-content/uploads/2023/05/logo.jpg" alt="DMI" onerror="this.style.display='none'"/><div><div class="res-dmi-org">DMI Computer Education</div><div class="res-dmi-sub">IELTS Academic Reading – Cambridge Book 20 Test 3</div></div></div><div class="res-dmi-right">📞 0777 173 517<br>✉️ Info@dmi.lk<br>🌐 www.dmi.lk</div></div>
+    <div class="res-title"><div class="tag">✓ Test Submitted</div><h2>Your Reading Results</h2><p>${dateStr}</p></div>
+    <div class="res-scores"><div class="res-score-box" style="background:var(--bg)"><div class="big">${correct}<span style="font-size:18px;color:var(--muted)">/40</span></div><div class="lbl">Correct Answers</div></div><div class="res-score-box" style="background:${bg}"><div class="big" style="color:${bc}">Band ${band}</div><div class="lbl">Estimated Band Score</div></div><div class="res-score-box" style="background:var(--bg)"><div class="big">${pct}%</div><div class="lbl">Accuracy</div></div></div>
+    <div class="student-info-box">
+      <div class="si-item"><div class="k">Name</div><div class="v">${rec.firstName} ${rec.lastName}</div></div>
+      <div class="si-item"><div class="k">Student ID</div><div class="v">${rec.id}</div></div>
+      <div class="si-item"><div class="k">DMI Branch</div><div class="v">${rec.branch}</div></div>
+      <div class="si-item"><div class="k">Email</div><div class="v">${rec.email}</div></div>
+      <div class="si-item"><div class="k">Time Taken</div><div class="v">${mins}m ${secs}s</div></div>
+      <div class="si-item"><div class="k">Attempt</div><div class="v">${rec.attempt}</div></div>
+      ${rec.classGroup?`<div class="si-item"><div class="k">Class</div><div class="v">${rec.classGroup}</div></div>`:''}
+      ${rec.nationality?`<div class="si-item"><div class="k">Nationality</div><div class="v">${rec.nationality}</div></div>`:''}
+    </div>
+    <div class="review-section"><h3>Answer Review – All 40 Questions</h3>${rows.map(r=>`<div class="rev-row ${r.ok?'ok':r.ua===undefined?'skip':'bad'}"><span class="rev-qn">Q${r.q}</span><div class="rev-detail">Your answer: <strong style="color:${r.ok?'var(--green)':r.ua===undefined?'#999':'var(--dmi-red)'}">${r.ua||'—'}</strong>${!r.ok?` · Correct: <strong style="color:var(--green)">${r.ca}</strong>`:''}</div><span>${r.ok?'✅':r.ua===undefined?'⬜':'❌'}</span></div>`).join('')}</div>
+    <div class="res-actions"><button class="res-btn sec" onclick="location.reload()">Take Test Again</button><button class="res-btn prim" onclick="window.print()">🖨 Print Results</button></div>
+    <div class="res-footer-note">This result is generated by DMI Computer Education's IELTS Practice Portal.<br>For official IELTS registration, contact us at <strong>0777 173 517</strong> or visit <strong>www.dmi.lk</strong><br>Branches: Jaffna · Nelliady · Chunnakam · Sandilipay · Chavakachcheri · Kilinochchi</div>`;
+}
+
+// ══ ADMIN ══
+function showAdminLogin(){showScreen('screenAdminLogin');document.getElementById('adminPw').value='';document.getElementById('loginErr').style.display='none';}
+function doLogin(){if(document.getElementById('adminPw').value==='admin123'){showScreen('screenAdmin');loadAdmin();}else document.getElementById('loginErr').style.display='block';}
+function loadAdmin(){try{const r=safeGet('dmi:ielts:b20t3:results');allResults=r?JSON.parse(r):[];}catch(e){allResults=[];}renderAdminStats();renderTable();}
+function renderAdminStats(){const t=allResults.length,avg=t?Math.round(allResults.reduce((s,r)=>s+r.correct,0)/t):0,avgB=t?(allResults.reduce((s,r)=>s+r.band,0)/t).toFixed(1):0,top=t?Math.max(...allResults.map(r=>r.correct)):0;document.getElementById('adminStats').innerHTML=`<div class="a-stat"><div class="a-stat-icon red">👥</div><div><div class="a-stat-val">${t}</div><div class="a-stat-lbl">Total Students</div></div></div><div class="a-stat"><div class="a-stat-icon green">✅</div><div><div class="a-stat-val">${avg}<span style="font-size:14px;color:var(--muted)">/40</span></div><div class="a-stat-lbl">Avg. Score</div></div></div><div class="a-stat"><div class="a-stat-icon amber">🎯</div><div><div class="a-stat-val">B${avgB}</div><div class="a-stat-lbl">Avg. Band Score</div></div></div><div class="a-stat"><div class="a-stat-icon blue">🏆</div><div><div class="a-stat-val">${top}<span style="font-size:14px;color:var(--muted)">/40</span></div><div class="a-stat-lbl">Top Score</div></div></div>`;}
+function sortR(k){sortKey=k;renderTable();}
+function renderTable(){
+  const q=(document.getElementById('searchBox').value||'').toLowerCase();
+  let data=[...allResults];
+  if(q) data=data.filter(r=>(r.firstName+' '+r.lastName).toLowerCase().includes(q)||r.id.toLowerCase().includes(q)||(r.branch||'').toLowerCase().includes(q)||r.email.toLowerCase().includes(q));
+  if(sortKey==='name') data.sort((a,b)=>(a.lastName+a.firstName).localeCompare(b.lastName+b.firstName));
+  else if(sortKey==='score') data.sort((a,b)=>b.correct-a.correct);
+  else if(sortKey==='branch') data.sort((a,b)=>(a.branch||'').localeCompare(b.branch||''));
+  else data.sort((a,b)=>new Date(b.startTime)-new Date(a.startTime));
+  const wrap=document.getElementById('tableWrap');
+  if(!data.length){wrap.innerHTML=`<div class="no-data"><div class="icon">📋</div><p>${allResults.length?'No results match your search.':'No students have completed the exam yet.'}</p></div>`;return;}
+  wrap.innerHTML=`<table class="results-table"><thead><tr><th>#</th><th>Student Name</th><th>ID</th><th>DMI Branch</th><th>Email</th><th>Score</th><th>Band</th><th>%</th><th>Time</th><th>Date</th><th>Actions</th></tr></thead><tbody>${data.map((r,i)=>{const bc=r.band>=7?'bhi':r.band>=5?'bmid':'blo';const d=new Date(r.startTime).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});const oi=allResults.indexOf(r);return`<tr><td style="color:var(--muted)">${i+1}</td><td style="font-weight:600;color:var(--navy)">${r.firstName} ${r.lastName}</td><td style="font-family:monospace;color:var(--sky);font-size:12px">${r.id}</td><td style="font-size:12px">${r.branch||'—'}${r.classGroup?' · '+r.classGroup:''}</td><td style="color:var(--muted);font-size:11px">${r.email}</td><td><div class="score-bar-wrap"><div class="score-bar"><div class="score-bar-fill" style="width:${r.pct}%"></div></div><span style="font-weight:700;min-width:34px">${r.correct}/40</span></div></td><td><span class="band-pill ${bc}">Band ${r.band}</span></td><td style="font-weight:600">${r.pct}%</td><td style="font-size:11px;color:var(--muted)">${r.timeTakenMin}m${r.timeTakenSec}s</td><td style="font-size:11px;color:var(--muted)">${d}</td><td><button class="detail-btn" onclick="showDetail(${oi})">View</button><button class="delete-btn" onclick="deleteR(${oi})">Del</button></td></tr>`}).join('')}</tbody></table>`;
+}
+function showDetail(idx){const r=allResults[idx];if(!r)return;document.getElementById('detailContent').innerHTML=`<div class="dm-grid"><div class="dm-item"><div class="k">Full Name</div><div class="v">${r.firstName} ${r.lastName}</div></div><div class="dm-item"><div class="k">Student ID</div><div class="v">${r.id}</div></div><div class="dm-item"><div class="k">Email</div><div class="v">${r.email}</div></div><div class="dm-item"><div class="k">DMI Branch</div><div class="v">${r.branch||'—'}</div></div>${r.classGroup?`<div class="dm-item"><div class="k">Class</div><div class="v">${r.classGroup}</div></div>`:''}${r.dob?`<div class="dm-item"><div class="k">Date of Birth</div><div class="v">${r.dob}</div></div>`:''}${r.nationality?`<div class="dm-item"><div class="k">Nationality</div><div class="v">${r.nationality}</div></div>`:''}<div class="dm-item"><div class="k">Attempt</div><div class="v">${r.attempt}</div></div><div class="dm-item"><div class="k">Score / Band</div><div class="v">${r.correct}/40 · Band ${r.band}</div></div><div class="dm-item"><div class="k">Accuracy</div><div class="v">${r.pct}%</div></div><div class="dm-item"><div class="k">Time Taken</div><div class="v">${r.timeTakenMin}m ${r.timeTakenSec}s</div></div><div class="dm-item"><div class="k">Start Time</div><div class="v">${new Date(r.startTime).toLocaleString()}</div></div></div><div class="dm-answers"><table><thead><tr><th>Q</th><th>Student Answer</th><th>Correct</th><th>Result</th></tr></thead><tbody>${(r.rows||[]).map(row=>`<tr class="${row.ok?'ok':row.ua===undefined?'':'bad'}"><td>${row.q}</td><td>${row.ua||'—'}</td><td>${row.ca}</td><td>${row.ok?'✅':row.ua===undefined?'⬜':'❌'}</td></tr>`).join('')}</tbody></table></div>`;document.getElementById('detailModal').classList.add('open');}
+function deleteR(idx){if(!confirm('Delete this student record?'))return;allResults.splice(idx,1);localStorage.setItem('dmi:ielts:b20t3:results',JSON.stringify(allResults));renderAdminStats();renderTable();}
+function clearAll(){if(!confirm('Delete ALL student records? This cannot be undone.'))return;allResults=[];localStorage.setItem('dmi:ielts:b20t3:results','[]');renderAdminStats();renderTable();}
+function exportCSV(){
+  if(!allResults.length){alert('No results to export.');return;}
+  const h=['Name','Student ID','Email','DMI Branch','Class','Nationality','Attempt','Score','Band','Accuracy%','TimeTaken','Start','End'];
+  const rows=allResults.map(r=>[
+    '"'+r.firstName+' '+r.lastName+'"',
+    r.id,r.email,r.branch||'',r.classGroup||'',r.nationality||'',
+    r.attempt,r.correct+'/40',r.band,r.pct+'%',
+    r.timeTakenMin+'m'+r.timeTakenSec+'s',
+    new Date(r.startTime).toLocaleString(),
+    r.endTime?new Date(r.endTime).toLocaleString():''
+  ].join(','));
+  const csv=[h.join(','),...rows].join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='DMI_IELTS_Book20T3_Results_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+</script>
+</body>
+</html>
