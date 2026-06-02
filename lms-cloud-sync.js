@@ -31,6 +31,9 @@
   // === CONFIG ===
   var API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
   var SYNC_PREFIX = 'lms_'; // every localStorage key starting with this is synced
+  // Per-device keys that should NEVER sync to/from the cloud (otherwise device A's
+  // session would clobber device B's). Anything in this set stays local-only.
+  var LOCAL_ONLY_KEYS = { 'lms_session': true };
 
   // ===== Pill UI =====
   function makePill() {
@@ -76,14 +79,17 @@
         // Cloud empty → first run. Whatever this device has becomes the seed.
         return { ok: true, seeded: false };
       }
-      // Wipe local lms_* and apply cloud version
+      // Wipe local lms_* (except local-only) and apply cloud version
       var toRemove = [];
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i);
-        if (k && k.indexOf(SYNC_PREFIX) === 0) toRemove.push(k);
+        if (k && k.indexOf(SYNC_PREFIX) === 0 && !LOCAL_ONLY_KEYS[k]) toRemove.push(k);
       }
       toRemove.forEach(function (k) { localStorage.removeItem(k); });
-      cloudKeys.forEach(function (k) { localStorage.setItem(k, cloud[k]); });
+      cloudKeys.forEach(function (k) {
+        if (LOCAL_ONLY_KEYS[k]) return; // never restore session from cloud
+        localStorage.setItem(k, cloud[k]);
+      });
       return { ok: true, applied: cloudKeys.length };
     } catch (e) {
       console.warn('[DMI Sync] initial pull failed:', e.message);
@@ -93,13 +99,50 @@
   var initial = pullSync();
   window.__DMI_SYNC_INITIAL = initial;
 
+  // ===== SINGLE SIGN-ON =====
+  // If signed in via the main DMI LMS (login.html), auto-create a matching user
+  // in the old LMS's lms_users list and set lms_session so the old LMS treats
+  // them as already logged in. Teachers become old-LMS admins; students stay
+  // students. Runs every page load — keeps name/role in sync if they change.
+  function applySSO() {
+    try {
+      var dmiUserRaw = localStorage.getItem('dmi_lms_user');
+      var dmiRole = localStorage.getItem('dmi_lms_role');
+      if (!dmiUserRaw) return false;
+      var dmiUser = JSON.parse(dmiUserRaw);
+      if (!dmiUser || !dmiUser.email) return false;
+      var ssoUsername = 'dmi:' + String(dmiUser.email).toLowerCase();
+      var ssoRole = (dmiRole === 'teacher') ? 'admin' : 'student';
+      var ssoName = dmiUser.name || dmiUser.email;
+      var users = [];
+      try { users = JSON.parse(localStorage.getItem('lms_users') || '[]') || []; } catch (e) {}
+      var idx = -1;
+      for (var i = 0; i < users.length; i++) { if (users[i].username === ssoUsername) { idx = i; break; } }
+      if (idx < 0) {
+        users.push({ username: ssoUsername, password: 'sso', name: ssoName, role: ssoRole });
+      } else {
+        users[idx].role = ssoRole; // keep role current
+        users[idx].name = ssoName;
+      }
+      // Use the original setItem (we're bypassing the wrapper because it isn't installed yet).
+      localStorage.setItem('lms_users', JSON.stringify(users));
+      localStorage.setItem('lms_session', ssoUsername);
+      return true;
+    } catch (e) {
+      console.warn('[DMI Sync] SSO failed:', e.message);
+      return false;
+    }
+  }
+  var ssoApplied = applySSO();
+  window.__DMI_SYNC_SSO = ssoApplied;
+
   // ===== PUSH (debounced) =====
   var pushTimer = null;
   function snapshot() {
     var out = {};
     for (var i = 0; i < localStorage.length; i++) {
       var k = localStorage.key(i);
-      if (k && k.indexOf(SYNC_PREFIX) === 0) out[k] = localStorage.getItem(k);
+      if (k && k.indexOf(SYNC_PREFIX) === 0 && !LOCAL_ONLY_KEYS[k]) out[k] = localStorage.getItem(k);
     }
     return out;
   }
@@ -159,12 +202,24 @@
     status: function () { return window.__DMI_SYNC_INITIAL; }
   };
 
-  // Ready event
+  // ===== Hook old LMS logout so it also signs out of DMI =====
+  // The old LMS exposes window.logout. We wrap it after DOM is ready.
   window.addEventListener('DOMContentLoaded', function () {
     if (initial.ok) {
       if (initial.applied) pillSet('ok');
     } else {
       pillSet('err');
+    }
+    if (typeof window.logout === 'function' && !window.logout._dmiWrapped) {
+      var orig = window.logout;
+      window.logout = function () {
+        try { localStorage.removeItem('dmi_lms_user'); } catch (e) {}
+        try { localStorage.removeItem('dmi_lms_role'); } catch (e) {}
+        try { localStorage.removeItem('lms_session'); } catch (e) {}
+        // Bounce to the DMI login screen (one folder up)
+        location.href = '../login.html';
+      };
+      window.logout._dmiWrapped = true;
     }
   });
 })();
