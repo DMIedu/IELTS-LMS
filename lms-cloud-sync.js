@@ -63,41 +63,79 @@
     else { p.style.opacity = '0'; }
   }
 
-  // ===== INITIAL PULL (synchronous, runs before main script) =====
-  function pullSync() {
-    try {
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', API_URL, false); // synchronous so main script waits
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      xhr.send('action=getLMSData');
-      if (xhr.status !== 200) throw new Error('HTTP ' + xhr.status);
-      var res = JSON.parse(xhr.responseText);
-      if (!res.ok) throw new Error(res.error || 'unknown server error');
-      var cloud = res.data || {};
-      var cloudKeys = Object.keys(cloud);
-      if (cloudKeys.length === 0) {
-        // Cloud empty → first run. Whatever this device has becomes the seed.
-        return { ok: true, seeded: false };
-      }
-      // Wipe local lms_* (except local-only) and apply cloud version
-      var toRemove = [];
-      for (var i = 0; i < localStorage.length; i++) {
-        var k = localStorage.key(i);
-        if (k && k.indexOf(SYNC_PREFIX) === 0 && !LOCAL_ONLY_KEYS[k]) toRemove.push(k);
-      }
-      toRemove.forEach(function (k) { localStorage.removeItem(k); });
-      cloudKeys.forEach(function (k) {
-        if (LOCAL_ONLY_KEYS[k]) return; // never restore session from cloud
-        localStorage.setItem(k, cloud[k]);
-      });
-      return { ok: true, applied: cloudKeys.length };
-    } catch (e) {
-      console.warn('[DMI Sync] initial pull failed:', e.message);
-      return { ok: false, error: e.message };
+  // ===== INITIAL PULL (async — modern browsers block sync XHR cross-origin) =====
+  // Strategy: kick off async pull immediately. When it completes, if the cloud
+  // has different data than the local copy, apply it and reload the page ONCE
+  // per session so the LMS re-renders with the fresh data.
+  function snapshotLocal() {
+    var out = {};
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf(SYNC_PREFIX) === 0 && !LOCAL_ONLY_KEYS[k]) out[k] = localStorage.getItem(k);
     }
+    return out;
   }
-  var initial = pullSync();
-  window.__DMI_SYNC_INITIAL = initial;
+  function dataChanged(cloud, localData) {
+    var aKeys = Object.keys(cloud).sort();
+    var bKeys = Object.keys(localData).sort();
+    if (aKeys.length !== bKeys.length) return true;
+    for (var i = 0; i < aKeys.length; i++) {
+      if (aKeys[i] !== bKeys[i]) return true;
+      if (cloud[aKeys[i]] !== localData[aKeys[i]]) return true;
+    }
+    return false;
+  }
+  function applyCloudToLocal(cloud) {
+    var toRemove = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && k.indexOf(SYNC_PREFIX) === 0 && !LOCAL_ONLY_KEYS[k]) toRemove.push(k);
+    }
+    toRemove.forEach(function (k) { localStorage.removeItem(k); });
+    Object.keys(cloud).forEach(function (k) {
+      if (LOCAL_ONLY_KEYS[k]) return;
+      // Bypass our wrapped setItem so this isn't pushed back as a write.
+      origSetItem.call(localStorage, k, cloud[k]);
+    });
+  }
+  function pullAsync() {
+    pillSet('syncing');
+    var body = new URLSearchParams({ action: 'getLMSData' });
+    return fetch(API_URL, { method: 'POST', body: body })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.ok) throw new Error((res && res.error) || 'server error');
+        var cloud = res.data || {};
+        if (Object.keys(cloud).length === 0) {
+          pillSet('ok');
+          return { ok: true, seeded: false };
+        }
+        var localData = snapshotLocal();
+        var changed = dataChanged(cloud, localData);
+        applyCloudToLocal(cloud);
+        pillSet('ok');
+        // Reload at most once per session so the LMS re-renders with the fresh data
+        if (changed && !sessionStorage.getItem('dmiSyncedThisSession')) {
+          sessionStorage.setItem('dmiSyncedThisSession', '1');
+          location.reload();
+        } else {
+          sessionStorage.setItem('dmiSyncedThisSession', '1');
+        }
+        return { ok: true, applied: Object.keys(cloud).length, changed: changed };
+      })
+      .catch(function (e) {
+        console.warn('[DMI Sync] pull failed:', e.message);
+        pillSet('err');
+        return { ok: false, error: e.message };
+      });
+  }
+  // Capture original setItem BEFORE we wrap it below.
+  var origSetItem = Storage.prototype.setItem;
+  // Kick off the pull immediately. The main script keeps running with whatever
+  // is in localStorage right now; when the pull resolves we reload (once) if
+  // anything was different.
+  var __pullPromise = pullAsync();
+  window.__DMI_SYNC_INITIAL = __pullPromise;
 
   // ===== SINGLE SIGN-ON =====
   // If signed in via the main DMI LMS (login.html), auto-create a matching user
@@ -124,9 +162,9 @@
         users[idx].role = ssoRole; // keep role current
         users[idx].name = ssoName;
       }
-      // Use the original setItem (we're bypassing the wrapper because it isn't installed yet).
-      localStorage.setItem('lms_users', JSON.stringify(users));
-      localStorage.setItem('lms_session', ssoUsername);
+      // Use the original setItem so this doesn't bounce back as a push.
+      origSetItem.call(localStorage, 'lms_users', JSON.stringify(users));
+      origSetItem.call(localStorage, 'lms_session', ssoUsername);
       return true;
     } catch (e) {
       console.warn('[DMI Sync] SSO failed:', e.message);
@@ -158,14 +196,29 @@
       })
       .catch(function () { pillSet('err'); });
   }
+  /** Blocking push — used right before the page navigates away so nothing is lost. */
+  function pushSync() {
+    try {
+      clearTimeout(pushTimer);
+      pushTimer = null;
+      var data = JSON.stringify(snapshot());
+      var body = 'action=setLMSData&payload=' + encodeURIComponent(data);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', API_URL, false); // synchronous so navigation waits
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.send(body);
+    } catch (e) {
+      console.warn('[DMI Sync] flush on unload failed:', e.message);
+    }
+  }
   function schedulePush() {
     pillSet('syncing');
     clearTimeout(pushTimer);
-    pushTimer = setTimeout(pushNow, 1500);
+    pushTimer = setTimeout(pushNow, 500); // batch quick bursts but push fast
   }
 
   // ===== Hook every localStorage write =====
-  var origSetItem = Storage.prototype.setItem;
+  // origSetItem was captured above (before pullAsync was called).
   var origRemoveItem = Storage.prototype.removeItem;
   var origClear = Storage.prototype.clear;
 
@@ -193,26 +246,22 @@
   window.DMI_LMS_SYNC = {
     /** Force an immediate push. Useful from an admin button. */
     pushNow: pushNow,
-    /** Force a pull and reload. Useful from a Refresh button. */
+    /** Force a pull. Will reload automatically if data changed. */
     pullAndReload: function () {
-      pullSync();
-      location.reload();
+      sessionStorage.removeItem('dmiSyncedThisSession');
+      return pullAsync();
     },
-    /** Returns { ok, applied?, seeded?, error? } from the initial sync. */
-    status: function () { return window.__DMI_SYNC_INITIAL; }
+    /** Returns the pull-in-progress Promise so callers can await. */
+    ready: function () { return __pullPromise; }
   };
 
   // ===== Hook old LMS logout so it also signs out of DMI =====
   // The old LMS exposes window.logout. We wrap it after DOM is ready.
   window.addEventListener('DOMContentLoaded', function () {
-    if (initial.ok) {
-      if (initial.applied) pillSet('ok');
-    } else {
-      pillSet('err');
-    }
     if (typeof window.logout === 'function' && !window.logout._dmiWrapped) {
-      var orig = window.logout;
       window.logout = function () {
+        // Make sure any pending edits are saved to the cloud first
+        if (pushTimer) pushSync();
         try { localStorage.removeItem('dmi_lms_user'); } catch (e) {}
         try { localStorage.removeItem('dmi_lms_role'); } catch (e) {}
         try { localStorage.removeItem('lms_session'); } catch (e) {}
@@ -220,6 +269,29 @@
         location.href = '../login.html';
       };
       window.logout._dmiWrapped = true;
+    }
+  });
+
+  // ===== Flush pending pushes before the tab closes / navigates =====
+  // If the user edits something and then closes the tab or navigates within
+  // the 1.5s debounce window, this catches the pending push so nothing is lost.
+  window.addEventListener('beforeunload', function () { if (pushTimer) pushSync(); });
+  // Best-effort capture for "Save Changes" buttons that don't navigate but
+  // page is hidden — sendBeacon ensures the request goes out even on mobile.
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden' && pushTimer) {
+      try {
+        var data = JSON.stringify(snapshot());
+        var body = new Blob(
+          ['action=setLMSData&payload=' + encodeURIComponent(data)],
+          { type: 'application/x-www-form-urlencoded' }
+        );
+        if (navigator.sendBeacon) {
+          navigator.sendBeacon(API_URL, body);
+          clearTimeout(pushTimer);
+          pushTimer = null;
+        }
+      } catch (e) {}
     }
   });
 })();
