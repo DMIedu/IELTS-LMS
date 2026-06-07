@@ -179,11 +179,25 @@
   var ssoApplied = applySSO();
   window.__DMI_SYNC_SSO = ssoApplied;
   // Re-apply SSO after the pull resolves — the pull wipes lms_users with the
-  // cloud version, which may not yet contain THIS device's SSO entry. Without
-  // re-applying, the OLD LMS bootstrap finds lms_session pointing at a user
-  // that no longer exists and falls through to the login screen.
+  // cloud version, which may not yet contain THIS device's SSO entry. If the
+  // SSO entry now exists but the OLD LMS bootstrap already rendered the login
+  // screen (because the entry was missing at boot), reload so the bootstrap
+  // sees the user and shows the app instead.
   __pullPromise.then(function () {
-    applySSO();
+    try {
+      var beforeUsers = JSON.parse(localStorage.getItem('lms_users') || '[]');
+      var sess = localStorage.getItem('lms_session');
+      var hadUserBefore = sess && beforeUsers.some(function(u){ return u.username === sess; });
+      applySSO();
+      var afterUsers = JSON.parse(localStorage.getItem('lms_users') || '[]');
+      var hasUserAfter = sess && afterUsers.some(function(u){ return u.username === sess; });
+      // If SSO just added the matching user AND we haven't reloaded yet this
+      // session, reload so the bootstrap can find the user and skip login.
+      if (!hadUserBefore && hasUserAfter && !sessionStorage.getItem('dmiSSOReloaded')) {
+        sessionStorage.setItem('dmiSSOReloaded', '1');
+        setTimeout(function(){ location.reload(); }, 200);
+      }
+    } catch (e) { /* ignore */ }
   }).catch(function () {});
 
   // ===== PUSH (debounced) =====
