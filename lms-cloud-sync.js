@@ -162,8 +162,13 @@
         users[idx].role = ssoRole; // keep role current
         users[idx].name = ssoName;
       }
-      // Use the original setItem so this doesn't bounce back as a push.
-      origSetItem.call(localStorage, 'lms_users', JSON.stringify(users));
+      // lms_users CHANGES need to reach the cloud (otherwise this device is the
+      // only place that knows about the SSO user). Use the wrapped setItem so
+      // the change is pushed. lms_session is per-device → bypass push.
+      var usersChanged = (idx < 0) || (idx >= 0 && (users[idx].role !== ssoRole || users[idx].name !== ssoName));
+      if (usersChanged) {
+        localStorage.setItem('lms_users', JSON.stringify(users)); // wrapped → push
+      }
       origSetItem.call(localStorage, 'lms_session', ssoUsername);
       return true;
     } catch (e) {
@@ -173,6 +178,13 @@
   }
   var ssoApplied = applySSO();
   window.__DMI_SYNC_SSO = ssoApplied;
+  // Re-apply SSO after the pull resolves — the pull wipes lms_users with the
+  // cloud version, which may not yet contain THIS device's SSO entry. Without
+  // re-applying, the OLD LMS bootstrap finds lms_session pointing at a user
+  // that no longer exists and falls through to the login screen.
+  __pullPromise.then(function () {
+    applySSO();
+  }).catch(function () {});
 
   // ===== PUSH (debounced) =====
   var pushTimer = null;
