@@ -390,3 +390,25 @@ Successful editor checks do not validate web-app deployment/browser behavior.
 
 This follow-up adds test-setup/SecurityTest.gs and updates the test runner,
 audit and manifest. Main and production source were not modified by Codex.
+
+## Native integration PASS and user-supplied test deployment
+
+The screenshot execution log at 20:31:31 on 7 October 2026 Asia/Colombo
+confirms 24 security checks passed, temporary accounts/sessions/results removed,
+original row counts restored, no production access, and Execution completed.
+This supersedes the pending-native-helper status above. The helper called
+handle directly from the editor: network/web-app/browser behavior remains untested.
+
+The owner provided the new test deployment URL recorded in the manifest. Its
+execute-as/access settings have not been independently read. The web tool could
+not access its ping URL; this is a tooling limitation and does not establish
+endpoint failure. Next owner check: open the test URL with ?action=ping and
+confirm JSON ok:true and version:phase1-candidate. No production URL changes.
+
+test-setup/browser-session-test.html is a standalone browser smoke page pinned
+to this separate test deployment. It embeds the shared auth client with distinct
+phase1_test_ storage keys, performs anonymous-denial checks and offers login,
+verification/reload and logout. It does not contain any credentials or write
+shared course data. A new temporary hashed browser-test account is still needed;
+the native test helper removed its disposable accounts. Full production-screen
+one-login, concurrency and safe sync write round-trip are still outstanding.

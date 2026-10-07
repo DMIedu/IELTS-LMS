@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DMI LMS — separate security test</title>
+<style>body{font:17px system-ui;max-width:760px;margin:40px auto;padding:20px;background:#f3f6fa;color:#17263c}section{background:white;padding:24px;margin:20px 0;border-radius:14px}label{display:block;margin:14px 0}input{display:block;padding:12px;width:90%;font:inherit;border:1px solid #9baabc;border-radius:6px}button{font:inherit;border:0;border-radius:7px;background:#184c86;color:white;padding:12px 16px;margin:6px;cursor:pointer}button:disabled{opacity:.5}pre{white-space:pre-wrap;overflow-wrap:anywhere}small{color:#4b5c70}</style></head>
+<body><h1>DMI LMS security test</h1><p>Separate test deployment. Credentials and session storage here are kept separate from the production LMS.</p>
+<section><h2>1. Connection and access</h2><button id="connection">Check connection</button><pre id="connectionStatus" role="status">Ready.</pre></section>
+<section><h2>2. Test-account login</h2><p>Use a temporary hashed account created in the security test database. The copied original passwords have not been migrated.</p>
+<form id="loginForm"><label>Test email<input id="email" type="email" autocomplete="off" required></label>
+<label>Test password<input id="password" type="password" autocomplete="off" required></label><button type="submit">Sign in</button></form>
+<button id="verify">Verify session</button><button id="logout">Sign out</button><pre id="loginStatus" role="status">Not signed in.</pre></section>
+<small>This checks the shared session client and deployed API. It does not validate all LMS screens, concurrent requests or sync writes. No tokens or passwords are printed.</small>
+<script>/**
+ * Shared DMI session client. Role/profile in localStorage are display caches;
+ * only the server session grants access. One token serves every LMS page.
+ */
+(function(){
+  var API_URL='https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec';
+  var here=document.currentScript && document.currentScript.src;
+  var base=here?here.replace(/[^\/]*$/,''):'./';
+  function token(){return localStorage.getItem('phase1_test_dmi_lms_token')||'';}
+  function clear(){
+    ['phase1_test_dmi_lms_token','phase1_test_dmi_lms_session_expiry','phase1_test_dmi_lms_user','phase1_test_dmi_lms_role','phase1_test_lms_session','phase1_test_lms_users']
+      .forEach(function(k){localStorage.removeItem(k);});
+    ['phase1_test_dmiSyncedThisSession','phase1_test_dmiSSOReloaded'].forEach(function(k){sessionStorage.removeItem(k);});
+    window.__DMI_VERIFIED=null;
+  }
+  function save(res){
+    if(!res.sessionToken)throw new Error('The secure backend has not been deployed');
+    clear();
+    localStorage.setItem('phase1_test_dmi_lms_token',res.sessionToken);
+    localStorage.setItem('phase1_test_dmi_lms_session_expiry',res.sessionExpiresAt);
+    localStorage.setItem('phase1_test_dmi_lms_user',JSON.stringify(res.user));
+    localStorage.setItem('phase1_test_dmi_lms_role',res.role);
+  }
+  function call(action,params){
+    var body=new URLSearchParams(Object.assign({},params||{}, {action:action,sessionToken:token()}));
+    return fetch(API_URL,{method:'POST',body:body}).then(function(r){return r.json();})
+      .then(function(res){
+        if(['UNAUTHENTICATED','ACCESS_EXPIRED'].indexOf(res.code)>=0)clear();
+        return res;
+      });
+  }
+  function verify(){
+    if(!token())return Promise.resolve(null);
+    return call('session').then(function(res){
+      if(!res.ok)return null;
+      localStorage.setItem('phase1_test_dmi_lms_user',JSON.stringify(res.user));
+      localStorage.setItem('phase1_test_dmi_lms_role',res.role);
+      return window.__DMI_VERIFIED={user:res.user,role:res.role};
+    });
+  }
+  function redirect(){location.replace(base+'login.html?next='+encodeURIComponent(location.pathname+location.search));}
+  function requireRole(role){
+    return verify().then(function(info){
+      if(!info || (role && info.role!==role)){redirect();return null;}
+      return info;
+    }).catch(function(){redirect();return null;});
+  }
+  async function logout(){
+    try{await call('logout');}finally{clear();location.href=base+'login.html';}
+  }
+  window.DMI_AUTH={token:token,clear:clear,save:save,call:call,verify:verify,
+    requireRole:requireRole,logout:logout};
+})();
+</script>
+<script>
+const endpoint="https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec";
+const status=document.getElementById('connectionStatus'),loginStatus=document.getElementById('loginStatus');
+async function raw(action,params){const r=await fetch(endpoint,{method:'POST',body:new URLSearchParams(Object.assign({},params||{},{action}))});return r.json();}
+async function busy(button,work){button.disabled=true;try{await work();}finally{button.disabled=false;}}
+document.getElementById('connection').onclick=function(){busy(this,async()=>{
+ status.textContent='Checking…';
+ try{
+ const ping=await fetch(endpoint+'?action=ping').then(r=>r.json());
+ if(!ping.ok||ping.version!=='phase1-candidate')throw new Error('Unexpected backend version');
+ const read=await raw('getLMSData'),write=await raw('setLMSData',{payload:'{}'}),list=await raw('listStudents');
+ if([read,write,list].some(r=>r.code!=='UNAUTHENTICATED'))throw new Error('Anonymous access check failed');
+ status.textContent='PASS: test endpoint responds. Anonymous sync read, sync write and student listing are denied.';
+ }catch(e){status.textContent='Connection check did not pass. Send this status: '+e.message;}
+});};
+document.getElementById('loginForm').onsubmit=async function(e){
+ e.preventDefault();const button=this.querySelector('button');
+ await busy(button,async()=>{
+ try{
+ const r=await DMI_AUTH.call('login',{email:document.getElementById('email').value.trim(),password:document.getElementById('password').value});
+ if(!r.ok){loginStatus.textContent='Sign-in failed: '+(r.error||r.code||'Unknown error');return;}
+ DMI_AUTH.save(r);const verified=await DMI_AUTH.verify();
+ if(!verified)throw new Error('Server session verification failed');
+ loginStatus.textContent='PASS: signed in and server verified. Role: '+verified.role+'. Use Verify session again or reload this page; another password should not be needed.';
+ }catch(err){loginStatus.textContent='Login test failed: '+err.message;}
+ finally{document.getElementById('password').value='';}
+ });
+};
+document.getElementById('verify').onclick=function(){busy(this,async()=>{
+ try{const info=await DMI_AUTH.verify();loginStatus.textContent=info?'PASS: existing session verified. Role: '+info.role:'No valid test session. Sign in first.';}
+ catch(e){loginStatus.textContent='Verification failed: '+e.message;}
+});};
+document.getElementById('logout').onclick=function(){busy(this,async()=>{
+ try{const r=await DMI_AUTH.call('logout');if(!r.ok)throw new Error('Server logout not confirmed');DMI_AUTH.clear();loginStatus.textContent='PASS: server logout confirmed and test session cleared.';}
+ catch(e){loginStatus.textContent='Sign-out not confirmed: '+e.message;}
+});};
+</script></body></html>

@@ -738,6 +738,23 @@
     "function": "runTestWorkbookSecurityChecks",
     "scope": "24 checks using disposable generated accounts/results in exact test workbook; cleanup in finally; sync reads only",
     "mockVerification": "24 checks plus failure cleanup, wrong-workbook guard and fixture restoration passed",
-    "appsScriptRunPending": true
+    "appsScriptRunPending": false,
+    "userObservedResult": {
+      "date": "2026-10-07",
+      "completionTime": "20:31:31",
+      "timezone": "Asia/Colombo",
+      "checksPassed": 24,
+      "cleanupConfirmedByLog": true,
+      "originalRowCountsRestoredByLog": true,
+      "productionAccessed": false,
+      "executionCompleted": true
+    }
+  },
+  "testDeployment": {
+    "url": "https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec",
+    "userProvided": true,
+    "executeAsAndAccessSettingsIndependentlyVerified": false,
+    "pingVerification": "web tool could not access URL; owner browser check pending",
+    "browserOneLoginTested": false
   }
 }
