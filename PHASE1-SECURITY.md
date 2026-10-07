@@ -425,3 +425,20 @@ Do not share properties/screenshots containing credentials. Cleanup helper
 removes only these generated accounts' rows and test credential properties.
 Mock creation, duplicate refusal, exact cleanup, no password logging and wrong
 workbook refusal pass. Native owner account-creation and browser login pending.
+
+## Browser login blocked and test credential cleanup
+
+Browser connection/anonymous-denial smoke page PASS is shown in user screenshot.
+Browser student login then reported HTML instead of JSON; completed doPost entries
+alone do not distinguish login from follow-up session failure. Screenshot shows
+instruction text in DMI_SESSION_SECRET and exposed disposable credentials; no
+values were copied to source, logs or fixtures. Owner cleanup completed 21:09:53
+Asia/Colombo, removing generated accounts/sessions/results and private test
+credential properties. No production change was performed.
+
+Next: owner uses test-setup/secret-generator.html, with browser
+crypto.getRandomValues(32), to produce a private 64-character hex secret. File
+has no network calls/storage, and sends no secret to Codex/GitHub. Owner pastes
+only into DMI_SESSION_SECRET in Security Test. This correction does NOT establish
+the cause of the HTML response. Fresh account/browser checks and diagnostics
+identifying the failed response stage remain pending.
