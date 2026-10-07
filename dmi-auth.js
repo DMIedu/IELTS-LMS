@@ -23,11 +23,21 @@
   }
   function call(action,params){
     var body=new URLSearchParams(Object.assign({},params||{}, {action:action,sessionToken:token()}));
-    return fetch(API_URL,{method:'POST',body:body}).then(function(r){return r.json();})
-      .then(function(res){
-        if(['UNAUTHENTICATED','ACCESS_EXPIRED'].indexOf(res.code)>=0)clear();
-        return res;
-      });
+    var readOnly=['session','listStudents','listCourses','listMarks','listExamResults','myMarks','getLMSData'].indexOf(action)>=0;
+    async function attempt(retried){
+      var res;
+      try{
+        var response=await fetch(API_URL,{method:'POST',body:body});
+        res=await response.json();
+      }catch(error){
+        if(readOnly && !retried && (error instanceof SyntaxError || error instanceof TypeError))return attempt(true);
+        throw error;
+      }
+      if(readOnly && !retried && res && res.error==='Use POST')return attempt(true);
+      if(['UNAUTHENTICATED','ACCESS_EXPIRED'].indexOf(res.code)>=0)clear();
+      return res;
+    }
+    return attempt(false);
   }
   function verify(){
     if(!token())return Promise.resolve(null);

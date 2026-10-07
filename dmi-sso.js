@@ -109,19 +109,40 @@
   }
 
   // ---------- 3. send the score to the Google Sheet ----------
+  function captureExamDetail(record) {
+    var answers={}, questions={}, source=record.answers||{};
+    Object.keys(source).forEach(function(k){answers[k]=source[k];});
+    (record.rows||[]).forEach(function(row){
+      if(row.q!=null && !Object.prototype.hasOwnProperty.call(answers,String(row.q)))
+        answers[String(row.q)]=row.ua==null?'':String(row.ua);
+    });
+    var total=Number(record.total)||0;
+    for(var n=1;n<=Math.min(total,200);n++){
+      var marker=document.getElementById('qn'+n) || document.getElementById('q'+n);
+      var block=marker && marker.closest('.q-block');
+      if(!block)continue;
+      var copy=block.cloneNode(true);
+      copy.querySelectorAll('input,select,textarea,button').forEach(function(el){el.remove();});
+      questions[String(n)]=copy.textContent.replace(/\s+/g,' ').trim();
+    }
+    if(record.band!=null)answers._band=record.band;
+    return {answers:answers,questions:questions};
+  }
+
   function send(record) {
     if (role !== 'student' || !record) return;
     var info = paperInfo();
     var isWriting = /writing/i.test(info.course);
     var score = record.correct != null ? record.correct : (record.score != null ? record.score : 0);
-    var answers = isWriting ? { task1: record.task1 || '', task2: record.task2 || '', words: [record.wc1, record.wc2] } : (record.answers || {});
+    var detail=captureExamDetail(record);
+    var answers = isWriting ? { task1: record.task1 || '', task2: record.task2 || '', words: [record.wc1, record.wc2] } : detail.answers;
     if (record.band != null) answers._band = record.band;
     var body = new URLSearchParams({
       action: 'submitExamResult', sessionToken: DMI_AUTH.token(),
       studentEmail: user.email || '', studentName: user.name || '',
       testName: info.testName, course: info.course,
       score: isWriting ? 0 : score, maxScore: isWriting ? 0 : (record.total || 40),
-      answersJSON: JSON.stringify(answers), questionsJSON: '{}'
+      answersJSON: JSON.stringify(answers), questionsJSON: JSON.stringify(isWriting?{}:detail.questions)
     });
     fetch(API_URL, { method: 'POST', body: body })
       .then(function (r) { return r.json(); })
