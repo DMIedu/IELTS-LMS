@@ -31,13 +31,20 @@
   }
   async function pull(){
     pulling=true;
+    var stage='session verification';
     try{
       verified=await DMI_AUTH.requireRole();
       if(!verified)return {ok:false};
+      stage='course data request';
       var res=await DMI_AUTH.call('getLMSData');
       if(!res.ok){status(res.error||'Sync unavailable',true);return res;}
+      stage='applying course data';
       apply(res.data||{});status('Synced',false);return res;
-    }catch(e){status('Sync unavailable — please retry',true);return {ok:false,error:e.message};}
+    }catch(e){
+      var reason=e instanceof SyntaxError?'response was not valid JSON':e instanceof TypeError?'request could not complete':'operation failed';
+      var message='Unable to complete '+stage+': '+reason+'.';
+      status(message,true);return {ok:false,error:message};
+    }
     finally{pulling=false;}
   }
   async function pushNow(){
