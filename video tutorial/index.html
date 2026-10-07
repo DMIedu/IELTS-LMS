@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><script src="../test-mode.js"></script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -738,9 +738,9 @@
 // STATE / STORAGE
 // ============================================================
 const LS = {
-  USERS: 'lms_users',
+  USERS: 'phase1_test_lms_users',
   COURSES: 'lms_courses',
-  SESSION: 'lms_session',
+  SESSION: 'phase1_test_lms_session',
   ANNOUNCE: c => `lms_announce_${c}`,
   PROGRESS: u => `lms_progress_${u}`,
   NOTES: u => `lms_notes_${u}`,
@@ -1278,8 +1278,8 @@ function showApp() {
 // instead of asking for a second username and password.
 function dmiMainUser() {
   try {
-    const u = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
-    const r = localStorage.getItem('dmi_lms_role');
+    const u = JSON.parse(localStorage.getItem('phase1_test_dmi_lms_user') || 'null');
+    const r = localStorage.getItem('phase1_test_dmi_lms_role');
     if (!u) return null;
     if (r !== 'teacher' && u.expiryDate && new Date(u.expiryDate) < new Date()) return null;
     const id = String(u.email || u.id || u.name).toLowerCase();
@@ -2836,8 +2836,8 @@ function escapeAttr(s) { return escapeHTML(s); }
 (function () {
   function getUser() {
     try {
-      var u = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
-      var r = localStorage.getItem('dmi_lms_role');
+      var u = JSON.parse(localStorage.getItem('phase1_test_dmi_lms_user') || 'null');
+      var r = localStorage.getItem('phase1_test_dmi_lms_role');
       if (!u || !DMI_AUTH.token()) return { state: 'anon' };
       if (r === 'teacher') return { state: 'teacher', user: u };
       if (u.expiryDate && new Date(u.expiryDate) < new Date()) return { state: 'expired', user: u };

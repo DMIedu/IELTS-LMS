@@ -3,23 +3,23 @@
  * only the server session grants access. One token serves every LMS page.
  */
 (function(){
-  var API_URL='https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
+  var API_URL='https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec';
   var here=document.currentScript && document.currentScript.src;
   var base=here?here.replace(/[^\/]*$/,''):'./';
-  function token(){return localStorage.getItem('dmi_lms_token')||'';}
+  function token(){return localStorage.getItem('phase1_test_dmi_lms_token')||'';}
   function clear(){
-    ['dmi_lms_token','dmi_lms_session_expiry','dmi_lms_user','dmi_lms_role','lms_session','lms_users']
+    ['phase1_test_dmi_lms_token','phase1_test_dmi_lms_session_expiry','phase1_test_dmi_lms_user','phase1_test_dmi_lms_role','phase1_test_lms_session','phase1_test_lms_users']
       .forEach(function(k){localStorage.removeItem(k);});
-    ['dmiSyncedThisSession','dmiSSOReloaded'].forEach(function(k){sessionStorage.removeItem(k);});
+    ['phase1_test_dmiSyncedThisSession','phase1_test_dmiSSOReloaded'].forEach(function(k){sessionStorage.removeItem(k);});
     window.__DMI_VERIFIED=null;
   }
   function save(res){
     if(!res.sessionToken)throw new Error('The secure backend has not been deployed');
     clear();
-    localStorage.setItem('dmi_lms_token',res.sessionToken);
-    localStorage.setItem('dmi_lms_session_expiry',res.sessionExpiresAt);
-    localStorage.setItem('dmi_lms_user',JSON.stringify(res.user));
-    localStorage.setItem('dmi_lms_role',res.role);
+    localStorage.setItem('phase1_test_dmi_lms_token',res.sessionToken);
+    localStorage.setItem('phase1_test_dmi_lms_session_expiry',res.sessionExpiresAt);
+    localStorage.setItem('phase1_test_dmi_lms_user',JSON.stringify(res.user));
+    localStorage.setItem('phase1_test_dmi_lms_role',res.role);
   }
   function call(action,params){
     var body=new URLSearchParams(Object.assign({},params||{}, {action:action,sessionToken:token()}));
@@ -33,8 +33,8 @@
     if(!token())return Promise.resolve(null);
     return call('session').then(function(res){
       if(!res.ok)return null;
-      localStorage.setItem('dmi_lms_user',JSON.stringify(res.user));
-      localStorage.setItem('dmi_lms_role',res.role);
+      localStorage.setItem('phase1_test_dmi_lms_user',JSON.stringify(res.user));
+      localStorage.setItem('phase1_test_dmi_lms_role',res.role);
       return window.__DMI_VERIFIED={user:res.user,role:res.role};
     });
   }

@@ -30,7 +30,7 @@
  */
 (function () {
   // === CONFIG: paste your Apps Script Web App URL here ===
-  var API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
+  var API_URL = 'https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec';
 
   var scriptURL=document.currentScript && document.currentScript.src;
   var ready=window.DMI_AUTH?Promise.resolve():new Promise(function(resolve,reject){
@@ -39,9 +39,9 @@
   });
   function getUser() {
     try {
-      var u = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
-      var r = localStorage.getItem('dmi_lms_role');
-      if (u && r === 'student' && localStorage.getItem('dmi_lms_token')) return u;
+      var u = JSON.parse(localStorage.getItem('phase1_test_dmi_lms_user') || 'null');
+      var r = localStorage.getItem('phase1_test_dmi_lms_role');
+      if (u && r === 'student' && localStorage.getItem('phase1_test_dmi_lms_token')) return u;
     } catch (e) {}
     return null;
   }

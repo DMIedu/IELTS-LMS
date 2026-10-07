@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script src="test-mode.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DMI IELTS Practice Papers</title>
@@ -1383,8 +1383,8 @@
   (function () {
     function getUser() {
       try {
-        var u = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
-        var r = localStorage.getItem('dmi_lms_role');
+        var u = JSON.parse(localStorage.getItem('phase1_test_dmi_lms_user') || 'null');
+        var r = localStorage.getItem('phase1_test_dmi_lms_role');
         if (!u) return { state: 'anon' };
         if (r === 'teacher') return { state: 'teacher', user: u };
         if (u.expiryDate && new Date(u.expiryDate) < new Date()) return { state: 'expired', user: u };

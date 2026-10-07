@@ -12,8 +12,8 @@
  *                                          and in the Teacher Panel.
  */
 (async function () {
-  var API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
-  var BRANCH_KEY = 'dmi_lms_branch';
+  var API_URL = 'https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec';
+  var BRANCH_KEY = 'phase1_test_dmi_lms_branch';
 
   // Folder that holds login.html (the folder this script lives in)
   var here = document.currentScript && document.currentScript.src;
@@ -21,8 +21,8 @@
 
   function readUser() {
     try {
-      var u = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
-      var role = localStorage.getItem('dmi_lms_role');
+      var u = JSON.parse(localStorage.getItem('phase1_test_dmi_lms_user') || 'null');
+      var role = localStorage.getItem('phase1_test_dmi_lms_role');
       if (!u) return null;
       if (role !== 'teacher' && u.expiryDate && new Date(u.expiryDate) < new Date()) return null;
       return { user: u, role: role };
@@ -151,5 +151,5 @@
   else prefill();
 })().catch(function(){
   var here=document.currentScript && document.currentScript.src;
-  location.replace((here?here.replace(/[^\/]*$/,''):'/IELTS-LMS/')+'login.html');
+  location.replace((here?here.replace(/[^\/]*$/,''):'/')+'login.html');
 });
