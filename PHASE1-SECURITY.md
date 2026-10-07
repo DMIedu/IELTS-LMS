@@ -442,3 +442,24 @@ has no network calls/storage, and sends no secret to Codex/GitHub. Owner pastes
 only into DMI_SESSION_SECRET in Security Test. This correction does NOT establish
 the cause of the HTML response. Fresh account/browser checks and diagnostics
 identifying the failed response stage remain pending.
+
+## Browser smoke tests reported PASS; sync round-trip prepared
+
+After owner replaced the placeholder session secret using offline browser random
+generation and recreated temporary hashed accounts, user screenshots confirm
+student login, reload/session verification and server logout. Teacher login PASS
+is visible in screenshot; teacher reload/verification and logout are reported by
+user. Post-logout no-session UI is visible for student and reported for teacher.
+The no-token client path returns locally, so this alone is not a server-side
+revoked-token replay check; native integration already covers token revocation.
+These are shared-client smoke checks, not full production-screen one-login tests.
+The prior HTML response cause remains unproven; subsequent successful flow does
+not establish that changing the secret fixed it. Secret/credentials stay private.
+
+Next owner-only helper test-setup/SyncTest.gs: runTestSyncRoundTrip guards the
+exact copied workbook, takes the script lock, retains a durable temporary backup
+tab, writes one generated announcement, verifies read-back/preservation/privacy,
+restores original values/formulas without replacing the LMSSync sheet ID, verifies
+restoration and removes the backup. On interruption/restore failure keep backup
+and report log before retrying. Mocks cover successful round-trip, restoration
+after injected write failure, and wrong-workbook refusal. Native run pending.
