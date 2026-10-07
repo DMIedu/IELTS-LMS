@@ -63,7 +63,7 @@ function initializeSecurity() {
   const book=ss();
   ['Students','Teachers'].forEach(name=>{
     const sheet=tab(name);
-    const head=sheet.getDataRange().getValues()[0];
+    const head=sheet.getDataRange().getValues()[0].map(headerName_);
     ['PasswordHash','PasswordSalt','PasswordIterations'].forEach(k=>{
       if(!head.includes(k)) { head.push(k); sheet.getRange(1,head.length).setValue(k); }
     });
@@ -73,7 +73,7 @@ function initializeSecurity() {
   // LMSSync is deliberately NOT created or migrated without the live source.
 }
 function setFields_(sheet,email,fields) {
-  const data=sheet.getDataRange().getValues(), head=data[0];
+  const data=sheet.getDataRange().getValues(), head=data[0].map(headerName_);
   const i=data.findIndex((r,j)=>j>0 && email_(r[head.indexOf('Email')])===email_(email));
   if(i<1) securityError_('NOT_FOUND','Account not found');
   Object.keys(fields).forEach(k=>{
@@ -165,7 +165,7 @@ function createStudent_(p) {
     securityError_('VALIDATION','Name and valid email required');
   if(account_('student',email)||account_('teacher',email))
     securityError_('VALIDATION','An account with this email already exists');
-  const sheet=tab('Students'), head=sheet.getDataRange().getValues()[0];
+  const sheet=tab('Students'), head=sheet.getDataRange().getValues()[0].map(headerName_);
   ['PasswordHash','PasswordSalt','PasswordIterations'].forEach(k=>{
     if(!head.includes(k))securityError_('CONFIGURATION_REQUIRED','Run security setup');
   });

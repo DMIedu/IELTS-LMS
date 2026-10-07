@@ -18,7 +18,13 @@ referenced spreadsheet ID and web-app URL, and items still needing owner backup.
 
 Working branch: security/phase1-backend-2026-10-07.
 
-The workbook itself has NOT been copied/exported. Live Apps Script source, manifest,
+Update: the workbook has now been copied through Google Drive into an unshared,
+owner-only backup and a separate unshared test copy. All six original tab names,
+IDs, order and dimensions match. Only schema headers and LMSSync key names were
+read; account/password rows and chunk payloads were not retrieved or published.
+Native Drive copy preserves the workbook; every cell/formula was not independently
+compared. Private copy links were delivered in chat rather than the public repo.
+Live Apps Script source, manifest,
 properties, triggers, deployment version, execute-as/access settings, and scopes
 have NOT been backed up or independently inspected. Local shell, file writer and
 Node execution failed to start because the Windows execution sandbox reported
@@ -147,7 +153,10 @@ conflict revisions, personal sync, and all legacy data-editor features need revi
 
 ## Owner steps and redeployment still required
 
-1. Make an independent Git repository archive/export if desired. Copy/export the
+1. Workbook backup and separate test copy are now COMPLETE via Google Drive.
+   Keep them private and preserve the backup without edits. Make an independent
+   Git repository archive/export if desired. Before final rollout, take another
+   current snapshot of the
    complete DMI LMS workbook, preserving all tabs/formulas/headers (Students,
    Teachers, Courses, Marks, ExamResults, LMSSync and any additional tabs).
    Store credential-bearing backups privately.
@@ -159,7 +168,8 @@ conflict revisions, personal sync, and all legacy data-editor features need revi
    merging into the existing schema. Retain required live behavior and remove
    all alternate unprotected API routes.
 4. Use a COPY of the workbook and a separate test Apps Script deployment. Update
-   SHEET_ID and the API URL consistently across all candidate scripts/pages.
+   DMI_SPREADSHEET_ID Script Property to the test copy ID and the API URL
+   consistently across all candidate scripts/pages.
    Set DMI_SESSION_SECRET to an independently generated random 32-byte-or-longer
    secret (base64 text at least 43 characters) in Script Properties. Never commit it.
 5. Run initializeSecurity() in the editor on the TEST copy; it appends password
@@ -190,7 +200,7 @@ Sessions because existing bearer-token records are not signed-token verifiers.
 
 ## Validation performed
 
-79 backend checks and 12 shared-auth client checks passed in an isolated JavaScript
+82 backend checks and 12 shared-auth client checks passed in an isolated JavaScript
 runtime with MOCKED Apps Script services, storage, network and cryptography.
 18 JavaScript/script-block syntax checks passed. The checked-in runner reproduces
 these checks with Node: node tests/phase1-security.test.js
@@ -203,3 +213,38 @@ live schema compatibility, full rendered UI, or end-to-end exam behavior.
 The legacy IELTS site and static practice papers remain publicly served. Phase 1
 here prepares backend security; it does not close the old site, remove every
 paper's admin123 dashboard, or make static question/answer files server-protected.
+
+## Follow-up: Google workbook backup and schema inspection
+
+The connected "DMI LMS Database" was copied to "DMI LMS Backup — Before Phase 1 —
+2026-10-07"; that backup was then copied to "DMI LMS Security Test — Phase 1 —
+2026-10-07". Both copies are unshared and have owner-only permissions. Neither
+copy nor the live workbook has had cell values, headers or script configuration
+changed by this follow-up.
+
+Original sheet headers have "ID    " and "Date    " with trailing spaces; tab
+names include "Teachers " and "LMSSync ". The candidate now normalizes header
+names when reading/matching them, without renaming/reordering workbook columns.
+The existing tab-name normalization is retained. Three additional checks cover
+these exact padded-header fixtures, taking the mocked backend count to 82.
+
+The actual accessible workbook ID begins with "1I..." (uppercase I), while the
+GitHub constant began "1l..." (lowercase l); the latter returns not-found to Drive.
+This reinforces the need to inspect the live script rather than overwrite it.
+The candidate now obtains its workbook ID from DMI_SPREADSHEET_ID in Script
+Properties and fails closed when unset, with no default production target.
+
+The preserved LMSSync table has headers Key | Value | UpdatedAt, and its key
+column contains chunk0, chunk1, chunk2, chunk3. A per-key row adapter would be
+wrong. Chunk ordering, serialization, chunk limits and update behavior remain
+unverified. No chunk payload or password data was read. The sync adapter remains
+disabled until the live source is exported and compared.
+
+Connected Drive tools have no Apps Script project-content/deployment API, and
+browser automation failed to initialize (trusted Node process exited). The
+standalone Apps Script Drive search returned no files; it cannot rule out a
+bound project. A native workbook copy may preserve a bound project, but this was
+NOT independently verified as a script-source backup. No live source/version,
+script properties, triggers or deployment settings were read or changed.
+The user still needs to supply the live Apps Script source and current deployment
+version (or enable working browser access) before reconciliation/runtime tests.

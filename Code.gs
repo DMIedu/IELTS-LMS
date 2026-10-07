@@ -20,9 +20,9 @@
  */
 
 // ====== CONFIG ======
-// Paste your Sheet ID below. (Easiest: triple-click the part of the
-// Google Sheet URL between /d/ and /edit, copy, paste between the quotes.)
-const SHEET_ID = '1lewfmmCpqrn8421yOa6oMYh5OGJK67FYIAaXiyXVkis'; // <-- EDIT THIS
+// Configure the workbook ID in Script Properties; no production workbook is selected by default.
+// Required Script Property. Point it at the TEST copy until rollout is approved.
+const SHEET_ID = PropertiesService.getScriptProperties().getProperty('DMI_SPREADSHEET_ID');
 const STUDENT_VALIDITY_DAYS = 30; // 1 month
 
 /**
@@ -132,7 +132,10 @@ function handle(e) {
 }
 
 // ====== HELPERS ======
-function ss() { return SpreadsheetApp.openById(SHEET_ID); }
+function ss() {
+  if(!SHEET_ID) securityError_('CONFIGURATION_REQUIRED','Set DMI_SPREADSHEET_ID to the test workbook');
+  return SpreadsheetApp.openById(SHEET_ID);
+}
 function tab(name) {
   const book = ss();
   // 1) Try exact match
@@ -152,13 +155,16 @@ function tab(name) {
 function json(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
+function headerName_(value) {
+  return String(value||'').replace(/[\u200b-\u200d\ufeff]/g,'').trim();
+}
 function rows(sheet) {
   const data = sheet.getDataRange().getValues();
   if (data.length < 2) return [];
-  const head = data[0];
+  const head = data[0].map(headerName_);
   return data.slice(1).map(r => {
     const o = {};
-    head.forEach((h, i) => o[h] = r[i]);
+    head.forEach((h, i) => { if(h) o[h] = r[i]; });
     return o;
   });
 }
@@ -200,7 +206,7 @@ function renewStudent(p) {
   if (!email) return { ok: false, error: 'Email required' };
   const sheet = tab('Students');
   const data = sheet.getDataRange().getValues();
-  const head = data[0];
+  const head = data[0].map(headerName_);
   const expiryCol = head.indexOf('ExpiryDate');
   if (expiryCol < 0) return { ok: false, error: 'ExpiryDate column missing in Students sheet' };
 

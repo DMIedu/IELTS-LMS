@@ -55,7 +55,7 @@
   "notBackedUp": [
     "Live Apps Script source and manifest",
     "Apps Script script properties, triggers, scopes and deployment settings/version",
-    "Google Sheet contents, formulas, sharing and tab schema"
+    "Spreadsheet sharing is verified separately; Drive copy is not a backup of original permission history"
   ],
   "noDeploymentPerformed": true,
   "baselineRepositoryTree": [
@@ -631,5 +631,32 @@
       "size": 124376,
       "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f0ab12e4427aa584a030dd98988d2526e84aa63c"
     }
-  ]
+  ],
+  "googleBackupUpdate": {
+    "date": "2026-10-07",
+    "spreadsheetBackupCreated": true,
+    "testWorkbookCopyCreated": true,
+    "backupAndTestSharingVerified": "not shared; owner permission only",
+    "sheetTitlesPreserved": [
+      "Students",
+      "LMSSync ",
+      "Teachers ",
+      "Courses",
+      "Marks",
+      "ExamResults"
+    ],
+    "originalModifiedTime": "2026-10-07T10:06:54.552Z",
+    "compatibilityFindings": [
+      "Students ID header has trailing spaces",
+      "Marks/ExamResults Date headers have trailing spaces",
+      "LMSSync/Teachers tab names have trailing spaces",
+      "Live LMSSync key column includes chunk0 through chunk3",
+      "GitHub SHEET_ID differs in case-sensitive second character from the connected DMI LMS Database ID"
+    ],
+    "privateBackupLocations": "Provided only in the user conversation; not published in this public repository",
+    "appsScriptSourceExported": false,
+    "appsScriptDeploymentVersionRecorded": false,
+    "browserAccessFailure": "Browser automation runtime exited before opening the spreadsheet",
+    "sourceSearchResult": "Drive Apps Script MIME-type search returned no standalone projects; this does not exclude a bound project"
+  }
 }
