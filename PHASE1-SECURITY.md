@@ -463,3 +463,19 @@ restores original values/formulas without replacing the LMSSync sheet ID, verifi
 restoration and removes the backup. On interruption/restore failure keep backup
 and report log before retrying. Mocks cover successful round-trip, restoration
 after injected write failure, and wrong-workbook refusal. Native run pending.
+
+## Native sync PASS and consolidated review candidate
+
+User screenshot shows 7 sync checks PASS and Execution completed at 22:01:23
+on 7 October 2026 Asia/Colombo. Original sync data/formulas restored, temporary
+announcement removed and backup tab deleted. Production was not accessed.
+release-candidate/Code.gs bundles the four backend sources without the test-only
+workbook guard; it does not include SecurityTest/BrowserTest/SyncTest helpers.
+It is a review artifact, not a deploy instruction. No secrets included; syntax
+checked. Standalone source files and bundle must not be combined.
+
+Remaining gates: actual LMS screens/flows against test endpoint, concurrency,
+private preservation/verification of production deployment/configuration and a
+bounded migration/reset plus coordinated frontend/backend publication plan.
+Main and production remain unchanged by Codex. Test completion does not authorize
+production deployment or establish that all Phase 1 release gates are complete.

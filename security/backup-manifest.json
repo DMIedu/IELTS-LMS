@@ -748,14 +748,24 @@
       "originalRowCountsRestoredByLog": true,
       "productionAccessed": false,
       "executionCompleted": true
-    }
+    },
+    "checksPassed": 24
   },
   "testDeployment": {
     "url": "https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec",
     "userProvided": true,
     "executeAsAndAccessSettingsIndependentlyVerified": false,
     "pingVerification": "User screenshot shows ok:true, version:phase1-candidate and time 2026-10-07T15:11:23.635Z",
-    "browserOneLoginTested": false
+    "browserOneLoginTested": false,
+    "browserSessionSmokeTests": {
+      "studentLogin": "PASS screenshot",
+      "studentReloadSession": "PASS screenshot",
+      "studentLogout": "PASS screenshot",
+      "teacherLogin": "PASS screenshot",
+      "teacherReloadSession": "PASS user report",
+      "teacherLogout": "PASS user report",
+      "scope": "standalone shared client only; actual LMS screens not tested"
+    }
   },
   "browserAccountSetup": {
     "path": "test-setup/BrowserTest.gs",
@@ -763,5 +773,22 @@
     "passwordsStored": "private test Script Properties; never in repository or logs",
     "cleanup": "cleanupBrowserTestAccounts removes generated accounts, sessions, results and test credential properties",
     "mockChecks": "creation, duplicate refusal, cleanup, no password logs, wrong workbook refusal PASS"
-  }
+  },
+  "nativeSyncRoundTrip": {
+    "date": "2026-10-07",
+    "timezone": "Asia/Colombo",
+    "completionTime": "22:01:23",
+    "checksPassed": 7,
+    "originalDataAndFormulasRestored": true,
+    "temporaryAnnouncementRemoved": true,
+    "backupTabRemoved": true,
+    "evidence": "user-provided editor log",
+    "productionAccessed": false
+  },
+  "releaseGatesRemaining": [
+    "Actual login/student/teacher/practice/video screens against test backend",
+    "Concurrent request behavior/global script lock",
+    "Production manifest/properties/triggers and deployment settings/source version preservation",
+    "Bounded legacy migration or reset and coordinated frontend/backend cutover approval"
+  ]
 }
