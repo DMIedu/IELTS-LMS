@@ -754,7 +754,14 @@
     "url": "https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec",
     "userProvided": true,
     "executeAsAndAccessSettingsIndependentlyVerified": false,
-    "pingVerification": "web tool could not access URL; owner browser check pending",
+    "pingVerification": "User screenshot shows ok:true, version:phase1-candidate and time 2026-10-07T15:11:23.635Z",
     "browserOneLoginTested": false
+  },
+  "browserAccountSetup": {
+    "path": "test-setup/BrowserTest.gs",
+    "ownerExecutionPending": true,
+    "passwordsStored": "private test Script Properties; never in repository or logs",
+    "cleanup": "cleanupBrowserTestAccounts removes generated accounts, sessions, results and test credential properties",
+    "mockChecks": "creation, duplicate refusal, cleanup, no password logs, wrong workbook refusal PASS"
   }
 }

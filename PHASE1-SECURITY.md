@@ -412,3 +412,16 @@ verification/reload and logout. It does not contain any credentials or write
 shared course data. A new temporary hashed browser-test account is still needed;
 the native test helper removed its disposable accounts. Full production-screen
 one-login, concurrency and safe sync write round-trip are still outstanding.
+
+## Test deployment ping and browser account preparation
+
+User's browser screenshot shows ok:true, version:phase1-candidate and timestamp
+2026-10-07T15:11:23.635Z. This establishes public ping behavior only, not POST
+role protection or frontend one-login. BrowserTest.gs prepares two temporary
+hashed accounts in the exact test workbook and puts random passwords in private
+Script Properties. Owner adds it as a third editor file and runs
+createBrowserTestAccounts (no redeployment required for creating test rows).
+Do not share properties/screenshots containing credentials. Cleanup helper
+removes only these generated accounts' rows and test credential properties.
+Mock creation, duplicate refusal, exact cleanup, no password logging and wrong
+workbook refusal pass. Native owner account-creation and browser login pending.
