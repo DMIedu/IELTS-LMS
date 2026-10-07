@@ -720,7 +720,24 @@
     "encoding": "native Utilities UTF-8 password and UTF-8 salt string bytes; 32-byte result hex",
     "isolateKnownAnswerTests": "PASS: PBKDF2 1,2,4096 and RFC4231 HMAC",
     "isolate600000ElapsedMilliseconds": 2281,
-    "appsScriptReplacementPerformanceVerified": false,
-    "productionDeployed": false
+    "appsScriptReplacementPerformanceVerified": true,
+    "productionDeployed": false,
+    "appsScript600000ElapsedMilliseconds": 2718,
+    "appsScriptKnownAnswerTests": "PASS shown in user-provided execution log, 20:07:38–20:07:41 Asia/Colombo"
+  },
+  "testSecurityInitialization": {
+    "function": "initializeSecurity",
+    "projectTitle": "DMI LMS Security Test",
+    "userScreenshot": "execution started 20:10:01; completed 20:10:05 without error",
+    "date": "2026-10-07",
+    "independentSchemaVerification": false,
+    "existingPasswordMigrationPerformed": false
+  },
+  "nativeIntegrationHelper": {
+    "path": "test-setup/SecurityTest.gs",
+    "function": "runTestWorkbookSecurityChecks",
+    "scope": "24 checks using disposable generated accounts/results in exact test workbook; cleanup in finally; sync reads only",
+    "mockVerification": "24 checks plus failure cleanup, wrong-workbook guard and fixture restoration passed",
+    "appsScriptRunPending": true
   }
 }

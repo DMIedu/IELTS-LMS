@@ -362,3 +362,31 @@ Security.gs and LiveSync.gs. Existing backup branches/Drive backups and main
 remain preserved. Changes in this follow-up: Security.gs, PasswordCrypto.gs,
 test-setup/Code.gs, tests/phase1-security.test.js, PHASE1-SECURITY.md,
 security/backup-manifest.json and third-party/js-sha256-LICENSE.txt.
+
+## Replacement hash PASS and test initialization receipt
+
+The user's next screenshots show PASS for replacement PBKDF2/HMAC checks and
+2718 ms for 600000 rounds in DMI LMS Security Test (20:07:38–20:07:41,
+7 October 2026 Asia/Colombo). initializeSecurity then completed without error
+(20:10:01–20:10:05). These are user-provided editor execution receipts;
+security columns and Sessions tab have not been independently re-read.
+The replacement native-runtime speed gate passes; concurrent login behavior
+and complete browser/web-app flows are still untested.
+
+Next: add test-setup/SecurityTest.gs as a separate SecurityTest.gs editor file
+alongside the existing single-file test bundle. Run runTestWorkbookSecurityChecks.
+It refuses any workbook except the previously created security test copy,
+requires an empty Sessions tab, creates disposable teacher/student accounts
+with hashed random passwords, checks roles/ownership/session revocation/reset,
+saves a disposable exam result, and cleans up those generated emails' rows in
+finally. It never enables legacy migration and never writes LMSSync. Native
+login may prune expired sessions, so requiring initially empty Sessions avoids
+modifying any pre-existing session row. No existing account passwords are reset.
+The runner validates mocked success, fixture preservation on injected failure,
+and wrong-workbook refusal; the native Apps Script integration run is pending.
+Unexpected stop/time-limit can bypass cleanup: do not rerun blindly; report the
+log if cleanup did not finish. No passwords/tokens/personal rows are logged.
+Successful editor checks do not validate web-app deployment/browser behavior.
+
+This follow-up adds test-setup/SecurityTest.gs and updates the test runner,
+audit and manifest. Main and production source were not modified by Codex.

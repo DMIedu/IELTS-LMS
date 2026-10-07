@@ -25,6 +25,31 @@ hashVectors.forEach(([password,salt,n])=>{
 });
 const backend=new Function(mocks+read('PasswordCrypto.gs')+read('Code.gs')+read('Security.gs')+read('LiveSync.gs')+'\nconst reconciledRead=readLiveLMSData_,reconciledWrite=writeLiveLMSData_; readLiveLMSData_=undefined;writeLiveLMSData_=undefined;\n'+backendTests)();
 
+
+const integrationMocks=mocks
+ .replace("const props={DMI_SESSION_SECRET:'s'.repeat(43)};",
+  "const props={DMI_SESSION_SECRET:'s'.repeat(43),DMI_TEST_MODE:'true',DMI_SPREADSHEET_ID:'1E1v8jEkNMOjgAeKH8ubzV6Peh77535Sj8YpZYxRMwnQ'};")
+ .replace('setMimeType:()=>s','setMimeType:()=>({getContent:()=>s})')
+ .replace('const Logger={log:()=>{}};','const logs=[];const Logger={log:s=>logs.push(s)};');
+const integrationFixture=backendTests.slice(0,backendTests.indexOf('const tokens='))
+ .replace('const obj={getDataRange:','const obj={getLastRow:()=>vals.length,getDataRange:')
+ .replace('ss=()=>({getSheetByName:n=>sheets[n],getSheets:()=>[]});',
+  "ss=()=>({getId:()=>props.DMI_SPREADSHEET_ID,getSheetByName:n=>sheets[n],getSheets:()=>[]});makeSheet('LMSSync',['Key','Value','UpdatedAt']);");
+const integrationBase=integrationMocks+read('Code.gs')+read('Security.gs')+read('LiveSync.gs')+
+ read('test-setup/SecurityTest.gs')+integrationFixture+"\npbkdf2_=(p,s,n)=>'hash-'+p;\n";
+const integrationLogs=new Function(integrationBase+'runTestWorkbookSecurityChecks();return logs;')();
+if(!integrationLogs.some(s=>s.includes('24 security checks completed')))throw new Error('Integration helper failed');
+new Function(integrationBase+`
+const before=JSON.stringify(Object.fromEntries(Object.entries(sheets).map(([k,s])=>[k,s.vals])));
+secureGetLMSData_=()=>{throw new Error('Injected sync failure');};
+let failed=false;try{runTestWorkbookSecurityChecks();}catch(e){failed=true;}
+if(!failed)throw Error('Missing failure');
+const after=JSON.stringify(Object.fromEntries(Object.entries(sheets).map(([k,s])=>[k,s.vals])));
+if(after!==before)throw Error('Failure cleanup did not restore fixture');
+props.DMI_SPREADSHEET_ID='production';
+try{runTestWorkbookSecurityChecks();throw Error('Wrong workbook allowed');}catch(e){if(!e.message.includes('TEST ONLY'))throw e;}
+`)();
+
 async function testAuthClient(source){
  const results=[];
  function expect(n,c){if(!c)throw new Error(n);results.push(n);}
@@ -63,7 +88,7 @@ async function testAuthClient(source){
 
 (async()=>{
  const frontend=await testAuthClient(read('dmi-auth.js'));
- const files=['PasswordCrypto.gs','test-setup/Code.gs','Code.gs','Security.gs','LiveSync.gs','dmi-auth.js','login.html','teacher-panel.html',
+ const files=['test-setup/SecurityTest.gs','PasswordCrypto.gs','test-setup/Code.gs','Code.gs','Security.gs','LiveSync.gs','dmi-auth.js','login.html','teacher-panel.html',
   'student-panel.html','dmi-sso.js','lms-result-sender.js','lms-cloud-sync.js','video tutorial/index.html'];
  let syntax=0;
  files.forEach(f=>{
@@ -72,5 +97,5 @@ async function testAuthClient(source){
   blocks.forEach(s=>{new Function(s);syntax++;});
  });
  console.log(JSON.stringify({backendPassed:backend.length,clientPassed:frontend.length,syntaxChecks:syntax,
-  realHashVectors:hashVectors.length,nativeCryptography:'OLD implementation vectors 1/2 PASS; replacement Apps Script check pending',liveIntegration:'NOT TESTED'},null,2));
+  testHelperMockChecks:24,testHelperFailureCleanup:'PASS',testHelperWrongWorkbookGuard:'PASS',realHashVectors:hashVectors.length,nativeCryptography:'OLD implementation vectors 1/2 PASS; replacement Apps Script check pending',liveIntegration:'NOT TESTED'},null,2));
 })().catch(e=>{console.error(e);process.exitCode=1;});
