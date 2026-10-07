@@ -695,9 +695,32 @@
     "displayedStartTime": "19:52:51",
     "displayedCompletionTime": "19:52:52",
     "scope": "PBKDF2-HMAC-SHA256 known-answer vectors at iterations 1 and 2 only",
-    "fullWorkFactor600000PerformanceVerified": false,
+    "fullWorkFactor600000PerformanceVerified": true,
     "spreadsheetDataChanged": false,
     "productionDeploymentPerformedByCodex": false,
     "receiptPrivatelyBackedUp": true
+  },
+  "nativePasswordBenchmark": {
+    "date": "2026-10-07",
+    "project": "DMI LMS Security Test",
+    "implementation": "native Utilities HMAC per PBKDF2 round",
+    "iterations": 600000,
+    "elapsedMilliseconds": 264532,
+    "startTime": "19:56:06",
+    "completionTime": "20:00:31",
+    "source": "user supplied Apps Script execution log",
+    "suitableForLogin": false,
+    "spreadsheetDataChanged": false
+  },
+  "passwordReplacement": {
+    "primitive": "js-sha256 1.0.0 HMAC-SHA256",
+    "upstreamCommit": "9a54fb31d4594762987e1b5d175265f6bac921de",
+    "license": "MIT",
+    "iterations": 600000,
+    "encoding": "native Utilities UTF-8 password and UTF-8 salt string bytes; 32-byte result hex",
+    "isolateKnownAnswerTests": "PASS: PBKDF2 1,2,4096 and RFC4231 HMAC",
+    "isolate600000ElapsedMilliseconds": 2281,
+    "appsScriptReplacementPerformanceVerified": false,
+    "productionDeployed": false
   }
 }

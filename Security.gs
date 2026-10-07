@@ -234,33 +234,44 @@ function secureSetLMSData_(p) {
 }
 
 /**
- * PBKDF2-HMAC-SHA256, 32-byte output, UTF-8 password and UTF-8 hex salt.
- * Candidate uses Apps Script's native HMAC. Benchmark 600,000 iterations in a
- * TEST deployment before any migration. Do not lower work factor to make it fit;
- * use a vetted native/managed identity provider if Apps Script exceeds limits.
+ * PBKDF2-HMAC-SHA256, 32-byte output. Preserve native UTF-8 byte encoding;
+ * only the per-round HMAC switches to pinned server-only js-sha256.
+ * Native 600000-round benchmark took 264532 ms in the TEST editor.
+ * Keep 600000 rounds; replacement Apps Script performance remains a rollout gate.
  */
 function pbkdf2_(password,salt,iterations) {
-  const key=Utilities.newBlob(password).getBytes();
-  const block=Utilities.newBlob(salt).getBytes().concat([0,0,0,1]);
-  let u=Utilities.computeHmacSha256Signature(block,key), out=u.slice();
+  if(!Number.isInteger(iterations) || iterations<1 || iterations>DMI_PASSWORD_ITERATIONS)
+    throw new Error('Invalid PBKDF2 iteration count');
+  const key=Utilities.newBlob(password).getBytes().map(b=>(b+256)%256);
+  const block=Utilities.newBlob(salt).getBytes().map(b=>(b+256)%256).concat([0,0,0,1]);
+  let u=DMI_SHA256.hmac.array(key,block), out=u.slice();
   for(let i=1;i<iterations;i++){
-    u=Utilities.computeHmacSha256Signature(u,key);
-    for(let j=0;j<out.length;j++)out[j]=(out[j]^u[j]);
+    u=DMI_SHA256.hmac.array(key,u);
+    for(let j=0;j<out.length;j++)out[j]^=u[j];
   }
   return hex_(out);
 }
 
-/** Owner-only validation in a disposable project. Does not modify accounts. */
+/** Editor-only checks. No spreadsheet, passwords, properties or deployment changes. */
 function testPasswordPrimitive() {
   const vectors=[
     [1,'120fb6cffcf8b32c43e7225256c4f837a86548c92ccc35480805987cb70be17b'],
-    [2,'ae4d0c95af6b46d32d0adff928f06dd02a303f8ef3c251dfd6e2d85a95474c43']
+    [2,'ae4d0c95af6b46d32d0adff928f06dd02a303f8ef3c251dfd6e2d85a95474c43'],
+    [4096,'c5e478d59288c841aa530db6845c4c8d962893a001ce4e11a4963873aa98134a']
   ];
   vectors.forEach(v=>{if(pbkdf2_('password','salt',v[0])!==v[1])throw new Error('PBKDF2 known-answer test failed');});
+  if(DMI_SHA256.hmac.hex(new Array(20).fill(11),'Hi There')!==
+    'b0344c61d8db38535ca8afceaf0bf12b881dc200c9833da726e9376c2e32cff7')
+    throw new Error('HMAC known-answer test failed');
   return true;
 }
 function benchmarkPasswordHash() {
   const start=Date.now();
   pbkdf2_('benchmark-only-not-an-account','benchmark-salt',DMI_PASSWORD_ITERATIONS);
-  Logger.log('PBKDF2 600000 elapsed ms: '+(Date.now()-start));
+  Logger.log('PBKDF2 600000 pure JS elapsed ms: '+(Date.now()-start));
+}
+function runPasswordTestsAndBenchmark() {
+  if(testPasswordPrimitive()!==true)throw new Error('Password primitive check failed');
+  Logger.log('PASS: PBKDF2 and HMAC known-answer tests passed. No spreadsheet data was changed.');
+  benchmarkPasswordHash();
 }

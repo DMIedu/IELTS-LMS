@@ -324,3 +324,41 @@ Next: select benchmarkPasswordHash in the TEST editor and Run. No spreadsheet
 records are accessed or passwords changed by that function. Collect its elapsed
 milliseconds or timeout/error. Keep legacy migration disabled and do not deploy
 production until performance and the remaining native integration checks pass.
+
+## Password performance failure and replacement candidate
+
+User's TEST execution log reports PBKDF2 600000 elapsed ms: 264532
+(19:56:06–20:00:31, 7 October 2026 Asia/Colombo). Native per-round Utilities
+HMAC is too slow for login and is replaced in this draft by server-only
+PasswordCrypto.gs: unmodified js-sha256 1.0.0 build, upstream commit
+9a54fb31d4594762987e1b5d175265f6bac921de, MIT license preserved in both file
+and third-party/js-sha256-LICENSE.txt. No network dependency at runtime.
+
+Security.gs keeps 600000 iterations and the exact prior native UTF-8 byte
+encoding for password/salt plus 32-byte hexadecimal output. Random salt and
+session generation still use native Utilities. PBKDF2 1/2/4096 known answers
+and RFC4231 HMAC pass in the JavaScript isolate; full work factor took 2281 ms
+in that isolate. This is NOT an Apps Script speed measurement. 105 mocked
+backend and 12 client checks pass; account-flow hashing remains mocked.
+The Node runner adds seven real PBKDF2 comparisons with node:crypto, including
+Unicode, embedded NUL, a long password, and 600000 rounds; these new Node
+comparisons have NOT been run because the local shell runtime is unavailable.
+
+Next owner action supersedes the earlier benchmark instruction: replace ONLY
+Code.gs in DMI LMS Security Test with regenerated test-setup/Code.gs, save,
+select runPasswordTestsAndBenchmark, and Run once. This bundle includes the
+vendor license and all backend files; do not add duplicate standalone files.
+This editor test needs no properties and reads/writes no spreadsheet records.
+Expect PASS then PBKDF2 600000 pure JS elapsed ms. Send both logs or any error.
+Do not initialize accounts, migrate plaintext, or deploy production yet.
+A fast replacement measurement does not establish acceptable concurrent login
+performance: the backend still serializes requests under a global script lock;
+validate latency/concurrency in the disposable test deployment before rollout.
+If replacement speed remains unsuitable, use a managed authentication service;
+do not lower the work factor to work around Apps Script latency.
+
+Production packaging now requires PasswordCrypto.gs alongside Code.gs,
+Security.gs and LiveSync.gs. Existing backup branches/Drive backups and main
+remain preserved. Changes in this follow-up: Security.gs, PasswordCrypto.gs,
+test-setup/Code.gs, tests/phase1-security.test.js, PHASE1-SECURITY.md,
+security/backup-manifest.json and third-party/js-sha256-LICENSE.txt.
