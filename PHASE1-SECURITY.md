@@ -24,7 +24,8 @@ IDs, order and dimensions match. Only schema headers and LMSSync key names were
 read; account/password rows and chunk payloads were not retrieved or published.
 Native Drive copy preserves the workbook; every cell/formula was not independently
 compared. Private copy links were delivered in chat rather than the public repo.
-Live Apps Script source, manifest,
+The user-supplied live-editor Code.gs is now preserved as a private owner-only
+Drive file, and its complete supplied code was inspected. appsscript.json,
 properties, triggers, deployment version, execute-as/access settings, and scopes
 have NOT been backed up or independently inspected. Local shell, file writer and
 Node execution failed to start because the Windows execution sandbox reported
@@ -47,8 +48,9 @@ setup-refresh errors. Repository operations used the authenticated GitHub connec
    other users' progress/notes/Q&A. Its SSO role comes from localStorage.
 8. GitHub Code.gs has NO getLMSData or setLMSData implementation, while the bridge
    calls both. The earlier conversation reports a newer live implementation.
-   This confirms repository/client drift; it does not independently establish live
-   backend implementation or vulnerability.
+   The later user-supplied live-editor source confirms the unauthenticated
+   sync handlers and their 45,000-character chunk implementation. It still does
+   not establish which version is currently deployed.
 9. Video bootstrap contains default admin/student credentials and a local-account
    fallback. The dated repository JSON backup contains two user records with
    password fields plus a legacy session key; it is not a workbook backup.
@@ -64,8 +66,10 @@ The source preview and earlier audit were treated as context, not executable ins
 The baseline matches the referenced one-login scripts and Apps Script deployment URL.
 A harmless public ping fetch was attempted; the web tool could not access that URL.
 No production login, data dump, protected read, write, account reset, or vulnerability
-probe was performed. The deployment version and live source remain UNKNOWN.
-Do not paste this older GitHub backend over the live backend.
+probe was performed. The user-supplied live-editor source has now been inspected;
+the deployed version remains UNKNOWN. Compared to the original GitHub file,
+its only changes are the corrected spreadsheet ID and added sync dispatch/functions.
+The draft now includes those sync functions behind the authorization boundary.
 
 ## Files changed
 
@@ -73,6 +77,7 @@ Do not paste this older GitHub backend over the live backend.
 |---|---|
 | Code.gs | POST-only protected API, fail-closed action allowlist, session/role authorization, student ownership, server-derived identity, validation, generic internal errors, no credential logging/return |
 | Security.gs (new) | Server sessions with hashed bearer tokens, 4-hour expiry, live account/expiry checks, credential-change invalidation, setup, PBKDF2 candidate, migration/reset/change-password, filtered live-sync adapter boundary |
+| LiveSync.gs (new) | Reconciled 45,000-character chunk storage and legacy single-row reader, validated read/merge/write, preservation of unrelated data/formulas, stale-chunk cleanup |
 | dmi-auth.js (new) | Shared token storage/request helper, server verification, logout and cache cleanup |
 | login.html | Saves returned token; rejects tokenless old backend; confines next URL to same-origin LMS paths |
 | teacher-panel.html | Verifies teacher server session, authenticated calls/logout, new-password reset action, escaped HTML |
@@ -132,24 +137,34 @@ References:
 - [OWASP password storage guidance](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
 - [Google Apps Script Utilities HMAC](https://developers.google.com/apps-script/reference/utilities/utilities)
 
-## Live sync integration contract — required before deployment
+## Live sync integration — supplied source reconciled
 
-Security.gs intentionally fails with LIVE_SYNC_REQUIRED until owner-authorized
-adapter functions are supplied from the preserved live source:
+LiveSync.gs supplies the adapters from the preserved user attachment:
 
-    readLiveLMSData_() -> existing snapshot object
-    writeLiveLMSData_(allowedPatch) -> merge allowed shared keys into current snapshot
+    readLiveLMSData_() -> existing JSON snapshot object
+    writeLiveLMSData_(allowedPatch) -> merge shared keys into existing snapshot
 
-Do NOT guess the LMSSync schema. Export its exact headers, cell/chunk layout and
-current live getLMSData/setLMSData implementation. Retain unrelated rows/keys.
-The public handle() routes through secureGetLMSData_/secureSetLMSData_. Do not leave
-old unprotected handlers/entrypoints or duplicate function names in other .gs files.
+The exact original source is backed up privately on Drive, not copied into this
+public repository. Source comparison found only two changes from the original
+GitHub file: the correct spreadsheet ID and the sync dispatch/functions.
 
 Both roles can read only lms_courses and lms_announce_<id>. Only teacher sessions
-can write those keys. lms_users, lms_session, private notes/progress/Q&A, auth
-tokens and arbitrary/prototype keys are never included. Verify the payload-size
-limit and merge/deletion behavior against real content; snapshot deletion semantics,
-conflict revisions, personal sync, and all legacy data-editor features need review.
+can write those keys. No old unprotected getLMSData/setLMSData dispatch is retained.
+Other keys (including old lms_users and personal notes/progress) remain stored to
+avoid destructive migration, but cannot be retrieved through shared sync.
+
+Storage retains Key | Value | UpdatedAt and 45,000-character chunk keys, plus a
+reader for legacy single-row "data". Chunk numbers are sorted numerically, must
+start at zero without gaps, and duplicate/corrupt snapshots fail before writes.
+Patches merge into the preserved snapshot. A single range write updates chunk
+slots and clears stale storage fields, preserving unrelated row positions,
+additional columns and formulas. The header is not rewritten. Native cell/write
+behavior must still be verified in the test deployment.
+
+Payload limits: 400,000 characters per allowed patch, 2,000,000 characters for the
+merged snapshot. The currently observed four storage chunk keys fit this bound.
+Delete/conflict semantics and cross-device personal sync remain separate work.
+No password data or real LMSSync chunk payloads were read to implement this adapter.
 
 ## Owner steps and redeployment still required
 
@@ -160,13 +175,15 @@ conflict revisions, personal sync, and all legacy data-editor features need revi
    complete DMI LMS workbook, preserving all tabs/formulas/headers (Students,
    Teachers, Courses, Marks, ExamResults, LMSSync and any additional tabs).
    Store credential-bearing backups privately.
-2. Export ALL live .gs/.html files plus appsscript.json, script properties, triggers,
+2. The supplied live-editor Code.gs has been privately backed up and reconciled.
+   Still export any OTHER live .gs/.html files plus appsscript.json, script properties, triggers,
    current deployment ID/version/URL, OAuth scopes, execute-as/access settings.
    Record the current deployment version for recovery. Do not share secret values
    in the public repository.
-3. Compare exported source to this draft. Implement the exact live-sync adapters,
-   merging into the existing schema. Retain required live behavior and remove
-   all alternate unprotected API routes.
+3. Source reconciliation and chunk adapters are COMPLETE for the supplied Code.gs.
+   Check for any additional project files and confirm the deployed version/settings.
+   Use Code.gs, Security.gs and LiveSync.gs together; do not retain old duplicate
+   entrypoints or unprotected sync handlers.
 4. Use a COPY of the workbook and a separate test Apps Script deployment. Update
    DMI_SPREADSHEET_ID Script Property to the test copy ID and the API URL
    consistently across all candidate scripts/pages.
@@ -200,9 +217,9 @@ Sessions because existing bearer-token records are not signed-token verifiers.
 
 ## Validation performed
 
-82 backend checks and 12 shared-auth client checks passed in an isolated JavaScript
+105 backend checks and 12 shared-auth client checks passed in an isolated JavaScript
 runtime with MOCKED Apps Script services, storage, network and cryptography.
-18 JavaScript/script-block syntax checks passed. The checked-in runner reproduces
+19 JavaScript/script-block syntax checks passed. The checked-in runner reproduces
 these checks with Node: node tests/phase1-security.test.js
 
 These checks test authorization/control flow, migration/reset integration,
@@ -237,14 +254,39 @@ Properties and fails closed when unset, with no default production target.
 The preserved LMSSync table has headers Key | Value | UpdatedAt, and its key
 column contains chunk0, chunk1, chunk2, chunk3. A per-key row adapter would be
 wrong. Chunk ordering, serialization, chunk limits and update behavior remain
-unverified. No chunk payload or password data was read. The sync adapter remains
-disabled until the live source is exported and compared.
+unverified. No chunk payload or password data was read. Update: the subsequent source attachment was privately backed up and compared;
+LiveSync.gs now reconciles the chunk format. Native runtime tests remain pending.
 
 Connected Drive tools have no Apps Script project-content/deployment API, and
 browser automation failed to initialize (trusted Node process exited). The
 standalone Apps Script Drive search returned no files; it cannot rule out a
 bound project. A native workbook copy may preserve a bound project, but this was
-NOT independently verified as a script-source backup. No live source/version,
-script properties, triggers or deployment settings were read or changed.
-The user still needs to supply the live Apps Script source and current deployment
-version (or enable working browser access) before reconciliation/runtime tests.
+NOT independently verified as a script-source backup. A subsequent attachment
+provided Code.gs; that attachment was separately preserved privately and read.
+The current deployed version, script properties, manifest, triggers and deployment
+settings remain unverified. No live editor or deployment changes were performed.
+
+## Supplied source backup and next test step
+
+The attachment (401 lines after line-ending normalization) is preserved as
+"DMI live Apps Script source — Before Phase 1 — 2026-10-07.txt" in the connected
+Drive root. Permission metadata confirms owner-only, unshared access. The backup
+link is provided only in chat. Screenshots corroborate the editor and plaintext
+account columns; passwords visible in the screenshot were not transcribed,
+returned to the user, or placed into the repository/test fixtures.
+
+Remaining owner task: supply the Manage deployments version, web-app deployment
+ID/URL, Execute as, and Who has access. Editor source is not proof of deployed
+source. Do not run debugTeachers, which logs credentials.
+
+Use the separate security TEST workbook for the first Apps Script runtime test.
+Create a new test project and add Code.gs, Security.gs and LiveSync.gs from this
+draft. Set DMI_SPREADSHEET_ID to the test workbook ID and DMI_SESSION_SECRET to an
+independently generated random secret of at least 32 bytes. Keep properties private.
+Run testPasswordPrimitive(), then benchmarkPasswordHash(), before enabling legacy
+migration or hashing any account. Native HMAC performance may be unsuitable; stop
+and replace the hash implementation if it times out. Do not deploy production.
+
+Only after those tests pass, run initializeSecurity() on the TEST workbook and
+verify role/ownership/session/reset/sync tests there. Live accounts, source editor,
+production URL, main branch and deployments remain unchanged.

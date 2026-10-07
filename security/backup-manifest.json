@@ -53,7 +53,7 @@
   "referencedSpreadsheetId": "1lewfmmCpqrn8421yOa6oMYh5OGJK67FYIAaXiyXVkis",
   "referencedDeploymentUrl": "https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec",
   "notBackedUp": [
-    "Live Apps Script source and manifest",
+    "Any additional Apps Script project files and appsscript.json; supplied Code.gs is backed up privately",
     "Apps Script script properties, triggers, scopes and deployment settings/version",
     "Spreadsheet sharing is verified separately; Drive copy is not a backup of original permission history"
   ],
@@ -654,9 +654,24 @@
       "GitHub SHEET_ID differs in case-sensitive second character from the connected DMI LMS Database ID"
     ],
     "privateBackupLocations": "Provided only in the user conversation; not published in this public repository",
-    "appsScriptSourceExported": false,
+    "appsScriptSourceExported": true,
     "appsScriptDeploymentVersionRecorded": false,
     "browserAccessFailure": "Browser automation runtime exited before opening the spreadsheet",
-    "sourceSearchResult": "Drive Apps Script MIME-type search returned no standalone projects; this does not exclude a bound project"
+    "sourceSearchResult": "Drive Apps Script MIME-type search returned no standalone projects; this does not exclude a bound project",
+    "appsScriptSourceExportScope": "User-supplied Code.gs only; no project manifest/properties/triggers or deployed version"
+  },
+  "suppliedLiveSource": {
+    "date": "2026-10-07",
+    "lineCount": 401,
+    "originalAttachmentSizeBytes": 16137,
+    "privatelyBackedUp": true,
+    "sharingVerified": "owner-only; not shared",
+    "sourceChangesFromOriginalGithub": [
+      "Correct spreadsheet ID (uppercase I)",
+      "getLMSData/setLMSData dispatch and 45000-character chunk implementation"
+    ],
+    "reconciledFile": "LiveSync.gs",
+    "deployedVersionVerified": false,
+    "backupLocation": "Private Drive file; link provided in user conversation only"
   }
 }

@@ -70,7 +70,7 @@ function initializeSecurity() {
   });
   if(!book.getSheetByName('Sessions'))book.insertSheet('Sessions').appendRow(
     ['TokenHash','Email','Role','CredentialVersion','ExpiresAt']);
-  // LMSSync is deliberately NOT created or migrated without the live source.
+  // Existing LMSSync storage is preserved; LiveSync.gs reads its live chunk format.
 }
 function setFields_(sheet,email,fields) {
   const data=sheet.getDataRange().getValues(), head=data[0].map(headerName_);
@@ -195,8 +195,8 @@ function resetStudentPassword_(p) {
 // No automatic emails or insecure public "forgot password" endpoint. Teacher
 // verifies student identity outside the LMS, then sets a new password via POST.
 
-// Live source is absent. This adapter must be owner-supplied from the preserved
-// LIVE implementation and verified against its LMSSync schema before rollout.
+// LiveSync.gs implements the preserved live chunk format. Native deployment
+// behavior and storage limits still require testing against the copied workbook.
 function liveSyncRead_() {
   if(typeof readLiveLMSData_!=='function')
     securityError_('LIVE_SYNC_REQUIRED','Live sync adapter has not been reconciled');
