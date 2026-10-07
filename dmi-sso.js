@@ -119,7 +119,7 @@
     var total=Number(record.total)||0;
     for(var n=1;n<=Math.min(total,200);n++){
       var marker=document.getElementById('qn'+n) || document.getElementById('q'+n);
-      var block=marker && marker.closest('.q-block');
+      var block=marker && marker.closest('.q-block') || marker.closest('tr');
       if(!block)continue;
       var copy=block.cloneNode(true);
       copy.querySelectorAll('input,select,textarea,button').forEach(function(el){el.remove();});
