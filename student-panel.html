@@ -152,11 +152,15 @@ tr:hover td{background:#fafbfd}
   </div>
 </div>
 
+<script src="dmi-auth.js"></script>
 <script>
+(async function(){
+const verified=await DMI_AUTH.requireRole('student');
+if(!verified)return;
 const API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
 
-const user = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
-const role = localStorage.getItem('dmi_lms_role');
+const user = verified.user;
+const role = verified.role;
 if (!user || role !== 'student') { window.location.href = 'login.html'; }
 document.getElementById('who').textContent = user ? user.name : '';
 document.getElementById('heroName').textContent = user ? (user.name.split(' ')[0]||user.name) : 'student';
@@ -175,7 +179,7 @@ if (user && user.expiryDate) {
   }
 }
 
-document.getElementById('logoutBtn').onclick = () => { localStorage.clear(); window.location.href = 'login.html'; };
+document.getElementById('logoutBtn').onclick = (e) => { e.preventDefault(); DMI_AUTH.logout(); };
 
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -184,15 +188,15 @@ document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
   document.getElementById('panel-'+t.dataset.tab).classList.add('active');
 });
 
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function safeURL(s){try{const u=new URL(s);return /^https?:$/.test(u.protocol)?esc(u.href):'#';}catch(e){return '#';}}
 async function call(action, params={}){
-  const body = new URLSearchParams({action, ...params});
-  const r = await fetch(API_URL, {method:'POST', body});
-  return r.json();
+  return DMI_AUTH.call(action,params);
 }
 
 async function loadMarks(){
   const res = await call('listMarks', {studentEmail:user.email});
-  if (!res.ok){document.getElementById('marksBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  if (!res.ok){document.getElementById('marksBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
   const data = res.data;
   document.getElementById('kTests').textContent = data.length;
   if (data.length){
@@ -211,33 +215,35 @@ async function loadMarks(){
       const pct = mx ? Math.round((s/mx)*1000)/10 : null;
       return `<tr>
         <td>${m.Date ? new Date(m.Date).toLocaleDateString() : ''}</td>
-        <td>${m.Course?'<span class="badge red">'+m.Course+'</span>':''}</td>
-        <td><b>${m.Test||''}</b></td>
+        <td>${m.Course?'<span class="badge red">'+esc(m.Course)+'</span>':''}</td>
+        <td><b>${esc(m.Test||'')}</b></td>
         <td><div class="score-cell">${s}<span style="color:var(--muted);font-size:14px;font-weight:500"> / ${mx||'-'}</span>${pct!==null?'<span class="pct">'+pct+'%</span>':''}</div></td>
-        <td>${m.TeacherName||''}</td>
-        <td>${m.Comments||''}</td>
+        <td>${esc(m.TeacherName||'')}</td>
+        <td>${esc(m.Comments||'')}</td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
 }
 
 async function loadCourses(){
   const res = await call('listCourses');
-  if (!res.ok){document.getElementById('coursesBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  if (!res.ok){document.getElementById('coursesBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
   const data = res.data;
   if (!data.length){document.getElementById('coursesBox').innerHTML='<div class="empty">No lessons available yet.</div>';return;}
   document.getElementById('coursesBox').innerHTML = `<div class="lessons">${data.map(c => `
     <div class="lesson">
-      <span class="course-tag">${c.Course||'Course'}</span>
-      <div class="lesson-title">${c.Lesson||''}</div>
+      <span class="course-tag">${esc(c.Course||'Course')}</span>
+      <div class="lesson-title">${esc(c.Lesson||'')}</div>
       <div class="actions">
-        ${c.VideoURL ? `<a class="primary" href="${c.VideoURL}" target="_blank">▶ Watch Video</a>` : ''}
-        ${c.PDFURL   ? `<a href="${c.PDFURL}" target="_blank">📄 PDF</a>` : ''}
+        ${c.VideoURL ? `<a class="primary" href="${safeURL(c.VideoURL)}" target="_blank">▶ Watch Video</a>` : ''}
+        ${c.PDFURL   ? `<a href="${safeURL(c.PDFURL)}" target="_blank">📄 PDF</a>` : ''}
       </div>
     </div>`).join('')}</div>`;
 }
 
 loadMarks();
 loadCourses();
+
+})().catch(function(){ location.href='login.html'; });
 </script>
 </body>
 </html>

@@ -168,7 +168,7 @@ tr:hover td{background:#fafbfd}
       <div class="grid">
         <div class="field"><label>Full name</label><input id="sName"/></div>
         <div class="field"><label>Email</label><input id="sEmail" type="email"/></div>
-        <div class="field"><label>Password</label><input id="sPass"/></div>
+        <div class="field"><label>Password</label><input id="sPass" type="password" minlength="12"/></div>
         <div class="field"><label>Class / Batch</label><input id="sClass" placeholder="e.g. IELTS-A"/></div>
       </div>
       <button class="btn btn-primary" onclick="addStudent()">+ Create Student</button>
@@ -241,17 +241,19 @@ tr:hover td{background:#fafbfd}
   </div>
 </div>
 
+<script src="dmi-auth.js"></script>
 <script>
+(async function(){
+const verified=await DMI_AUTH.requireRole('teacher');
+if(!verified)return;
 const API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
 
-const user = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
-const role = localStorage.getItem('dmi_lms_role');
+const user = verified.user;
+const role = verified.role;
 if (!user || role !== 'teacher') { window.location.href = 'login.html'; }
 document.getElementById('who').textContent = user ? user.name : '';
 
-document.getElementById('logoutBtn').onclick = () => {
-  localStorage.clear(); window.location.href = 'login.html';
-};
+document.getElementById('logoutBtn').onclick = (e) => { e.preventDefault(); DMI_AUTH.logout(); };
 
 document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
   document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
@@ -260,10 +262,10 @@ document.querySelectorAll('.tab').forEach(t => t.onclick = () => {
   document.getElementById('panel-'+t.dataset.tab).classList.add('active');
 });
 
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function safeURL(s){try{const u=new URL(s);return /^https?:$/.test(u.protocol)?esc(u.href):'#';}catch(e){return '#';}}
 async function call(action, params={}){
-  const body = new URLSearchParams({action, ...params});
-  const r = await fetch(API_URL, {method:'POST', body});
-  return r.json();
+  return DMI_AUTH.call(action,params);
 }
 function setMsg(id,t,c){const el=document.getElementById(id);el.className='msg '+c;el.textContent=t;}
 
@@ -272,13 +274,13 @@ let allStudents=[], allMarks=[], allCourses=[];
 async function loadStudents(){
   document.getElementById('studentsBox').innerHTML = '<div class="empty">Loading…</div>';
   const res = await call('listStudents');
-  if (!res.ok){document.getElementById('studentsBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  if (!res.ok){document.getElementById('studentsBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
   allStudents = res.data;
   document.getElementById('kStudents').textContent = allStudents.length;
   renderStudents();
   const sel = document.getElementById('mStudent');
   sel.innerHTML = '<option value="">— Select student —</option>' +
-    allStudents.map(s => `<option value="${s.Email}|${s.Name}">${s.Name} — ${s.Email}</option>`).join('');
+    allStudents.map(s => `<option value="${esc(s.Email)}|${esc(s.Name)}">${esc(s.Name)} — ${esc(s.Email)}</option>`).join('');
 }
 
 function renderStudents(){
@@ -295,15 +297,16 @@ function renderStudents(){
       const expired = !!s.expired;
       const daysLeft = expDate ? Math.ceil((expDate - new Date())/(1000*60*60*24)) : null;
       return `<tr>
-        <td><b>${s.Name||''}</b></td>
-        <td>${s.Email||''}</td>
-        <td>${s.Class?'<span class="badge blue">'+s.Class+'</span>':''}</td>
+        <td><b>${esc(s.Name||'')}</b></td>
+        <td>${esc(s.Email||'')}</td>
+        <td>${s.Class?'<span class="badge blue">'+esc(s.Class)+'</span>':''}</td>
         <td>${s.JoinDate ? new Date(s.JoinDate).toLocaleDateString() : ''}</td>
         <td>${expDate ? expDate.toLocaleDateString() : '—'}${(!expired && daysLeft !== null) ? '<br/><small style="color:var(--muted)">'+daysLeft+' day'+(daysLeft===1?'':'s')+' left</small>' : ''}</td>
         <td>${expired ? '<span class="badge red">Expired</span>' : '<span class="badge green">Active</span>'}</td>
         <td>
-          <button class="btn btn-sm" style="background:var(--blue);color:#fff;border:none" onclick="renewStudent('${s.Email}')">Renew</button>
-          <button class="btn btn-danger" onclick="deleteStudent('${s.Email}')">Delete</button>
+          <button class="btn btn-sm" style="background:var(--blue);color:#fff;border:none" onclick="renewStudent(decodeURIComponent('${encodeURIComponent(s.Email).replace(/'/g,'%27')}'))">Renew</button>
+          <button class="btn btn-sm" onclick="resetPassword(decodeURIComponent('${encodeURIComponent(s.Email).replace(/'/g,'%27')}'))">Reset Password</button>
+          <button class="btn btn-danger" onclick="deleteStudent(decodeURIComponent('${encodeURIComponent(s.Email).replace(/'/g,'%27')}'))">Delete</button>
         </td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
@@ -322,7 +325,7 @@ let allExams = [];
 async function loadExams(){
   document.getElementById('examsBox').innerHTML='<div class="empty">Loading…</div>';
   const res = await call('listExamResults');
-  if (!res.ok){document.getElementById('examsBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  if (!res.ok){document.getElementById('examsBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
   allExams = res.data;
   renderExams();
 }
@@ -340,8 +343,8 @@ function renderExams(){
       const pct = mx ? Math.round((s/mx)*1000)/10 : null;
       return `<tr>
         <td>${e.Date ? new Date(e.Date).toLocaleDateString() : ''}</td>
-        <td><b>${e.StudentName||''}</b><br/><small style="color:var(--muted)">${e.StudentEmail||''}</small></td>
-        <td>${e.TestName||''}${e.Course?'<br/><span class="badge red" style="margin-top:4px">'+e.Course+'</span>':''}</td>
+        <td><b>${esc(e.StudentName||'')}</b><br/><small style="color:var(--muted)">${esc(e.StudentEmail||'')}</small></td>
+        <td>${esc(e.TestName||'')}${e.Course?'<br/><span class="badge red" style="margin-top:4px">'+esc(e.Course)+'</span>':''}</td>
         <td><div class="score-cell">${s}<span style="color:var(--muted);font-size:14px;font-weight:500"> / ${mx||'-'}</span>${pct!==null?'<span class="pct">'+pct+'%</span>':''}</div></td>
         <td><button class="btn btn-ghost btn-sm" onclick="viewExam(${i})">View Answers</button></td>
       </tr>`;
@@ -360,15 +363,15 @@ function viewExam(idx){
   try { questions = JSON.parse(e.QuestionsJSON || '{}'); } catch(_) {}
   const keys = Object.keys(answers).length ? Object.keys(answers) : Object.keys(questions);
   const rows = keys.length ? keys.map(k => `
-    <tr><td style="font-weight:700;color:var(--dmi-red);width:40px">${k}</td>
-        <td>${(questions[k]||'').toString().replace(/</g,'&lt;') || '<em style="color:var(--muted)">(question text not captured)</em>'}</td>
-        <td><b>${(answers[k]||'').toString().replace(/</g,'&lt;') || '—'}</b></td></tr>`).join('') :
+    <tr><td style="font-weight:700;color:var(--dmi-red);width:40px">${esc(k)}</td>
+        <td>${esc(questions[k]||'') || '<em style="color:var(--muted)">(question text not captured)</em>'}</td>
+        <td><b>${esc(answers[k]||'') || '—'}</b></td></tr>`).join('') :
     '<tr><td colspan="3" class="empty">No answer data captured</td></tr>';
   document.getElementById('examModalBody').innerHTML = `
-    <h2 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:6px">${e.TestName||'Exam'}</h2>
-    <div style="color:var(--muted);font-size:13px;margin-bottom:18px">${e.StudentName||''} · ${e.StudentEmail||''} · ${e.Date?new Date(e.Date).toLocaleString():''}</div>
+    <h2 style="font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:6px">${esc(e.TestName||'Exam')}</h2>
+    <div style="color:var(--muted);font-size:13px;margin-bottom:18px">${esc(e.StudentName||'')} · ${esc(e.StudentEmail||'')} · ${e.Date?new Date(e.Date).toLocaleString():''}</div>
     <div style="background:var(--bg);padding:14px;border-radius:8px;margin-bottom:18px;font-size:14px">
-      Score: <b style="color:var(--green);font-size:18px">${e.Score||0} / ${e.MaxScore||'-'}</b>
+      Score: <b style="color:var(--green);font-size:18px">${esc(e.Score||0)} / ${esc(e.MaxScore||'-')}</b>
     </div>
     <div class="tbl-wrap"><table>
       <thead><tr><th style="width:40px">Q#</th><th>Question</th><th>Student Answer</th></tr></thead>
@@ -403,7 +406,7 @@ async function deleteStudent(email){
 async function loadCourses(){
   document.getElementById('coursesBox').innerHTML='<div class="empty">Loading…</div>';
   const res = await call('listCourses');
-  if (!res.ok){document.getElementById('coursesBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  if (!res.ok){document.getElementById('coursesBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
   allCourses = res.data;
   document.getElementById('kCourses').textContent = allCourses.length;
   renderCourses();
@@ -417,11 +420,11 @@ function renderCourses(){
   document.getElementById('coursesBox').innerHTML = `<div class="tbl-wrap"><table>
     <thead><tr><th>Course</th><th>Lesson</th><th>Video</th><th>PDF</th><th></th></tr></thead>
     <tbody>${list.map(c => `<tr>
-      <td><span class="badge red">${c.Course||''}</span></td>
-      <td><b>${c.Lesson||''}</b></td>
-      <td>${c.VideoURL?'<a class="link" href="'+c.VideoURL+'" target="_blank">Video ↗</a>':''}</td>
-      <td>${c.PDFURL?'<a class="link" href="'+c.PDFURL+'" target="_blank">PDF ↗</a>':''}</td>
-      <td><button class="btn btn-danger" onclick="delCourse('${c.CourseID}')">Delete</button></td>
+      <td><span class="badge red">${esc(c.Course||'')}</span></td>
+      <td><b>${esc(c.Lesson||'')}</b></td>
+      <td>${c.VideoURL?'<a class="link" href="'+safeURL(c.VideoURL)+'" target="_blank">Video ↗</a>':''}</td>
+      <td>${c.PDFURL?'<a class="link" href="'+safeURL(c.PDFURL)+'" target="_blank">PDF ↗</a>':''}</td>
+      <td><button class="btn btn-danger" onclick="delCourse(decodeURIComponent('${encodeURIComponent(c.CourseID).replace(/'/g,'%27')}'))">Delete</button></td>
     </tr>`).join('')}</tbody></table></div>`;
 }
 document.getElementById('searchCrs').addEventListener('input', renderCourses);
@@ -467,7 +470,7 @@ async function postMark(){
 async function loadMarks(){
   document.getElementById('marksBox').innerHTML='<div class="empty">Loading…</div>';
   const res = await call('listMarks');
-  if (!res.ok){document.getElementById('marksBox').innerHTML='<div class="empty">Error: '+res.error+'</div>';return;}
+  if (!res.ok){document.getElementById('marksBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
   allMarks = res.data;
   document.getElementById('kMarks').textContent = allMarks.length;
   // Class average
@@ -493,18 +496,37 @@ function renderMarks(){
       const pct = mx ? Math.round((s/mx)*1000)/10 : null;
       return `<tr>
         <td>${m.Date ? new Date(m.Date).toLocaleDateString() : ''}</td>
-        <td><b>${m.StudentName||''}</b><br/><small style="color:var(--muted)">${m.StudentEmail||''}</small></td>
-        <td>${m.Course?'<span class="badge red">'+m.Course+'</span>':''}</td>
-        <td>${m.Test||''}</td>
+        <td><b>${esc(m.StudentName||'')}</b><br/><small style="color:var(--muted)">${esc(m.StudentEmail||'')}</small></td>
+        <td>${m.Course?'<span class="badge red">'+esc(m.Course)+'</span>':''}</td>
+        <td>${esc(m.Test||'')}</td>
         <td><div class="score-cell">${s}<span style="color:var(--muted);font-size:14px;font-weight:500"> / ${mx||'-'}</span>${pct!==null?'<span class="pct">'+pct+'%</span>':''}</div></td>
-        <td>${m.TeacherName||''}</td>
-        <td>${m.Comments||''}</td>
+        <td>${esc(m.TeacherName||'')}</td>
+        <td>${esc(m.Comments||'')}</td>
       </tr>`;
     }).join('')}</tbody></table></div>`;
 }
 document.getElementById('searchMarks').addEventListener('input', renderMarks);
 
 loadStudents(); loadCourses(); loadMarks(); loadExams();
+async function resetPassword(email){
+  const newPassword=prompt('Verify the student identity first. Enter a new password of at least 12 characters:');
+  if(!newPassword)return;
+  const res=await call('resetStudentPassword',{email,newPassword});
+  alert(res.ok?'Password reset. Existing sessions are invalidated.':res.error);
+}
+window.resetPassword=resetPassword;
+window.renewStudent=renewStudent;
+window.deleteStudent=deleteStudent;
+window.addStudent=addStudent;
+window.addCourse=addCourse;
+window.delCourse=delCourse;
+window.postMark=postMark;
+window.viewExam=viewExam;
+window.loadStudents=loadStudents;
+window.loadCourses=loadCourses;
+window.loadExams=loadExams;
+window.loadMarks=loadMarks;
+})().catch(function(){ location.href='login.html'; });
 </script>
 </body>
 </html>

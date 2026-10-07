@@ -11,7 +11,7 @@
  *                                          (ExamResults + Marks), so it shows on their dashboard
  *                                          and in the Teacher Panel.
  */
-(function () {
+(async function () {
   var API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
   var BRANCH_KEY = 'dmi_lms_branch';
 
@@ -29,7 +29,13 @@
     } catch (e) { return null; }
   }
 
-  var auth = readUser();
+  if(!window.DMI_AUTH){
+    await new Promise(function(resolve,reject){
+      var script=document.createElement('script'); script.src=BASE+'dmi-auth.js';
+      script.onload=resolve; script.onerror=reject; document.head.appendChild(script);
+    });
+  }
+  var auth = await DMI_AUTH.requireRole();
   if (!auth) {
     location.replace(BASE + 'login.html?next=' + encodeURIComponent(location.pathname + location.search));
     return;
@@ -114,7 +120,7 @@
     var answers = isWriting ? { task1: record.task1 || '', task2: record.task2 || '', words: [record.wc1, record.wc2] } : (record.answers || {});
     if (record.band != null) answers._band = record.band;
     var body = new URLSearchParams({
-      action: 'submitExamResult',
+      action: 'submitExamResult', sessionToken: DMI_AUTH.token(),
       studentEmail: user.email || '', studentName: user.name || '',
       testName: info.testName, course: info.course,
       score: isWriting ? 0 : score, maxScore: isWriting ? 0 : (record.total || 40),
@@ -143,4 +149,7 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prefill);
   else prefill();
-})();
+})().catch(function(){
+  var here=document.currentScript && document.currentScript.src;
+  location.replace((here?here.replace(/[^\/]*$/,''):'/IELTS-LMS/')+'login.html');
+});

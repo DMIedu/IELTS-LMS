@@ -117,6 +117,7 @@ body::before{content:'';position:absolute;inset:0;pointer-events:none;background
   <div>Powered by DMI LMS</div>
 </div>
 
+<script src="dmi-auth.js"></script>
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
 
@@ -144,11 +145,16 @@ btn.addEventListener('click', async () => {
       show(res.error || 'Login failed', 'err'); return;
     }
     if (res.role !== role) { show('This account is a '+res.role+', not a '+role, 'err'); return; }
-    localStorage.setItem('dmi_lms_user', JSON.stringify(res.user));
-    localStorage.setItem('dmi_lms_role', res.role);
+    DMI_AUTH.save(res);
     show('Welcome, '+res.user.name+'. Redirecting…', 'ok');
     // ?next=… lets us bounce the student back to the paper they tried to open
-    const urlNext = new URLSearchParams(location.search).get('next');
+    const requested = new URLSearchParams(location.search).get('next');
+    let urlNext = null;
+    if(requested){
+      const target = new URL(requested,location.href);
+      const root = new URL('./',location.href).pathname;
+      if(target.origin===location.origin && target.pathname.startsWith(root))urlNext=target.href;
+    }
     const fallback = res.role === 'teacher' ? 'teacher-panel.html' : 'student-panel.html';
     setTimeout(() => { window.location.href = urlNext && res.role === 'student' ? urlNext : fallback; }, 600);
   } catch(e) { show('Network error: '+e.message, 'err'); }
