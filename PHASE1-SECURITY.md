@@ -290,3 +290,19 @@ and replace the hash implementation if it times out. Do not deploy production.
 Only after those tests pass, run initializeSecurity() on the TEST workbook and
 verify role/ownership/session/reset/sync tests there. Live accounts, source editor,
 production URL, main branch and deployments remain unchanged.
+
+## Deployment receipt supplied by the user
+
+A subsequent screenshot shows "Deployment successfully updated" and "Version 8
+on Oct 7, 2026, 7:20 PM". The image is preserved as an unshared, owner-only Drive
+backup; its link stays in chat. Codex did not perform that deployment update.
+Treat Version 8 as the latest user-observed deployment reference, subject to
+confirming the selected deployment ID and settings. The screenshot does not prove
+that the security draft is deployed or that the supplied editor source exactly
+matches Version 8. The full deployment URL/settings were not extracted from
+truncated/small screenshot text.
+
+"Execute as" and "Who has access" are not visible in the success receipt. Read
+them in the selected deployment's configuration. Do not click Deploy while
+collecting settings. Native hash and test-workbook verification still precede
+any production security rollout.
