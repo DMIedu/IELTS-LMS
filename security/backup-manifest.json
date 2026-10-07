@@ -685,5 +685,19 @@
     "whoHasAccessVerified": false,
     "deployedSourceIndependentlyVerified": false,
     "note": "User screenshot shows a deployment update; Codex did not perform it. This receipt does not establish that the draft security code is installed."
+  },
+  "nativePasswordPrimitiveEvidence": {
+    "date": "2026-10-07",
+    "timezone": "Asia/Colombo",
+    "projectTitle": "DMI LMS Security Test",
+    "function": "runPasswordPrimitiveCheck",
+    "result": "PASS shown in user-supplied Apps Script execution log",
+    "displayedStartTime": "19:52:51",
+    "displayedCompletionTime": "19:52:52",
+    "scope": "PBKDF2-HMAC-SHA256 known-answer vectors at iterations 1 and 2 only",
+    "fullWorkFactor600000PerformanceVerified": false,
+    "spreadsheetDataChanged": false,
+    "productionDeploymentPerformedByCodex": false,
+    "receiptPrivatelyBackedUp": true
   }
 }
