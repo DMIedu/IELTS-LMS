@@ -673,5 +673,17 @@
     "reconciledFile": "LiveSync.gs",
     "deployedVersionVerified": false,
     "backupLocation": "Private Drive file; link provided in user conversation only"
+  },
+  "latestUserProvidedDeploymentReceipt": {
+    "version": 8,
+    "displayedDate": "2026-10-07",
+    "displayedTime": "19:20",
+    "timezone": "Asia/Colombo (user context)",
+    "evidence": "User-provided deployment-success screenshot",
+    "receiptPrivatelyBackedUp": true,
+    "executeAsVerified": false,
+    "whoHasAccessVerified": false,
+    "deployedSourceIndependentlyVerified": false,
+    "note": "User screenshot shows a deployment update; Codex did not perform it. This receipt does not establish that the draft security code is installed."
   }
 }
