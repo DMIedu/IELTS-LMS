@@ -306,3 +306,21 @@ truncated/small screenshot text.
 them in the selected deployment's configuration. Do not click Deploy while
 collecting settings. Native hash and test-workbook verification still precede
 any production security rollout.
+
+## Native password primitive check: PASS
+
+The user's screenshot from "DMI LMS Security Test" shows
+runPasswordPrimitiveCheck starting at 7:52:51 PM and completing at 7:52:52 PM
+on 7 October 2026, with the expected PASS log. The screenshot is backed up as
+an unshared, owner-only Drive file. This verifies the native PBKDF2-HMAC-SHA256
+known-answer vectors at iterations 1 and 2. It does NOT benchmark the full
+600,000-iteration password work factor or validate the complete authentication flow.
+
+A second screenshot shows the hardened debugTeachers function logging only
+"Teacher credentials are never logged. Use testConnection for schema checks."
+No credentials were transcribed from the screenshots.
+
+Next: select benchmarkPasswordHash in the TEST editor and Run. No spreadsheet
+records are accessed or passwords changed by that function. Collect its elapsed
+milliseconds or timeout/error. Keep legacy migration disabled and do not deploy
+production until performance and the remaining native integration checks pass.
