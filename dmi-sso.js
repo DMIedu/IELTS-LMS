@@ -36,10 +36,7 @@
     });
   }
   var auth = await DMI_AUTH.requireRole();
-  if (!auth) {
-    location.replace(BASE + 'login.html?next=' + encodeURIComponent(location.pathname + location.search));
-    return;
-  }
+  if (!auth) return; // requireRole already handles sign-in or retry UI.
   var user = auth.user, role = auth.role;
 
   // ---------- helpers ----------
