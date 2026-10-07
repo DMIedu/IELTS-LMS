@@ -1270,6 +1270,13 @@ function login() {
   showApp();
 }
 function logout() {
+  if (state.user && state.user.dmi) {
+    localStorage.removeItem('dmi_lms_user');
+    localStorage.removeItem('dmi_lms_role');
+    localStorage.removeItem(LS.SESSION);
+    location.href = '../login.html';
+    return;
+  }
   localStorage.removeItem(LS.SESSION);
   state.user = null;
   state.courseId = null;
@@ -1306,9 +1313,26 @@ function showApp() {
   navTo('home');
 }
 
+// Single sign-on: if the student/teacher is signed in on the main DMI LMS
+// (login.html, Google Sheet accounts), open the video library straight away
+// instead of asking for a second username and password.
+function dmiMainUser() {
+  try {
+    const u = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
+    const r = localStorage.getItem('dmi_lms_role');
+    if (!u) return null;
+    if (r !== 'teacher' && u.expiryDate && new Date(u.expiryDate) < new Date()) return null;
+    const id = String(u.email || u.id || u.name).toLowerCase();
+    return { username: id, name: u.name || id, role: r === 'teacher' ? 'admin' : 'student', dmi: true };
+  } catch (e) { return null; }
+}
+
 // Restore session
 const sess = load(LS.SESSION, null);
-if (sess) {
+const dmiUser = dmiMainUser();
+if (dmiUser) {
+  state.user = dmiUser; showApp();
+} else if (sess) {
   const users = load(LS.USERS, []);
   const u = users.find(x => x.username === sess);
   if (u) { state.user = u; showApp(); } else { showLogin(); }
