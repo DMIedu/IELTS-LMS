@@ -1,6 +1,6 @@
 # Course details and enrolment — release package
 
-Status: implemented and tested in isolated JavaScript mocks; not deployed to Apps Script or the live website.
+Status: the owner deployed the course backend to production Version 13 on 8 October 2026 (Asia/Colombo). Matching website publication follows this commit. Native TEST initialization, course creation, enrolment visibility and renewal were confirmed during rollout. Native removal visibility and full production course acceptance remain pending.
 Base: 40d84e6bb7ee6dbc8499e634e450bb062c2a9d8c. The existing Phase 1 backend and Phase 2 login retry remain intact.
 
 ## What teachers can do
@@ -23,10 +23,10 @@ All requests remain POST with verified sessions. Metadata and enrolment mutation
 36 backend checks passed with in-memory Sheets, locks, properties and sessions:
 legacy preservation, idempotent setup/enrolment, real handle/authorize dispatch, role checks, authenticated identity, visibility and revocation, expired/deleted users, header-order handling, extra-column preservation, input bounds and unsafe URLs.
 The existing 13 login transport regression checks also passed with the extended read-action list.
-11 UI checks passed with a minimal DOM: text escaping, safe links, empty/error states, old-backend fallback, active-student selection, legacy settings and disabled writes before setup.
+13 UI checks passed with a minimal DOM: text escaping, safe links, empty/error states, old-backend fallback, active-student selection, legacy settings and disabled writes before setup.
 The consolidated backend and changed frontend scripts passed syntax checks.
 Tests ran in the isolated functions JavaScript runtime. Local shell execution was unavailable; the checked-in Node runners were not executed as Node processes.
-No native Apps Script integration test, screenshot/layout QA or live enrolment change has been performed.
+Native TEST evidence: initialization completed; existing test web-app deployment updated to Version 2; course creation saved; the user confirmed hidden before enrolment and visible after enrolment, and confirmed renewal. Initial course catalogue loading returned non-JSON HTML; recovery succeeded, but its underlying cause remains unresolved. No production enrolment change or comprehensive layout audit is confirmed. Follow-up UI checks cover clear retry feedback and clearing stale errors on success.
 
 Run locally with Node:
 - node tests/course-management.test.js
