@@ -6,7 +6,7 @@ This copy uses only the existing DMI LMS Security Test endpoint and separate tes
 
 First replace consolidated Code.gs in the DMI LMS Security Test Apps Script project with release-candidate/Code.gs from this archive. Do not add standalone Code/Security/CourseManagement files beside the bundle. Keep DMI_SPREADSHEET_ID pointing at the TEST workbook and leave the session secret private. Run initializeCourseManagement, then publish a new version of the existing TEST deployment. Confirm ?action=ping says phase3-courses.
 
-The temporary browser accounts from Phase 1 were cleaned up. In the TEST project only, run createBrowserTestAccounts in BrowserTest.gs to create fresh private test credentials; view them in Script Properties and do not share their values. Use these accounts to sign in to this local website.
+The temporary browser accounts from Phase 1 were cleaned up. In the TEST project only, use the existing BrowserTest.gs (or add test-setup/BrowserTest.gs from this archive if it is absent), then run createBrowserTestAccounts to create fresh private test credentials; view them in Script Properties and do not share their values. Use these accounts to sign in to this local website.
 
 Teacher: Courses → New course; add description, teacher, duration, syllabus and a materials link; save with Enrolled students only selected. Student: verify the course is hidden before enrolment, visible after teacher enrols that student, and hidden again after removal. Confirm existing lessons and marks remain available and student cannot access Teacher Panel. Use Chrome and Edge for separate accounts.
 
