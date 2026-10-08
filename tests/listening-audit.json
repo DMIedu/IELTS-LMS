@@ -15,7 +15,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2022/06/cam17-test1-part4.mp3"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 17 listening test 2.html",
@@ -33,7 +35,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2022/06/cam17-test2-part4.mp3"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 18 listening test 1.html",
@@ -51,7 +55,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2023/06/cam18-test1-part4.mp3"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 18 listening test 2.html",
@@ -69,7 +75,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2023/06/cam18-test2-part4.mp3"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 18 listening test 3.html",
@@ -87,7 +95,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2023/06/cam18-test3-part4.mp3"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 18 listening test 4.html",
@@ -105,7 +115,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2023/06/cam18-test4-part4.mp3"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 19 listening test 1.html",
@@ -123,7 +135,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2024/07/cam19-test1-part4.m4a"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 19 listening test 2.html",
@@ -141,7 +155,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2024/07/cam19-test2-part4.m4a"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 19 listening test 3.html",
@@ -159,7 +175,9 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2024/07/cam19-test3-part4.m4a"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   },
   {
     "paper": "book 19 listening test 4.html",
@@ -177,6 +195,8 @@
       "https://ieltstrainingonline.com/wp-content/uploads/2024/07/cam19-test4-part4.m4a"
     ],
     "sourceListingVerified": true,
-    "decodedPlaybackVerified": false
+    "decodedPlaybackVerified": true,
+    "browserCheckRun": "https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190",
+    "playbackScope": "Metadata, playback start, pause and same-part navigation; not full recording review"
   }
 ]

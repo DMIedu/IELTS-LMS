@@ -29,7 +29,7 @@ The corrected URLs were checked against these pages on 9 October 2026 (Asia/Colo
 - [book 19 listening test 3](https://ieltstrainingonline.com/practice-cam-19-listening-test-03-with-answer-and-audioscripts/)
 - [book 19 listening test 4](https://ieltstrainingonline.com/practice-cam-19-listening-test-04-with-answer-and-audioscripts/)
 
-tests/listening-audit.json records each old/new URL and the distinction between source-listing verification and actual decoded playback.
+tests/listening-audit.json records each old/new URL and source-listing verification. Native Chromium subsequently confirmed playback starts for all 40 parts.
 
 ## Validation
 
@@ -37,7 +37,11 @@ tests/listening-audit.json records each old/new URL and the distinction between 
 
 The Listening checks workflow runs the Node tests and makes small header/range requests to all 40 external URLs, retaining a JSON status/type report. It closes each response without reading the recording. An audio-compatible HTTP response does not prove full playback, seeking support or correctness of every recording.
 
-Native browser testing is unavailable in this session because the local tool runtime failed to start. Actual audible playback, mobile behavior and external-host hotlink restrictions remain unverified. External hosting can change independently of this website.
+Native Chromium testing passed for all 40 audio parts in [Listening checks run 37827242190](https://github.com/DMIedu/IELTS-LMS/actions/runs/37827242190). The proposed complete paper files were served at the site origin inside an isolated browser, with a fictional authentication fixture and every Apps Script request blocked. Each recording had a finite duration, advanced playback after a Play click, paused correctly, and retained position during navigation within the same part. No production account was used and no test result was submitted.
+
+The same run passed 174 Node controls/page checks and returned audio-compatible range responses for 40/40 URLs. An earlier repeated header probe gave inconclusive failures for three Book 17 parts; the later header and native playback checks all passed. The header probe is diagnostic; actual browser playback determines the workflow result.
+
+The local computer/browser tool could not start, so browser checks ran in GitHub Actions. These are short playback-start checks, not a human listening to every full recording or checking every spoken answer against the questions. Mobile browsers and later external-host outages remain unverified.
 
 ## Browser check after publication
 
