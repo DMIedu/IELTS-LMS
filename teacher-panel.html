@@ -178,6 +178,40 @@ tr:hover td{background:#fafbfd}
 
   <!-- COURSES -->
   <div class="panel" id="panel-courses">
+    <div class="card" id="courseManagement">
+      <div class="card-hd"><div><h2>Course details and enrolment</h2><div class="sub">Describe a course, then assign students to it</div></div><button type="button" class="btn btn-ghost btn-sm" id="courseRefresh">Refresh</button></div>
+      <div id="courseNotice" class="msg" role="status" aria-live="polite"></div>
+      <div class="field"><label for="detailCourse">Choose course</label><select id="detailCourse"><option value="">New course</option></select></div>
+      <form id="courseDetailForm">
+        <fieldset style="border:0;padding:0" id="courseDetailFields">
+          <div class="grid">
+            <div class="field"><label for="detailName">Course name</label><input id="detailName" required maxlength="150"/></div>
+            <div class="field"><label for="detailInstructor">Teacher</label><input id="detailInstructor" maxlength="150"/></div>
+            <div class="field"><label for="detailDuration">Duration</label><input id="detailDuration" placeholder="e.g. 8 weeks" maxlength="100"/></div>
+          </div>
+          <div class="field"><label for="detailDescription">Description</label><textarea id="detailDescription" maxlength="4000"></textarea></div>
+          <div class="field"><label for="detailSyllabus">Syllabus</label><textarea id="detailSyllabus" maxlength="8000" placeholder="One topic per line"></textarea></div>
+          <div class="grid">
+            <div class="field"><label for="detailMaterials">Learning materials link</label><input id="detailMaterials" type="url" maxlength="2000" placeholder="https://…"/></div>
+            <div class="field"><label for="detailURL">Course page link (optional)</label><input id="detailURL" type="url" maxlength="2000" placeholder="https://…"/></div>
+          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin:12px 0"><input type="checkbox" id="detailRestricted" style="width:auto"/> Enrolled students only</label>
+          <p class="sub" style="margin-bottom:14px">This controls course details and lessons in My Courses. Public links and the video tutorial library have their own access settings.</p>
+          <button type="submit" class="btn btn-primary">Save course details</button>
+        </fieldset>
+      </form>
+      <hr style="border:0;border-top:1px solid var(--border);margin:22px 0"/>
+      <h2 style="font-size:18px;margin-bottom:12px">Student enrolment</h2>
+      <p class="sub" id="enrolmentHint">Save or select a course to assign students.</p>
+      <form id="courseEnrolmentForm" style="margin-top:12px">
+        <fieldset id="courseEnrolmentFields" disabled style="border:0;padding:0">
+          <div class="field"><label for="enrolStudent">Active student</label><select id="enrolStudent"><option value="">Select student</option></select></div>
+          <button class="btn btn-primary" type="submit">Enrol student</button>
+        </fieldset>
+      </form>
+      <div id="courseRoster" style="margin-top:14px"></div>
+    </div>
+
     <div class="card">
       <div class="card-hd"><div><h2>Add Course / Lesson</h2><div class="sub">Each row is one lesson with optional Video and PDF URL</div></div></div>
       <div class="grid">
@@ -242,6 +276,7 @@ tr:hover td{background:#fafbfd}
 </div>
 
 <script src="dmi-auth.js"></script>
+<script src="dmi-courses.js"></script>
 <script>
 (async function(){
 const verified=await DMI_AUTH.requireRole('teacher');
@@ -276,6 +311,7 @@ async function loadStudents(){
   const res = await call('listStudents');
   if (!res.ok){document.getElementById('studentsBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
   allStudents = res.data;
+  DMI_COURSES.setStudents(allStudents);
   document.getElementById('kStudents').textContent = allStudents.length;
   renderStudents();
   const sel = document.getElementById('mStudent');
@@ -408,7 +444,7 @@ async function loadCourses(){
   const res = await call('listCourses');
   if (!res.ok){document.getElementById('coursesBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
   allCourses = res.data;
-  document.getElementById('kCourses').textContent = allCourses.length;
+  // The catalogue counts courses; this list contains lesson rows.
   renderCourses();
 }
 function renderCourses(){
@@ -507,6 +543,7 @@ function renderMarks(){
 }
 document.getElementById('searchMarks').addEventListener('input', renderMarks);
 
+DMI_COURSES.initTeacher(user);
 loadStudents(); loadCourses(); loadMarks(); loadExams();
 async function resetPassword(email){
   const newPassword=prompt('Verify the student identity first. Enter a new password of at least 12 characters:');

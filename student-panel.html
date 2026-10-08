@@ -146,13 +146,14 @@ tr:hover td{background:#fafbfd}
 
   <div class="panel" id="panel-courses">
     <div class="card">
-      <div class="card-hd"><div><h2>Course lessons</h2><div class="sub">Watch the video or download the PDF for each lesson</div></div></div>
+      <div class="card-hd"><div><h2>My Courses</h2><div class="sub">Your course details, syllabus and learning materials</div></div></div>
       <div id="coursesBox"><div class="empty">Loading…</div></div>
     </div>
   </div>
 </div>
 
 <script src="dmi-auth.js"></script>
+<script src="dmi-courses.js"></script>
 <script>
 (async function(){
 const verified=await DMI_AUTH.requireRole('student');
@@ -224,21 +225,7 @@ async function loadMarks(){
     }).join('')}</tbody></table></div>`;
 }
 
-async function loadCourses(){
-  const res = await call('listCourses');
-  if (!res.ok){document.getElementById('coursesBox').innerHTML='<div class="empty">Error: '+esc(res.error)+'</div>';return;}
-  const data = res.data;
-  if (!data.length){document.getElementById('coursesBox').innerHTML='<div class="empty">No lessons available yet.</div>';return;}
-  document.getElementById('coursesBox').innerHTML = `<div class="lessons">${data.map(c => `
-    <div class="lesson">
-      <span class="course-tag">${esc(c.Course||'Course')}</span>
-      <div class="lesson-title">${esc(c.Lesson||'')}</div>
-      <div class="actions">
-        ${c.VideoURL ? `<a class="primary" href="${safeURL(c.VideoURL)}" target="_blank">▶ Watch Video</a>` : ''}
-        ${c.PDFURL   ? `<a href="${safeURL(c.PDFURL)}" target="_blank">📄 PDF</a>` : ''}
-      </div>
-    </div>`).join('')}</div>`;
-}
+async function loadCourses(){return DMI_COURSES.loadStudent();}
 
 loadMarks();
 loadCourses();
