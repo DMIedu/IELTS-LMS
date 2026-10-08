@@ -1,0 +1,794 @@
+{
+  "date": "2026-10-07",
+  "timezone": "Asia/Colombo",
+  "repositories": [
+    {
+      "repository": "DMIedu/IELTS-LMS",
+      "commit": "0d42448ab30ac57c0667bb3cbdf6adc447c3fa73",
+      "tree": "37b77b689086d7cfadf63732a8cccb5eb883b25c",
+      "backupBranch": "backup/phase1-2026-10-07"
+    },
+    {
+      "repository": "DMIedu/IELTS",
+      "commit": "37e40fbc8daa5971f163e57aa4724aece62e5c8c",
+      "tree": "4176db466e4d3e403acf294c76658e3b8a95ffdf",
+      "backupBranch": "backup/phase1-2026-10-07"
+    }
+  ],
+  "workingBranch": "security/phase1-backend-2026-10-07",
+  "inspectedFiles": [
+    {
+      "path": "Code.gs",
+      "blob": "6357ab04fb06e1d04119a95b13ae3c3e7a9da86c"
+    },
+    {
+      "path": "lms-cloud-sync.js",
+      "blob": "29fea9028d9046a7feef24c910cd2213cb275d73"
+    },
+    {
+      "path": "dmi-sso.js",
+      "blob": "230aa9753d57e6bee4dfd3d8ef5f4c793b9c1ab3"
+    },
+    {
+      "path": "login.html",
+      "blob": "85f9fb00d1fca20e7b91d00e4729ab2e9addb6d9"
+    },
+    {
+      "path": "teacher-panel.html",
+      "blob": "88d561de7aa1661c0a10a0c5fc44ebbf04b45683"
+    },
+    {
+      "path": "student-panel.html",
+      "blob": "6d27c8b9b992e57ef7c96dee58206fdb7c887070"
+    },
+    {
+      "path": "lms-result-sender.js",
+      "blob": "da9a1ebbc02531a3dcdc9d694ab84328da4dd55b"
+    },
+    {
+      "path": "video tutorial/index.html",
+      "blob": "f0ab12e4427aa584a030dd98988d2526e84aa63c"
+    }
+  ],
+  "referencedSpreadsheetId": "1lewfmmCpqrn8421yOa6oMYh5OGJK67FYIAaXiyXVkis",
+  "referencedDeploymentUrl": "https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec",
+  "notBackedUp": [
+    "Any additional Apps Script project files and appsscript.json; supplied Code.gs is backed up privately",
+    "Apps Script script properties, triggers, scopes and deployment settings/version",
+    "Spreadsheet sharing is verified separately; Drive copy is not a backup of original permission history"
+  ],
+  "noDeploymentPerformed": true,
+  "baselineRepositoryTree": [
+    {
+      "path": ".gitattributes",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0d129f459a3e56f8cf623a4ae8e015d71cc9e92f",
+      "size": 111,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/0d129f459a3e56f8cf623a4ae8e015d71cc9e92f"
+    },
+    {
+      "path": "Avoid+these+Answer+Sheet+Mistakes.docx",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c61ba9222ae7a0104080c9efa58385cda382681c",
+      "size": 14172,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/c61ba9222ae7a0104080c9efa58385cda382681c"
+    },
+    {
+      "path": "Code.gs",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6357ab04fb06e1d04119a95b13ae3c3e7a9da86c",
+      "size": 12880,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/6357ab04fb06e1d04119a95b13ae3c3e7a9da86c"
+    },
+    {
+      "path": "SETUP-GUIDE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "787216c878a9ccff252709d07f3ded00c1344e49",
+      "size": 4612,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/787216c878a9ccff252709d07f3ded00c1344e49"
+    },
+    {
+      "path": "Speaking",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "fdca1852577d3fa88797b26536ccc9ace15076de",
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/trees/fdca1852577d3fa88797b26536ccc9ace15076de"
+    },
+    {
+      "path": "Speaking/book 17 speaking test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cee04e79e79243702cda7f38caf57826798683f8",
+      "size": 74674,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/cee04e79e79243702cda7f38caf57826798683f8"
+    },
+    {
+      "path": "book 15 reding test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eeddf95004f2798e236a54e1367d5de11dc6c0f6",
+      "size": 108555,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/eeddf95004f2798e236a54e1367d5de11dc6c0f6"
+    },
+    {
+      "path": "book 15 reding test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a39a7216c3bd35f9991bd9b8330697a69e762f37",
+      "size": 102034,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/a39a7216c3bd35f9991bd9b8330697a69e762f37"
+    },
+    {
+      "path": "book 15 reding test 3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "26da339a859b68f27a8c09b0a47ec6d7d18cd9cd",
+      "size": 103624,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/26da339a859b68f27a8c09b0a47ec6d7d18cd9cd"
+    },
+    {
+      "path": "book 15 reding test 4.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eeddf95004f2798e236a54e1367d5de11dc6c0f6",
+      "size": 108555,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/eeddf95004f2798e236a54e1367d5de11dc6c0f6"
+    },
+    {
+      "path": "book 16 reding test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1892c9f5b8cb771d1c430ec4cf801d9d7959fe5b",
+      "size": 110156,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/1892c9f5b8cb771d1c430ec4cf801d9d7959fe5b"
+    },
+    {
+      "path": "book 17 listening test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fe7dd424dab13b0acd2c2d33cfd99813831fd54a",
+      "size": 95632,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/fe7dd424dab13b0acd2c2d33cfd99813831fd54a"
+    },
+    {
+      "path": "book 17 listening test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f6596e3955023257d9d59d863bfa5c8a23177fb4",
+      "size": 92340,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f6596e3955023257d9d59d863bfa5c8a23177fb4"
+    },
+    {
+      "path": "book 17 speaking test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a63e02c466b333877595e38fef6e31d763a6250",
+      "size": 74671,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/2a63e02c466b333877595e38fef6e31d763a6250"
+    },
+    {
+      "path": "book 17 writing test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ddb7a6c22c8f4b342d835b63d55997ce7e34eecc",
+      "size": 64255,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/ddb7a6c22c8f4b342d835b63d55997ce7e34eecc"
+    },
+    {
+      "path": "book 17 writing test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7d7b2efad82282ebb59041ff97938035bb30aa4",
+      "size": 60016,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/d7d7b2efad82282ebb59041ff97938035bb30aa4"
+    },
+    {
+      "path": "book 18 listening test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61f92e2d37d343e6df1a8a0aed6083e3806f8f61",
+      "size": 95524,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/61f92e2d37d343e6df1a8a0aed6083e3806f8f61"
+    },
+    {
+      "path": "book 18 listening test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f362fbc2e1891571ab0fb3aa1170947e20a51376",
+      "size": 100648,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f362fbc2e1891571ab0fb3aa1170947e20a51376"
+    },
+    {
+      "path": "book 18 listening test 3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8bd7a3f3e88a53abcba3008e1af6a8400778a164",
+      "size": 97616,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/8bd7a3f3e88a53abcba3008e1af6a8400778a164"
+    },
+    {
+      "path": "book 18 listening test 4.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3c470b82697b7b40ce7a711ad3e60e8c2cd32a3",
+      "size": 93386,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/b3c470b82697b7b40ce7a711ad3e60e8c2cd32a3"
+    },
+    {
+      "path": "book 18 reding test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1a85b27bc2c62de5f7fecaca14d1470220bbe9b6",
+      "size": 106660,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/1a85b27bc2c62de5f7fecaca14d1470220bbe9b6"
+    },
+    {
+      "path": "book 18 reding test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28bc6a331e3c34b472e13c4777c7fd62f57eba13",
+      "size": 101442,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/28bc6a331e3c34b472e13c4777c7fd62f57eba13"
+    },
+    {
+      "path": "book 18 reding test 3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2edbd1a08c8d1f7365882de0a51566732c13406e",
+      "size": 104232,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/2edbd1a08c8d1f7365882de0a51566732c13406e"
+    },
+    {
+      "path": "book 18 writing test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a817407759bbc996cb378f047d5009e0ce5a5fd7",
+      "size": 57241,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/a817407759bbc996cb378f047d5009e0ce5a5fd7"
+    },
+    {
+      "path": "book 18 writing test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5b4add8109c829db85778e37cf6ca0ec5378bb71",
+      "size": 56854,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/5b4add8109c829db85778e37cf6ca0ec5378bb71"
+    },
+    {
+      "path": "book 19 listening test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5f706182d982ff513f07c39c42a357a0e47dd336",
+      "size": 99573,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/5f706182d982ff513f07c39c42a357a0e47dd336"
+    },
+    {
+      "path": "book 19 listening test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cbc8c983902e3b4ea6deee1a0e84fc96c8e8d61d",
+      "size": 95385,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/cbc8c983902e3b4ea6deee1a0e84fc96c8e8d61d"
+    },
+    {
+      "path": "book 19 listening test 3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a059d470d46880e6800e95ef84f74f1856916b48",
+      "size": 95271,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/a059d470d46880e6800e95ef84f74f1856916b48"
+    },
+    {
+      "path": "book 19 listening test 4.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "316dabe92105cef39a861f0972b5be7aa991ab80",
+      "size": 94020,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/316dabe92105cef39a861f0972b5be7aa991ab80"
+    },
+    {
+      "path": "book 19 writing test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2cb0a180d9389af84005eab6d9a2f258ca3efd38",
+      "size": 63314,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/2cb0a180d9389af84005eab6d9a2f258ca3efd38"
+    },
+    {
+      "path": "book 19 writing test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2861c0bd2599653ad069a071288f9d61629997f7",
+      "size": 63481,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/2861c0bd2599653ad069a071288f9d61629997f7"
+    },
+    {
+      "path": "book 19 writing test 3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "98d4c7e68f8d7c61cbcf3a14b3613bd92a244ae7",
+      "size": 63315,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/98d4c7e68f8d7c61cbcf3a14b3613bd92a244ae7"
+    },
+    {
+      "path": "book 19 writing test 4.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90cf0a9a921242a04ee992c5ba7812a446e5b946",
+      "size": 63062,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/90cf0a9a921242a04ee992c5ba7812a446e5b946"
+    },
+    {
+      "path": "book 20 reding test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dfcf38a38221b3e3ae3b636185be2fb1409b65f5",
+      "size": 108519,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/dfcf38a38221b3e3ae3b636185be2fb1409b65f5"
+    },
+    {
+      "path": "book 20 reding test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93cf5b7586b2e0d050aed31aa2eeae2b7e15936a",
+      "size": 103140,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/93cf5b7586b2e0d050aed31aa2eeae2b7e15936a"
+    },
+    {
+      "path": "book 20 reding test 3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "507a9a9c06afff61e3740c4d7eb23dc66221a8a7",
+      "size": 104318,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/507a9a9c06afff61e3740c4d7eb23dc66221a8a7"
+    },
+    {
+      "path": "book 20 reding test 4.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e74e7cff270983d6cf34fe380fe3f81de0920da4",
+      "size": 98946,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/e74e7cff270983d6cf34fe380fe3f81de0920da4"
+    },
+    {
+      "path": "book 20 speaking test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aeb7869611940dc30d15f4ef9d94f14df0e1aebf",
+      "size": 74642,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/aeb7869611940dc30d15f4ef9d94f14df0e1aebf"
+    },
+    {
+      "path": "book 20 speaking test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f98b96946e02b45bc0a4ee7c9082da29117ce758",
+      "size": 74629,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f98b96946e02b45bc0a4ee7c9082da29117ce758"
+    },
+    {
+      "path": "book 20 speaking test 3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f3db366411fb93b3d1d9e78dea504402901d9ec",
+      "size": 74621,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/0f3db366411fb93b3d1d9e78dea504402901d9ec"
+    },
+    {
+      "path": "book 20 speaking test 4.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6bc4031011eccad929868bb255172e730e077508",
+      "size": 74667,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/6bc4031011eccad929868bb255172e730e077508"
+    },
+    {
+      "path": "book 20 writing test 1.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef2261bcc29c3920cf39217396ba75a8bef39deb",
+      "size": 63493,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/ef2261bcc29c3920cf39217396ba75a8bef39deb"
+    },
+    {
+      "path": "book 20 writing test 2.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97c98adf698a9040678ed8cee690bfdbee6777be",
+      "size": 65442,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/97c98adf698a9040678ed8cee690bfdbee6777be"
+    },
+    {
+      "path": "book 20 writing test 3.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f07a50855687cc381bc4537981baadb3a05dce2f",
+      "size": 66984,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f07a50855687cc381bc4537981baadb3a05dce2f"
+    },
+    {
+      "path": "book 20 writing test 4.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "80742e49e0d07cc6112a9c8aa8061e484e6562dd",
+      "size": 62870,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/80742e49e0d07cc6112a9c8aa8061e484e6562dd"
+    },
+    {
+      "path": "dmi-award-team.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc61aa7c324379c41cf79eba43365858c82fe0f9",
+      "size": 145919,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/bc61aa7c324379c41cf79eba43365858c82fe0f9"
+    },
+    {
+      "path": "dmi-award-trophy.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f603acc197c1e401a93cdd9c995ebc400dc640d7",
+      "size": 240986,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f603acc197c1e401a93cdd9c995ebc400dc640d7"
+    },
+    {
+      "path": "dmi-lms-backup-2026-05-31.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2460e2a4651891baa142a95f50a17d5f84e837af",
+      "size": 139076,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/2460e2a4651891baa142a95f50a17d5f84e837af"
+    },
+    {
+      "path": "dmi-logo.jfif",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aae2959b0cb4a37955114c1c05ee336312c9cc81",
+      "size": 14443,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/aae2959b0cb4a37955114c1c05ee336312c9cc81"
+    },
+    {
+      "path": "dmi-sso.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "230aa9753d57e6bee4dfd3d8ef5f4c793b9c1ab3",
+      "size": 7250,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/230aa9753d57e6bee4dfd3d8ef5f4c793b9c1ab3"
+    },
+    {
+      "path": "image",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3ad23cea9466e2620f3785cc84455a0e526eac7e",
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/trees/3ad23cea9466e2620f3785cc84455a0e526eac7e"
+    },
+    {
+      "path": "image/dmi-award-team.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bc61aa7c324379c41cf79eba43365858c82fe0f9",
+      "size": 145919,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/bc61aa7c324379c41cf79eba43365858c82fe0f9"
+    },
+    {
+      "path": "image/dmi-award-trophy.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f603acc197c1e401a93cdd9c995ebc400dc640d7",
+      "size": 240986,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f603acc197c1e401a93cdd9c995ebc400dc640d7"
+    },
+    {
+      "path": "image/pic 2.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c2d3f13620c925e705aa77d215fd0943c878ef8",
+      "size": 137167,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/7c2d3f13620c925e705aa77d215fd0943c878ef8"
+    },
+    {
+      "path": "image/pic 3.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6edb3adf278b7f2fed2e4e0d6a4966234845016d",
+      "size": 75201,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/6edb3adf278b7f2fed2e4e0d6a4966234845016d"
+    },
+    {
+      "path": "image/pic 4.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4049fd8a0bf412a834b4c29a40f4eff0ca4b316a",
+      "size": 74494,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/4049fd8a0bf412a834b4c29a40f4eff0ca4b316a"
+    },
+    {
+      "path": "image/pic1.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f603acc197c1e401a93cdd9c995ebc400dc640d7",
+      "size": 240986,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f603acc197c1e401a93cdd9c995ebc400dc640d7"
+    },
+    {
+      "path": "index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50699a158b555aa199e9108c39798c5d1a1b0c80",
+      "size": 50127,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/50699a158b555aa199e9108c39798c5d1a1b0c80"
+    },
+    {
+      "path": "lms-cloud-sync.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29fea9028d9046a7feef24c910cd2213cb275d73",
+      "size": 14321,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/29fea9028d9046a7feef24c910cd2213cb275d73"
+    },
+    {
+      "path": "lms-result-sender.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "da9a1ebbc02531a3dcdc9d694ab84328da4dd55b",
+      "size": 4500,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/da9a1ebbc02531a3dcdc9d694ab84328da4dd55b"
+    },
+    {
+      "path": "login.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "85f9fb00d1fca20e7b91d00e4729ab2e9addb6d9",
+      "size": 10378,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/85f9fb00d1fca20e7b91d00e4729ab2e9addb6d9"
+    },
+    {
+      "path": "pic 2.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7c2d3f13620c925e705aa77d215fd0943c878ef8",
+      "size": 137167,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/7c2d3f13620c925e705aa77d215fd0943c878ef8"
+    },
+    {
+      "path": "pic1.jpg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f603acc197c1e401a93cdd9c995ebc400dc640d7",
+      "size": 240986,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f603acc197c1e401a93cdd9c995ebc400dc640d7"
+    },
+    {
+      "path": "student-panel.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d27c8b9b992e57ef7c96dee58206fdb7c887070",
+      "size": 13741,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/6d27c8b9b992e57ef7c96dee58206fdb7c887070"
+    },
+    {
+      "path": "teacher-panel.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "88d561de7aa1661c0a10a0c5fc44ebbf04b45683",
+      "size": 28180,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/88d561de7aa1661c0a10a0c5fc44ebbf04b45683"
+    },
+    {
+      "path": "video tutorial",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "89ca00ddb5e880d092b47188471319ffd00a2eb3",
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/trees/89ca00ddb5e880d092b47188471319ffd00a2eb3"
+    },
+    {
+      "path": "video tutorial/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1e777bd42abb168ede672a2721064cf7d6107e86",
+      "size": 7002,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/1e777bd42abb168ede672a2721064cf7d6107e86"
+    },
+    {
+      "path": "video tutorial/Section 2 IELTS Exam Basic Information",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "047e4a3a09eb10faf906af3b462cf5a17ab454a8",
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/trees/047e4a3a09eb10faf906af3b462cf5a17ab454a8"
+    },
+    {
+      "path": "video tutorial/Section 2 IELTS Exam Basic Information/5 IELTS Exam Basic Information.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d0a2aea6aedabb388999673d16d577589e833cbc",
+      "size": 4220,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/d0a2aea6aedabb388999673d16d577589e833cbc"
+    },
+    {
+      "path": "video tutorial/course-data.backup-pre-restore.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "caad6e75d2b839bf5f71389037f441bbb5a23116",
+      "size": 194551,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/caad6e75d2b839bf5f71389037f441bbb5a23116"
+    },
+    {
+      "path": "video tutorial/course-data.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a794d38bd05ec0422341992f1b9a4a612b705d69",
+      "size": 207222,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/a794d38bd05ec0422341992f1b9a4a612b705d69"
+    },
+    {
+      "path": "video tutorial/index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0ab12e4427aa584a030dd98988d2526e84aa63c",
+      "size": 124376,
+      "url": "https://api.github.com/repos/DMIedu/IELTS-LMS/git/blobs/f0ab12e4427aa584a030dd98988d2526e84aa63c"
+    }
+  ],
+  "googleBackupUpdate": {
+    "date": "2026-10-07",
+    "spreadsheetBackupCreated": true,
+    "testWorkbookCopyCreated": true,
+    "backupAndTestSharingVerified": "not shared; owner permission only",
+    "sheetTitlesPreserved": [
+      "Students",
+      "LMSSync ",
+      "Teachers ",
+      "Courses",
+      "Marks",
+      "ExamResults"
+    ],
+    "originalModifiedTime": "2026-10-07T10:06:54.552Z",
+    "compatibilityFindings": [
+      "Students ID header has trailing spaces",
+      "Marks/ExamResults Date headers have trailing spaces",
+      "LMSSync/Teachers tab names have trailing spaces",
+      "Live LMSSync key column includes chunk0 through chunk3",
+      "GitHub SHEET_ID differs in case-sensitive second character from the connected DMI LMS Database ID"
+    ],
+    "privateBackupLocations": "Provided only in the user conversation; not published in this public repository",
+    "appsScriptSourceExported": true,
+    "appsScriptDeploymentVersionRecorded": false,
+    "browserAccessFailure": "Browser automation runtime exited before opening the spreadsheet",
+    "sourceSearchResult": "Drive Apps Script MIME-type search returned no standalone projects; this does not exclude a bound project",
+    "appsScriptSourceExportScope": "User-supplied Code.gs only; no project manifest/properties/triggers or deployed version"
+  },
+  "suppliedLiveSource": {
+    "date": "2026-10-07",
+    "lineCount": 401,
+    "originalAttachmentSizeBytes": 16137,
+    "privatelyBackedUp": true,
+    "sharingVerified": "owner-only; not shared",
+    "sourceChangesFromOriginalGithub": [
+      "Correct spreadsheet ID (uppercase I)",
+      "getLMSData/setLMSData dispatch and 45000-character chunk implementation"
+    ],
+    "reconciledFile": "LiveSync.gs",
+    "deployedVersionVerified": false,
+    "backupLocation": "Private Drive file; link provided in user conversation only"
+  },
+  "latestUserProvidedDeploymentReceipt": {
+    "version": 8,
+    "displayedDate": "2026-10-07",
+    "displayedTime": "19:20",
+    "timezone": "Asia/Colombo (user context)",
+    "evidence": "User-provided deployment-success screenshot",
+    "receiptPrivatelyBackedUp": true,
+    "executeAsVerified": false,
+    "whoHasAccessVerified": false,
+    "deployedSourceIndependentlyVerified": false,
+    "note": "User screenshot shows a deployment update; Codex did not perform it. This receipt does not establish that the draft security code is installed."
+  },
+  "nativePasswordPrimitiveEvidence": {
+    "date": "2026-10-07",
+    "timezone": "Asia/Colombo",
+    "projectTitle": "DMI LMS Security Test",
+    "function": "runPasswordPrimitiveCheck",
+    "result": "PASS shown in user-supplied Apps Script execution log",
+    "displayedStartTime": "19:52:51",
+    "displayedCompletionTime": "19:52:52",
+    "scope": "PBKDF2-HMAC-SHA256 known-answer vectors at iterations 1 and 2 only",
+    "fullWorkFactor600000PerformanceVerified": true,
+    "spreadsheetDataChanged": false,
+    "productionDeploymentPerformedByCodex": false,
+    "receiptPrivatelyBackedUp": true
+  },
+  "nativePasswordBenchmark": {
+    "date": "2026-10-07",
+    "project": "DMI LMS Security Test",
+    "implementation": "native Utilities HMAC per PBKDF2 round",
+    "iterations": 600000,
+    "elapsedMilliseconds": 264532,
+    "startTime": "19:56:06",
+    "completionTime": "20:00:31",
+    "source": "user supplied Apps Script execution log",
+    "suitableForLogin": false,
+    "spreadsheetDataChanged": false
+  },
+  "passwordReplacement": {
+    "primitive": "js-sha256 1.0.0 HMAC-SHA256",
+    "upstreamCommit": "9a54fb31d4594762987e1b5d175265f6bac921de",
+    "license": "MIT",
+    "iterations": 600000,
+    "encoding": "native Utilities UTF-8 password and UTF-8 salt string bytes; 32-byte result hex",
+    "isolateKnownAnswerTests": "PASS: PBKDF2 1,2,4096 and RFC4231 HMAC",
+    "isolate600000ElapsedMilliseconds": 2281,
+    "appsScriptReplacementPerformanceVerified": true,
+    "productionDeployed": false,
+    "appsScript600000ElapsedMilliseconds": 2718,
+    "appsScriptKnownAnswerTests": "PASS shown in user-provided execution log, 20:07:38–20:07:41 Asia/Colombo"
+  },
+  "testSecurityInitialization": {
+    "function": "initializeSecurity",
+    "projectTitle": "DMI LMS Security Test",
+    "userScreenshot": "execution started 20:10:01; completed 20:10:05 without error",
+    "date": "2026-10-07",
+    "independentSchemaVerification": false,
+    "existingPasswordMigrationPerformed": false
+  },
+  "nativeIntegrationHelper": {
+    "path": "test-setup/SecurityTest.gs",
+    "function": "runTestWorkbookSecurityChecks",
+    "scope": "24 checks using disposable generated accounts/results in exact test workbook; cleanup in finally; sync reads only",
+    "mockVerification": "24 checks plus failure cleanup, wrong-workbook guard and fixture restoration passed",
+    "appsScriptRunPending": false,
+    "userObservedResult": {
+      "date": "2026-10-07",
+      "completionTime": "20:31:31",
+      "timezone": "Asia/Colombo",
+      "checksPassed": 24,
+      "cleanupConfirmedByLog": true,
+      "originalRowCountsRestoredByLog": true,
+      "productionAccessed": false,
+      "executionCompleted": true
+    },
+    "checksPassed": 24
+  },
+  "testDeployment": {
+    "url": "https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec",
+    "userProvided": true,
+    "executeAsAndAccessSettingsIndependentlyVerified": false,
+    "pingVerification": "User screenshot shows ok:true, version:phase1-candidate and time 2026-10-07T15:11:23.635Z",
+    "browserOneLoginTested": false,
+    "browserSessionSmokeTests": {
+      "studentLogin": "PASS screenshot",
+      "studentReloadSession": "PASS screenshot",
+      "studentLogout": "PASS screenshot",
+      "teacherLogin": "PASS screenshot",
+      "teacherReloadSession": "PASS user report",
+      "teacherLogout": "PASS user report",
+      "scope": "standalone shared client only; actual LMS screens not tested"
+    }
+  },
+  "browserAccountSetup": {
+    "path": "test-setup/BrowserTest.gs",
+    "ownerExecutionPending": true,
+    "passwordsStored": "private test Script Properties; never in repository or logs",
+    "cleanup": "cleanupBrowserTestAccounts removes generated accounts, sessions, results and test credential properties",
+    "mockChecks": "creation, duplicate refusal, cleanup, no password logs, wrong workbook refusal PASS"
+  },
+  "nativeSyncRoundTrip": {
+    "date": "2026-10-07",
+    "timezone": "Asia/Colombo",
+    "completionTime": "22:01:23",
+    "checksPassed": 7,
+    "originalDataAndFormulasRestored": true,
+    "temporaryAnnouncementRemoved": true,
+    "backupTabRemoved": true,
+    "evidence": "user-provided editor log",
+    "productionAccessed": false
+  },
+  "releaseGatesRemaining": [
+    "Actual login/student/teacher/practice/video screens against test backend",
+    "Concurrent request behavior/global script lock",
+    "Production manifest/properties/triggers and deployment settings/source version preservation",
+    "Bounded legacy migration or reset and coordinated frontend/backend cutover approval"
+  ]
+}

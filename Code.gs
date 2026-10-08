@@ -12,6 +12,7 @@
  * Each new student gets 1-month access from JoinDate. After expiry,
  * login is blocked and the admin must Renew them from the teacher panel.
  *
+ * CANDIDATE ONLY: Do not replace live source before reconciling sync and benchmarking passwords.
  * Deploy: Extensions → Apps Script → paste this file → Save
  *         Deploy → New deployment → Web app → Execute as: Me, Access: Anyone
  *         Copy the URL, paste into login.html, teacher-panel.html, student-panel.html
@@ -19,9 +20,9 @@
  */
 
 // ====== CONFIG ======
-// Paste your Sheet ID below. (Easiest: triple-click the part of the
-// Google Sheet URL between /d/ and /edit, copy, paste between the quotes.)
-const SHEET_ID = '1lewfmmCpqrn8421yOa6oMYh5OGJK67FYIAaXiyXVkis'; // <-- EDIT THIS
+// Configure the workbook ID in Script Properties; no production workbook is selected by default.
+// Required Script Property. Point it at the TEST copy until rollout is approved.
+const SHEET_ID = PropertiesService.getScriptProperties().getProperty('DMI_SPREADSHEET_ID');
 const STUDENT_VALIDITY_DAYS = 30; // 1 month
 
 /**
@@ -31,19 +32,7 @@ const STUDENT_VALIDITY_DAYS = 30; // 1 month
  */
 /** Dumps every row of the Teachers tab so you can see exactly what's stored. */
 function debugTeachers() {
-  try {
-    const sheet = tab('Teachers');
-    const data = sheet.getDataRange().getValues();
-    Logger.log('Teachers tab has ' + data.length + ' rows (including header)');
-    data.forEach((row, i) => {
-      Logger.log('Row ' + i + ': ' + JSON.stringify(row));
-    });
-    if (data.length < 2) {
-      Logger.log('⚠ NO TEACHER DATA. Add a row 2 with: T-001 | Niroshan | niroshan.dmi@gmail.com | Pass1234 | IELTS');
-    }
-  } catch (e) {
-    Logger.log('ERROR: ' + e.message);
-  }
+  Logger.log('Teacher credentials are never logged. Use testConnection for schema checks.');
 }
 
 function testConnection() {
@@ -78,35 +67,75 @@ function doGet(e) { return handle(e); }
 function doPost(e) { return handle(e); }
 
 function handle(e) {
+  let lock;
   try {
-    const params = (e && e.parameter) ? e.parameter : {};
-    const action = params.action || '';
+    const p=Object.assign({},e && e.parameter || {});
+    const action=String(p.action||'');
+    if(action==='ping')return json({ok:true,version:'phase1-candidate',time:new Date()});
+    // Credentials and bearer tokens must never be accepted in GET URLs.
+    if(!e || !e.postData)securityError_('POST_REQUIRED','Use POST');
+    lock=LockService.getScriptLock();
+    if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
+    if(action==='login')return json(secureLogin_(p));
+    const ctx=authorize_(p,action);
     let result;
-
-    switch (action) {
-      case 'login':            result = login(params); break;
-      case 'listStudents':     result = listStudents(); break;
-      case 'addStudent':       result = addStudent(params); break;
-      case 'deleteStudent':    result = deleteStudent(params); break;
-      case 'renewStudent':     result = renewStudent(params); break;
-      case 'listCourses':      result = listCourses(); break;
-      case 'addCourse':        result = addCourse(params); break;
-      case 'deleteCourse':     result = deleteCourse(params); break;
-      case 'addMark':          result = addMark(params); break;
-      case 'listMarks':        result = listMarks(params); break;
-      case 'submitExamResult': result = submitExamResult(params); break;
-      case 'listExamResults':  result = listExamResults(params); break;
-      case 'ping':             result = { ok: true, time: new Date() }; break;
-      default:                 result = { ok: false, error: 'Unknown action: ' + action };
+    if(ctx.role==='student' && ['listMarks','listExamResults','submitExamResult'].includes(action)){
+      if(p.studentEmail && email_(p.studentEmail)!==email_(ctx.user.email))
+        securityError_('FORBIDDEN','You can only access your own results');
+      p.studentEmail=ctx.user.email; p.studentName=ctx.user.name;
+    }
+    if(action==='addMark'){
+      const student=account_('student',p.studentEmail);
+      if(!student)securityError_('NOT_FOUND','Student not found');
+      p.studentName=student.Name; p.teacherName=ctx.user.name;
+    }
+    if(action==='renewStudent' && (!Number.isInteger(Number(p.days||30)) ||
+      Number(p.days||30)<1 || Number(p.days||30)>366))
+      securityError_('VALIDATION','Renewal must be 1–366 days');
+    if(['addMark','submitExamResult'].includes(action)){
+      const score=Number(p.score||0), max=Number(p.maxScore||0);
+      if(!Number.isFinite(score)||!Number.isFinite(max)||score<0||max<0||score>max||max>1000)
+        securityError_('VALIDATION','Invalid score');
+      ['answersJSON','questionsJSON'].forEach(k=>{
+        if(String(p[k]||'').length>45000)securityError_('VALIDATION','Submission too large');
+        if(p[k]){try{JSON.parse(p[k]);}catch(e){securityError_('VALIDATION','Invalid submission JSON');}}
+      });
+    }
+    ['studentName','teacherName','name','class','course','lesson','test','testName','comments']
+      .forEach(k=>{if(p[k]!=null)p[k]=sheetText_(p[k]);});
+    switch(action){
+      case 'session': result={ok:true,role:ctx.role,user:ctx.user};break;
+      case 'logout': result=logout_(ctx);break;
+      case 'changePassword': result=changePassword_(p,ctx);break;
+      case 'resetStudentPassword': result=resetStudentPassword_(p);break;
+      case 'listStudents': result={ok:true,data:rows(tab('Students')).map(safeStudent_)};break;
+      case 'addStudent': result=createStudent_(p);break;
+      case 'deleteStudent': result=deleteStudent(p);break;
+      case 'renewStudent': result=renewStudent(p);break;
+      case 'listCourses': result=listCourses();break;
+      case 'addCourse': result=addCourse(p);break;
+      case 'deleteCourse': result=deleteCourse(p);break;
+      case 'addMark': result=addMark(p);break;
+      case 'listMarks': result=listMarks(p);break;
+      case 'submitExamResult': result=submitExamResult(p);break;
+      case 'listExamResults': result=listExamResults(p);break;
+      case 'getLMSData': result=secureGetLMSData_(ctx);break;
+      case 'setLMSData': result=secureSetLMSData_(p);break;
+      default: securityError_('UNKNOWN_ACTION','Unknown action');
     }
     return json(result);
-  } catch (err) {
-    return json({ ok: false, error: String(err) });
-  }
+  } catch(err) {
+    // Never return internal exceptions, spreadsheet contents, or credentials.
+    return json({ok:false,code:err.code||'SERVER_ERROR',
+      error:err.code?err.message:'Request failed. Please contact DMI.'});
+  } finally {if(lock && lock.hasLock())lock.releaseLock();}
 }
 
 // ====== HELPERS ======
-function ss() { return SpreadsheetApp.openById(SHEET_ID); }
+function ss() {
+  if(!SHEET_ID) securityError_('CONFIGURATION_REQUIRED','Set DMI_SPREADSHEET_ID to the test workbook');
+  return SpreadsheetApp.openById(SHEET_ID);
+}
 function tab(name) {
   const book = ss();
   // 1) Try exact match
@@ -126,13 +155,16 @@ function tab(name) {
 function json(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }
+function headerName_(value) {
+  return String(value||'').replace(/[\u200b-\u200d\ufeff]/g,'').trim();
+}
 function rows(sheet) {
   const data = sheet.getDataRange().getValues();
   if (data.length < 2) return [];
-  const head = data[0];
+  const head = data[0].map(headerName_);
   return data.slice(1).map(r => {
     const o = {};
-    head.forEach((h, i) => o[h] = r[i]);
+    head.forEach((h, i) => { if(h) o[h] = r[i]; });
     return o;
   });
 }
@@ -152,54 +184,7 @@ function isExpired(expiry) {
 }
 
 // ====== ACTIONS ======
-function login(p) {
-  const email = (p.email || '').toString().trim().toLowerCase();
-  const pass  = (p.password || '').toString();
-  if (!email || !pass) return { ok: false, error: 'Email and password required' };
-
-  const teachers = rows(tab('Teachers'));
-  const t = teachers.find(r => String(r.Email).toLowerCase() === email && String(r.Password) === pass);
-  if (t) return { ok: true, role: 'teacher', user: { id: t.ID, name: t.Name, email: t.Email, subject: t.Subject } };
-
-  const students = rows(tab('Students'));
-  const s = students.find(r => String(r.Email).toLowerCase() === email && String(r.Password) === pass);
-  if (s) {
-    if (isExpired(s.ExpiryDate)) {
-      return { ok: false, expired: true, error: 'Your access has expired on ' + new Date(s.ExpiryDate).toLocaleDateString() + '. Please contact the admin to renew your account.' };
-    }
-    return { ok: true, role: 'student', user: {
-      id: s.ID, name: s.Name, email: s.Email, class: s.Class,
-      expiryDate: s.ExpiryDate
-    }};
-  }
-  return { ok: false, error: 'Invalid email or password' };
-}
-
-function listStudents() {
-  const data = rows(tab('Students')).map(s => {
-    s.expired = isExpired(s.ExpiryDate);
-    return s;
-  });
-  return { ok: true, data };
-}
-
-function addStudent(p) {
-  const name = (p.name || '').toString().trim();
-  const email = (p.email || '').toString().trim().toLowerCase();
-  const password = (p.password || '').toString();
-  const klass = (p.class || '').toString();
-  if (!name || !email || !password) return { ok: false, error: 'Name, email, password required' };
-
-  const sheet = tab('Students');
-  const existing = rows(sheet).find(r => String(r.Email).toLowerCase() === email);
-  if (existing) return { ok: false, error: 'A student with this email already exists' };
-
-  const id = uid('STU');
-  const today = new Date();
-  const expiry = addDays(today, STUDENT_VALIDITY_DAYS);
-  sheet.appendRow([id, name, email, password, klass, today, expiry]);
-  return { ok: true, id, expiryDate: expiry };
-}
+// Authentication and account creation moved to Security.gs.
 
 function deleteStudent(p) {
   const email = (p.email || '').toString().trim().toLowerCase();
@@ -221,7 +206,7 @@ function renewStudent(p) {
   if (!email) return { ok: false, error: 'Email required' };
   const sheet = tab('Students');
   const data = sheet.getDataRange().getValues();
-  const head = data[0];
+  const head = data[0].map(headerName_);
   const expiryCol = head.indexOf('ExpiryDate');
   if (expiryCol < 0) return { ok: false, error: 'ExpiryDate column missing in Students sheet' };
 

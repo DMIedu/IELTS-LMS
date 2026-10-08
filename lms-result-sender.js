@@ -32,11 +32,16 @@
   // === CONFIG: paste your Apps Script Web App URL here ===
   var API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
 
+  var scriptURL=document.currentScript && document.currentScript.src;
+  var ready=window.DMI_AUTH?Promise.resolve():new Promise(function(resolve,reject){
+    var s=document.createElement('script'); s.src=new URL('dmi-auth.js',scriptURL||location.href).href;
+    s.onload=resolve; s.onerror=reject; document.head.appendChild(s);
+  });
   function getUser() {
     try {
       var u = JSON.parse(localStorage.getItem('dmi_lms_user') || 'null');
       var r = localStorage.getItem('dmi_lms_role');
-      if (u && r === 'student') return u;
+      if (u && r === 'student' && localStorage.getItem('dmi_lms_token')) return u;
     } catch (e) {}
     return null;
   }
@@ -76,14 +81,16 @@
 
   window.DMI_LMS = {
     /** Submit a completed exam to the admin sheet. Safe to call without login. */
-    submit: function (data) {
-      var user = getUser();
+    submit: async function (data) {
+      await ready;
+      var auth=await DMI_AUTH.verify();
+      var user = auth && auth.role==='student' ? auth.user : null;
       if (!user) {
         toast('Not signed in — result not saved to admin', 'err');
         return Promise.resolve({ ok: false, error: 'not signed in' });
       }
       var body = new URLSearchParams({
-        action: 'submitExamResult',
+        action: 'submitExamResult', sessionToken: DMI_AUTH.token(),
         studentEmail:  user.email,
         studentName:   user.name,
         testName:      (data.testName || ''),

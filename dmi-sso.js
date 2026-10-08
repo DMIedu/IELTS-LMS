@@ -11,7 +11,7 @@
  *                                          (ExamResults + Marks), so it shows on their dashboard
  *                                          and in the Teacher Panel.
  */
-(function () {
+(async function () {
   var API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
   var BRANCH_KEY = 'dmi_lms_branch';
 
@@ -29,11 +29,14 @@
     } catch (e) { return null; }
   }
 
-  var auth = readUser();
-  if (!auth) {
-    location.replace(BASE + 'login.html?next=' + encodeURIComponent(location.pathname + location.search));
-    return;
+  if(!window.DMI_AUTH){
+    await new Promise(function(resolve,reject){
+      var script=document.createElement('script'); script.src=BASE+'dmi-auth.js';
+      script.onload=resolve; script.onerror=reject; document.head.appendChild(script);
+    });
   }
+  var auth = await DMI_AUTH.requireRole();
+  if (!auth) return; // requireRole already handles sign-in or retry UI.
   var user = auth.user, role = auth.role;
 
   // ---------- helpers ----------
@@ -106,19 +109,40 @@
   }
 
   // ---------- 3. send the score to the Google Sheet ----------
+  function captureExamDetail(record) {
+    var answers={}, questions={}, source=record.answers||{};
+    Object.keys(source).forEach(function(k){answers[k]=source[k];});
+    (record.rows||[]).forEach(function(row){
+      if(row.q!=null && !Object.prototype.hasOwnProperty.call(answers,String(row.q)))
+        answers[String(row.q)]=row.ua==null?'':String(row.ua);
+    });
+    var total=Number(record.total)||0;
+    for(var n=1;n<=Math.min(total,200);n++){
+      var marker=document.getElementById('qn'+n) || document.getElementById('q'+n);
+      var block=marker && marker.closest('.q-block') || marker.closest('tr');
+      if(!block)continue;
+      var copy=block.cloneNode(true);
+      copy.querySelectorAll('input,select,textarea,button').forEach(function(el){el.remove();});
+      questions[String(n)]=copy.textContent.replace(/\s+/g,' ').trim();
+    }
+    if(record.band!=null)answers._band=record.band;
+    return {answers:answers,questions:questions};
+  }
+
   function send(record) {
     if (role !== 'student' || !record) return;
     var info = paperInfo();
     var isWriting = /writing/i.test(info.course);
     var score = record.correct != null ? record.correct : (record.score != null ? record.score : 0);
-    var answers = isWriting ? { task1: record.task1 || '', task2: record.task2 || '', words: [record.wc1, record.wc2] } : (record.answers || {});
+    var detail=captureExamDetail(record);
+    var answers = isWriting ? { task1: record.task1 || '', task2: record.task2 || '', words: [record.wc1, record.wc2] } : detail.answers;
     if (record.band != null) answers._band = record.band;
     var body = new URLSearchParams({
-      action: 'submitExamResult',
+      action: 'submitExamResult', sessionToken: DMI_AUTH.token(),
       studentEmail: user.email || '', studentName: user.name || '',
       testName: info.testName, course: info.course,
       score: isWriting ? 0 : score, maxScore: isWriting ? 0 : (record.total || 40),
-      answersJSON: JSON.stringify(answers), questionsJSON: '{}'
+      answersJSON: JSON.stringify(answers), questionsJSON: JSON.stringify(isWriting?{}:detail.questions)
     });
     fetch(API_URL, { method: 'POST', body: body })
       .then(function (r) { return r.json(); })
@@ -143,4 +167,7 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prefill);
   else prefill();
-})();
+})().catch(function(){
+  var here=document.currentScript && document.currentScript.src;
+  location.replace((here?here.replace(/[^\/]*$/,''):'/IELTS-LMS/')+'login.html');
+});
