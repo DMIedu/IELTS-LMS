@@ -9,6 +9,10 @@
     if(!result.ok){const error=new Error(result.error||'The request could not complete.');error.code=result.code;throw error;}
     return result;
   }
+  function errorText(error){
+    return error instanceof SyntaxError?'The server returned an unreadable response. Click Refresh to retry loading courses.':
+      error instanceof TypeError?'The course request could not complete. Click Refresh to retry.':error.message;
+  }
   let courses=[],students=[],ready=false;
   function notice(text,kind){const node=byId('courseNotice');node.textContent=text;node.className='msg '+kind;}
   function selected(){return courses.find(c=>c.CourseKey===byId('detailCourse').value);}
@@ -55,12 +59,12 @@
           if(!confirm('Remove this student’s enrolment from '+c.Course+'?'))return;
           button.disabled=true;
           try{await request('setCourseEnrollment',{courseKey:c.CourseKey,studentEmail:e.studentEmail,enrolled:'false'});notice('Enrolment removed.','ok');await roster();}
-          catch(error){notice(error.message,'err');}finally{button.disabled=false;}
+          catch(error){notice(errorText(error),'err');}finally{button.disabled=false;}
         };
         cell.appendChild(button);row.appendChild(cell);body.appendChild(row);
       });
       table.appendChild(body);const wrap=document.createElement('div');wrap.className='tbl-wrap';wrap.appendChild(table);box.appendChild(wrap);
-    }catch(error){if(revision===rosterRevision)byId('courseRoster').textContent=error.message;}
+    }catch(error){if(revision===rosterRevision)byId('courseRoster').textContent=errorText(error);}
   }
   async function loadTeacher(user,key){
     ++rosterRevision;
@@ -74,7 +78,8 @@
       if(byId('kCourses'))byId('kCourses').textContent=courses.length;
       fill(user);await roster();
       if(!ready)notice('Course management is not enabled yet. Existing lessons remain available.','err');
-    }catch(error){notice(error.code==='UNKNOWN_ACTION'?'Course management is not enabled yet. Existing lessons remain available.':error.message,'err');}
+      else if(byId('courseNotice').className==='msg err')notice('Courses loaded.','ok');
+    }catch(error){notice(error.code==='UNKNOWN_ACTION'?'Course management is not enabled yet. Existing lessons remain available.':errorText(error),'err');}
   }
   function initTeacher(user){
     byId('detailCourse').onchange=()=>{++rosterRevision;fill(user);roster();};
@@ -127,7 +132,7 @@
       }
       box.innerHTML=result.data.length?renderCourses(result.data):'<div class="empty">No courses assigned yet. Please contact your teacher.</div>';
     }catch(error){
-      box.replaceChildren();const message=document.createElement('p');message.textContent=error.message;
+      box.replaceChildren();const message=document.createElement('p');message.textContent=errorText(error);
       const retry=document.createElement('button');retry.type='button';retry.textContent='Retry loading courses';retry.onclick=loadStudent;
       box.append(message,retry);
     }
