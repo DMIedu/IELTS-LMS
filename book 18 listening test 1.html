@@ -889,27 +889,23 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
           <div class="audio-cbt-header">
             <div class="audio-cbt-title">&#x1F3A7; IELTS Official Practice Room Audio Settings</div>
             <div class="audio-cbt-sources">
-              <div class="audio-src-tab active" id="tabSrcLocalFolder" onclick="switchAudioSource('localFolder')">Local Audio File (Folder)</div>
-              <div class="audio-src-tab" id="tabSrcStream" onclick="switchAudioSource('stream')">Online Stream (MP3)</div>
-              <div class="audio-src-tab" id="tabSrcLocal" onclick="document.getElementById('localAudioFile').click()">Choose File (Disk)</div>
-              <div class="audio-src-tab" id="tabSrcYT" onclick="switchAudioSource('youtube')">YouTube Backup</div>
+              <button type="button" class="audio-src-tab active" id="tabSrcStream" aria-pressed="true" onclick="switchAudioSource('stream')">Online audio</button>
+              <button type="button" class="audio-src-tab" id="tabSrcLocal" aria-pressed="false" onclick="document.getElementById('localAudioFile').click()">Choose audio file</button>
             </div>
           </div>
           
-          <input type="file" id="localAudioFile" accept="audio/*" style="display:none" onchange="loadLocalAudio(event)"/>
+          <input type="file" id="localAudioFile" accept="audio/*,video/mp4,.mp3,.m4a,.mp4,.wav" style="display:none" onchange="loadLocalAudio(event)"/>
           
           <div class="audio-controls-row">
-            <button class="audio-play-btn" id="audioPlayBtn" onclick="toggleAudioPlayback()">&#x25B6;</button>
+            <button class="audio-play-btn" id="audioPlayBtn" type="button" aria-label="Play audio" onclick="toggleAudioPlayback()">&#x25B6;</button>
             <div class="audio-progress-wrap">
-              <input type="range" class="audio-progress" id="audioScrubber" min="0" max="100" value="0" oninput="scrubAudio(this.value)"/>
+              <input type="range" class="audio-progress" id="audioScrubber" aria-label="Audio position" min="0" max="100" value="0" oninput="scrubAudio(this.value)"/>
               <span class="audio-time-label" id="audioTimeLbl">00:00 / 00:00</span>
             </div>
           </div>
-          <div class="audio-status-text" id="audioStatusText">Mode: Local Folder Audio (Part 1)</div>
+          <div class="audio-status-text" id="audioStatusText" role="status" aria-live="polite">Press Play to start Part 1 audio.</div>
           
-          <div class="youtube-backup-wrap" id="youtubeBackupWrap">
-            <iframe id="ytIframe" src="https://www.youtube.com/embed/n4qQf1a7d6M?rel=0&amp;showinfo=0&amp;controls=1&amp;enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
+          <p style="margin-top:8px"><a id="audioExternalLink" target="_blank" rel="noopener noreferrer">Open this part’s audio separately</a></p>
         </div>
 
         <!-- PART 1 -->
@@ -1351,6 +1347,7 @@ html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color
   </div>
 </div>
 
+<script src="dmi-listening.js"></script>
 <script>
 const STORAGE_KEY = 'dmi:ielts:b18t1:listening';
 const KEY = {
@@ -1366,23 +1363,15 @@ const KEY = {
   36: 'breathing', 37: 'feet', 38: 'employment', 39: 'weapons', 40: 'tourism'
 };
 
-const PART_AUDIO_LOCAL = {
-  1: './Audio/Cambridge 18 test 1.mp4',
-  2: './Audio/Cambridge 18 test 1.mp4',
-  3: './Audio/Cambridge 18 test 1.mp4',
-  4: './Audio/Cambridge 18 test 1.mp4'
-};
-
 const PART_AUDIO_ONLINE = {
-  1: 'https://ieltstrainingonline.com/wp-content/uploads/2023/05/cam18-test1-part1.mp3',
-  2: 'https://ieltstrainingonline.com/wp-content/uploads/2023/05/cam18-test1-part2.mp3',
-  3: 'https://ieltstrainingonline.com/wp-content/uploads/2023/05/cam18-test1-part3.mp3',
-  4: 'https://ieltstrainingonline.com/wp-content/uploads/2023/05/cam18-test1-part4.mp3'
+  1: 'https://ieltstrainingonline.com/wp-content/uploads/2023/06/cam18-test1-part1.mp3',
+  2: 'https://ieltstrainingonline.com/wp-content/uploads/2023/06/cam18-test1-part2.mp3',
+  3: 'https://ieltstrainingonline.com/wp-content/uploads/2023/06/cam18-test1-part3.mp3',
+  4: 'https://ieltstrainingonline.com/wp-content/uploads/2023/06/cam18-test1-part4.mp3'
 };
 
 let student = {}, curPart = 1, timeLeft = 2400, timerInt;
 let allResults = [], sortKey = 'date';
-let audioMode = 'localFolder'; // 'localFolder', 'stream', 'local', 'youtube'
 let activeQ = 1;
 let reviewFlags = {};
 
@@ -1431,17 +1420,7 @@ function startExam() {
   setupAudioListeners();
   bindInputsFocus();
   
-  // Auto-play linked audio file after candidate clicks Begin Exam button
-  setTimeout(() => {
-    const audio = document.getElementById('examAudio');
-    if (audio) {
-      audio.play().then(() => {
-        document.getElementById('audioPlayBtn').innerHTML = '&#x23F8;';
-      }).catch(err => {
-        console.log('Autoplay prevented or failed:', err);
-      });
-    }
-  }, 300);
+
 }
 
 function startTimer() {
@@ -1480,34 +1459,8 @@ function showPart(p) {
     if (el) el.style.display = (i === p) ? '' : 'none';
   }
   
-  const audio = document.getElementById('examAudio');
-  const playBtn = document.getElementById('audioPlayBtn');
-  
-  if (audioMode === 'localFolder') {
-    if (audio) {
-      const targetSrc = PART_AUDIO_LOCAL[p];
-      const decodedSrc = decodeURIComponent(audio.src || '');
-      const normalizedTarget = targetSrc.replace(/^\./, '');
-      if (!decodedSrc || !decodedSrc.endsWith(normalizedTarget)) {
-        audio.src = targetSrc;
-        audio.load();
-        playBtn.innerHTML = '&#x25B6;';
-      }
-      document.getElementById('audioStatusText').textContent = 'Mode: Local Folder Audio (Part ' + p + ')';
-    }
-  } else if (audioMode === 'stream') {
-    if (audio) {
-      const targetSrc = PART_AUDIO_ONLINE[p];
-      const decodedSrc = decodeURIComponent(audio.src || '');
-      const normalizedTarget = targetSrc.replace(/^\./, '');
-      if (!decodedSrc || !decodedSrc.endsWith(normalizedTarget)) {
-        audio.src = targetSrc;
-        audio.load();
-        playBtn.innerHTML = '&#x25B6;';
-      }
-      document.getElementById('audioStatusText').textContent = 'Mode: Streaming MP3 (Part ' + p + ')';
-    }
-  }
+  DMI_LISTENING.setup(PART_AUDIO_ONLINE);
+  DMI_LISTENING.showPart(p);
   updateNavIndicators();
   document.querySelectorAll('.grp-lbl').forEach((lbl, idx) => {
     lbl.classList.toggle('cur', (idx + 1) === p);
@@ -1696,60 +1649,13 @@ function renderResults(rec) {
 function esc(s) { if (!s) return ''; return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
 // ══ NATIVE AUDIO PLAYER LOGIC ══
-function setupAudioListeners() {
-  const audio = document.getElementById('examAudio');
-  if (!audio) return;
-  
-  audio.ontimeupdate = () => {
-    const scrubber = document.getElementById('audioScrubber');
-    const timeLbl = document.getElementById('audioTimeLbl');
-    if (!audio.duration) return;
-    
-    const pct = (audio.currentTime / audio.duration) * 100;
-    if (scrubber) scrubber.value = pct;
-    
-    const curM = String(Math.floor(audio.currentTime / 60)).padStart(2, '0');
-    const curS = String(Math.floor(audio.currentTime % 60)).padStart(2, '0');
-    const durM = String(Math.floor(audio.duration / 60)).padStart(2, '0');
-    const durS = String(Math.floor(audio.duration % 60)).padStart(2, '0');
-    if (timeLbl) timeLbl.textContent = `${curM}:${curS} / ${durM}:${durS}`;
-  };
-  
-  audio.onended = () => {
-    document.getElementById('audioPlayBtn').innerHTML = '&#x25B6;';
-  };
-}
+function setupAudioListeners() { DMI_LISTENING.setup(PART_AUDIO_ONLINE); }
 
-function toggleAudioPlayback() {
-  const audio = document.getElementById('examAudio');
-  const playBtn = document.getElementById('audioPlayBtn');
-  if (!audio) return;
-  
-  if (audio.paused) {
-    audio.play().then(() => {
-      playBtn.innerHTML = '&#x23F8;';
-    }).catch(err => {
-      alert('Please click Play again to confirm audio start!');
-    });
-  } else {
-    audio.pause();
-    playBtn.innerHTML = '&#x25B6;';
-  }
-}
+function toggleAudioPlayback() { return DMI_LISTENING.toggle(); }
 
-function scrubAudio(val) {
-  const audio = document.getElementById('examAudio');
-  if (audio && audio.duration) {
-    audio.currentTime = (val / 100) * audio.duration;
-  }
-}
+function scrubAudio(val) { DMI_LISTENING.scrub(val); }
 
-function changeVolume(val) {
-  const audio = document.getElementById('examAudio');
-  if (audio) audio.volume = val / 100;
-  const slider = document.getElementById('headerVol');
-  if (slider) slider.value = val;
-}
+function changeVolume(val) { DMI_LISTENING.volume(val); }
 
 function playBeep() {
   try {
@@ -1771,80 +1677,10 @@ function playBeep() {
   } catch (e) {}
 }
 
-function switchAudioSource(mode) {
-  audioMode = mode;
-  const tabs = ['localFolder', 'stream', 'local', 'youtube'];
-  tabs.forEach(t => {
-    const tabName = 'tabSrc' + t.charAt(0).toUpperCase() + t.slice(1);
-    const tab = document.getElementById(tabName);
-    if (tab) tab.classList.toggle('active', t === mode);
-  });
-  
-  const audio = document.getElementById('examAudio');
-  const playBtn = document.getElementById('audioPlayBtn');
-  const ytWrap = document.getElementById('youtubeBackupWrap');
-  
-  if (mode === 'localFolder') {
-    ytWrap.style.display = 'none';
-    if (audio) {
-      const targetSrc = PART_AUDIO_LOCAL[curPart];
-      const decodedSrc = decodeURIComponent(audio.src || '');
-      const normalizedTarget = targetSrc.replace(/^\./, '');
-      if (!decodedSrc || !decodedSrc.endsWith(normalizedTarget)) {
-        audio.src = targetSrc;
-        audio.load();
-        playBtn.innerHTML = '&#x25B6;';
-      }
-      document.getElementById('audioStatusText').textContent = 'Mode: Local Folder Audio (Part ' + curPart + ')';
-    }
-  } else if (mode === 'stream') {
-    ytWrap.style.display = 'none';
-    if (audio) {
-      const targetSrc = PART_AUDIO_ONLINE[curPart];
-      const decodedSrc = decodeURIComponent(audio.src || '');
-      const normalizedTarget = targetSrc.replace(/^\./, '');
-      if (!decodedSrc || !decodedSrc.endsWith(normalizedTarget)) {
-        audio.src = targetSrc;
-        audio.load();
-        playBtn.innerHTML = '&#x25B6;';
-      }
-      document.getElementById('audioStatusText').textContent = 'Mode: Streaming MP3 (Part ' + curPart + ')';
-    }
-  } else if (mode === 'youtube') {
-    if (audio) audio.pause();
-    playBtn.innerHTML = '&#x25B6;';
-    ytWrap.style.display = 'block';
-    document.getElementById('audioStatusText').textContent = 'Mode: YouTube Backup Enabled';
-  }
-}
+function switchAudioSource(mode) { DMI_LISTENING.switchSource(mode); }
 
-function loadLocalAudio(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  
-  audioMode = 'local';
-  const tabs = ['localFolder', 'stream', 'local', 'youtube'];
-  tabs.forEach(t => {
-    const tabName = 'tabSrc' + t.charAt(0).toUpperCase() + t.slice(1);
-    const tab = document.getElementById(tabName);
-    if (tab) tab.classList.toggle('active', t === 'local');
-  });
-  
-  document.getElementById('youtubeBackupWrap').style.display = 'none';
-  
-  const audio = document.getElementById('examAudio');
-  const playBtn = document.getElementById('audioPlayBtn');
-  if (audio) {
-    audio.src = URL.createObjectURL(file);
-    audio.load();
-    audio.play().then(() => {
-      playBtn.innerHTML = '&#x23F8;';
-    });
-    document.getElementById('audioStatusText').textContent = 'Loaded Local: ' + file.name;
-  }
-}
+function loadLocalAudio(e) { return DMI_LISTENING.selectFile(e); }
 
-// ══ CBT NAVIGATION LOGIC ══
 function setActiveQ(q) {
   activeQ = q;
   document.getElementById('reviewChk').checked = !!reviewFlags[q];
