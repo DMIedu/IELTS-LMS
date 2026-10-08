@@ -1,0 +1,28 @@
+name: Listening checks
+on:
+  pull_request:
+    paths:
+      - 'book * listening test *.html'
+      - 'dmi-listening.js'
+      - 'tests/listening.test.js'
+      - 'scripts/check-listening-audio.js'
+      - '.github/workflows/listening-checks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check listening controls and paper wiring
+        run: node tests/listening.test.js
+      - name: Check public audio responses
+        run: node scripts/check-listening-audio.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: listening-audio-report
+          path: artifacts/listening-audio-report.json
+          if-no-files-found: ignore
