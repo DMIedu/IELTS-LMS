@@ -479,3 +479,37 @@ private preservation/verification of production deployment/configuration and a
 bounded migration/reset plus coordinated frontend/backend publication plan.
 Main and production remain unchanged by Codex. Test completion does not authorize
 production deployment or establish that all Phase 1 release gates are complete.
+
+## Actual-site checks and production preparation — 8 October 2026
+
+Screenshots from the isolated test website show the copied student list (24),
+teacher marks, course library with Synced, student re-login with existing mark,
+and a new Book 15 Reading Test 1 submission (3/40) displayed on both dashboards.
+Teacher View Answers now contains individual answers and question text. Questions
+8–13 use table rows and were initially missing; the subsequent fallback to tr was
+code-tested but has not received native browser verification. Video playback was
+explicitly deferred by the owner. Concurrent native requests remain unchecked.
+
+Intermittent non-JSON responses and Use POST also occurred. Underlying transport
+cause remains unproven. Verification now preserves the token and blocks access
+with retry UI on transient errors, redirecting only for absent/invalid/expired
+sessions or role mismatch. Read requests retry once for network/JSON/Use POST
+failures; mutation requests never auto-retry. Mock checks passed. Course links
+now point directly to the course page; filtered exam rows select the correct
+submission. Test-only URLs, keys and guard scripts were removed on backport.
+
+User reported saving current production Code.gs and creating a fresh private
+workbook backup. Screenshots showed deployment versions 10 then 11, execute as
+owner and Anyone access. User installed the consolidated candidate in the
+production editor, set four properties including the production workbook ID,
+fresh private secret and legacy-password window ending 2026-10-22T23:59:59+05:30.
+The first initializeSecurity failed at secret validation; after correction,
+the screenshot shows Execution completed at 07:29:14 Asia/Colombo. This confirms
+editor execution without visible error, not an independent schema/data audit.
+User also completed browser-test account cleanup on the test workbook.
+
+The new secure backend has not been confirmed deployed. Main remains unchanged
+by Codex. Production schema was initialized by the user; do not claim production
+is wholly unchanged. Trigger/manifest/scopes review, bounded migration acceptance,
+native concurrency/remaining table capture checks, and coordinated publication
+with rollback remain release gates. Never merge the test website branch.

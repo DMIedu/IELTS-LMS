@@ -23,27 +23,55 @@
   }
   function call(action,params){
     var body=new URLSearchParams(Object.assign({},params||{}, {action:action,sessionToken:token()}));
-    return fetch(API_URL,{method:'POST',body:body}).then(function(r){return r.json();})
-      .then(function(res){
-        if(['UNAUTHENTICATED','ACCESS_EXPIRED'].indexOf(res.code)>=0)clear();
-        return res;
-      });
+    var readOnly=['session','listStudents','listCourses','listMarks','listExamResults','myMarks','getLMSData'].indexOf(action)>=0;
+    async function attempt(retried){
+      var res;
+      try{
+        var response=await fetch(API_URL,{method:'POST',body:body});
+        res=await response.json();
+      }catch(error){
+        if(readOnly && !retried && (error instanceof SyntaxError || error instanceof TypeError))return attempt(true);
+        throw error;
+      }
+      if(readOnly && !retried && res && res.error==='Use POST')return attempt(true);
+      if(['UNAUTHENTICATED','ACCESS_EXPIRED'].indexOf(res.code)>=0)clear();
+      return res;
+    }
+    return attempt(false);
   }
   function verify(){
     if(!token())return Promise.resolve(null);
     return call('session').then(function(res){
-      if(!res.ok)return null;
+      if(!res.ok){
+        if(['UNAUTHENTICATED','ACCESS_EXPIRED'].indexOf(res.code)>=0)return null;
+        throw new Error(res.error==='Use POST'?'The server returned Use POST during session verification.':'The server could not verify the session.');
+      }
       localStorage.setItem('dmi_lms_user',JSON.stringify(res.user));
       localStorage.setItem('dmi_lms_role',res.role);
       return window.__DMI_VERIFIED={user:res.user,role:res.role};
     });
   }
   function redirect(){location.replace(base+'login.html?next='+encodeURIComponent(location.pathname+location.search));}
+  function retryVerification(error){
+    window.__DMI_VERIFIED=null;
+    function show(){
+      var box=document.createElement('div');
+      box.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#f2f5f9;color:#1e2d40;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:32px;text-align:center;font:16px system-ui';
+      var title=document.createElement('h2');title.textContent='Session verification could not complete';box.appendChild(title);
+      var detail=document.createElement('p');detail.textContent=error instanceof SyntaxError?'The server response was not valid JSON.':error instanceof TypeError?'The verification request could not complete.':error.message==='The server returned Use POST during session verification.'?error.message:'The server could not verify the session.';
+      box.appendChild(detail);
+      var note=document.createElement('p');note.textContent='Your saved sign-in was kept. Retry verification to continue.';box.appendChild(note);
+      var button=document.createElement('button');button.textContent='Retry verification';
+      button.style.cssText='padding:12px 20px;background:#c0202a;color:#fff;border:0;border-radius:7px;cursor:pointer;font:inherit';
+      button.onclick=function(){location.reload();};box.appendChild(button);document.body.appendChild(box);
+    }
+    if(document.body)show();else document.addEventListener('DOMContentLoaded',show,{once:true});
+  }
   function requireRole(role){
     return verify().then(function(info){
       if(!info || (role && info.role!==role)){redirect();return null;}
       return info;
-    }).catch(function(){redirect();return null;});
+    }).catch(function(error){retryVerification(error);return null;});
   }
   async function logout(){
     try{await call('logout');}finally{clear();location.href=base+'login.html';}

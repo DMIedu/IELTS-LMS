@@ -112,7 +112,7 @@ tr:hover td{background:#fafbfd}
       <span class="brand-text">DMI LMS</span>
     </a>
     <nav class="tb-nav">
-      <a href="index.html">My Courses</a>
+      <a href="video%20tutorial/index.html">My Courses</a>
       <a href="index.html">Practice Papers</a>
       <a href="#" class="active">Teacher Panel</a>
     </nav>
@@ -346,7 +346,7 @@ function renderExams(){
         <td><b>${esc(e.StudentName||'')}</b><br/><small style="color:var(--muted)">${esc(e.StudentEmail||'')}</small></td>
         <td>${esc(e.TestName||'')}${e.Course?'<br/><span class="badge red" style="margin-top:4px">'+esc(e.Course)+'</span>':''}</td>
         <td><div class="score-cell">${s}<span style="color:var(--muted);font-size:14px;font-weight:500"> / ${mx||'-'}</span>${pct!==null?'<span class="pct">'+pct+'%</span>':''}</div></td>
-        <td><button class="btn btn-ghost btn-sm" onclick="viewExam(${i})">View Answers</button></td>
+        <td><button class="btn btn-ghost btn-sm" onclick="viewExam(${allExams.indexOf(e)})">View Answers</button></td>
       </tr>`;
     }).join('')}</tbody></table></div>
     <div id="examModal" style="display:none;position:fixed;inset:0;background:rgba(15,30,45,.6);z-index:99;align-items:center;justify-content:center;padding:24px" onclick="if(event.target===this)this.style.display='none'">
@@ -361,7 +361,7 @@ function viewExam(idx){
   let answers = {}, questions = {};
   try { answers = JSON.parse(e.AnswersJSON || '{}'); } catch(_) {}
   try { questions = JSON.parse(e.QuestionsJSON || '{}'); } catch(_) {}
-  const keys = Object.keys(answers).length ? Object.keys(answers) : Object.keys(questions);
+  const keys = Array.from(new Set(Object.keys(answers).concat(Object.keys(questions)))).filter(k=>k.charAt(0)!=='_');
   const rows = keys.length ? keys.map(k => `
     <tr><td style="font-weight:700;color:var(--dmi-red);width:40px">${esc(k)}</td>
         <td>${esc(questions[k]||'') || '<em style="color:var(--muted)">(question text not captured)</em>'}</td>
