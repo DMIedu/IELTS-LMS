@@ -5,6 +5,7 @@ on:
       - 'book * listening test *.html'
       - 'dmi-listening.js'
       - 'tests/listening.test.js'
+      - 'tests/listening-browser.test.js'
       - 'scripts/check-listening-audio.js'
       - '.github/workflows/listening-checks.yml'
   workflow_dispatch:
@@ -13,16 +14,22 @@ permissions:
 jobs:
   controls:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: Check listening controls and paper wiring
         run: node tests/listening.test.js
       - name: Check public audio responses
         run: node scripts/check-listening-audio.js
+      - name: Install isolated browser test dependency
+        run: npm install --no-save --ignore-scripts playwright
+      - name: Install Chromium for playback validation
+        run: npx playwright install --with-deps chromium
+      - name: Check every audio part in native Chromium
+        run: node tests/listening-browser.test.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: listening-audio-report
-          path: artifacts/listening-audio-report.json
+          path: artifacts/listening-*-report.json
           if-no-files-found: ignore
