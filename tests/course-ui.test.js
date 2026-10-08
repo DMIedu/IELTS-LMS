@@ -38,6 +38,14 @@ async function runCourseUITests(source){
   assert(document.getElementById('detailName').readOnly && document.getElementById('detailRestricted').checked===false,'Legacy editor preserves availability and course identity');checks++;
   requests.push({ok:true,data:[],courseManagementReady:false});await document.getElementById('courseRefresh').onclick();
   assert(document.getElementById('courseDetailFields').disabled && document.getElementById('courseEnrolmentFields').disabled,'Missing setup disables writes');checks++;
+  requests.push(new SyntaxError('Unexpected token < private HTML'));
+  await document.getElementById('courseRefresh').onclick();
+  assert(document.getElementById('courseNotice').textContent.includes('unreadable response') &&
+    !document.getElementById('courseNotice').textContent.includes('private HTML'),'Unparseable responses use a helpful message');checks++;
+  requests.push({ok:true,data:[],courseManagementReady:true});
+  await document.getElementById('courseRefresh').onclick();
+  assert(document.getElementById('courseNotice').className==='msg ok' &&
+    !document.getElementById('courseDetailFields').disabled,'Successful refresh clears stale error and enables editing');checks++;
   return checks;
 }
 
