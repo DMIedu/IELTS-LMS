@@ -26,7 +26,7 @@ function probe(url,redirects=0){
    resolve({url,status,type,ok:[200,206].includes(status)&&/^(audio\/|video\/mp4|application\/octet-stream)/i.test(type)});
   });
   request.setTimeout(15000,()=>request.destroy(Error('Timed out')));
-  request.on('error',error=>resolve({url,ok:false,error:error.message}));
+  request.on('error',error=>resolve({url,ok:false,error:error.message||error.code||String(error)}));
  });
 }
 (async()=>{

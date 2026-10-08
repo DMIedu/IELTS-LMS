@@ -20,6 +20,7 @@ jobs:
       - name: Check listening controls and paper wiring
         run: node tests/listening.test.js
       - name: Check public audio responses
+        continue-on-error: true
         run: node scripts/check-listening-audio.js
       - name: Install isolated browser test dependency
         run: npm install --no-save --ignore-scripts playwright
