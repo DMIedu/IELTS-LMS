@@ -125,11 +125,6 @@ const msg = document.getElementById('msg');
 const btn = document.getElementById('loginBtn');
 function show(t,c){msg.className='msg '+c;msg.textContent=t;}
 
-async function call(action, params){
-  const body = new URLSearchParams({action, ...params});
-  const r = await fetch(API_URL, {method:'POST', body});
-  return r.json();
-}
 
 btn.addEventListener('click', async () => {
   const role = document.getElementById('role').value;
@@ -138,11 +133,13 @@ btn.addEventListener('click', async () => {
   if (!email || !password) { show('Please enter email and password', 'err'); return; }
   btn.disabled = true; btn.textContent = 'Signing in…';
   try {
-    const res = await call('login', {email, password});
+    const res = await DMI_AUTH.login({email, password});
     if (!res.ok) {
       // Friendlier "expired" message
       if (res.expired) { show(res.error || 'Your access has expired. Please contact the admin to renew.', 'err'); return; }
-      show(res.error || 'Login failed', 'err'); return;
+      show(res.code === 'POST_REQUIRED'
+        ? 'The server could not complete sign-in. Please try again shortly.'
+        : res.error || 'Login failed', 'err'); return;
     }
     if (res.role !== role) { show('This account is a '+res.role+', not a '+role, 'err'); return; }
     DMI_AUTH.save(res);

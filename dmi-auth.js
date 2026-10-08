@@ -21,8 +21,10 @@
     localStorage.setItem('dmi_lms_user',JSON.stringify(res.user));
     localStorage.setItem('dmi_lms_role',res.role);
   }
-  function call(action,params){
-    var body=new URLSearchParams(Object.assign({},params||{}, {action:action,sessionToken:token()}));
+  function request(action,params,includeSession){
+    var payload=Object.assign({},params||{}, {action:action});
+    if(includeSession)payload.sessionToken=token();
+    var body=new URLSearchParams(payload);
     var readOnly=['session','listStudents','listCourses','listMarks','listExamResults','myMarks','getLMSData'].indexOf(action)>=0;
     async function attempt(retried){
       var res;
@@ -33,12 +35,18 @@
         if(readOnly && !retried && (error instanceof SyntaxError || error instanceof TypeError))return attempt(true);
         throw error;
       }
-      if(readOnly && !retried && res && res.error==='Use POST')return attempt(true);
+      // POST_REQUIRED is rejected before authentication or any database writes.
+      // Retry login only for that explicit rejection, never for an ambiguous
+      // network failure, invalid password, or rate limit.
+      if(!retried && res && (readOnly && res.error==='Use POST' ||
+        action==='login' && res.code==='POST_REQUIRED'))return attempt(true);
       if(['UNAUTHENTICATED','ACCESS_EXPIRED'].indexOf(res.code)>=0)clear();
       return res;
     }
     return attempt(false);
   }
+  function call(action,params){return request(action,params,true);}
+  function login(params){return request('login',params,false);}
   function verify(){
     if(!token())return Promise.resolve(null);
     return call('session').then(function(res){
@@ -76,6 +84,6 @@
   async function logout(){
     try{await call('logout');}finally{clear();location.href=base+'login.html';}
   }
-  window.DMI_AUTH={token:token,clear:clear,save:save,call:call,verify:verify,
+  window.DMI_AUTH={token:token,clear:clear,save:save,call:call,login:login,verify:verify,
     requireRole:requireRole,logout:logout};
 })();
