@@ -25,7 +25,7 @@
     var payload=Object.assign({},params||{}, {action:action});
     if(includeSession)payload.sessionToken=token();
     var body=new URLSearchParams(payload);
-    var readOnly=['session','listStudents','listCourses','listMarks','listExamResults','myMarks','getLMSData','listCourseCatalogue','listCourseEnrollments'].indexOf(action)>=0;
+    var readOnly=['session','listStudents','listCourses','listMarks','listExamResults','myMarks','getLMSData','listCourseCatalogue','listCourseEnrollments','listCourseProgress'].indexOf(action)>=0;
     async function attempt(retried){
       var res;
       try{
