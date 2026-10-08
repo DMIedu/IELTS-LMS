@@ -71,7 +71,7 @@ function handle(e) {
   try {
     const p=Object.assign({},e && e.parameter || {});
     const action=String(p.action||'');
-    if(action==='ping')return json({ok:true,version:'phase1-candidate',time:new Date()});
+    if(action==='ping')return json({ok:true,version:'phase3-courses',time:new Date()});
     // Credentials and bearer tokens must never be accepted in GET URLs.
     if(!e || !e.postData)securityError_('POST_REQUIRED','Use POST');
     lock=LockService.getScriptLock();
@@ -112,7 +112,11 @@ function handle(e) {
       case 'addStudent': result=createStudent_(p);break;
       case 'deleteStudent': result=deleteStudent(p);break;
       case 'renewStudent': result=renewStudent(p);break;
-      case 'listCourses': result=listCourses();break;
+      case 'listCourses': result=visibleCourseLessons_(ctx);break;
+      case 'listCourseCatalogue': result=listCourseCatalogue_(ctx);break;
+      case 'saveCourseDetails': result=saveCourseDetails_(p,ctx);break;
+      case 'listCourseEnrollments': result=listCourseEnrolments_(p,ctx);break;
+      case 'setCourseEnrollment': result=setCourseEnrolment_(p,ctx);break;
       case 'addCourse': result=addCourse(p);break;
       case 'deleteCourse': result=deleteCourse(p);break;
       case 'addMark': result=addMark(p);break;
@@ -191,9 +195,12 @@ function deleteStudent(p) {
   if (!email) return { ok: false, error: 'Email required' };
   const sheet = tab('Students');
   const data = sheet.getDataRange().getValues();
+  const emailCol = data[0].map(headerName_).indexOf('Email');
+  if(emailCol<0)securityError_('CONFIGURATION_REQUIRED','Student email column missing');
   for (let i = 1; i < data.length; i++) {
-    if (String(data[i][2]).toLowerCase() === email) {
+    if (email_(data[i][emailCol]) === email) {
       sheet.deleteRow(i + 1);
+      removeStudentCourseEnrolments_(email);
       return { ok: true };
     }
   }
@@ -232,6 +239,9 @@ function addCourse(p) {
   const videoURL = (p.videoURL || '').toString().trim();
   const pdfURL   = (p.pdfURL   || '').toString().trim();
   if (!course || !lesson) return { ok: false, error: 'Course and Lesson required' };
+  if(courseSheet_('CourseDetails',DMI_COURSE_HEADERS,false) &&
+    !courseRecords_().some(c=>c.CourseKey===courseKey_(course)))
+    return {ok:false,error:'Save the course details first, then add its lessons'};
   const sheet = tab('Courses');
   const id = uid('CRS');
   sheet.appendRow([id, course, lesson, videoURL, pdfURL]);
