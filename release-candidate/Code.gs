@@ -1561,17 +1561,21 @@ function initializeMockAttempts(){
 function mockChart_(chart){
   if(chart==null)return null;
   const fail=()=>securityError_('MOCK_NOT_READY','The Writing chart needs review');
-  if(!chart||typeof chart!=='object'||Array.isArray(chart)||chart.type!=='bar'||
+  if(!chart||typeof chart!=='object'||Array.isArray(chart)||!['bar','line'].includes(chart.type)||
     typeof chart.title!=='string'||!chart.title.trim()||chart.title.length>160||
     typeof chart.unit!=='string'||chart.unit.length>30||
     !Number.isFinite(chart.maximum)||chart.maximum<=0||chart.maximum>1000000||
-    !Array.isArray(chart.categories)||!chart.categories.length||chart.categories.length>6||
+    !Array.isArray(chart.categories)||!chart.categories.length||chart.categories.length>(chart.type==='line'?16:6)||
     !chart.categories.every(v=>typeof v==='string'&&v.trim()&&v.length<=60)||
     !Array.isArray(chart.series)||!chart.series.length||chart.series.length>4)fail();
   if(!chart.series.every(s=>s&&typeof s.name==='string'&&s.name.trim()&&s.name.length<=60&&Array.isArray(s.values)&&
     s.values.length===chart.categories.length&&s.values.every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=chart.maximum)))fail();
-  return {type:'bar',title:chart.title,unit:chart.unit,maximum:chart.maximum,categories:chart.categories.slice(),
+  if(chart.type==='line'&&(chart.categories.length<2||(chart.projectionStartIndex!=null&&
+    (!Number.isInteger(chart.projectionStartIndex)||chart.projectionStartIndex<1||chart.projectionStartIndex>=chart.categories.length))))fail();
+  const result={type:chart.type,title:chart.title,unit:chart.unit,maximum:chart.maximum,categories:chart.categories.slice(),
     series:chart.series.map(s=>({name:s.name,values:s.values.slice()}))};
+  if(chart.type==='line'&&chart.projectionStartIndex!=null)result.projectionStartIndex=chart.projectionStartIndex;
+  return result;
 }
 
 function mockPaper_(id,version){

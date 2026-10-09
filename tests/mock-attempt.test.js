@@ -28,6 +28,14 @@ for(const invalid of [{...chart,maximum:0},{...chart,series:[{name:'x',values:[-
  const bad=JSON.parse(paperJSON);bad.sections[2].questions[0].chart=invalid;sheets.MockPapers.vals[1][4]=JSON.stringify(bad);
  check('invalid chart blocks starting paper',req('startMockAttempt',{sittingID:id},'student').code==='MOCK_NOT_READY');
 }
+const lineChart={type:'line',title:'Synthetic trend',unit:'units',maximum:100,categories:Array.from({length:11},(_,i)=>String(2030+i)),series:[{name:'Synthetic series',values:Array.from({length:11},(_,i)=>i*5)}],projectionStartIndex:8,answerKey:'NEVER-EXPOSE-KEY'};
+const cleaned=ctx.mockChart_(lineChart);
+check('line chart retains numeric trend and forecast boundary',cleaned.type==='line'&&cleaned.categories.length===11&&cleaned.series[0].values[10]===50&&cleaned.projectionStartIndex===8);
+check('line chart strips extra key fields',!JSON.stringify(cleaned).includes('NEVER-EXPOSE-KEY'));
+for(const invalid of [{...lineChart,projectionStartIndex:-1},{...lineChart,projectionStartIndex:11},{...lineChart,projectionStartIndex:1.5},{...lineChart,categories:['one'],series:[{name:'x',values:[10]}]},{...lineChart,categories:Array(17).fill('x'),series:[{name:'x',values:Array(17).fill(10)}]}]){
+ const bad=JSON.parse(paperJSON);bad.sections[2].questions[0].chart=invalid;sheets.MockPapers.vals[1][4]=JSON.stringify(bad);
+ check('invalid line chart blocks paper',req('startMockAttempt',{sittingID:id},'student').code==='MOCK_NOT_READY');
+}
 sheets.MockPapers.vals[1][4]=paperJSON;
 const begin=req('startMockAttempt',{sittingID:id},'student'),attempt=begin.attempt;
 check('reviewed test fixture starts Listening',begin.ok&&attempt.section==='listening'&&attempt.revision===0);

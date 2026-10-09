@@ -21,4 +21,14 @@ await page.setViewportSize({width:390,height:844});check('mobile fits viewport',
 check('SVG fits mobile width',await page.locator('svg').evaluate(e=>e.getBoundingClientRect().width<=innerWidth));
 await page.evaluate(()=>{const host=document.createElement('div');host.id='invalid-chart';document.body.append(host);DMI_MOCK_CHART.render(host,{type:'bar',categories:['A'],series:[{name:'x',values:[-1]}],maximum:100});});
 check('invalid data is not drawn',await page.locator('#invalid-chart svg').count()===0&&(await page.locator('#invalid-chart').textContent()).includes('unavailable'));
+await page.evaluate(()=>{const host=document.createElement('div');host.id='line-chart';document.body.append(host);DMI_MOCK_CHART.render(host,{type:'line',title:'Synthetic line trend',unit:'units',maximum:100,categories:Array.from({length:11},(_,i)=>String(2030+i)),series:[{name:'Series A',values:Array.from({length:11},(_,i)=>i*5)},{name:'Series B',values:Array.from({length:11},(_,i)=>100-i*5)}],projectionStartIndex:8});});
+check('line graph renders two trends',await page.locator('#line-chart polyline').count()===2&&await page.locator('#line-chart circle').count()===22);
+const points=(await page.locator('#line-chart polyline').first().getAttribute('points')).split(' ').map(p=>p.split(',').map(Number));
+check('line graph preserves scaled coordinates',points.length===11&&points[0][0]===68&&points[0][1]===345&&points[10][0]===812&&points[10][1]===210);
+check('projection boundary uses category position',Number(await page.locator('[data-projection-boundary]').getAttribute('x1'))===663.2);
+check('projection identified in exact values caption',(await page.locator('#line-chart caption').textContent()).includes('projected from 2038'));
+check('line exact table retains all categories',await page.locator('#line-chart table tr').count()===12);
+check('line SVG fits mobile width',await page.locator('#line-chart svg').evaluate(e=>e.getBoundingClientRect().width<=innerWidth));
+await page.evaluate(()=>{const host=document.createElement('div');host.id='bad-projection';document.body.append(host);DMI_MOCK_CHART.render(host,{type:'line',title:'Invalid',unit:'x',maximum:100,categories:['A','B'],series:[{name:'x',values:[10,20]}],projectionStartIndex:2});});
+check('invalid projection is not drawn',await page.locator('#bad-projection svg').count()===0);
 const out=path.join(root,'artifacts');fs.mkdirSync(out,{recursive:true});await page.screenshot({path:path.join(out,'mock-writing-chart-synthetic.png'),fullPage:true});await context.close();await browser.close();console.log(JSON.stringify({writingChartBrowserChecks:checks,liveWorkbookWrites:0}));})().catch(e=>{console.error(e);process.exit(1);});
