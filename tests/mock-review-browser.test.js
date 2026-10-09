@@ -12,8 +12,8 @@ await page.exposeFunction('reviewCall',async(a,p)=>{const r=h.req(a,p);if(a==='s
 await context.route('**/*',async route=>{const rel=new URL(route.request().url()).pathname.split('/').pop();
 if(rel==='dmi-auth.js')return route.fulfill({contentType:'text/javascript',body:"window.DMI_AUTH={requireRole:async()=>({role:'teacher',user:{name:'Teacher'}}),call:(a,p)=>window.reviewCall(a,p)};"});
 const f=path.join(root,rel);if(fs.existsSync(f))return route.fulfill({contentType:rel.endsWith('.js')?'text/javascript':rel.endsWith('.css')?'text/css':'text/html',body:fs.readFileSync(f)});return route.abort();});
-await page.goto('https://draft.example/mock-review.html');await page.locator('#sitting option').waitFor();
-await page.locator('#load').click();await page.locator('#attempt option').waitFor();await page.locator('#open').click();await page.locator('#review').waitFor({state:'visible'});
+await page.goto('https://draft.example/mock-review.html');await page.locator('#sitting option').waitFor({state:'attached'});
+await page.locator('#load').click();await page.locator('#attempt option').waitFor({state:'attached'});await page.locator('#open').click();await page.locator('#review').waitFor({state:'visible'});
 check('saved essay visible',(await page.locator('#answers').textContent()).includes('Synthetic essay'));
 check('answers cannot inject HTML',await page.locator('#answers img').count()===0);
 check('unreviewed band stays blank',await page.locator('#score-task').inputValue()==='');
