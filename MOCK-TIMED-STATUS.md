@@ -24,3 +24,8 @@ AI audio assessment integration; teacher marking/release; native test deployment
 The four-skill mock is not ready for production.
 
 Synthetic lifecycle tests run in tests/mock-attempt.test.js alongside the existing entry/login/native browser checks.
+
+## Listening authoring milestone — 9 October 2026
+The owner now has separate private candidate and teacher documents for original DMI Listening 01: four parts and 40 questions, complete scripts, accepted answers, evidence spans and recording cues. Both branding assets are included. All 40 evidence spans and within-part answer order were checked against the saved teacher text.
+
+Two monologue draft voiceovers returned ready previews; four speaker-only dialogue tracks were queued at creation. These are production drafts, not a complete assembled or listened-to master recording. Exact duration/evidence timestamps and headphone/pilot review remain pending. The private scripts and answer keys are deliberately excluded from this public repository. Reviewed=false and AudioReviewed=false; keep the timed runner disabled.
