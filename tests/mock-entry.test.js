@@ -55,7 +55,7 @@ function run(){
  check('owner setup preserves existing data',before===JSON.stringify([sheets.Students.vals,sheets.Teachers.vals,sheets.Marks.vals,sheets.Sessions.vals]));
  check('initialization idempotent',sheets.MockSittings.vals.length===1&&sheets.MockAdmissions.vals.length===1);
  for(const p of [
- {title:''},{title:'x'.repeat(101)},{opensAt:'bad'},{closesAt:'bad'},
+ {paperID:'unavailable'},{paperID:'toString'},{title:''},{title:'x'.repeat(101)},{opensAt:'bad'},{closesAt:'bad'},
  {closesAt:new Date(clock.now-120000).toISOString()},{closesAt:new Date(clock.now+8*86400000).toISOString()},
  {candidatesJSON:'{}'},{candidatesJSON:'[]'},{candidatesJSON:'['},{candidatesJSON:'[1]'},
  {candidatesJSON:JSON.stringify(Array(101).fill('one@example.com'))},{requestID:'invalid'}
@@ -64,6 +64,7 @@ function run(){
  const oldExpiry=sheets.Students.vals[1][6];sheets.Students.vals[1][6]=new Date(clock.now-1000);
  check('expired candidate cannot be assigned',req('createMockSitting',payload()).code==='VALIDATION');sheets.Students.vals[1][6]=oldExpiry;
  const p=payload(),created=req('createMockSitting',p),id=created.sitting.id;
+ check('default paper remains Mock 01',created.sitting.paper==='DMI-ACADEMIC-MOCK-01');
  check('teacher creates sitting',created.ok&&created.sitting.candidates.length===2);
  check('high entropy code displayed once',/^[A-F0-9]{4}(-[A-F0-9]{4}){2}$/.test(created.code));
  check('code not stored in plaintext',!JSON.stringify(sheets.MockSittings.vals).includes(created.code.replaceAll('-','')));
@@ -99,6 +100,12 @@ function run(){
  check('student cannot list all admissions',req('listMockAdmissions',{sittingID:id},'student').code==='FORBIDDEN');
  const rp=crypto.randomUUID(),firstRotate=req('rotateMockCode',{sittingID:id,requestID:rp}),twiceRotate=req('rotateMockCode',{sittingID:id,requestID:rp});
  check('rotation retry is idempotent',twiceRotate.ok&&twiceRotate.recovered&&!twiceRotate.code&&twiceRotate.sitting.codeVersion===firstRotate.sitting.codeVersion);
+ const secondPayload=Object.assign(payload(),{paperID:'DMI-ACADEMIC-MOCK-02'});
+ const secondMock=req('createMockSitting',secondPayload);
+ check('teacher selects Mock 02',secondMock.ok&&secondMock.sitting.paper==='DMI-ACADEMIC-MOCK-02'&&secondMock.sitting.examReady===false);
+ check('retry preserves selected paper',req('createMockSitting',Object.assign({},secondPayload,{paperID:'DMI-ACADEMIC-MOCK-01'})).sitting.paper==='DMI-ACADEMIC-MOCK-02');
+ const secondEntry=req('enterMockSitting',{sittingID:secondMock.sitting.id,code:secondMock.code,paperID:'DMI-ACADEMIC-MOCK-01'},'student');
+ check('candidate cannot override sitting paper',secondEntry.ok&&secondEntry.sitting.paper==='DMI-ACADEMIC-MOCK-02');
  const failedSitting=req('createMockSitting',payload()),fid=failedSitting.sitting.id;
  for(let i=0;i<5;i++)check('code failure '+i,req('enterMockSitting',{sittingID:fid,code:'0000'},'student').code==='INVALID_MOCK_CODE');
  check('fifth failure blocks next entry',req('enterMockSitting',{sittingID:fid,code:failedSitting.code},'student').code==='MOCK_RATE_LIMITED');

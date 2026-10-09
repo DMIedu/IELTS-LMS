@@ -50,7 +50,7 @@
       await loadSittings();if(createRequest&&sittings.some(s=>s.createRequestID===createRequest.id)){createRequest=null;status('The previous sitting was saved. Issue a replacement code if you did not receive it.');}const wrap=$('sittings');wrap.replaceChildren();
       if(!sittings.length)wrap.append(node('p','No mock sittings yet.','muted'));
       sittings.forEach(s=>{
-        const card=node('article','','card');card.append(node('h3',s.title),node('p',s.state,'state'),
+        const card=node('article','','card');card.append(node('h3',s.title),node('p',s.paperTitle||s.paper||'','muted'),node('p',s.state,'state'),
           node('p',localDate(s.opensAt)+' → '+localDate(s.closesAt),'muted'),
           node('p',(s.class?s.class+' · ':'')+s.candidates.length+' assigned students','muted'));
         const actions=node('div','','actions');
@@ -80,7 +80,7 @@
     $('refresh').onclick=()=>work(refresh);
     $('create-form').onsubmit=e=>{e.preventDefault();work(async()=>{
       if(!chosen.size)throw Error('Choose at least one active student.');
-      const payload={title:$('title').value,class:$('class').value,opensAt:new Date($('opens').value).toISOString(),
+      const payload={paperID:$('paper').value,title:$('title').value,class:$('class').value,opensAt:new Date($('opens').value).toISOString(),
         closesAt:new Date($('closes').value).toISOString(),candidatesJSON:JSON.stringify(Array.from(chosen))};
       const fingerprint=JSON.stringify(payload);
       if(createRequest&&createRequest.fingerprint!==fingerprint)throw Error('The previous request may have saved. Refresh sittings before creating another.');

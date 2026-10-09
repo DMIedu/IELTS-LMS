@@ -3,6 +3,7 @@
  * The timed runner, original paper and AI assessment are a separate rollout gate.
  * Public actions run under handle()'s script lock and verified session.
  */
+const DMI_MOCK_PAPERS = {'DMI-ACADEMIC-MOCK-01':'Mock 01 — Original DMI Academic paper','DMI-ACADEMIC-MOCK-02':'Mock 02 — Existing practice paper set'};
 const DMI_MOCK_HEADERS = ['SittingID','Title','Class','PaperID','OpensAt','ClosesAt','Status','CandidatesJSON','CodeSalt','CodeHash','CodeVersion','CreatedBy','CreatedAt','CreateRequestID','LastCodeRequestID'];
 const DMI_ADMISSION_HEADERS = ['AdmissionID','SittingID','StudentEmail','StudentID','StudentName','AdmittedAt','Status'];
 
@@ -60,7 +61,7 @@ function mockState_(r){
   return Date.now()<start?'scheduled':Date.now()>=end?'expired':'open';
 }
 function mockPublic_(r,teacher){
-  const out={id:r.SittingID,title:r.Title,class:r.Class,paper:r.PaperID,
+  const out={id:r.SittingID,title:r.Title,class:r.Class,paper:r.PaperID,paperTitle:DMI_MOCK_PAPERS[r.PaperID]||r.PaperID,
     opensAt:new Date(r.OpensAt).toISOString(),closesAt:new Date(r.ClosesAt).toISOString(),
     state:mockState_(r),examReady:false};
   if(teacher){
@@ -90,6 +91,8 @@ function createMockSitting_(p,ctx){
   const sheet=mockSheet_('MockSittings',DMI_MOCK_HEADERS),requestID=mockRequestID_(p.requestID);
   const existing=rows(sheet).find(r=>r.CreatedBy===email_(ctx.user.email) && r.CreateRequestID===requestID);
   if(existing)return {ok:true,sitting:mockPublic_(existing,true),recovered:true};
+  const paperID=String(p.paperID||'DMI-ACADEMIC-MOCK-01');
+  if(!Object.prototype.hasOwnProperty.call(DMI_MOCK_PAPERS,paperID))securityError_('VALIDATION','Choose an available mock paper');
   const title=String(p.title||'').trim(),cls=String(p.class||'').trim();
   const start=new Date(p.opensAt).getTime(),end=new Date(p.closesAt).getTime();
   if(!title || title.length>100 || cls.length>80 || !Number.isFinite(start)||!Number.isFinite(end) ||
@@ -101,7 +104,7 @@ function createMockSitting_(p,ctx){
   candidates=Array.from(new Set(candidates.map(email_)));
   candidates.forEach(email=>{try{active_('student',account_('student',email));}catch(e){securityError_('VALIDATION','Choose only existing active students');}});
   const code=mockNewCode_(),id='MOCK-'+opaque_().slice(0,24);
-  const fields={SittingID:id,Title:sheetText_(title),Class:sheetText_(cls),PaperID:'DMI-ACADEMIC-MOCK-01',
+  const fields={SittingID:id,Title:sheetText_(title),Class:sheetText_(cls),PaperID:paperID,
     OpensAt:new Date(start),ClosesAt:new Date(end),Status:'scheduled',CandidatesJSON:JSON.stringify(candidates),
     CodeSalt:code.salt,CodeHash:code.hash,CodeVersion:1,CreatedBy:email_(ctx.user.email),
     CreatedAt:new Date(),CreateRequestID:requestID,LastCodeRequestID:requestID};
