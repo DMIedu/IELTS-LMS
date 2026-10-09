@@ -31,6 +31,7 @@ check('existing attempt cannot be restarted',await page.locator('#start').isHidd
 await page.locator('[data-answer]').fill('new answer');lose=true;await page.locator('#save').click();
 await page.getByText('Simulated lost response',{exact:true}).waitFor();
 check('failed save retains typed answer',await page.locator('[data-answer]').inputValue()==='new answer');
+check('pending snapshot freezes further edits',await page.locator('[data-answer]').isDisabled());
 check('restore cannot overwrite pending save',await page.locator('#resume').isDisabled());
 await page.locator('#retry').click();await page.getByText('Answers acknowledged by the server.',{exact:true}).waitFor();
 check('retry keeps request identity',requests.length===2&&requests[0].requestID===requests[1].requestID);

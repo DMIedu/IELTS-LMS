@@ -9,7 +9,7 @@ const fields=()=>Array.from(document.querySelectorAll('[data-answer]'));
 function message(text,bad){$('message').textContent=text;$('message').className=bad?'error':'success';}
 function el(tag,text){const e=document.createElement(tag);e.textContent=text;return e;}
 function editable(){return attempt&&attempt.section&&!attempt.sections[['listening','reading','writing'].indexOf(attempt.section)].closed&&!expired&&!blocked;}
-function controls(){fields().forEach(f=>f.disabled=busy||!editable());$('save').disabled=busy||!editable();$('submit').disabled=busy||!editable();$('retry').hidden=!pending;$('retry').disabled=busy||blocked;$('resume').disabled=busy||dirty||!!pending;$('start').disabled=busy||!!attempt;}
+function controls(){fields().forEach(f=>f.disabled=busy||!!pending||!editable());$('save').disabled=busy||!!pending||!editable();$('submit').disabled=busy||!!pending||!editable();$('retry').hidden=!pending;$('retry').disabled=busy||blocked;$('resume').disabled=busy||dirty||!!pending;$('start').disabled=busy||!!attempt;}
 async function call(action,p){const r=await DMI_AUTH.call(action,p);if(!r||!r.ok){const e=Error(r&&r.error||'Connection interrupted.');e.code=r&&r.code;throw e;}return r.attempt;}
 function render(a,force){
  attempt=a;offset=new Date(a.serverNow).getTime()-Date.now();expired=false;
