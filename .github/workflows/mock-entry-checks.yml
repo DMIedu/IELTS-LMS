@@ -9,10 +9,12 @@ on:
       - 'release-candidate/Code.gs'
       - 'mock-*.html'
       - 'dmi-mock.*'
+      - 'dmi-mock-runner.js'
       - 'dmi-auth.js'
       - 'assets/british-council-registration-partner.png'
       - 'tests/mock-entry*.js'
       - 'tests/mock-attempt.test.js'
+      - 'tests/mock-runner-browser.test.js'
       - '.github/workflows/mock-entry-checks.yml'
 permissions:
   contents: read
@@ -32,7 +34,9 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Exercise teacher and student mock screens
-        run: node tests/mock-entry-browser.test.js
+        run: |
+          node tests/mock-entry-browser.test.js
+          node tests/mock-runner-browser.test.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
