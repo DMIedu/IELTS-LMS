@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="test-mode.js"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>DMI LMS — My Dashboard</title>
@@ -158,7 +159,7 @@ tr:hover td{background:#fafbfd}
 (async function(){
 const verified=await DMI_AUTH.requireRole('student');
 if(!verified)return;
-const API_URL = 'https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec';
 
 const user = verified.user;
 const role = verified.role;

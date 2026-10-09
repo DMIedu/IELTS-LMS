@@ -1,3 +1,338 @@
+/** Course management release candidate. Test against a copied workbook before production.
+ * Consolidated backend: replace Code.gs; do not also add standalone source files.
+ * Existing properties and Phase 1 security remain in place.
+ */
+/**
+ * DMI LMS - Google Apps Script Backend
+ *
+ * SHEET TABS REQUIRED:
+ *
+ * 1) Students:     ID | Name | Email | Password | Class | JoinDate | ExpiryDate
+ * 2) Teachers:     ID | Name | Email | Password | Subject
+ * 3) Courses:      CourseID | Course | Lesson | VideoURL | PDFURL
+ * 4) Marks:        MarkID | StudentEmail | StudentName | Course | Test | Score | MaxScore | Date | TeacherName | Comments
+ * 5) ExamResults:  ResultID | StudentEmail | StudentName | TestName | Course | Score | MaxScore | Date | AnswersJSON | QuestionsJSON
+ *
+ * Each new student gets 1-month access from JoinDate. After expiry,
+ * login is blocked and the admin must Renew them from the teacher panel.
+ *
+ * CANDIDATE ONLY: Do not replace live source before reconciling sync and benchmarking passwords.
+ * Deploy: Extensions → Apps Script → paste this file → Save
+ *         Deploy → New deployment → Web app → Execute as: Me, Access: Anyone
+ *         Copy the URL, paste into login.html, teacher-panel.html, student-panel.html
+ *         AND lms-result-sender.js
+ */
+
+// ====== CONFIG ======
+// Configure the workbook ID in Script Properties; no production workbook is selected by default.
+// Required Script Property. Point it at the TEST copy until rollout is approved.
+const SHEET_ID = PropertiesService.getScriptProperties().getProperty('DMI_SPREADSHEET_ID');
+const STUDENT_VALIDITY_DAYS = 30; // 1 month
+
+/**
+ * ⚙ TEST FUNCTION — run this once in Apps Script to verify everything works.
+ * Top of editor: pick "testConnection" in the function dropdown, click ▶ Run.
+ * Then View → Logs (or Ctrl+Enter) to see the result.
+ */
+/** Dumps every row of the Teachers tab so you can see exactly what's stored. */
+function debugTeachers() {
+  Logger.log('Teacher credentials are never logged. Use testConnection for schema checks.');
+}
+
+function testConnection() {
+  try {
+    const book = SpreadsheetApp.openById(SHEET_ID);
+    Logger.log('✓ Opened spreadsheet: ' + book.getName());
+    const sheets = book.getSheets();
+    // Show every tab and its char codes — this reveals hidden characters
+    Logger.log('--- Tab names with character codes ---');
+    sheets.forEach(s => {
+      const n = s.getName();
+      const codes = [];
+      for (let i = 0; i < n.length; i++) codes.push(n.charCodeAt(i));
+      Logger.log('  "' + n + '"  length=' + n.length + '  codes=[' + codes.join(',') + ']');
+    });
+    Logger.log('--- Checking required tabs (smart match) ---');
+    ['Students','Teachers','Courses','Marks','ExamResults'].forEach(name => {
+      try {
+        const s = tab(name);
+        Logger.log('  ✓ ' + name + ' OK  (matched: "' + s.getName() + '")');
+      } catch (e) {
+        Logger.log('  ✗ ' + e.message);
+      }
+    });
+  } catch (e) {
+    Logger.log('✗ ERROR: ' + e.message);
+  }
+}
+
+// ====== ENTRY POINTS ======
+function doGet(e) { return handle(e); }
+function doPost(e) { return handle(e); }
+
+function handle(e) {
+  let lock;
+  try {
+    const p=Object.assign({},e && e.parameter || {});
+    const action=String(p.action||'');
+    if(action==='ping')return json({ok:true,version:'phase3-courses',time:new Date()});
+    // Credentials and bearer tokens must never be accepted in GET URLs.
+    if(!e || !e.postData)securityError_('POST_REQUIRED','Use POST');
+    lock=LockService.getScriptLock();
+    if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
+    if(action==='login')return json(secureLogin_(p));
+    const ctx=authorize_(p,action);
+    let result;
+    if(ctx.role==='student' && ['listMarks','listExamResults','submitExamResult'].includes(action)){
+      if(p.studentEmail && email_(p.studentEmail)!==email_(ctx.user.email))
+        securityError_('FORBIDDEN','You can only access your own results');
+      p.studentEmail=ctx.user.email; p.studentName=ctx.user.name;
+    }
+    if(action==='addMark'){
+      const student=account_('student',p.studentEmail);
+      if(!student)securityError_('NOT_FOUND','Student not found');
+      p.studentName=student.Name; p.teacherName=ctx.user.name;
+    }
+    if(action==='renewStudent' && (!Number.isInteger(Number(p.days||30)) ||
+      Number(p.days||30)<1 || Number(p.days||30)>366))
+      securityError_('VALIDATION','Renewal must be 1–366 days');
+    if(['addMark','submitExamResult'].includes(action)){
+      const score=Number(p.score||0), max=Number(p.maxScore||0);
+      if(!Number.isFinite(score)||!Number.isFinite(max)||score<0||max<0||score>max||max>1000)
+        securityError_('VALIDATION','Invalid score');
+      ['answersJSON','questionsJSON'].forEach(k=>{
+        if(String(p[k]||'').length>45000)securityError_('VALIDATION','Submission too large');
+        if(p[k]){try{JSON.parse(p[k]);}catch(e){securityError_('VALIDATION','Invalid submission JSON');}}
+      });
+    }
+    ['studentName','teacherName','name','class','course','lesson','test','testName','comments']
+      .forEach(k=>{if(p[k]!=null)p[k]=sheetText_(p[k]);});
+    switch(action){
+      case 'createMockSitting': result=createMockSitting_(p,ctx);break;
+      case 'listMockSittings': result=listMockSittings_(ctx);break;
+      case 'rotateMockCode': result=rotateMockCode_(p,ctx);break;
+      case 'closeMockSitting': result=closeMockSitting_(p,ctx);break;
+      case 'enterMockSitting': result=enterMockSitting_(p,ctx);break;
+      case 'myMockAdmission': result=myMockAdmission_(p,ctx);break;
+      case 'listMockAdmissions': result=listMockAdmissions_(p,ctx);break;
+      case 'session': result={ok:true,role:ctx.role,user:ctx.user};break;
+      case 'logout': result=logout_(ctx);break;
+      case 'changePassword': result=changePassword_(p,ctx);break;
+      case 'resetStudentPassword': result=resetStudentPassword_(p);break;
+      case 'listStudents': result={ok:true,data:rows(tab('Students')).map(safeStudent_)};break;
+      case 'addStudent': result=createStudent_(p);break;
+      case 'deleteStudent': result=deleteStudent(p);break;
+      case 'renewStudent': result=renewStudent(p);break;
+      case 'listCourses': result=visibleCourseLessons_(ctx);break;
+      case 'listCourseCatalogue': result=listCourseCatalogue_(ctx);break;
+      case 'saveCourseDetails': result=saveCourseDetails_(p,ctx);break;
+      case 'listCourseEnrollments': result=listCourseEnrolments_(p,ctx);break;
+      case 'setCourseEnrollment': result=setCourseEnrolment_(p,ctx);break;
+      case 'addCourse': result=addCourse(p);break;
+      case 'deleteCourse': result=deleteCourse(p);break;
+      case 'addMark': result=addMark(p);break;
+      case 'listMarks': result=listMarks(p);break;
+      case 'submitExamResult': result=submitExamResult(p);break;
+      case 'listExamResults': result=listExamResults(p);break;
+      case 'getLMSData': result=secureGetLMSData_(ctx);break;
+      case 'setLMSData': result=secureSetLMSData_(p);break;
+      default: securityError_('UNKNOWN_ACTION','Unknown action');
+    }
+    return json(result);
+  } catch(err) {
+    // Never return internal exceptions, spreadsheet contents, or credentials.
+    return json({ok:false,code:err.code||'SERVER_ERROR',
+      error:err.code?err.message:'Request failed. Please contact DMI.'});
+  } finally {if(lock && lock.hasLock())lock.releaseLock();}
+}
+
+// ====== HELPERS ======
+function ss() {
+  if(!SHEET_ID) securityError_('CONFIGURATION_REQUIRED','Set DMI_SPREADSHEET_ID to the test workbook');
+  return SpreadsheetApp.openById(SHEET_ID);
+}
+function tab(name) {
+  const book = ss();
+  // 1) Try exact match
+  let s = book.getSheetByName(name);
+  if (s) return s;
+  // 2) Fallback: case-insensitive, trim spaces and zero-width chars
+  const clean = function(x){ return String(x).replace(/[\s​-‍﻿]+/g,'').toLowerCase(); };
+  const target = clean(name);
+  const all = book.getSheets();
+  for (let i = 0; i < all.length; i++) {
+    if (clean(all[i].getName()) === target) return all[i];
+  }
+  // 3) Not found — list what IS there so the error is actionable
+  const have = all.map(x => '"' + x.getName() + '"').join(', ');
+  throw new Error('Sheet tab not found: "' + name + '". Tabs in this sheet: ' + have);
+}
+function json(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+function headerName_(value) {
+  return String(value||'').replace(/[\u200b-\u200d\ufeff]/g,'').trim();
+}
+function rows(sheet) {
+  const data = sheet.getDataRange().getValues();
+  if (data.length < 2) return [];
+  const head = data[0].map(headerName_);
+  return data.slice(1).map(r => {
+    const o = {};
+    head.forEach((h, i) => { if(h) o[h] = r[i]; });
+    return o;
+  });
+}
+function uid(prefix) {
+  return prefix + '-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+}
+function addDays(date, days) {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+function isExpired(expiry) {
+  if (!expiry) return false;
+  const exp = new Date(expiry);
+  if (isNaN(exp.getTime())) return false;
+  return exp.getTime() < new Date().getTime();
+}
+
+// ====== ACTIONS ======
+// Authentication and account creation moved to Security.gs.
+
+function deleteStudent(p) {
+  const email = (p.email || '').toString().trim().toLowerCase();
+  if (!email) return { ok: false, error: 'Email required' };
+  const sheet = tab('Students');
+  const data = sheet.getDataRange().getValues();
+  const emailCol = data[0].map(headerName_).indexOf('Email');
+  if(emailCol<0)securityError_('CONFIGURATION_REQUIRED','Student email column missing');
+  for (let i = 1; i < data.length; i++) {
+    if (email_(data[i][emailCol]) === email) {
+      sheet.deleteRow(i + 1);
+      removeStudentCourseEnrolments_(email);
+      return { ok: true };
+    }
+  }
+  return { ok: false, error: 'Student not found' };
+}
+
+function renewStudent(p) {
+  const email = (p.email || '').toString().trim().toLowerCase();
+  const days = Number(p.days || STUDENT_VALIDITY_DAYS);
+  if (!email) return { ok: false, error: 'Email required' };
+  const sheet = tab('Students');
+  const data = sheet.getDataRange().getValues();
+  const head = data[0].map(headerName_);
+  const expiryCol = head.indexOf('ExpiryDate');
+  if (expiryCol < 0) return { ok: false, error: 'ExpiryDate column missing in Students sheet' };
+
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][2]).toLowerCase() === email) {
+      const current = data[i][expiryCol];
+      const base = (current && new Date(current) > new Date()) ? new Date(current) : new Date();
+      const newExpiry = addDays(base, days);
+      sheet.getRange(i + 1, expiryCol + 1).setValue(newExpiry);
+      return { ok: true, newExpiry };
+    }
+  }
+  return { ok: false, error: 'Student not found' };
+}
+
+function listCourses() {
+  return { ok: true, data: rows(tab('Courses')) };
+}
+
+function addCourse(p) {
+  const course   = (p.course   || '').toString().trim();
+  const lesson   = (p.lesson   || '').toString().trim();
+  const videoURL = (p.videoURL || '').toString().trim();
+  const pdfURL   = (p.pdfURL   || '').toString().trim();
+  if (!course || !lesson) return { ok: false, error: 'Course and Lesson required' };
+  if(courseSheet_('CourseDetails',DMI_COURSE_HEADERS,false) &&
+    !courseRecords_().some(c=>c.CourseKey===courseKey_(course)))
+    return {ok:false,error:'Save the course details first, then add its lessons'};
+  const sheet = tab('Courses');
+  const id = uid('CRS');
+  sheet.appendRow([id, course, lesson, videoURL, pdfURL]);
+  return { ok: true, id };
+}
+
+function deleteCourse(p) {
+  const id = (p.courseID || '').toString();
+  if (!id) return { ok: false, error: 'courseID required' };
+  const sheet = tab('Courses');
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0]) === id) {
+      sheet.deleteRow(i + 1);
+      return { ok: true };
+    }
+  }
+  return { ok: false, error: 'Course not found' };
+}
+
+function addMark(p) {
+  const studentEmail = (p.studentEmail || '').toString().trim().toLowerCase();
+  const studentName  = (p.studentName  || '').toString();
+  const course       = (p.course       || '').toString();
+  const test         = (p.test         || '').toString();
+  const score        = Number(p.score || 0);
+  const maxScore     = Number(p.maxScore || 0);
+  const teacherName  = (p.teacherName  || '').toString();
+  const comments     = (p.comments     || '').toString();
+  if (!studentEmail || !test) return { ok: false, error: 'studentEmail and test required' };
+
+  const sheet = tab('Marks');
+  const id = uid('MARK');
+  sheet.appendRow([id, studentEmail, studentName, course, test, score, maxScore, new Date(), teacherName, comments]);
+  return { ok: true, id };
+}
+
+function listMarks(p) {
+  const email = (p.studentEmail || '').toString().trim().toLowerCase();
+  let data = rows(tab('Marks'));
+  if (email) data = data.filter(r => String(r.StudentEmail).toLowerCase() === email);
+  data.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+  return { ok: true, data };
+}
+
+// ===== EXAM RESULT SUBMISSION (called by test pages when student finishes) =====
+function submitExamResult(p) {
+  const studentEmail = (p.studentEmail || '').toString().trim().toLowerCase();
+  const studentName  = (p.studentName  || '').toString();
+  const testName     = (p.testName     || '').toString();
+  const course       = (p.course       || '').toString();
+  const score        = Number(p.score || 0);
+  const maxScore     = Number(p.maxScore || 0);
+  const answersJSON  = (p.answersJSON  || '').toString();
+  const questionsJSON= (p.questionsJSON|| '').toString();
+  if (!studentEmail || !testName) return { ok: false, error: 'studentEmail and testName required' };
+
+  // Save full submission
+  const id = uid('EXAM');
+  tab('ExamResults').appendRow([
+    id, studentEmail, studentName, testName, course, score, maxScore, new Date(),
+    answersJSON, questionsJSON
+  ]);
+  // Also write a row into Marks so the score shows on the student dashboard
+  tab('Marks').appendRow([
+    uid('MARK'), studentEmail, studentName, course, testName, score, maxScore,
+    new Date(), 'System (auto)', 'Submitted by student'
+  ]);
+  return { ok: true, id };
+}
+
+function listExamResults(p) {
+  const email = (p.studentEmail || '').toString().trim().toLowerCase();
+  let data = rows(tab('ExamResults'));
+  if (email) data = data.filter(r => String(r.StudentEmail).toLowerCase() === email);
+  data.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+  return { ok: true, data };
+}
+
+
 /** Server-only vendored js-sha256 1.0.0. Upstream commit 9a54fb31d4594762987e1b5d175265f6bac921de.
  * Unmodified build/sha256.js enclosed in a private CommonJS export wrapper.
  * No runtime downloads. MIT license below.
@@ -496,330 +831,6 @@ var exports={}, module={exports:exports};
 return module.exports;
 })();
 
-/**
- * GENERATED TEST-ONLY bundle: replace Code.gs in the copied TEST project only.
- * Includes PasswordCrypto.gs, Code.gs, Security.gs and LiveSync.gs from the draft branch.
- * Do not also add those files separately (duplicate definitions).
- * First run runPasswordTestsAndBenchmark; it reads/writes NO spreadsheet.
- * No deployment is needed for this editor-only check.
- */
-/**
- * DMI LMS - Google Apps Script Backend
- *
- * SHEET TABS REQUIRED:
- *
- * 1) Students:     ID | Name | Email | Password | Class | JoinDate | ExpiryDate
- * 2) Teachers:     ID | Name | Email | Password | Subject
- * 3) Courses:      CourseID | Course | Lesson | VideoURL | PDFURL
- * 4) Marks:        MarkID | StudentEmail | StudentName | Course | Test | Score | MaxScore | Date | TeacherName | Comments
- * 5) ExamResults:  ResultID | StudentEmail | StudentName | TestName | Course | Score | MaxScore | Date | AnswersJSON | QuestionsJSON
- *
- * Each new student gets 1-month access from JoinDate. After expiry,
- * login is blocked and the admin must Renew them from the teacher panel.
- *
- * CANDIDATE ONLY: Do not replace live source before reconciling sync and benchmarking passwords.
- * Deploy: Extensions → Apps Script → paste this file → Save
- *         Deploy → New deployment → Web app → Execute as: Me, Access: Anyone
- *         Copy the URL, paste into login.html, teacher-panel.html, student-panel.html
- *         AND lms-result-sender.js
- */
-
-// ====== CONFIG ======
-// Configure the workbook ID in Script Properties; no production workbook is selected by default.
-// Required Script Property. Point it at the TEST copy until rollout is approved.
-const SHEET_ID = PropertiesService.getScriptProperties().getProperty('DMI_SPREADSHEET_ID');
-const STUDENT_VALIDITY_DAYS = 30; // 1 month
-
-/**
- * ⚙ TEST FUNCTION — run this once in Apps Script to verify everything works.
- * Top of editor: pick "testConnection" in the function dropdown, click ▶ Run.
- * Then View → Logs (or Ctrl+Enter) to see the result.
- */
-/** Dumps every row of the Teachers tab so you can see exactly what's stored. */
-function debugTeachers() {
-  Logger.log('Teacher credentials are never logged. Use testConnection for schema checks.');
-}
-
-function testConnection() {
-  try {
-    const book = SpreadsheetApp.openById(SHEET_ID);
-    Logger.log('✓ Opened spreadsheet: ' + book.getName());
-    const sheets = book.getSheets();
-    // Show every tab and its char codes — this reveals hidden characters
-    Logger.log('--- Tab names with character codes ---');
-    sheets.forEach(s => {
-      const n = s.getName();
-      const codes = [];
-      for (let i = 0; i < n.length; i++) codes.push(n.charCodeAt(i));
-      Logger.log('  "' + n + '"  length=' + n.length + '  codes=[' + codes.join(',') + ']');
-    });
-    Logger.log('--- Checking required tabs (smart match) ---');
-    ['Students','Teachers','Courses','Marks','ExamResults'].forEach(name => {
-      try {
-        const s = tab(name);
-        Logger.log('  ✓ ' + name + ' OK  (matched: "' + s.getName() + '")');
-      } catch (e) {
-        Logger.log('  ✗ ' + e.message);
-      }
-    });
-  } catch (e) {
-    Logger.log('✗ ERROR: ' + e.message);
-  }
-}
-
-// ====== ENTRY POINTS ======
-function doGet(e) { return handle(e); }
-function doPost(e) { return handle(e); }
-
-function handle(e) {
-  let lock;
-  try {
-    const p=Object.assign({},e && e.parameter || {});
-    const action=String(p.action||'');
-    if(action==='ping')return json({ok:true,version:'phase1-candidate',time:new Date()});
-    // Credentials and bearer tokens must never be accepted in GET URLs.
-    if(!e || !e.postData)securityError_('POST_REQUIRED','Use POST');
-    lock=LockService.getScriptLock();
-    if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
-    if(action==='login')return json(secureLogin_(p));
-    const ctx=authorize_(p,action);
-    let result;
-    if(ctx.role==='student' && ['listMarks','listExamResults','submitExamResult'].includes(action)){
-      if(p.studentEmail && email_(p.studentEmail)!==email_(ctx.user.email))
-        securityError_('FORBIDDEN','You can only access your own results');
-      p.studentEmail=ctx.user.email; p.studentName=ctx.user.name;
-    }
-    if(action==='addMark'){
-      const student=account_('student',p.studentEmail);
-      if(!student)securityError_('NOT_FOUND','Student not found');
-      p.studentName=student.Name; p.teacherName=ctx.user.name;
-    }
-    if(action==='renewStudent' && (!Number.isInteger(Number(p.days||30)) ||
-      Number(p.days||30)<1 || Number(p.days||30)>366))
-      securityError_('VALIDATION','Renewal must be 1–366 days');
-    if(['addMark','submitExamResult'].includes(action)){
-      const score=Number(p.score||0), max=Number(p.maxScore||0);
-      if(!Number.isFinite(score)||!Number.isFinite(max)||score<0||max<0||score>max||max>1000)
-        securityError_('VALIDATION','Invalid score');
-      ['answersJSON','questionsJSON'].forEach(k=>{
-        if(String(p[k]||'').length>45000)securityError_('VALIDATION','Submission too large');
-        if(p[k]){try{JSON.parse(p[k]);}catch(e){securityError_('VALIDATION','Invalid submission JSON');}}
-      });
-    }
-    ['studentName','teacherName','name','class','course','lesson','test','testName','comments']
-      .forEach(k=>{if(p[k]!=null)p[k]=sheetText_(p[k]);});
-    switch(action){
-      case 'session': result={ok:true,role:ctx.role,user:ctx.user};break;
-      case 'logout': result=logout_(ctx);break;
-      case 'changePassword': result=changePassword_(p,ctx);break;
-      case 'resetStudentPassword': result=resetStudentPassword_(p);break;
-      case 'listStudents': result={ok:true,data:rows(tab('Students')).map(safeStudent_)};break;
-      case 'addStudent': result=createStudent_(p);break;
-      case 'deleteStudent': result=deleteStudent(p);break;
-      case 'renewStudent': result=renewStudent(p);break;
-      case 'listCourses': result=listCourses();break;
-      case 'addCourse': result=addCourse(p);break;
-      case 'deleteCourse': result=deleteCourse(p);break;
-      case 'addMark': result=addMark(p);break;
-      case 'listMarks': result=listMarks(p);break;
-      case 'submitExamResult': result=submitExamResult(p);break;
-      case 'listExamResults': result=listExamResults(p);break;
-      case 'getLMSData': result=secureGetLMSData_(ctx);break;
-      case 'setLMSData': result=secureSetLMSData_(p);break;
-      default: securityError_('UNKNOWN_ACTION','Unknown action');
-    }
-    return json(result);
-  } catch(err) {
-    // Never return internal exceptions, spreadsheet contents, or credentials.
-    return json({ok:false,code:err.code||'SERVER_ERROR',
-      error:err.code?err.message:'Request failed. Please contact DMI.'});
-  } finally {if(lock && lock.hasLock())lock.releaseLock();}
-}
-
-// ====== HELPERS ======
-function ss() {
-  if(!SHEET_ID) securityError_('CONFIGURATION_REQUIRED','Set DMI_SPREADSHEET_ID to the test workbook');
-  if(PropertiesService.getScriptProperties().getProperty('DMI_TEST_MODE')!=='true')
-    securityError_('TEST_ONLY','Set DMI_TEST_MODE=true for this test-only bundle');
-  if(['1IewfmmCpqrn8421yOa6oMYh5OGJK67FYIAaXiyXVkis','1lewfmmCpqrn8421yOa6oMYh5OGJK67FYIAaXiyXVkis'].includes(SHEET_ID))
-    securityError_('TEST_ONLY','This test-only bundle refuses the production workbook');
-  return SpreadsheetApp.openById(SHEET_ID);
-}
-function tab(name) {
-  const book = ss();
-  // 1) Try exact match
-  let s = book.getSheetByName(name);
-  if (s) return s;
-  // 2) Fallback: case-insensitive, trim spaces and zero-width chars
-  const clean = function(x){ return String(x).replace(/[\s​-‍﻿]+/g,'').toLowerCase(); };
-  const target = clean(name);
-  const all = book.getSheets();
-  for (let i = 0; i < all.length; i++) {
-    if (clean(all[i].getName()) === target) return all[i];
-  }
-  // 3) Not found — list what IS there so the error is actionable
-  const have = all.map(x => '"' + x.getName() + '"').join(', ');
-  throw new Error('Sheet tab not found: "' + name + '". Tabs in this sheet: ' + have);
-}
-function json(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
-}
-function headerName_(value) {
-  return String(value||'').replace(/[\u200b-\u200d\ufeff]/g,'').trim();
-}
-function rows(sheet) {
-  const data = sheet.getDataRange().getValues();
-  if (data.length < 2) return [];
-  const head = data[0].map(headerName_);
-  return data.slice(1).map(r => {
-    const o = {};
-    head.forEach((h, i) => { if(h) o[h] = r[i]; });
-    return o;
-  });
-}
-function uid(prefix) {
-  return prefix + '-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-}
-function addDays(date, days) {
-  const d = new Date(date);
-  d.setDate(d.getDate() + days);
-  return d;
-}
-function isExpired(expiry) {
-  if (!expiry) return false;
-  const exp = new Date(expiry);
-  if (isNaN(exp.getTime())) return false;
-  return exp.getTime() < new Date().getTime();
-}
-
-// ====== ACTIONS ======
-// Authentication and account creation moved to Security.gs.
-
-function deleteStudent(p) {
-  const email = (p.email || '').toString().trim().toLowerCase();
-  if (!email) return { ok: false, error: 'Email required' };
-  const sheet = tab('Students');
-  const data = sheet.getDataRange().getValues();
-  for (let i = 1; i < data.length; i++) {
-    if (String(data[i][2]).toLowerCase() === email) {
-      sheet.deleteRow(i + 1);
-      return { ok: true };
-    }
-  }
-  return { ok: false, error: 'Student not found' };
-}
-
-function renewStudent(p) {
-  const email = (p.email || '').toString().trim().toLowerCase();
-  const days = Number(p.days || STUDENT_VALIDITY_DAYS);
-  if (!email) return { ok: false, error: 'Email required' };
-  const sheet = tab('Students');
-  const data = sheet.getDataRange().getValues();
-  const head = data[0].map(headerName_);
-  const expiryCol = head.indexOf('ExpiryDate');
-  if (expiryCol < 0) return { ok: false, error: 'ExpiryDate column missing in Students sheet' };
-
-  for (let i = 1; i < data.length; i++) {
-    if (String(data[i][2]).toLowerCase() === email) {
-      const current = data[i][expiryCol];
-      const base = (current && new Date(current) > new Date()) ? new Date(current) : new Date();
-      const newExpiry = addDays(base, days);
-      sheet.getRange(i + 1, expiryCol + 1).setValue(newExpiry);
-      return { ok: true, newExpiry };
-    }
-  }
-  return { ok: false, error: 'Student not found' };
-}
-
-function listCourses() {
-  return { ok: true, data: rows(tab('Courses')) };
-}
-
-function addCourse(p) {
-  const course   = (p.course   || '').toString().trim();
-  const lesson   = (p.lesson   || '').toString().trim();
-  const videoURL = (p.videoURL || '').toString().trim();
-  const pdfURL   = (p.pdfURL   || '').toString().trim();
-  if (!course || !lesson) return { ok: false, error: 'Course and Lesson required' };
-  const sheet = tab('Courses');
-  const id = uid('CRS');
-  sheet.appendRow([id, course, lesson, videoURL, pdfURL]);
-  return { ok: true, id };
-}
-
-function deleteCourse(p) {
-  const id = (p.courseID || '').toString();
-  if (!id) return { ok: false, error: 'courseID required' };
-  const sheet = tab('Courses');
-  const data = sheet.getDataRange().getValues();
-  for (let i = 1; i < data.length; i++) {
-    if (String(data[i][0]) === id) {
-      sheet.deleteRow(i + 1);
-      return { ok: true };
-    }
-  }
-  return { ok: false, error: 'Course not found' };
-}
-
-function addMark(p) {
-  const studentEmail = (p.studentEmail || '').toString().trim().toLowerCase();
-  const studentName  = (p.studentName  || '').toString();
-  const course       = (p.course       || '').toString();
-  const test         = (p.test         || '').toString();
-  const score        = Number(p.score || 0);
-  const maxScore     = Number(p.maxScore || 0);
-  const teacherName  = (p.teacherName  || '').toString();
-  const comments     = (p.comments     || '').toString();
-  if (!studentEmail || !test) return { ok: false, error: 'studentEmail and test required' };
-
-  const sheet = tab('Marks');
-  const id = uid('MARK');
-  sheet.appendRow([id, studentEmail, studentName, course, test, score, maxScore, new Date(), teacherName, comments]);
-  return { ok: true, id };
-}
-
-function listMarks(p) {
-  const email = (p.studentEmail || '').toString().trim().toLowerCase();
-  let data = rows(tab('Marks'));
-  if (email) data = data.filter(r => String(r.StudentEmail).toLowerCase() === email);
-  data.sort((a, b) => new Date(b.Date) - new Date(a.Date));
-  return { ok: true, data };
-}
-
-// ===== EXAM RESULT SUBMISSION (called by test pages when student finishes) =====
-function submitExamResult(p) {
-  const studentEmail = (p.studentEmail || '').toString().trim().toLowerCase();
-  const studentName  = (p.studentName  || '').toString();
-  const testName     = (p.testName     || '').toString();
-  const course       = (p.course       || '').toString();
-  const score        = Number(p.score || 0);
-  const maxScore     = Number(p.maxScore || 0);
-  const answersJSON  = (p.answersJSON  || '').toString();
-  const questionsJSON= (p.questionsJSON|| '').toString();
-  if (!studentEmail || !testName) return { ok: false, error: 'studentEmail and testName required' };
-
-  // Save full submission
-  const id = uid('EXAM');
-  tab('ExamResults').appendRow([
-    id, studentEmail, studentName, testName, course, score, maxScore, new Date(),
-    answersJSON, questionsJSON
-  ]);
-  // Also write a row into Marks so the score shows on the student dashboard
-  tab('Marks').appendRow([
-    uid('MARK'), studentEmail, studentName, course, testName, score, maxScore,
-    new Date(), 'System (auto)', 'Submitted by student'
-  ]);
-  return { ok: true, id };
-}
-
-function listExamResults(p) {
-  const email = (p.studentEmail || '').toString().trim().toLowerCase();
-  let data = rows(tab('ExamResults'));
-  if (email) data = data.filter(r => String(r.StudentEmail).toLowerCase() === email);
-  data.sort((a, b) => new Date(b.Date) - new Date(a.Date));
-  return { ok: true, data };
-}
-
 
 /**
  * Phase 1 candidate. Reconcile with exported LIVE source before deployment.
@@ -829,10 +840,10 @@ function listExamResults(p) {
  */
 const DMI_SESSION_HOURS = 4;
 const DMI_PASSWORD_ITERATIONS = 600000;
-const DMI_TEACHER_ACTIONS = ['listStudents','addStudent','deleteStudent',
-  'renewStudent','addCourse','deleteCourse','addMark','resetStudentPassword','setLMSData'];
-const DMI_ACTIONS = DMI_TEACHER_ACTIONS.concat(['listCourses','listMarks',
-  'listExamResults','submitExamResult','getLMSData','session','logout','changePassword']);
+const DMI_TEACHER_ACTIONS = ['createMockSitting','rotateMockCode','closeMockSitting','listMockAdmissions','listStudents','addStudent','deleteStudent',
+  'renewStudent','addCourse','deleteCourse','addMark','resetStudentPassword','setLMSData','saveCourseDetails','listCourseEnrollments','setCourseEnrollment'];
+const DMI_ACTIONS = DMI_TEACHER_ACTIONS.concat(['listMockSittings','enterMockSitting','myMockAdmission','listCourses','listMarks',
+  'listExamResults','submitExamResult','getLMSData','session','logout','changePassword','listCourseCatalogue']);
 
 function securityError_(code, message) {
   const e = new Error(message); e.code = code; throw e;
@@ -1189,8 +1200,328 @@ function writeLiveLMSData_(patch) {
 }
 
 
-/** Editor-only first check. No account passwords or worksheet data are touched. */
-function runPasswordPrimitiveCheck() {
-  if(testPasswordPrimitive()!==true)throw new Error('Password primitive check failed');
-  Logger.log('PASS: PBKDF2-HMAC-SHA256 known-answer tests passed. No spreadsheet data was changed.');
+/**
+ * Course details and enrolment for the dashboard.
+ * Existing lesson courses remain available to all active students until a teacher
+ * explicitly selects "Enrolled students only". New courses default to restricted.
+ * Course enrolment controls API listings; it does not protect public media URLs
+ * or change the separate video tutorial library.
+ */
+const DMI_COURSE_HEADERS=['CourseKey','Course','Description','Instructor','Duration','Syllabus','MaterialsURL','CourseURL','EnrolmentRequired'];
+const DMI_ENROLMENT_HEADERS=['CourseKey','StudentEmail','EnrolledAt','EnrolledBy'];
+function courseKey_(name){return digest_(String(name||'').trim().toLowerCase());}
+function courseSheet_(name,head,required){
+  const sheet=ss().getSheetByName(name);
+  if(!sheet){if(required)securityError_('COURSE_SETUP_REQUIRED','Course management is not enabled yet');return null;}
+  const actual=sheet.getDataRange().getValues()[0].map(headerName_);
+  if(!head.every(k=>actual.includes(k)))securityError_('COURSE_SETUP_REQUIRED','Course setup needs attention');
+  return sheet;
+}
+function initializeCourseManagement(){
+  secret_();
+  const lock=LockService.getScriptLock();
+  if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
+  try{
+    const book=ss();
+    [['CourseDetails',DMI_COURSE_HEADERS],['CourseEnrollments',DMI_ENROLMENT_HEADERS]].forEach(pair=>{
+      if(!book.getSheetByName(pair[0]))book.insertSheet(pair[0]).appendRow(pair[1]);
+      courseSheet_(pair[0],pair[1],true);
+    });
+    Logger.log('Course management ready. Existing students, lessons, marks and sessions preserved.');
+  }finally{lock.releaseLock();}
+}
+function courseRecords_(){
+  const details=courseSheet_('CourseDetails',DMI_COURSE_HEADERS,false);
+  const catalogue=new Map();
+  rows(tab('Courses')).forEach(lesson=>{
+    const name=String(lesson.Course||'').trim();
+    if(name){const key=courseKey_(name);if(!catalogue.has(key))catalogue.set(key,{CourseKey:key,Course:name,EnrolmentRequired:false});}
+  });
+  if(details)rows(details).forEach(record=>{
+    if(record.CourseKey!==courseKey_(record.Course))securityError_('COURSE_SETUP_REQUIRED','Course identity needs attention');
+    catalogue.set(record.CourseKey,Object.assign({},record,{EnrolmentRequired:String(record.EnrolmentRequired).toLowerCase()==='true'}));
+  });
+  return Array.from(catalogue.values()).sort((a,b)=>a.Course.localeCompare(b.Course));
+}
+function courseEnrolments_(){
+  const sheet=courseSheet_('CourseEnrollments',DMI_ENROLMENT_HEADERS,false);
+  return sheet?rows(sheet):[];
+}
+function courseVisible_(course,ctx,enrolments){
+  return ctx.role==='teacher' || !course.EnrolmentRequired ||
+    enrolments.some(e=>e.CourseKey===course.CourseKey && email_(e.StudentEmail)===email_(ctx.user.email));
+}
+function listCourseCatalogue_(ctx){
+  const courses=courseRecords_(), enrolments=courseEnrolments_(), lessons=rows(tab('Courses'));
+  const data=courses.filter(c=>courseVisible_(c,ctx,enrolments)).map(c=>{
+    const out=Object.assign({},c);
+    out.Lessons=lessons.filter(l=>courseKey_(l.Course)===c.CourseKey);
+    out.Enrolled=enrolments.some(e=>e.CourseKey===c.CourseKey && email_(e.StudentEmail)===email_(ctx.user.email));
+    if(ctx.role==='teacher')out.EnrolledCount=enrolments.filter(e=>e.CourseKey===c.CourseKey).length;
+    return out;
+  });
+  return {ok:true,data,courseManagementReady:!!courseSheet_('CourseDetails',DMI_COURSE_HEADERS,false) &&
+    !!courseSheet_('CourseEnrollments',DMI_ENROLMENT_HEADERS,false)};
+}
+function visibleCourseLessons_(ctx){
+  const courses=courseRecords_(), enrolments=courseEnrolments_();
+  const visible=new Set(courses.filter(c=>courseVisible_(c,ctx,enrolments)).map(c=>c.CourseKey));
+  return {ok:true,data:rows(tab('Courses')).filter(l=>visible.has(courseKey_(l.Course)))};
+}
+function courseText_(value,label,max){
+  const text=String(value||'').trim();
+  if(text.length>max)securityError_('VALIDATION',label+' is too long');
+  return text;
+}
+function courseURL_(value,label){
+  const text=courseText_(value,label,2000);
+  if(text && (!/^https?:\/\/[^\s]+$/i.test(text) || /^https?:\/\/[^/?#]*@/i.test(text)))
+    securityError_('VALIDATION',label+' must be an http or https link without embedded credentials');
+  return text;
+}
+function requireCourseTeacher_(ctx){
+  if(!ctx || ctx.role!=='teacher')securityError_('FORBIDDEN','Teacher access required');
+}
+function saveCourseDetails_(p,ctx){
+  requireCourseTeacher_(ctx);
+  const sheet=courseSheet_('CourseDetails',DMI_COURSE_HEADERS,true);
+  const name=courseText_(p.course,'Course name',150);
+  if(!name)securityError_('VALIDATION','Course name is required');
+  if(/^[=+\-@]/.test(name))securityError_('VALIDATION','Course name must start with a letter or number');
+  const key=courseKey_(name), courses=courseRecords_();
+  if(p.courseKey && (p.courseKey!==key || !courses.some(c=>c.CourseKey===key)))
+    securityError_('VALIDATION','Choose the existing course without changing its name');
+  if(!p.courseKey && courses.some(c=>c.CourseKey===key))
+    securityError_('VALIDATION','This course already exists. Select it to edit its details.');
+  if(!['true','false'].includes(String(p.enrolmentRequired)))securityError_('VALIDATION','Choose who can access the course');
+  const record={CourseKey:key,Course:sheetText_(name),
+    Description:sheetText_(courseText_(p.description,'Description',4000)),
+    Instructor:sheetText_(courseText_(p.instructor,'Teacher',150)),
+    Duration:sheetText_(courseText_(p.duration,'Duration',100)),
+    Syllabus:sheetText_(courseText_(p.syllabus,'Syllabus',8000)),
+    MaterialsURL:courseURL_(p.materialsURL,'Materials link'),
+    CourseURL:courseURL_(p.courseURL,'Course link'),
+    EnrolmentRequired:String(p.enrolmentRequired)==='true'};
+  const data=sheet.getDataRange().getValues(), head=data[0].map(headerName_);
+  const i=data.findIndex((r,j)=>j>0 && r[head.indexOf('CourseKey')]===key);
+  if(i<1)sheet.appendRow(head.map(h=>Object.prototype.hasOwnProperty.call(record,h)?record[h]:''));
+  else Object.keys(record).forEach(h=>sheet.getRange(i+1,head.indexOf(h)+1).setValue(record[h]));
+  return {ok:true,courseKey:key};
+}
+function listCourseEnrolments_(p,ctx){
+  requireCourseTeacher_(ctx);
+  if(!courseRecords_().some(c=>c.CourseKey===p.courseKey))securityError_('NOT_FOUND','Course not found');
+  return {ok:true,data:courseEnrolments_().filter(e=>e.CourseKey===p.courseKey).map(e=>({
+    studentEmail:e.StudentEmail,enrolledAt:e.EnrolledAt
+  }))};
+}
+function setCourseEnrolment_(p,ctx){
+  requireCourseTeacher_(ctx);
+  const sheet=courseSheet_('CourseEnrollments',DMI_ENROLMENT_HEADERS,true);
+  if(!courseRecords_().some(c=>c.CourseKey===p.courseKey))securityError_('NOT_FOUND','Course not found');
+  const email=email_(p.studentEmail);
+  if(!['true','false'].includes(String(p.enrolled)))securityError_('VALIDATION','Choose enrol or remove');
+  if(p.enrolled==='true'){
+    const student=account_('student',email);
+    if(!student)securityError_('NOT_FOUND','Student not found');
+    active_('student',student);
+  }
+  const data=sheet.getDataRange().getValues(), head=data[0].map(headerName_);
+  const matches=[];
+  for(let i=1;i<data.length;i++)if(data[i][head.indexOf('CourseKey')]===p.courseKey &&
+    email_(data[i][head.indexOf('StudentEmail')])===email)matches.push(i+1);
+  if(p.enrolled==='true' && !matches.length){
+    const record={CourseKey:p.courseKey,StudentEmail:email,EnrolledAt:new Date(),EnrolledBy:ctx.user.email};
+    sheet.appendRow(head.map(h=>Object.prototype.hasOwnProperty.call(record,h)?record[h]:''));
+  }
+  if(p.enrolled==='false')matches.reverse().forEach(i=>sheet.deleteRow(i));
+  return {ok:true};
+}
+
+function removeStudentCourseEnrolments_(email){
+  const sheet=courseSheet_('CourseEnrollments',DMI_ENROLMENT_HEADERS,false);
+  if(!sheet)return;
+  const data=sheet.getDataRange().getValues(), head=data[0].map(headerName_);
+  for(let i=data.length-1;i>0;i--)if(email_(data[i][head.indexOf('StudentEmail')])===email_(email))sheet.deleteRow(i+1);
+}
+
+/**
+ * Academic lab mock entry foundation. A successful admission is NOT an exam start.
+ * The timed runner, original paper and AI assessment are a separate rollout gate.
+ * Public actions run under handle()'s script lock and verified session.
+ */
+const DMI_MOCK_HEADERS = ['SittingID','Title','Class','PaperID','OpensAt','ClosesAt','Status','CandidatesJSON','CodeSalt','CodeHash','CodeVersion','CreatedBy','CreatedAt','CreateRequestID','LastCodeRequestID'];
+const DMI_ADMISSION_HEADERS = ['AdmissionID','SittingID','StudentEmail','StudentID','StudentName','AdmittedAt','Status'];
+
+function mockSheet_(name,headers){
+  const sheet=ss().getSheetByName(name);
+  if(!sheet || !headers.every(k=>sheet.getDataRange().getValues()[0].map(headerName_).includes(k)))
+    securityError_('MOCK_SETUP_REQUIRED','Mock test setup is not ready. Please contact DMI.');
+  return sheet;
+}
+function initializeMockTests(){
+  secret_();
+  const lock=LockService.getScriptLock();
+  if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
+  try {
+    const book=ss();
+    [['MockSittings',DMI_MOCK_HEADERS],['MockAdmissions',DMI_ADMISSION_HEADERS]].forEach(pair=>{
+      if(!book.getSheetByName(pair[0]))book.insertSheet(pair[0]).appendRow(pair[1]);
+      mockSheet_(pair[0],pair[1]);
+    });
+    Logger.log('Mock entry ready. Existing accounts, courses, marks and sessions preserved. Exam sections are not enabled yet.');
+  } finally {lock.releaseLock();}
+}
+function mockRole_(ctx,role){
+  if(ctx.role!==role)securityError_('FORBIDDEN',role==='teacher'?'Teacher access required':'Student access required');
+  active_(ctx.role,account_(ctx.role,ctx.user.email));
+}
+function mockID_(value){
+  const id=String(value||'');
+  if(!/^MOCK-[a-f0-9]{24}$/.test(id))securityError_('VALIDATION','Choose a valid mock sitting');
+  return id;
+}
+function mockRequestID_(value){
+  const id=String(value||'');
+  if(!/^[a-f0-9-]{32,36}$/.test(id))securityError_('VALIDATION','Request identity required');
+  return id;
+}
+function mockRecord_(id){
+  const r=rows(mockSheet_('MockSittings',DMI_MOCK_HEADERS)).find(r=>r.SittingID===mockID_(id));
+  if(!r)securityError_('NOT_FOUND','Mock sitting not found');
+  return r;
+}
+function mockCandidates_(r){
+  let emails;
+  try {emails=JSON.parse(r.CandidatesJSON);}catch(e){securityError_('MOCK_SETUP_REQUIRED','Mock candidates need attention');}
+  if(!Array.isArray(emails) || !emails.length || emails.length>100 || !emails.every(e=>typeof e==='string'))
+    securityError_('MOCK_SETUP_REQUIRED','Mock candidates need attention');
+  return emails.map(email_);
+}
+function mockState_(r){
+  if(r.Status==='closed')return 'closed';
+  if(r.Status!=='scheduled')securityError_('MOCK_SETUP_REQUIRED','Mock sitting needs attention');
+  const start=new Date(r.OpensAt).getTime(),end=new Date(r.ClosesAt).getTime();
+  if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start)
+    securityError_('MOCK_SETUP_REQUIRED','Mock schedule needs attention');
+  return Date.now()<start?'scheduled':Date.now()>=end?'expired':'open';
+}
+function mockPublic_(r,teacher){
+  const out={id:r.SittingID,title:r.Title,class:r.Class,paper:r.PaperID,
+    opensAt:new Date(r.OpensAt).toISOString(),closesAt:new Date(r.ClosesAt).toISOString(),
+    state:mockState_(r),examReady:false};
+  if(teacher){
+    out.candidates=mockCandidates_(r).map(email=>{
+      const a=account_('student',email);
+      return {email,name:a?a.Name:'Removed account',id:a?a.ID:''};
+    });
+    out.codeVersion=Number(r.CodeVersion);
+    out.createRequestID=r.CreateRequestID;
+  }
+  return out;
+}
+function mockPatch_(id,fields){
+  const sheet=mockSheet_('MockSittings',DMI_MOCK_HEADERS),data=sheet.getDataRange().getValues();
+  const head=data[0].map(headerName_),i=data.findIndex((r,i)=>i>0 && r[head.indexOf('SittingID')]===id);
+  if(i<1)securityError_('NOT_FOUND','Mock sitting not found');
+  const row=data[i].slice();
+  Object.keys(fields).forEach(k=>{if(!head.includes(k))securityError_('MOCK_SETUP_REQUIRED','Mock schema needs attention');row[head.indexOf(k)]=fields[k];});
+  sheet.getRange(i+1,1,1,head.length).setValues([row]);
+}
+function mockNewCode_(){
+  const raw=opaque_().slice(0,12).toUpperCase(),salt=opaque_();
+  return {code:raw.match(/.{4}/g).join('-'),salt,hash:digest_(salt+'|'+raw)};
+}
+function createMockSitting_(p,ctx){
+  mockRole_(ctx,'teacher');
+  const sheet=mockSheet_('MockSittings',DMI_MOCK_HEADERS),requestID=mockRequestID_(p.requestID);
+  const existing=rows(sheet).find(r=>r.CreatedBy===email_(ctx.user.email) && r.CreateRequestID===requestID);
+  if(existing)return {ok:true,sitting:mockPublic_(existing,true),recovered:true};
+  const title=String(p.title||'').trim(),cls=String(p.class||'').trim();
+  const start=new Date(p.opensAt).getTime(),end=new Date(p.closesAt).getTime();
+  if(!title || title.length>100 || cls.length>80 || !Number.isFinite(start)||!Number.isFinite(end) ||
+    end<=start || end<=Date.now() || end-start>7*86400000 || start>Date.now()+90*86400000)
+    securityError_('VALIDATION','Enter a title and a valid entry window of up to seven days');
+  let candidates;try{candidates=JSON.parse(String(p.candidatesJSON||''));}catch(e){securityError_('VALIDATION','Choose the students for this sitting');}
+  if(!Array.isArray(candidates)||!candidates.length||candidates.length>100 || !candidates.every(e=>typeof e==='string'))
+    securityError_('VALIDATION','Choose 1–100 students');
+  candidates=Array.from(new Set(candidates.map(email_)));
+  candidates.forEach(email=>{try{active_('student',account_('student',email));}catch(e){securityError_('VALIDATION','Choose only existing active students');}});
+  const code=mockNewCode_(),id='MOCK-'+opaque_().slice(0,24);
+  const fields={SittingID:id,Title:sheetText_(title),Class:sheetText_(cls),PaperID:'DMI-ACADEMIC-MOCK-01',
+    OpensAt:new Date(start),ClosesAt:new Date(end),Status:'scheduled',CandidatesJSON:JSON.stringify(candidates),
+    CodeSalt:code.salt,CodeHash:code.hash,CodeVersion:1,CreatedBy:email_(ctx.user.email),
+    CreatedAt:new Date(),CreateRequestID:requestID,LastCodeRequestID:requestID};
+  const head=sheet.getDataRange().getValues()[0].map(headerName_);
+  sheet.appendRow(head.map(k=>Object.prototype.hasOwnProperty.call(fields,k)?fields[k]:''));
+  return {ok:true,sitting:mockPublic_(fields,true),code:code.code};
+}
+function listMockSittings_(ctx){
+  const data=rows(mockSheet_('MockSittings',DMI_MOCK_HEADERS));
+  return {ok:true,data:data.filter(r=>ctx.role==='teacher'||mockCandidates_(r).includes(email_(ctx.user.email)))
+    .map(r=>mockPublic_(r,ctx.role==='teacher')).sort((a,b)=>b.opensAt.localeCompare(a.opensAt))};
+}
+function rotateMockCode_(p,ctx){
+  mockRole_(ctx,'teacher');
+  const r=mockRecord_(p.sittingID),requestID=mockRequestID_(p.requestID);
+  if(['closed','expired'].includes(mockState_(r)))securityError_('MOCK_CLOSED','Entry is closed for this sitting');
+  if(r.LastCodeRequestID===requestID)return {ok:true,recovered:true,sitting:mockPublic_(r,true)};
+  const code=mockNewCode_();
+  const fields={CodeSalt:code.salt,CodeHash:code.hash,CodeVersion:Number(r.CodeVersion)+1,LastCodeRequestID:requestID};
+  mockPatch_(r.SittingID,fields);
+  return {ok:true,code:code.code,sitting:mockPublic_(Object.assign({},r,fields),true)};
+}
+function closeMockSitting_(p,ctx){
+  mockRole_(ctx,'teacher');
+  const r=mockRecord_(p.sittingID);
+  mockPatch_(r.SittingID,{Status:'closed',CodeHash:'',CodeSalt:''});
+  return {ok:true};
+}
+function mockAdmission_(r,ctx){
+  return rows(mockSheet_('MockAdmissions',DMI_ADMISSION_HEADERS))
+    .find(a=>a.SittingID===r.SittingID && email_(a.StudentEmail)===email_(ctx.user.email) && String(a.StudentID)===String(ctx.user.id));
+}
+function mockAdmissionPublic_(a){
+  return {id:a.AdmissionID,sittingID:a.SittingID,studentID:a.StudentID,studentName:a.StudentName,
+    admittedAt:new Date(a.AdmittedAt).toISOString(),status:a.Status};
+}
+function enterMockSitting_(p,ctx){
+  mockRole_(ctx,'student');
+  const r=mockRecord_(p.sittingID);
+  if(!mockCandidates_(r).includes(email_(ctx.user.email)))securityError_('FORBIDDEN','You are not assigned to this sitting');
+  const state=mockState_(r);
+  if(state==='scheduled')securityError_('MOCK_NOT_OPEN','Entry has not opened yet');
+  if(state!=='open')securityError_('MOCK_CLOSED','Entry is closed for this sitting');
+  const prior=mockAdmission_(r,ctx);
+  if(prior)return {ok:true,admission:mockAdmissionPublic_(prior),sitting:mockPublic_(r,false),resumed:true};
+  const cache=CacheService.getScriptCache(),key='mock-entry:'+digest_(r.SittingID+'|'+ctx.user.id+'|'+email_(ctx.user.email));
+  const raw=cache.get(key);
+  let tries={count:0,until:Date.now()+15*60000};
+  if(raw){try{tries=JSON.parse(raw);}catch(e){securityError_('MOCK_RATE_LIMITED','Please wait before trying this code again');}}
+  if(tries.until<=Date.now())tries={count:0,until:Date.now()+15*60000};
+  if(tries.count>=5)securityError_('MOCK_RATE_LIMITED','Please try the mock code again in 15 minutes');
+  const code=String(p.code||'').trim().toUpperCase().replace(/-/g,'');
+  if(!/^[A-F0-9]{12}$/.test(code) || !equal_(digest_(String(r.CodeSalt)+'|'+code),r.CodeHash)){
+    tries.count++;cache.put(key,JSON.stringify(tries),Math.max(1,Math.ceil((tries.until-Date.now())/1000)));
+    securityError_('INVALID_MOCK_CODE','Mock code is incorrect. Check it with your teacher.');
+  }
+  cache.remove(key);
+  const id='ADMIT-'+digest_(r.SittingID+'|'+ctx.user.id+'|'+email_(ctx.user.email)).slice(0,24);
+  const a={AdmissionID:id,SittingID:r.SittingID,StudentEmail:email_(ctx.user.email),StudentID:ctx.user.id,
+    StudentName:sheetText_(ctx.user.name),AdmittedAt:new Date(),Status:'admitted'};
+  const sheet=mockSheet_('MockAdmissions',DMI_ADMISSION_HEADERS),head=sheet.getDataRange().getValues()[0].map(headerName_);
+  sheet.appendRow(head.map(k=>Object.prototype.hasOwnProperty.call(a,k)?a[k]:''));
+  return {ok:true,admission:mockAdmissionPublic_(a),sitting:mockPublic_(r,false)};
+}
+function myMockAdmission_(p,ctx){
+  mockRole_(ctx,'student');
+  const r=mockRecord_(p.sittingID);
+  if(!mockCandidates_(r).includes(email_(ctx.user.email)))securityError_('FORBIDDEN','You are not assigned to this sitting');
+  const a=mockAdmission_(r,ctx);
+  return {ok:true,admission:a?mockAdmissionPublic_(a):null,sitting:mockPublic_(r,false)};
+}
+function listMockAdmissions_(p,ctx){
+  mockRole_(ctx,'teacher');const r=mockRecord_(p.sittingID);
+  return {ok:true,data:rows(mockSheet_('MockAdmissions',DMI_ADMISSION_HEADERS))
+    .filter(a=>a.SittingID===r.SittingID).map(mockAdmissionPublic_)};
 }

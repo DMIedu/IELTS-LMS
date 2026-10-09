@@ -3,7 +3,7 @@
  * only the server session grants access. One token serves every LMS page.
  */
 (function(){
-  var API_URL='https://script.google.com/macros/s/AKfycbxl15H-Esfx0t4GZrZki0cTyVRQf4SDWFD6wmUmE0f5i24wVksWAnztIxcOPcAooZXp/exec';
+  var API_URL='https://script.google.com/macros/s/AKfycbzEIzTnSwNuEJ_QGVS94YpcyU6K0JlN-Aa3LE88LhkICGgR2wt5AoxcrFRBIpSvQC-qew/exec';
   var here=document.currentScript && document.currentScript.src;
   var base=here?here.replace(/[^\/]*$/,''):'./';
   function token(){return localStorage.getItem('dmi_lms_token')||'';}
