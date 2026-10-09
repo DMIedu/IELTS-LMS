@@ -58,3 +58,20 @@ The workflow publishes check totals and desktop/mobile screenshots. Native Apps 
 - Recorded AI Speaking and private audio storage.
 - Writing/Speaking teacher review, combined report and release controls.
 - Full concurrent lab pilot before production.
+
+## Validation completed — 9 October 2026
+- 76 synthetic backend admission/security checks passed.
+- 13 existing login transport regression checks passed.
+- 35 Chromium browser checks passed, including teacher creation, wrong/correct code, admission refresh, teacher monitoring, unassigned candidates, closed entry, desktop/mobile layout and both actual logo images loading.
+- Five backend/client syntax checks passed.
+- Ten pinned test-package checks confirmed correct test endpoints, guard injection and bundle consistency.
+- Browser validation used synthetic accounts and an in-memory workbook, with zero live workbook writes.
+- Latest code validation: https://github.com/DMIedu/IELTS-LMS/actions/runs/37871483383
+- Native Apps Script and real test-workbook acceptance remain pending. No production release has been made.
+
+## Pinned downloads
+- Isolated test website: https://github.com/DMIedu/IELTS-LMS/archive/a35d3ddb342f6fb63602a588cb1f4b3b131fd632.zip
+- Consolidated tested backend: https://raw.githubusercontent.com/DMIedu/IELTS-LMS/e16872e39a2d91e14e0b16b082990c085f85b4ce/release-candidate/Code.gs
+- Draft review: https://github.com/DMIedu/IELTS-LMS/pull/6
+
+The local terminal and browser-control connection failed during this task with a setup-refresh error. GitHub validation was used to complete automated testing; the signed-in Apps Script editor could not be operated from this chat.
