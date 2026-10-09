@@ -1,0 +1,37 @@
+name: Mock entry checks
+on:
+  pull_request:
+    paths:
+      - 'MockTests.gs'
+      - 'Code.gs'
+      - 'Security.gs'
+      - 'release-candidate/Code.gs'
+      - 'mock-*.html'
+      - 'dmi-mock.*'
+      - 'assets/british-council-registration-partner.png'
+      - 'tests/mock-entry*.js'
+      - '.github/workflows/mock-entry-checks.yml'
+permissions:
+  contents: read
+jobs:
+  entry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test secure admission and existing login recovery
+        run: |
+          node tests/mock-entry.test.js
+          node tests/phase2-login-transport.test.js
+      - name: Install browser test dependency
+        run: npm install --no-save --ignore-scripts playwright
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Exercise teacher and student mock screens
+        run: node tests/mock-entry-browser.test.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mock-entry-browser
+          path: artifacts/mock-*
+          if-no-files-found: ignore

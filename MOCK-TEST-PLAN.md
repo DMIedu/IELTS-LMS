@@ -1,11 +1,11 @@
 # DMI Academic Lab Mock — implementation specification
 
-Status: specification prepared; mock runner, new paper, recordings and AI assessment are not implemented or published.
+Status: teacher sitting setup and student entry foundation implemented in a draft development branch; automated and native acceptance are tracked in MOCK-ENTRY-SETUP.md. The timed mock runner, original paper, recordings and AI assessment are not yet implemented or published.
 
 ## Confirmed choices
 - First mock: a new, original DMI-created Academic paper.
 - Entry: existing active student login plus a temporary mock-test code issued by a teacher/admin.
-- Branding: existing dmi-logo.jfif and DMI's British Council partner badge. The owner confirmed a partner badge exists; its actual asset still needs to be supplied.
+- Branding: existing dmi-logo.jfif and DMI's British Council partner badge. The exact badge supplied by the owner is stored at assets/british-council-registration-partner.png.
 - Speaking: AI-assisted mock practice. This is a DMI training assessment, not an official IELTS test or official band result.
 - This development takes priority over lesson progress.
 

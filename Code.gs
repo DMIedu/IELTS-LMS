@@ -104,6 +104,13 @@ function handle(e) {
     ['studentName','teacherName','name','class','course','lesson','test','testName','comments']
       .forEach(k=>{if(p[k]!=null)p[k]=sheetText_(p[k]);});
     switch(action){
+      case 'createMockSitting': result=createMockSitting_(p,ctx);break;
+      case 'listMockSittings': result=listMockSittings_(ctx);break;
+      case 'rotateMockCode': result=rotateMockCode_(p,ctx);break;
+      case 'closeMockSitting': result=closeMockSitting_(p,ctx);break;
+      case 'enterMockSitting': result=enterMockSitting_(p,ctx);break;
+      case 'myMockAdmission': result=myMockAdmission_(p,ctx);break;
+      case 'listMockAdmissions': result=listMockAdmissions_(p,ctx);break;
       case 'session': result={ok:true,role:ctx.role,user:ctx.user};break;
       case 'logout': result=logout_(ctx);break;
       case 'changePassword': result=changePassword_(p,ctx);break;
