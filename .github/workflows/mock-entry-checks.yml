@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'MockTests.gs'
+      - 'MockAttempts.gs'
       - 'Code.gs'
       - 'Security.gs'
       - 'release-candidate/Code.gs'
@@ -11,6 +12,7 @@ on:
       - 'dmi-auth.js'
       - 'assets/british-council-registration-partner.png'
       - 'tests/mock-entry*.js'
+      - 'tests/mock-attempt.test.js'
       - '.github/workflows/mock-entry-checks.yml'
 permissions:
   contents: read
@@ -23,6 +25,7 @@ jobs:
       - name: Test secure admission and existing login recovery
         run: |
           node tests/mock-entry.test.js
+          node tests/mock-attempt.test.js
           node tests/phase2-login-transport.test.js
       - name: Install browser test dependency
         run: npm install --no-save --ignore-scripts playwright

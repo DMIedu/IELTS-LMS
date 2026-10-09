@@ -104,6 +104,10 @@ function handle(e) {
     ['studentName','teacherName','name','class','course','lesson','test','testName','comments']
       .forEach(k=>{if(p[k]!=null)p[k]=sheetText_(p[k]);});
     switch(action){
+      case 'startMockAttempt': result=startMockAttempt_(p,ctx);break;
+      case 'resumeMockAttempt': result=resumeMockAttempt_(p,ctx);break;
+      case 'saveMockAnswers': result=saveMockAnswers_(p,ctx);break;
+      case 'submitMockSection': result=submitMockSection_(p,ctx);break;
       case 'createMockSitting': result=createMockSitting_(p,ctx);break;
       case 'listMockSittings': result=listMockSittings_(ctx);break;
       case 'rotateMockCode': result=rotateMockCode_(p,ctx);break;
