@@ -21,7 +21,7 @@ function task(){const t=current.writingTasks.find(t=>t.task===Number($('task').v
 function show(r){current=r.review;$('review').hidden=false;$('identity').textContent=current.studentID+' · '+current.studentEmail+' · '+current.paper+' · '+current.paperVersion;
  $('answers').replaceChildren();current.sections.forEach(s=>{const box=text('section','');box.append(text('h3',s.name+(s.closed?' — closed':' — in progress')));
  const keys=new Set([...s.questions.map(q=>q.id),...Object.keys(s.answers)]);for(const id of keys){const q=s.questions.find(q=>q.id===id);
- box.append(text('p',id+'. '+(q?q.prompt:'Question text unavailable')),text('pre',s.answers[id]||'No acknowledged answer'));}$('answers').append(box);});
+ box.append(text('p',id+'. '+(q?q.prompt:'Question text unavailable')));if(q&&q.chart)DMI_MOCK_CHART.render(box,q.chart);box.append(text('pre',s.answers[id]||'No acknowledged answer'));}$('answers').append(box);});
  $('warning').textContent=current.paperProblem||'Assessment remains pending. Saving a rubric does not release a student result.';task();controls();}
 $('task').onchange=task;
 $('load').onclick=()=>work(async()=>{const r=await call('listMockAttempts',{sittingID:$('sitting').value});$('attempt').replaceChildren();r.data.forEach(a=>{const o=text('option',a.studentName+' · '+a.studentID+(a.writtenComplete?' · written complete':' · in progress'));o.value=a.id;$('attempt').append(o);});status(r.data.length?'Choose an attempt.':'No attempts in this sitting.');});

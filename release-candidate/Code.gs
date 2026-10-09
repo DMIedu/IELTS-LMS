@@ -1556,6 +1556,24 @@ function initializeMockAttempts(){
     Logger.log('Mock attempt storage ready. No paper was enabled and no existing results were changed.');
   }finally{lock.releaseLock();}
 }
+
+/** Bounded chart data, never HTML/SVG or arbitrary resource URLs. */
+function mockChart_(chart){
+  if(chart==null)return null;
+  const fail=()=>securityError_('MOCK_NOT_READY','The Writing chart needs review');
+  if(!chart||typeof chart!=='object'||Array.isArray(chart)||chart.type!=='bar'||
+    typeof chart.title!=='string'||!chart.title.trim()||chart.title.length>160||
+    typeof chart.unit!=='string'||chart.unit.length>30||
+    !Number.isFinite(chart.maximum)||chart.maximum<=0||chart.maximum>1000000||
+    !Array.isArray(chart.categories)||!chart.categories.length||chart.categories.length>6||
+    !chart.categories.every(v=>typeof v==='string'&&v.trim()&&v.length<=60)||
+    !Array.isArray(chart.series)||!chart.series.length||chart.series.length>4)fail();
+  if(!chart.series.every(s=>s&&typeof s.name==='string'&&s.name.trim()&&s.name.length<=60&&Array.isArray(s.values)&&
+    s.values.length===chart.categories.length&&s.values.every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=chart.maximum)))fail();
+  return {type:'bar',title:chart.title,unit:chart.unit,maximum:chart.maximum,categories:chart.categories.slice(),
+    series:chart.series.map(s=>({name:s.name,values:s.values.slice()}))};
+}
+
 function mockPaper_(id,version){
   const matches=rows(mockSheet_('MockPapers',DMI_MOCK_PAPER_HEADERS)).filter(r=>r.PaperID===id&&(!version||String(r.Version)===String(version)));
   if(matches.length!==1)securityError_('MOCK_NOT_READY','An immutable reviewed paper version is required');
@@ -1572,6 +1590,7 @@ function mockPaper_(id,version){
     if(!section||section.name!==name||!Array.isArray(section.questions)||section.questions.length!==total||
       !section.questions.every((q,j)=>q&&q.id===String(j+1)&&typeof q.prompt==='string'&&q.prompt.trim()))
       securityError_('MOCK_NOT_READY','The mock questions need review');
+    section.questions.forEach(q=>{if(q.chart!=null){if(name!=='writing')securityError_('MOCK_NOT_READY','Charts belong to Writing tasks');mockChart_(q.chart);}});
   });
   // No arbitrary URLs/keys are exposed: public content is a strict allowlist.
   return {record:r,paper,digest:digest_(r.PaperJSON)};
@@ -1626,7 +1645,7 @@ function mockAttemptPublic_(a,state){
     result.content={name:section.name,instructions:String(section.instructions||''),passages:Array.isArray(section.passages)?
       section.passages.map(v=>({title:String(v.title||''),text:String(v.text||'')})):[],
       questions:section.questions.map(q=>({id:q.id,prompt:q.prompt,options:Array.isArray(q.options)?q.options.map(String):[],
-        wordLimit:Number.isInteger(q.wordLimit)?q.wordLimit:null}))};
+        wordLimit:Number.isInteger(q.wordLimit)?q.wordLimit:null,chart:mockChart_(q.chart)}))};
   }
   return {ok:true,attempt:result};
 }
@@ -1705,7 +1724,7 @@ function getMockAttemptReview_(p,ctx){
   return {ok:true,review:{id:a.AttemptID,studentID:a.StudentID,studentEmail:a.StudentEmail,paper:a.PaperID,paperVersion:a.PaperVersion,
     paperProblem:problem,assessment:'pending',speaking:'not_started',
     sections:state.sections.map((s,i)=>({name:['listening','reading','writing'][i],closed:s.closed,reason:s.reason||null,
-      answers:s.answers,questions:paper?paper.sections[i].questions.map(q=>({id:q.id,prompt:q.prompt})):[]})),
+      answers:s.answers,questions:paper?paper.sections[i].questions.map(q=>({id:q.id,prompt:q.prompt,chart:mockChart_(q.chart)})):[]})),
     writingTasks:[1,2].map(task=>{const history=reviews.filter(r=>Number(r.Task)===task);return {task,revision:history.length,history:history.map(mockReviewPublic_)};})}};
 }
 function saveMockWritingReview_(p,ctx){

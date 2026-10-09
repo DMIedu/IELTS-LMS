@@ -1,0 +1,24 @@
+/* Synthetic Writing chart through the actual candidate screen, no live API. */
+const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');let checks=0;const check=(n,v)=>{assert.ok(v,n);checks++;};
+(async()=>{const browser=await chromium.launch(),context=await browser.newContext(),page=await context.newPage();
+const chart={type:'bar',title:'<script>unsafe()</script> Synthetic chart',unit:'%',maximum:100,categories:['Category A','Category B'],series:[{name:'Year A',values:[20,80]},{name:'Year B',values:[30,70]}]};
+const attempt={id:'A1',revision:0,serverNow:new Date().toISOString(),startedAt:new Date().toISOString(),deadlines:[new Date(Date.now()-2000).toISOString(),new Date(Date.now()-1000).toISOString(),new Date(Date.now()+3600000).toISOString()],section:'writing',sections:[{closed:true},{closed:true},{closed:false}],answers:{},content:{instructions:'Synthetic Writing instructions',passages:[],questions:[{id:'1',prompt:'Describe the synthetic chart',options:[],chart},{id:'2',prompt:'Write the synthetic essay',options:[]}]}};
+await page.exposeFunction('chartCall',async()=>({ok:true,attempt}));
+await context.route('**/*',async route=>{const rel=new URL(route.request().url()).pathname.split('/').pop();
+if(rel==='dmi-auth.js')return route.fulfill({contentType:'text/javascript',body:"window.DMI_AUTH={requireRole:async()=>({role:'student',user:{name:'Synthetic',id:'S1'}}),call:(a,p)=>window.chartCall(a,p)};"});
+const f=path.join(root,rel);if(fs.existsSync(f))return route.fulfill({contentType:rel.endsWith('.js')?'text/javascript':rel.endsWith('.css')?'text/css':'text/html',body:fs.readFileSync(f)});return route.abort();});
+await page.goto('https://draft.example/mock-runner.html?sitting=MOCK-'+'a'.repeat(24));await page.locator('#questions svg').waitFor();
+check('Writing displays two answer boxes',await page.locator('textarea[data-answer]').count()===2);
+check('chart rendered only once',await page.locator('#questions figure').count()===1);
+check('chart accessible name',await page.locator('svg').getAttribute('role')==='img');
+check('chart title cannot inject script',await page.locator('#questions script').count()===0&&(await page.locator('figure h3').textContent()).includes('<script>'));
+check('exact numeric table shown',(await page.locator('figure table').textContent()).includes('20')&&(await page.locator('figure table').textContent()).includes('70'));
+const heights=await page.locator('svg rect').evaluateAll(rs=>rs.slice(2).map(r=>Number(r.getAttribute('height'))));
+check('bars have correct scaled heights',JSON.stringify(heights)===JSON.stringify([54,81,216,189]));
+check('chart does not disable Writing answers',await page.locator('[data-answer]').first().isEnabled());
+await page.setViewportSize({width:390,height:844});check('mobile fits viewport',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+check('SVG fits mobile width',await page.locator('svg').evaluate(e=>e.getBoundingClientRect().width<=innerWidth));
+await page.evaluate(()=>{const host=document.createElement('div');host.id='invalid-chart';document.body.append(host);DMI_MOCK_CHART.render(host,{type:'bar',categories:['A'],series:[{name:'x',values:[-1]}],maximum:100});});
+check('invalid data is not drawn',await page.locator('#invalid-chart svg').count()===0&&(await page.locator('#invalid-chart').textContent()).includes('unavailable'));
+const out=path.join(root,'artifacts');fs.mkdirSync(out,{recursive:true});await page.screenshot({path:path.join(out,'mock-writing-chart-synthetic.png'),fullPage:true});await context.close();await browser.close();console.log(JSON.stringify({writingChartBrowserChecks:checks,liveWorkbookWrites:0}));})().catch(e=>{console.error(e);process.exit(1);});

@@ -28,7 +28,7 @@ function render(a,force){
     else{input=el(a.section==='writing'?'textarea':'input','');if(a.section==='writing')input.rows=14;else input.type='text';}
     input.id='answer-'+q.id;input.dataset.answer=q.id;input.maxLength=a.section==='writing'?12000:100;input.autocomplete='off';
     input.value=(a.answers||{})[q.id]||'';input.oninput=()=>{dirty=true;$('saved').textContent='Changes waiting to save';controls();};
-    const box=el('div','');box.append(label,input);$('questions').append(box);
+    const box=el('div','');box.append(label);if(q.chart)DMI_MOCK_CHART.render(box,q.chart);box.append(input);$('questions').append(box);
    });
   }else{$('instructions').textContent='Your acknowledged written answers are saved. No score has been released.';}
  }

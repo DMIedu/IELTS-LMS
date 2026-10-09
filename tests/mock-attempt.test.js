@@ -18,12 +18,20 @@ const paper={listeningSeconds:1800,sections:['listening','reading','writing'].ma
  name,instructions:'Private instructions',passages:[{title:'Private text',text:'Synthetic passage'}],
  questions:Array.from({length:i===2?2:40},(_,j)=>({id:String(j+1),prompt:'Question '+(j+1),key:'NEVER-EXPOSE-KEY',options:['A','B']}))
 }))};
+const chart={type:'bar',title:'Synthetic chart',unit:'%',maximum:100,categories:['Category A','Category B'],series:[{name:'Year A',values:[20,80]},{name:'Year B',values:[30,70]}],answerKey:'NEVER-EXPOSE-KEY'};
+paper.sections[2].questions[0].chart=chart;
 const paperJSON=JSON.stringify(paper);
 sheets.MockPapers.appendRow(['DMI-ACADEMIC-MOCK-01','v1',false,true,paperJSON]);
 check('unreviewed paper fails closed',req('startMockAttempt',{sittingID:id},'student').code==='MOCK_NOT_READY');
 sheets.MockPapers.vals[1][2]=true;
+for(const invalid of [{...chart,maximum:0},{...chart,series:[{name:'x',values:[-1,2]}]},{...chart,categories:['x'],series:[{name:'x',values:[2,3]}]},{...chart,series:[{name:'x',values:['20',80]}]}]){
+ const bad=JSON.parse(paperJSON);bad.sections[2].questions[0].chart=invalid;sheets.MockPapers.vals[1][4]=JSON.stringify(bad);
+ check('invalid chart blocks starting paper',req('startMockAttempt',{sittingID:id},'student').code==='MOCK_NOT_READY');
+}
+sheets.MockPapers.vals[1][4]=paperJSON;
 const begin=req('startMockAttempt',{sittingID:id},'student'),attempt=begin.attempt;
 check('reviewed test fixture starts Listening',begin.ok&&attempt.section==='listening'&&attempt.revision===0);
+check('Writing chart not revealed in Listening',!JSON.stringify(begin).includes('Synthetic chart'));
 check('keys never returned',!JSON.stringify(begin).includes('NEVER-EXPOSE-KEY'));
 check('future sections not returned',!JSON.stringify(begin).includes('"name":"reading"'));
 check('Listening includes two minute review',Date.parse(attempt.deadlines[0])-clock.now===1920000);
@@ -66,6 +74,8 @@ clock.now=Date.parse(attempt.deadlines[1]);
 const writing=req('resumeMockAttempt',{sittingID:id},'student');
 check('clock advances to Writing',writing.attempt.section==='writing');
 check('Reading auto locks its last saved answers',writing.attempt.sections[1].closed);
+check('Writing receives chart values',writing.attempt.content.questions[0].chart.series[0].values[0]===20);
+check('chart strips unknown key fields',!JSON.stringify(writing).includes('NEVER-EXPOSE-KEY'));
 check('Writing has sixty minutes',Date.parse(attempt.deadlines[2])-clock.now===3600000);
 const writingSave=req('saveMockAnswers',{...base,section:'writing',revision:writing.attempt.revision,requestID:crypto.randomUUID(),answersJSON:JSON.stringify({'1':'Task one text','2':'Task two text'})},'student');
 check('teacher cannot mark unfinished Writing',req('saveMockWritingReview',{attemptID:attempt.id,task:1,requestID:crypto.randomUUID(),revision:0,scoresJSON:'{}',feedback:'Draft'}).code==='MOCK_REVIEW_NOT_READY');
