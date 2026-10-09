@@ -8,6 +8,7 @@ on:
       - 'release-candidate/Code.gs'
       - 'mock-*.html'
       - 'dmi-mock.*'
+      - 'dmi-auth.js'
       - 'assets/british-council-registration-partner.png'
       - 'tests/mock-entry*.js'
       - '.github/workflows/mock-entry-checks.yml'
