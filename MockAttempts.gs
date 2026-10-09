@@ -10,7 +10,7 @@ function initializeMockAttempts(){
   if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
   try{
     const book=ss();
-    [['MockPapers',DMI_MOCK_PAPER_HEADERS],['MockAttempts',DMI_MOCK_ATTEMPT_HEADERS]].forEach(pair=>{
+    [['MockPapers',DMI_MOCK_PAPER_HEADERS],['MockAttempts',DMI_MOCK_ATTEMPT_HEADERS],['MockReviews',DMI_MOCK_REVIEW_HEADERS]].forEach(pair=>{
       if(!book.getSheetByName(pair[0]))book.insertSheet(pair[0]).appendRow(pair[1]);
       mockSheet_(pair[0],pair[1]);
     });
@@ -138,3 +138,58 @@ function mutateMockAnswers_(p,ctx,submit){
 }
 function saveMockAnswers_(p,ctx){return mutateMockAnswers_(p,ctx,false);}
 function submitMockSection_(p,ctx){return mutateMockAnswers_(p,ctx,true);}
+
+/** Teacher-only review drafts. Append-only rubric history; no student result release. */
+const DMI_MOCK_REVIEW_HEADERS=['ReviewID','AttemptID','Task','ScoresJSON','Feedback','TeacherEmail','TeacherName','ReviewedAt','RequestID','BaseRevision'];
+function mockReviewAttempt_(p,ctx){
+  mockRole_(ctx,'teacher');
+  const a=rows(mockSheet_('MockAttempts',DMI_MOCK_ATTEMPT_HEADERS)).find(a=>a.AttemptID===String(p.attemptID||''));
+  if(!a)securityError_('NOT_FOUND','Mock attempt not found');
+  return a;
+}
+function mockReviewRows_(id){return rows(mockSheet_('MockReviews',DMI_MOCK_REVIEW_HEADERS)).filter(r=>r.AttemptID===id);}
+function mockReviewPublic_(r){return {id:r.ReviewID,task:Number(r.Task),scores:JSON.parse(r.ScoresJSON),
+  feedback:String(r.Feedback||''),teacherName:r.TeacherName,reviewedAt:new Date(r.ReviewedAt).toISOString(),revision:Number(r.BaseRevision)+1};}
+function listMockAttempts_(p,ctx){
+  mockRole_(ctx,'teacher');const sitting=mockRecord_(p.sittingID);
+  return {ok:true,data:rows(mockSheet_('MockAttempts',DMI_MOCK_ATTEMPT_HEADERS)).filter(a=>a.SittingID===sitting.SittingID).map(a=>{
+    const state=mockReconcileAttempt_(a),admission=rows(mockSheet_('MockAdmissions',DMI_ADMISSION_HEADERS)).find(r=>r.AdmissionID===a.AdmissionID);
+    return {id:a.AttemptID,sittingID:a.SittingID,paper:a.PaperID,studentID:a.StudentID,studentName:admission?admission.StudentName:'Candidate',
+      startedAt:new Date(a.StartedAt).toISOString(),writtenComplete:state.sections.every(s=>s.closed),assessment:'pending'};
+  })};
+}
+function getMockAttemptReview_(p,ctx){
+  const a=mockReviewAttempt_(p,ctx),state=mockReconcileAttempt_(a);let paper=null,problem=null;
+  try{const loaded=mockPaper_(a.PaperID,a.PaperVersion);if(!equal_(loaded.digest,a.PaperDigest))throw Error('changed');paper=loaded.paper;}
+  catch(e){problem='Pinned paper unavailable or changed. Saved answers remain visible; verify the original paper before marking.';}
+  const reviews=mockReviewRows_(a.AttemptID);
+  return {ok:true,review:{id:a.AttemptID,studentID:a.StudentID,studentEmail:a.StudentEmail,paper:a.PaperID,paperVersion:a.PaperVersion,
+    paperProblem:problem,assessment:'pending',speaking:'not_started',
+    sections:state.sections.map((s,i)=>({name:['listening','reading','writing'][i],closed:s.closed,reason:s.reason||null,
+      answers:s.answers,questions:paper?paper.sections[i].questions.map(q=>({id:q.id,prompt:q.prompt})):[]})),
+    writingTasks:[1,2].map(task=>{const history=reviews.filter(r=>Number(r.Task)===task);return {task,revision:history.length,history:history.map(mockReviewPublic_)};})}};
+}
+function saveMockWritingReview_(p,ctx){
+  const a=mockReviewAttempt_(p,ctx),state=mockReconcileAttempt_(a),task=Number(p.task),requestID=mockRequestID_(p.requestID);
+  if(![1,2].includes(task))securityError_('VALIDATION','Choose Writing task 1 or 2');
+  const sheet=mockSheet_('MockReviews',DMI_MOCK_REVIEW_HEADERS),all=rows(sheet);
+  const prior=all.find(r=>r.TeacherEmail===email_(ctx.user.email)&&r.RequestID===requestID);
+  if(prior){if(prior.AttemptID!==a.AttemptID||Number(prior.Task)!==task)securityError_('VALIDATION','Request identity already used');
+    return {ok:true,saved:mockReviewPublic_(prior),recovered:true,assessment:'pending'};}
+  if(!state.sections[2].closed)securityError_('MOCK_REVIEW_NOT_READY','Writing must be closed before marking');
+  const loaded=mockPaper_(a.PaperID,a.PaperVersion);
+  if(!equal_(loaded.digest,a.PaperDigest))securityError_('MOCK_PAPER_CHANGED','Restore the pinned paper before marking');
+  const history=all.filter(r=>r.AttemptID===a.AttemptID&&Number(r.Task)===task),revision=Number(p.revision);
+  if(!Number.isInteger(revision)||revision!==history.length)securityError_('MOCK_REVIEW_CONFLICT','A newer review exists. Reload the review before saving.');
+  let scores;try{scores=JSON.parse(String(p.scoresJSON||''));}catch(e){securityError_('VALIDATION','Enter all four criterion marks');}
+  const criteria=['task','coherence','lexical','grammar'];
+  if(!scores||Array.isArray(scores)||Object.keys(scores).length!==4||!criteria.every(k=>typeof scores[k]==='number'&&Number.isInteger(scores[k])&&scores[k]>=0&&scores[k]<=9))
+    securityError_('VALIDATION','Enter four whole criterion bands from 0 to 9');
+  const feedback=String(p.feedback||'').trim();
+  if(!feedback||feedback.length>5000)securityError_('VALIDATION','Enter feedback of up to 5000 characters');
+  const r={ReviewID:'REVIEW-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Task:task,ScoresJSON:JSON.stringify(scores),
+    Feedback:sheetText_(feedback),TeacherEmail:email_(ctx.user.email),TeacherName:sheetText_(ctx.user.name),
+    ReviewedAt:new Date(),RequestID:requestID,BaseRevision:revision};
+  const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
+  return {ok:true,saved:mockReviewPublic_(r),assessment:'pending'};
+}

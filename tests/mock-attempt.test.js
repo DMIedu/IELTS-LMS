@@ -68,6 +68,7 @@ check('clock advances to Writing',writing.attempt.section==='writing');
 check('Reading auto locks its last saved answers',writing.attempt.sections[1].closed);
 check('Writing has sixty minutes',Date.parse(attempt.deadlines[2])-clock.now===3600000);
 const writingSave=req('saveMockAnswers',{...base,section:'writing',revision:writing.attempt.revision,requestID:crypto.randomUUID(),answersJSON:JSON.stringify({'1':'Task one text','2':'Task two text'})},'student');
+check('teacher cannot mark unfinished Writing',req('saveMockWritingReview',{attemptID:attempt.id,task:1,requestID:crypto.randomUUID(),revision:0,scoresJSON:'{}',feedback:'Draft'}).code==='MOCK_REVIEW_NOT_READY');
 check('both writing tasks saved',writingSave.ok&&writingSave.attempt.answers['2']==='Task two text');
 clock.now=Date.parse(attempt.deadlines[2]);
 const finished=req('resumeMockAttempt',{sittingID:id},'student');
@@ -78,4 +79,31 @@ check('deadline rejects late writing',req('saveMockAnswers',{...base,section:'wr
 check('existing results never changed',sheets.Marks.vals.length===1&&sheets.ExamResults.vals.length===1);
 new vm.Script(fs.readFileSync(path.join(__dirname,'..','release-candidate','Code.gs'),'utf8'));
 check('consolidated backend contains attempt module',fs.readFileSync(path.join(__dirname,'..','release-candidate','Code.gs'),'utf8').includes(fs.readFileSync(path.join(__dirname,'..','MockAttempts.gs'),'utf8')));
+
+for(const action of ['listMockAttempts','getMockAttemptReview','saveMockWritingReview']){
+ check('student denied teacher review '+action,req(action,{sittingID:id,attemptID:attempt.id},'student').code==='FORBIDDEN');
+ check('anonymous denied teacher review '+action,req(action,{sessionToken:'',sittingID:id,attemptID:attempt.id}).code==='UNAUTHENTICATED');
+}
+check('teacher lists submitted attempt',req('listMockAttempts',{sittingID:id}).data[0].writtenComplete);
+const view=req('getMockAttemptReview',{attemptID:attempt.id});
+check('teacher sees saved Writing text',view.review.sections[2].answers['2']==='Task two text');
+check('review starts pending with no zero mark',view.review.assessment==='pending'&&view.review.writingTasks.every(t=>t.history.length===0));
+check('review does not leak stored answer keys',!JSON.stringify(view).includes('NEVER-EXPOSE-KEY'));
+const rubric={task:6,coherence:6,lexical:7,grammar:6};
+const rp={attemptID:attempt.id,task:1,revision:0,requestID:crypto.randomUUID(),scoresJSON:JSON.stringify(rubric),feedback:'Synthetic teacher feedback'};
+for(const scoresJSON of ['{}','[]','null','{','{"task":6,"coherence":6,"lexical":7,"grammar":10}','{"task":"","coherence":6,"lexical":7,"grammar":6}'])
+ check('invalid rubric denied',req('saveMockWritingReview',{...rp,scoresJSON}).code==='VALIDATION');
+const marked=req('saveMockWritingReview',rp);
+check('teacher rubric saved as pending',marked.ok&&marked.assessment==='pending'&&marked.saved.revision===1);
+check('review retry is idempotent',req('saveMockWritingReview',rp).recovered&&sheets.MockReviews.vals.length===2);
+check('request cannot be reused for different task',req('saveMockWritingReview',{...rp,task:2}).code==='VALIDATION');
+check('stale review cannot overwrite',req('saveMockWritingReview',{...rp,requestID:crypto.randomUUID()}).code==='MOCK_REVIEW_CONFLICT');
+check('second review appends history',req('saveMockWritingReview',{...rp,revision:1,requestID:crypto.randomUUID(),feedback:'Revised feedback'}).ok&&sheets.MockReviews.vals.length===3);
+check('history retains old feedback',req('getMockAttemptReview',{attemptID:attempt.id}).review.writingTasks[0].history[0].feedback==='Synthetic teacher feedback');
+sheets.MockPapers.vals[1][4]=originalPaper.replace('Question 1','Changed');
+const changed=req('getMockAttemptReview',{attemptID:attempt.id});
+check('paper problem preserves review answers',changed.ok&&changed.review.paperProblem&&changed.review.sections[2].answers['2']==='Task two text');
+check('changed paper cannot be marked',req('saveMockWritingReview',{...rp,revision:2,requestID:crypto.randomUUID()}).code==='MOCK_PAPER_CHANGED');
+sheets.MockPapers.vals[1][4]=originalPaper;
+check('review does not release student results',sheets.Marks.vals.length===1&&sheets.ExamResults.vals.length===1&&req('resumeMockAttempt',{sittingID:id},'student').attempt.assessment==='pending');
 console.log(JSON.stringify({mockAttemptChecks:checks,nativeAppsScript:'PENDING',runnerEnabled:false},null,2));

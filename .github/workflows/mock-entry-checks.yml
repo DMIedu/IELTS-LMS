@@ -10,11 +10,13 @@ on:
       - 'mock-*.html'
       - 'dmi-mock.*'
       - 'dmi-mock-runner.js'
+      - 'dmi-mock-review.js'
       - 'dmi-auth.js'
       - 'assets/british-council-registration-partner.png'
       - 'tests/mock-entry*.js'
       - 'tests/mock-attempt.test.js'
       - 'tests/mock-runner-browser.test.js'
+      - 'tests/mock-review-browser.test.js'
       - '.github/workflows/mock-entry-checks.yml'
 permissions:
   contents: read
@@ -37,6 +39,7 @@ jobs:
         run: |
           node tests/mock-entry-browser.test.js
           node tests/mock-runner-browser.test.js
+          node tests/mock-review-browser.test.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
