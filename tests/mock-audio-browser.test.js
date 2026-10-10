@@ -16,6 +16,8 @@ await set(3);await page.waitForFunction(()=>document.querySelector('audio').read
 check('no free seeking controls',await page.locator('audio').getAttribute('controls')===null);
 check('playback requires candidate join',await page.locator('audio').evaluate(a=>a.paused));
 await page.locator('button').click();await page.waitForFunction(()=>!document.querySelector('audio').paused);
+await page.waitForFunction(()=>document.querySelector('audio').currentTime>=3&&document.querySelector('audio').currentTime<6,{},{timeout:5000});
+console.log('Synthetic first join',await page.locator('audio').evaluate(a=>({time:a.currentTime,duration:a.duration,paused:a.paused,seekable:a.seekable.length})));
 check('join follows elapsed server clock',await page.locator('audio').evaluate(a=>a.currentTime>=3&&a.currentTime<6));
 await page.locator('audio').evaluate(a=>{a.currentTime=0;a.playbackRate=2;});await page.waitForTimeout(650);
 check('seeking rejoins current timeline',await page.locator('audio').evaluate(a=>a.currentTime>=3));
