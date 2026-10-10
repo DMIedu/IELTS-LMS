@@ -46,7 +46,7 @@ function tick(){
 async function run(fn){if(busy)return;busy=true;controls();try{await fn();}catch(e){
  message(e.message,true);
  if(['MOCK_REVISION_CONFLICT','MOCK_SECTION_CLOSED','MOCK_PAPER_CHANGED','UNAUTHENTICATED','ACCESS_EXPIRED'].includes(e.code)){
-  blocked=true;$('saved').textContent='Saving paused. Keep this screen open and ask your teacher; unacknowledged text remains on this page.';
+  blocked=true;DMI_MOCK_AUDIO.stop();$('saved').textContent='Saving paused. Keep this screen open and ask your teacher; unacknowledged text remains on this page.';
  }
 }finally{busy=false;controls();}}
 async function resume(force){await run(async()=>{const a=await call('resumeMockAttempt',{sittingID});blocked=false;render(a,force);message('Saved attempt restored.');});}

@@ -23,7 +23,7 @@ function update(host,a){
  return {elapsed,index:s.clips.findIndex(c=>elapsed>=c.startSeconds&&elapsed<c.startSeconds+c.durationSeconds)};
  }
  async function sync(play){
- if(state!==s)return;
+ if(state!==s||s.failed&&!play)return;
  const pos=locate();
  if(pos.index<0){s.audio.pause();s.button.disabled=true;report('Recording time finished. Use the remaining Listening review time.');return;}
  const clip=s.clips[pos.index],target=pos.elapsed-clip.startSeconds;
