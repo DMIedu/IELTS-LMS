@@ -2,7 +2,7 @@
 (async()=>{
  'use strict';const $=id=>document.getElementById(id),attemptID=new URLSearchParams(location.search).get('attempt');
  if(!await DMI_AUTH.requireRole('teacher'))return;$('speaking-review').hidden=false;
- let current=null,busy=false,pending=null,url=null,baseline='';
+ let current=null,busy=false,pending=null,url=null,baseline='',sessionChanged=false;
  function status(v){$('speaking-status').textContent=v;}
  function part(){return current&&current.parts.find(p=>p.part===Number($('speaking-part').value));}
  function controls(){
@@ -11,7 +11,8 @@
   $('speaking-retry').hidden=!pending;$('speaking-retry').disabled=busy;
  }
  async function call(action,p={}){
-  const r=await DMI_AUTH.call(action,{attemptID,...p});if(!r||!r.ok){const e=Error(r&&r.error||'Connection interrupted.');e.code=r&&r.code;throw e;}return r;
+  if(sessionChanged)throw Error('Sign in again to review recordings.');
+  const r=await DMI_AUTH.call(action,{attemptID,...p});if(sessionChanged)throw Error('Sign in again to review recordings.');if(!r||!r.ok){const e=Error(r&&r.error||'Connection interrupted.');e.code=r&&r.code;throw e;}return r;
  }
  function closeAudio(){
   const audio=$('speaking-audio');audio.pause();audio.removeAttribute('src');audio.load();audio.hidden=true;
@@ -56,6 +57,12 @@
  $('speaking-retry').onclick=save;$('speaking-reload').onclick=reload;
  window.addEventListener('beforeunload',e=>{if(pending||$('speaking-feedback').value!==baseline){e.preventDefault();e.returnValue='';}});
  window.addEventListener('pagehide',closeAudio);
+ window.addEventListener('storage',e=>{
+  if(e.key!==null&&e.key!=='dmi_lms_token')return;
+  sessionChanged=true;closeAudio();current=null;pending=null;baseline='';
+  $('speaking-feedback').value='';$('speaking-history').replaceChildren();$('speaking-identity').textContent='';$('speaking-receipt').textContent='';
+  $('speaking-review').hidden=true;
+ });
  if(!/^ATTEMPT-[a-f0-9]{24}$/.test(attemptID||'')){status('Open a candidate from the written review page.');controls();return;}
  await reload();
 })();
