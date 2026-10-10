@@ -175,6 +175,7 @@ def main():
     sys.stdout.write(json.dumps(result, allow_nan=False))
 
 if __name__ == "__main__":
+    sys.modules["processor"] = sys.modules[__name__]
     try:
         main()
     except Exception as error:
