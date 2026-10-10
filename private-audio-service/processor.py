@@ -137,13 +137,14 @@ def process_request(body, assessor=None, decoder=decode_audio, metrics=quality_m
     prepared = []
     # Decode all three before any assessor invocation; all audio remains in memory.
     for clip in sorted(clips, key=lambda r: r["part"]):
-        unpack_audio(clip)
+        source, _ = unpack_audio(clip)
         pcm = decoder(clip)
         details = metrics(pcm)
         decoded.append({"part": clip["part"], "receiptID": clip["receiptID"],
                         "audioSHA256": clip["audioSHA256"], **details})
         prepared.append({"part": clip["part"], "receiptID": clip["receiptID"],
-                         "audioSHA256": clip["audioSHA256"], "wavBytes": wav_bytes(pcm)})
+                         "audioSHA256": clip["audioSHA256"], "wavBytes": wav_bytes(pcm),
+                         "sourceBytes": source, "mime": clip["mime"]})
     response = {"requestID": body["requestID"], "decoded": decoded, "assessment": None}
     if quality_holds(decoded):
         return response
@@ -169,7 +170,8 @@ def main():
         body = json.loads(raw)
     except (ValueError, UnicodeError):
         reject("INVALID_REQUEST")
-    result = process_request(body)
+    from gemini_assessor import configured_assessor
+    result = process_request(body, assessor=configured_assessor())
     sys.stdout.write(json.dumps(result, allow_nan=False))
 
 if __name__ == "__main__":
