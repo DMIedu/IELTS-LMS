@@ -48,7 +48,7 @@ function update(host,a){
  s.audio.addEventListener('ended',()=>sync(false));
  s.sync=sync;s.timer=setInterval(()=>sync(false),500);sync(false);
  }
- state.offset=Date.parse(a.serverNow)-Date.now();
+ state.offset=Date.parse(a.serverNow)-Date.now();state.sync(false);
 }
 document.addEventListener('visibilitychange',()=>{if(state&&!document.hidden)state.sync(false);});
 window.DMI_MOCK_AUDIO={update,stop};
