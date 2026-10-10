@@ -51,7 +51,10 @@ class DecoderChecks(unittest.TestCase):
         for kind in ("webm", "ogg", "mp4"):
             with self.subTest(kind=kind):
                 pcm = processor.decode_audio(clip(generate(kind), kind=kind))
-                self.assertLess(abs(len(pcm) / 32000 - 1.2), 0.05)
+                decoded = len(pcm) / 32000
+                # Fragmented AAC may retain encoder delay and final frame padding.
+                tolerance = 2 * 1024 / 16000 if kind == 'mp4' else 0.05
+                self.assertLess(abs(decoded - 1.2), tolerance)
                 self.assertGreater(len(pcm), 32000)
 
     def test_real_silence_voice_activity(self):
