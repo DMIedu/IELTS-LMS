@@ -3,6 +3,7 @@ const {createHarness}=require('./mock-entry.test.js'),fs=require('node:fs'),path
 const h=createHarness(),{ctx,req,sheets,clock}=h;let checks=0;const check=(n,v)=>{assert.ok(v,n);checks++;};
 vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockAttempts.gs'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockSpeaking.gs'),'utf8'),ctx);
+vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockSpeakingTimed.gs'),'utf8'),ctx);
 ctx.initializeMockTests();ctx.initializeMockAttempts();ctx.initializeMockSpeaking();ctx.initializeMockSpeaking();
 check('Speaking setup additive and idempotent',sheets.MockSpeakingUploads.vals.length===1&&sheets.Marks.vals.length===1);
 let enabled=false,shared=false,viewer=false,editor=false,group=false,paged=false,lookupError=false,files=[],createCount=0;
