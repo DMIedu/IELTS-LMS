@@ -111,6 +111,9 @@ function handle(e) {
       case 'listMockAttempts': result=listMockAttempts_(p,ctx);break;
       case 'startMockSpeakingTimed': result=startMockSpeakingTimed_(p,ctx);break;
       case 'resumeMockSpeakingTimed': result=resumeMockSpeakingTimed_(p,ctx);break;
+      case 'getMockSpeakingRecording': result=getMockSpeakingRecording_(p,ctx);break;
+      case 'getMockSpeakingReview': result=getMockSpeakingReview_(p,ctx);break;
+      case 'saveMockSpeakingReview': result=saveMockSpeakingReview_(p,ctx);break;
       case 'uploadMockSpeaking': result=uploadMockSpeaking_(p,ctx);break;
       case 'myMockSpeakingUploads': result=myMockSpeakingUploads_(p,ctx);break;
       case 'listMockSpeakingUploads': result=listMockSpeakingUploads_(p,ctx);break;
@@ -852,7 +855,7 @@ return module.exports;
  */
 const DMI_SESSION_HOURS = 4;
 const DMI_PASSWORD_ITERATIONS = 600000;
-const DMI_TEACHER_ACTIONS = ['listMockSpeakingUploads','listMockAttempts','getMockAttemptReview','saveMockWritingReview','createMockSitting','rotateMockCode','closeMockSitting','listMockAdmissions','listStudents','addStudent','deleteStudent',
+const DMI_TEACHER_ACTIONS = ['getMockSpeakingRecording','getMockSpeakingReview','saveMockSpeakingReview','listMockSpeakingUploads','listMockAttempts','getMockAttemptReview','saveMockWritingReview','createMockSitting','rotateMockCode','closeMockSitting','listMockAdmissions','listStudents','addStudent','deleteStudent',
   'renewStudent','addCourse','deleteCourse','addMark','resetStudentPassword','setLMSData','saveCourseDetails','listCourseEnrollments','setCourseEnrollment'];
 const DMI_ACTIONS = DMI_TEACHER_ACTIONS.concat(['startMockSpeakingTimed','resumeMockSpeakingTimed','uploadMockSpeaking','myMockSpeakingUploads','startMockAttempt','resumeMockAttempt','saveMockAnswers','submitMockSection','listMockSittings','enterMockSitting','myMockAdmission','listCourses','listMarks',
   'listExamResults','submitExamResult','getLMSData','session','logout','changePassword','listCourseCatalogue']);
@@ -1782,10 +1785,15 @@ function saveMockWritingReview_(p,ctx){
 }
 
 /** Disabled Speaking capture/upload draft. No provider call, bands or result writes. */
-const DMI_SPEAKING_HEADERS=['ReceiptID','AttemptID','Part','RequestID','Digest','Bytes','Mime','DurationSeconds','FileID','UploadedAt'];
+const DMI_SPEAKING_HEADERS=['ReceiptID','AttemptID','Part','RequestID','Digest','Bytes','Mime','DurationSeconds','FileID','UploadedAt','RecordingID'];
 function initializeMockSpeaking(){
  secret_();const lock=LockService.getScriptLock();if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
- try{const book=ss();if(!book.getSheetByName('MockSpeakingUploads'))book.insertSheet('MockSpeakingUploads').appendRow(DMI_SPEAKING_HEADERS);mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS);
+ try{const book=ss();if(!book.getSheetByName('MockSpeakingUploads'))book.insertSheet('MockSpeakingUploads').appendRow(DMI_SPEAKING_HEADERS);
+ const uploads=book.getSheetByName('MockSpeakingUploads'),head=uploads.getDataRange().getValues()[0].map(headerName_);
+ if(!head.includes('RecordingID'))uploads.getRange(1,head.length+1).setValue('RecordingID');
+ mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS);
+ if(!book.getSheetByName('MockSpeakingReviews'))book.insertSheet('MockSpeakingReviews').appendRow(DMI_SPEAKING_REVIEW_HEADERS);
+ mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS);
  Logger.log('Speaking upload storage ready. Capture remains disabled; no recordings or results changed.');}finally{lock.releaseLock();}
 }
 function mockSpeakingFolder_(){
@@ -1844,13 +1852,67 @@ function uploadMockSpeaking_(p,ctx){
  const name='mock-speaking-'+digest_(a.AttemptID+'|'+part).slice(0,32),found=folder.getFilesByName(name);let file;
  if(found.hasNext()){file=found.next();if(found.hasNext()||file.getDescription()!==fingerprint)securityError_('MOCK_UPLOAD_CONFLICT','An interrupted upload needs owner review');mockSpeakingPrivate_(file);mockSpeakingTimedUpload_(a,p,true);}
  else{mockSpeakingTimedUpload_(a,p,false);file=folder.createFile(Utilities.newBlob(bytes,mime,name));mockSpeakingPrivate_(file);file.setDescription(fingerprint);}
- const r={ReceiptID:'AUDIO-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Part:part,RequestID:requestID,Digest:fingerprint,Bytes:bytes.length,Mime:mime,DurationSeconds:duration,FileID:file.getId(),UploadedAt:new Date()};
+ const r={ReceiptID:'AUDIO-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Part:part,RequestID:requestID,Digest:fingerprint,Bytes:bytes.length,Mime:mime,DurationSeconds:duration,FileID:file.getId(),UploadedAt:new Date(),RecordingID:String(p.recordingID||'')};
  const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
  return {ok:true,receipt:mockSpeakingReceipt_(r),assessment:'pending'};
 }
 function listMockSpeakingUploads_(p,ctx){
  const a=mockReviewAttempt_(p,ctx);mockSpeakingFolder_();
  return {ok:true,receipts:rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID).map(mockSpeakingReceipt_),assessment:'pending'};
+}
+
+/** Teacher-only private audio and append-only notes. No band scoring or public links. */
+const DMI_SPEAKING_REVIEW_HEADERS=['ReviewID','AttemptID','Part','ReceiptID','Feedback','TeacherEmail','TeacherName','ReviewedAt','RequestID','BaseRevision'];
+function mockSpeakingUploadForReview_(a,p){
+ const part=Number(p.part),id=String(p.receiptID||'');
+ if(![1,2,3].includes(part))securityError_('VALIDATION','Choose a Speaking part');
+ const matches=rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID&&Number(r.Part)===part&&r.ReceiptID===id);
+ if(matches.length!==1)securityError_('NOT_FOUND','Recording receipt not found for this attempt');
+ return matches[0];
+}
+function mockSpeakingReviewPublic_(r){return{id:r.ReviewID,part:Number(r.Part),receiptID:r.ReceiptID,feedback:String(r.Feedback||''),teacherName:r.TeacherName,reviewedAt:new Date(r.ReviewedAt).toISOString(),revision:Number(r.BaseRevision)+1};}
+function getMockSpeakingReview_(p,ctx){
+ const a=mockReviewAttempt_(p,ctx);mockSpeakingFolder_();
+ const uploads=rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID);
+ const history=rows(mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS)).filter(r=>r.AttemptID===a.AttemptID);
+ return {ok:true,review:{attemptID:a.AttemptID,studentID:a.StudentID,studentEmail:a.StudentEmail,assessment:'pending',
+ parts:[1,2,3].map(part=>{const receipt=uploads.find(r=>Number(r.Part)===part),notes=history.filter(r=>Number(r.Part)===part);
+ return{part,receipt:receipt?mockSpeakingReceipt_(receipt):null,revision:notes.length,history:notes.map(mockSpeakingReviewPublic_)};})}};
+}
+function getMockSpeakingRecording_(p,ctx){
+ const a=mockReviewAttempt_(p,ctx),r=mockSpeakingUploadForReview_(a,p),folder=mockSpeakingFolder_();
+ const found=folder.getFilesByName('mock-speaking-'+digest_(a.AttemptID+'|'+Number(r.Part)).slice(0,32));
+ if(!found.hasNext())securityError_('NOT_FOUND','Private recording unavailable');
+ const file=found.next();if(found.hasNext()||file.getId()!==r.FileID||file.getDescription()!==r.Digest)
+ securityError_('MOCK_UPLOAD_CONFLICT','Recording identity needs owner review');
+ mockSpeakingPrivate_(file);const bytes=file.getBlob().getBytes();
+ if(bytes.length!==Number(r.Bytes)||bytes.length<64||bytes.length>4194304)securityError_('MOCK_UPLOAD_CONFLICT','Recording integrity needs owner review');
+ const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,bytes).map(b=>('0'+((b+256)%256).toString(16)).slice(-2)).join('');
+ const base=[a.AttemptID,Number(r.Part),r.RequestID,hash,r.Mime,Number(r.DurationSeconds)];
+ let identities=[String(r.RecordingID||'')];
+ if(!r.RecordingID){const s=mockAttemptState_(a).speaking;if(s&&s.recordingIDs&&s.recordingIDs[r.Part])identities.push(s.recordingIDs[r.Part]);}
+ const valid=identities.some(id=>equal_(digest_(JSON.stringify(base.concat([id]))),r.Digest))||
+ (!r.RecordingID&&equal_(digest_(JSON.stringify(base)),r.Digest));
+ if(!valid)securityError_('MOCK_UPLOAD_CONFLICT','Recording bytes changed; ask the owner to review');
+ if(!['audio/webm','audio/webm;codecs=opus','audio/ogg','audio/ogg;codecs=opus','audio/mp4'].includes(r.Mime))securityError_('MOCK_UPLOAD_CONFLICT','Unsupported recording format');
+ return{ok:true,recording:{receiptID:r.ReceiptID,part:Number(r.Part),mime:r.Mime,audioBase64:Utilities.base64Encode(bytes),assessment:'pending'}};
+}
+function saveMockSpeakingReview_(p,ctx){
+ const a=mockReviewAttempt_(p,ctx),receipt=mockSpeakingUploadForReview_(a,p);mockSpeakingFolder_();
+ const part=Number(p.part),requestID=mockRequestID_(p.requestID),feedback=String(p.feedback||'').trim(),revision=Number(p.revision);
+ if(!feedback||feedback.length>5000||!Number.isInteger(revision)||revision<0)securityError_('VALIDATION','Enter a review note of up to 5000 characters');
+ const sheet=mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS),all=rows(sheet),prior=all.find(r=>r.TeacherEmail===email_(ctx.user.email)&&r.RequestID===requestID);
+ if(prior){
+  if(prior.AttemptID!==a.AttemptID||Number(prior.Part)!==part||prior.ReceiptID!==receipt.ReceiptID||prior.Feedback!==sheetText_(feedback)||Number(prior.BaseRevision)!==revision)
+  securityError_('VALIDATION','Review request identity already used');
+  return{ok:true,saved:mockSpeakingReviewPublic_(prior),recovered:true,assessment:'pending'};
+ }
+ const history=all.filter(r=>r.AttemptID===a.AttemptID&&Number(r.Part)===part);
+ if(revision!==history.length)securityError_('MOCK_REVIEW_CONFLICT','A newer Speaking note exists. Reload before saving.');
+ const r={ReviewID:'SPEAK-REVIEW-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Part:part,ReceiptID:receipt.ReceiptID,
+ Feedback:sheetText_(feedback),TeacherEmail:email_(ctx.user.email),TeacherName:sheetText_(ctx.user.name),ReviewedAt:new Date(),RequestID:requestID,BaseRevision:revision};
+ const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
+ return{ok:true,saved:mockSpeakingReviewPublic_(r),assessment:'pending'};
 }
 
 /** Disabled timed Speaking prompt draft. No examiner simulation or assessment. */
