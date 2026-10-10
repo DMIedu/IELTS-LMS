@@ -4,9 +4,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg gcc libc
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY processor.py service.py ./
+COPY processor.py service.py gemini_assessor.py ./
 RUN useradd --uid 10001 --no-create-home worker
 USER 10001
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV DMI_AUDIO_WORKER_ENABLED=false
+ENV DMI_AUDIO_ASSESSOR_ENABLED=false
 ENTRYPOINT ["python", "processor.py"]
