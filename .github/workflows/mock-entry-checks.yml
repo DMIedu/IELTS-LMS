@@ -14,6 +14,7 @@ on:
       - 'tests/test_private_audio_service.py'
       - 'tests/test_private_audio_container.py'
       - 'tests/test_private_audio_gemini.py'
+      - 'tests/test_private_audio_hosting.py'
       - 'Code.gs'
       - 'Security.gs'
       - 'release-candidate/Code.gs'
@@ -75,6 +76,9 @@ jobs:
           python tests/test_private_audio_service.py -v
           python tests/test_private_audio_gemini.py -v
           python tests/test_private_audio_container.py -v
+          python -m pip install gunicorn==26.2.0
+          python tests/test_private_audio_hosting.py -v
+          docker build -f private-audio-service/Dockerfile.web -t dmi-audio-web-check private-audio-service
       - name: Install browser test dependency
         run: npm install --no-save --ignore-scripts playwright
       - name: Install Chromium
