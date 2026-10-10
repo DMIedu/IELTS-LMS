@@ -65,7 +65,9 @@ def validate_criteria(criteria, decoded):
             parts.add(item["part"])
         if parts != {1, 2, 3}:
             invalid()
-    return criteria
+    return {key: {"band": value["band"], "feedback": value["feedback"],
+                  "evidence": [{field: item[field] for field in ("part", "source", "startSeconds", "endSeconds", "observation")}
+                               for item in value["evidence"]]} for key, value in criteria.items()}
 
 class GeminiAssessor:
     def __init__(self, key, model, transport=post_json):
@@ -98,7 +100,10 @@ class GeminiAssessor:
         if len(payload) > MAX_REQUEST:
             raise ProcessingError("ASSESSOR_REQUEST_TOO_LARGE")
         url = "https://generativelanguage.googleapis.com/v1beta/models/" + self.model + ":generateContent"
-        response = self.transport(url, {"Content-Type": "application/json", "x-goog-api-key": self.key}, payload)
+        try:
+            response = self.transport(url, {"Content-Type": "application/json", "x-goog-api-key": self.key}, payload)
+        except Exception:
+            raise ProcessingError("ASSESSOR_SERVICE_ERROR") from None
         try:
             candidates = response["candidates"]
             if len(candidates) != 1 or candidates[0].get("finishReason") != "STOP":
