@@ -1833,7 +1833,7 @@ function uploadMockSpeaking_(p,ctx){
  ogg=u.slice(0,4).join(',')==='79,103,103,83',mp4=u.slice(4,8).join(',')==='102,116,121,112';
  if(!(mime.startsWith('audio/webm')&&webm||mime.startsWith('audio/ogg')&&ogg||mime==='audio/mp4'&&mp4))securityError_('VALIDATION','Recording container does not match its format');
  const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,bytes).map(b=>('0'+((b+256)%256).toString(16)).slice(-2)).join('');
- const fingerprint=digest_(JSON.stringify([a.AttemptID,part,requestID,hash,mime,duration]));
+ const fingerprint=digest_(JSON.stringify([a.AttemptID,part,requestID,hash,mime,duration,String(p.recordingID||'')]));
  const sheet=mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS),records=rows(sheet),same=records.find(r=>r.RequestID===requestID);
  if(same){if(same.AttemptID!==a.AttemptID||Number(same.Part)!==part||same.Digest!==fingerprint)securityError_('VALIDATION','Upload identity already used');
  return {ok:true,receipt:mockSpeakingReceipt_(same),recovered:true,assessment:'pending'};}
@@ -1842,8 +1842,8 @@ function uploadMockSpeaking_(p,ctx){
  if(done.some((v,i)=>v!==i+1))securityError_('MOCK_SETUP_REQUIRED','Speaking receipts need owner review');
  if(part!==done.length+1)securityError_('MOCK_SECTION_ORDER','Upload Speaking parts in order');
  const name='mock-speaking-'+digest_(a.AttemptID+'|'+part).slice(0,32),found=folder.getFilesByName(name);let file;
- if(found.hasNext()){file=found.next();if(found.hasNext()||file.getDescription()!==fingerprint)securityError_('MOCK_UPLOAD_CONFLICT','An interrupted upload needs owner review');mockSpeakingPrivate_(file);}
- else{file=folder.createFile(Utilities.newBlob(bytes,mime,name));mockSpeakingPrivate_(file);file.setDescription(fingerprint);}
+ if(found.hasNext()){file=found.next();if(found.hasNext()||file.getDescription()!==fingerprint)securityError_('MOCK_UPLOAD_CONFLICT','An interrupted upload needs owner review');mockSpeakingPrivate_(file);mockSpeakingTimedUpload_(a,p,true);}
+ else{mockSpeakingTimedUpload_(a,p,false);file=folder.createFile(Utilities.newBlob(bytes,mime,name));mockSpeakingPrivate_(file);file.setDescription(fingerprint);}
  const r={ReceiptID:'AUDIO-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Part:part,RequestID:requestID,Digest:fingerprint,Bytes:bytes.length,Mime:mime,DurationSeconds:duration,FileID:file.getId(),UploadedAt:new Date()};
  const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
  return {ok:true,receipt:mockSpeakingReceipt_(r),assessment:'pending'};
@@ -1889,6 +1889,7 @@ function mockSpeakingTimedPublic_(a,plan){
  return {ok:true,speaking:{attemptID:a.AttemptID,serverNow:new Date(now).toISOString(),startedAt:s.startedAt,
   deadline:new Date(start+plan.totalSeconds*1000).toISOString(),totalSeconds:plan.totalSeconds,
   status:current?'in_progress':'finished',assessment:'pending',
+  recordingWindow:current&&current.phase!=='preparation'?mockSpeakingWindow_(a,plan,current.part,true):null,
   stage:current?{phase:current.phase,part:current.part,prompt:current.prompt,
    startedAt:new Date(start+current.startSeconds*1000).toISOString(),deadline:new Date(start+current.endSeconds*1000).toISOString()}:null}};
 }
@@ -1896,10 +1897,32 @@ function startMockSpeakingTimed_(p,ctx){
  mockSpeakingTimedGate_();const a=mockSpeakingAccess_(p,ctx);mockSpeakingFolder_();const plan=mockSpeakingPlan_(a),state=mockAttemptState_(a);
  if(!state.speaking){
   if(![true,'true'].includes(p.consent)||![true,'true'].includes(p.microphoneReady))securityError_('VALIDATION','Complete microphone preflight and recording consent first');
-  state.speaking={startedAt:new Date().toISOString(),paperDigest:a.PaperDigest};mockAttemptPatch_(a,state);
+  state.speaking={startedAt:new Date().toISOString(),paperDigest:a.PaperDigest,recordingIDs:{1:opaque_(),2:opaque_(),3:opaque_()}};mockAttemptPatch_(a,state);
  }
  return mockSpeakingTimedPublic_(a,plan);
 }
 function resumeMockSpeakingTimed_(p,ctx){
  mockSpeakingTimedGate_();const a=mockSpeakingAccess_(p,ctx);mockSpeakingFolder_();return mockSpeakingTimedPublic_(a,mockSpeakingPlan_(a));
+}
+
+/** Window metadata does not prove audio content/duration; real decoding/assessment remains pending. */
+function mockSpeakingWindow_(a,plan,part,publicView){
+ const s=mockSpeakingTimedState_(a),stages=plan.stages.filter(v=>v.part===part&&v.phase!=='preparation');
+ const start=new Date(s.startedAt).getTime()+stages[0].startSeconds*1000,end=new Date(s.startedAt).getTime()+stages[stages.length-1].endSeconds*1000;
+ const id=s.recordingIDs&&s.recordingIDs[part];
+ if(typeof id!=='string'||!id)securityError_('MOCK_SETUP_REQUIRED','Recording identities need teacher assistance');
+ const eligible=Date.now()>=start&&Date.now()<=start+15000;
+ return {part,startedAt:new Date(start).toISOString(),deadline:new Date(end).toISOString(),uploadDeadline:new Date(end+900000).toISOString(),
+  recordingID:!publicView||eligible?id:null,eligible};
+}
+function mockSpeakingTimedUpload_(a,p,recovery){
+ const state=mockAttemptState_(a);
+ if(!state.speaking&&PropertiesService.getScriptProperties().getProperty('DMI_MOCK_SPEAKING_TIMED_ENABLED')!=='true')return;
+ mockSpeakingTimedGate_();const plan=mockSpeakingPlan_(a),window=mockSpeakingWindow_(a,plan,Number(p.part),false);
+ if(typeof p.recordingID!=='string'||!equal_(window.recordingID,p.recordingID))
+ securityError_('MOCK_RECORDING_ID','This recording does not belong to the timed part');
+ if(!recovery&&(Date.now()<new Date(window.deadline).getTime()||Date.now()>new Date(window.uploadDeadline).getTime()))
+ securityError_('MOCK_UPLOAD_WINDOW','The timed recording upload window is closed; ask your teacher');
+ if(Number(p.durationSeconds)>(new Date(window.deadline)-new Date(window.startedAt))/1000+5)
+ securityError_('VALIDATION','Recording exceeds its timed part');
 }
