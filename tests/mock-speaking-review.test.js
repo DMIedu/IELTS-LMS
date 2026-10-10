@@ -1,0 +1,65 @@
+/* Synthetic private folder/files and authenticated sessions. No real audio or Drive access. */
+const {createHarness}=require('./mock-entry.test.js'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+const h=createHarness(),{ctx,req,sheets,clock}=h;let checks=0;const check=(n,v)=>{assert.ok(v,n);checks++;};
+vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockAttempts.gs'),'utf8'),ctx);
+vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockSpeaking.gs'),'utf8'),ctx);
+vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockSpeakingTimed.gs'),'utf8'),ctx);
+ctx.initializeMockTests();ctx.initializeMockAttempts();ctx.initializeMockSpeaking();ctx.initializeMockSpeaking();
+check('Speaking setup additive and idempotent',sheets.MockSpeakingUploads.vals.length===1&&sheets.Marks.vals.length===1);
+let enabled=false,shared=false,viewer=false,editor=false,group=false,paged=false,lookupError=false,files=[],createCount=0;
+const original=ctx.PropertiesService.getScriptProperties;
+ctx.PropertiesService.getScriptProperties=()=>({getProperty:k=>k==='DMI_MOCK_SPEAKING_ENABLED'?String(enabled):k==='DMI_MOCK_SPEAKING_FOLDER_ID'?'synthetic_folder_1234':original().getProperty(k)});
+const user={getEmail:()=> 'owner@example.com'};
+const privacy={getOwner:()=>user,getSharingAccess:()=>shared?'ANYONE':'PRIVATE',getViewers:()=>viewer?[user]:[],getEditors:()=>editor?[{getEmail:()=> 'other@example.com'}]:[]};
+ctx.Session={getEffectiveUser:()=>user};
+ctx.ScriptApp={getOAuthToken:()=> 'synthetic-test-token'};
+ctx.UrlFetchApp={fetch:()=>({getResponseCode:()=>lookupError?403:200,getContentText:()=>JSON.stringify({permissions:[{type:'user',role:'owner',emailAddress:'owner@example.com'},...(group?[{type:'group',role:'reader',emailAddress:'synthetic@example.com'}]:[])],...(paged?{nextPageToken:'synthetic-next'}:{})})})};
+const folder={...privacy,getId:()=> 'synthetic_folder_1234',getFilesByName:name=>{const matching=files.filter(f=>f.name===name);let i=0;return{hasNext:()=>i<matching.length,next:()=>matching[i++]};},
+ createFile:blob=>{createCount++;const f={...privacy,name:blob.name,bytes:blob.bytes.slice(),getBlob(){return{getBytes:()=>this.bytes.slice()};},description:'',getId:()=> 'private-file-'+createCount,getDescription(){return this.description;},setDescription(d){this.description=d;}};files.push(f);return f;}};
+ctx.DriveApp={Access:{PRIVATE:'PRIVATE'},getFolderById:()=>folder};
+ctx.Utilities.base64Decode=s=>Array.from(Buffer.from(s,'base64'));
+ctx.Utilities.newBlob=(bytes,mime,name)=>({bytes,mime,name});
+const oldDigest=ctx.Utilities.computeDigest;ctx.Utilities.computeDigest=(algo,data)=>Array.isArray(data)?Array.from(crypto.createHash('sha256').update(Buffer.from(data)).digest()):oldDigest(algo,data);
+const sitting=req('createMockSitting',h.payload()),id=sitting.sitting.id;
+const attempt={AttemptID:'ATTEMPT-speaking',AdmissionID:'none',SittingID:id,StudentEmail:'one@example.com',StudentID:'S1',PaperID:'DMI-ACADEMIC-MOCK-01',PaperVersion:'v1',PaperDigest:'synthetic',StartedAt:new Date(clock.now-100000),ListeningDeadline:new Date(clock.now-3000),ReadingDeadline:new Date(clock.now-2000),WritingDeadline:new Date(clock.now-1000),StateJSON:JSON.stringify({sections:[0,1,2].map(()=>({closed:true,answers:{}}))}),Revision:0};
+sheets.MockAttempts.appendRow(sheets.MockAttempts.vals[0].map(k=>attempt[k]));
+
+ctx.Utilities.base64Encode=bytes=>Buffer.from(bytes).toString('base64');
+const bytes=Buffer.alloc(128);bytes.set([26,69,223,163]);enabled=true;
+const uploaded=req('uploadMockSpeaking',{sittingID:id,part:1,requestID:crypto.randomUUID(),mime:'audio/webm',durationSeconds:30,audioBase64:bytes.toString('base64')},'student');
+check('synthetic recording acknowledged',uploaded.ok&&createCount===1);
+const p={attemptID:attempt.AttemptID,part:1,receiptID:uploaded.receipt.id};
+for(const action of ['getMockSpeakingRecording','getMockSpeakingReview','saveMockSpeakingReview']){
+ check('student cannot '+action,req(action,p,'student').code==='FORBIDDEN');
+ check('anonymous cannot '+action,req(action,{...p,sessionToken:''}).code==='UNAUTHENTICATED');
+ check('GET cannot '+action,req(action,p,'teacher',false).code==='POST_REQUIRED');
+}
+check('private playback recovers original bytes',req('getMockSpeakingRecording',p).recording.audioBase64===bytes.toString('base64'));
+check('playback exposes no Drive id or link',!JSON.stringify(req('getMockSpeakingRecording',p)).includes('private-file')&&!JSON.stringify(req('getMockSpeakingRecording',p)).includes('https://'));
+check('wrong receipt rejected',req('getMockSpeakingRecording',{...p,receiptID:'wrong'}).code==='NOT_FOUND');
+check('wrong part cannot use receipt',req('getMockSpeakingRecording',{...p,part:2}).code==='NOT_FOUND');
+files[0].bytes[10]=1;check('changed file bytes fail integrity',req('getMockSpeakingRecording',p).code==='MOCK_UPLOAD_CONFLICT');files[0].bytes[10]=0;
+group=true;check('new group permission blocks playback',req('getMockSpeakingRecording',p).code==='MOCK_NOT_READY');group=false;
+const review=req('getMockSpeakingReview',p);
+check('review has receipt and empty history only',review.ok&&review.review.parts[0].receipt.id===p.receiptID&&review.review.parts[0].revision===0&&!JSON.stringify(review).includes('audioBase64'));
+const note={...p,feedback:'Synthetic teacher note',revision:0,requestID:crypto.randomUUID()};
+check('note needs acknowledged matching receipt',req('saveMockSpeakingReview',{...note,receiptID:'wrong'}).code==='NOT_FOUND');
+check('empty note rejected',req('saveMockSpeakingReview',{...note,feedback:''}).code==='VALIDATION');
+const saved=req('saveMockSpeakingReview',note);
+check('teacher note saved pending',saved.ok&&saved.assessment==='pending'&&saved.saved.revision===1);
+check('lost note response exact retry recovered',req('saveMockSpeakingReview',note).recovered&&sheets.MockSpeakingReviews.vals.length===2);
+check('same request cannot change feedback',req('saveMockSpeakingReview',{...note,feedback:'changed'}).code==='VALIDATION');
+check('stale revision rejected',req('saveMockSpeakingReview',{...note,requestID:crypto.randomUUID()}).code==='MOCK_REVIEW_CONFLICT');
+check('next revision appends history',req('saveMockSpeakingReview',{...note,revision:1,feedback:'Second note',requestID:crypto.randomUUID()}).ok&&sheets.MockSpeakingReviews.vals.length===3);
+check('review history preserves both notes',req('getMockSpeakingReview',p).review.parts[0].history.map(n=>n.feedback).join('|')==='Synthetic teacher note|Second note');
+const escapedNote={...note,revision:2,feedback:'=1+1',requestID:crypto.randomUUID()};
+check('formula-like feedback stored as text',req('saveMockSpeakingReview',escapedNote).saved.feedback.startsWith("'"));
+sheets.MockSpeakingReviews.vals[3][sheets.MockSpeakingReviews.vals[0].indexOf('Feedback')]='=1+1';
+check('text-escape normalization keeps exact retry recoverable',req('saveMockSpeakingReview',escapedNote).recovered&&sheets.MockSpeakingReviews.vals.length===4);
+check('normalized note cannot change payload on same identity',req('saveMockSpeakingReview',{...escapedNote,feedback:'=2+2'}).code==='VALIDATION');
+sheets.MockSpeakingUploads.vals[0].pop();ctx.initializeMockSpeaking();
+check('additive legacy header upgrade preserves receipts',sheets.MockSpeakingUploads.vals[0].at(-1)==='RecordingID'&&sheets.MockSpeakingUploads.vals.length===2&&sheets.MockSpeakingReviews.vals.length===4);
+check('scores untouched by playback and notes',sheets.Marks.vals.length===1&&sheets.ExamResults.vals.length===1);
+new vm.Script(fs.readFileSync(path.join(__dirname,'..','release-candidate','Code.gs'),'utf8'));
+check('bundle contains exact Speaking module',fs.readFileSync(path.join(__dirname,'..','release-candidate','Code.gs'),'utf8').includes(fs.readFileSync(path.join(__dirname,'..','MockSpeaking.gs'),'utf8')));
+console.log(JSON.stringify({speakingReviewBackendChecks:checks,realAudioReads:0,bandsReleased:0}));
