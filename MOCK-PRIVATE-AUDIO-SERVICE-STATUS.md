@@ -20,7 +20,7 @@ service.py provides a WSGI callable only; importing it does not start a server. 
 
 A bounded per-process cache retains up to 32 successful response envelopes plus payload hashes; exact retry replays, changed payload on the same identity conflicts. Replay eligibility expires after 300 seconds. Expired entries are removed on a later request or process exit, not by a strict background deletion timer. Audio bytes and prompts are not cached. Future feedback metadata would remain private in memory. Cache is not durable/across workers/restarts; it does not guarantee exactly-once provider billing.
 
-Docker packaging runs as a non-root user, with the worker disabled by default. The default container is a stdin processing worker, not a listening HTTP server. Real hosting needs a configured WSGI server, HTTPS/authenticated ingress, request/timeout/resource limits, processing/retention policy and persistent provider idempotency design. No image is published or running outside ephemeral checks.
+Docker packaging runs as a non-root user, with the worker disabled by default. Dockerfile preserves the offline stdin worker. Dockerfile.web adds a Gunicorn 26.2.0 HTTP server, with one synchronous worker, bounded headers/backlog/timeouts, access logs disabled and non-root UID 10001. Default processing/assessor gates remain false. Real hosting still needs HTTPS/authenticated ingress, body/read/resource limits, processing/retention policy and persistent provider idempotency design. No image is published or running outside ephemeral checks.
 
 ## Remaining
 
@@ -39,3 +39,10 @@ DMI_AUDIO_WORKER_ENABLED and DMI_AUDIO_ASSESSOR_ENABLED default false. Native Ap
 ## Verification
 
 https://github.com/DMIedu/IELTS-LMS/actions/runs/38022220327 at 9a1ecc152072a8960481bf7dabc47a42390574cc passed 19 actual decoder/quality tests, 10 in-process authenticated transport tests, 12 Gemini HTTP-stub tests and 2 container tests (43 new Python test cases), plus all existing mock and login suites. WebM, Ogg and fragmented AAC/MP4 fixtures were generated in CI, actually decoded and checked; synthetic silence was also processed inside an ephemeral network-disabled/read-only container. No real candidate recording, real Google API call or score release. The container image was built only locally in CI and was not published. Browser screenshots remain uninspected locally because computer access is unavailable.
+
+
+## HTTP hosting package verification
+
+Run https://github.com/DMIedu/IELTS-LMS/actions/runs/38023252182 at 5e8d5d5c66a0f0833a501be376772675aaeb4e55 passed the prior 43 Python cases plus 6 actual loopback HTTP checks and all prior backend/browser suites. Both offline and web images built successfully. Loopback tests started a short-lived test server with the assessor disabled and synthetic inputs; they cover default-disabled mode, missing token, missing/wrong credentials, authenticated invalid bodies, route/method handling and invalid port rejection. No hosting resource, registry push or provider call occurred.
+
+See private-audio-service/OWNER-SETUP.md for the reviewable hosting configuration and remaining owner choices. This single-process package is a pilot draft, not an approved production service; native ingress/resource limits, API acceptance, durable request/cost controls and calibration remain pending.
