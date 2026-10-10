@@ -17,6 +17,7 @@ on:
       - 'dmi-mock-audio.js'
       - 'dmi-mock-speaking.js'
       - 'dmi-mock-speaking-timed.js'
+      - 'dmi-mock-speaking-review.js'
       - 'dmi-auth.js'
       - 'assets/british-council-registration-partner.png'
       - 'tests/mock-entry*.js'
@@ -27,8 +28,10 @@ on:
       - 'tests/mock-audio-browser.test.js'
       - 'tests/mock-speaking.test.js'
       - 'tests/mock-speaking-timed.test.js'
+      - 'tests/mock-speaking-review.test.js'
       - 'tests/mock-speaking-browser.test.js'
       - 'tests/mock-speaking-timed-browser.test.js'
+      - 'tests/mock-speaking-review-browser.test.js'
       - '.github/workflows/mock-entry-checks.yml'
 permissions:
   contents: read
@@ -44,6 +47,7 @@ jobs:
           node tests/mock-attempt.test.js
           node tests/mock-speaking.test.js
           node tests/mock-speaking-timed.test.js
+          node tests/mock-speaking-review.test.js
           node tests/phase2-login-transport.test.js
       - name: Install browser test dependency
         run: npm install --no-save --ignore-scripts playwright
@@ -58,6 +62,7 @@ jobs:
           node tests/mock-audio-browser.test.js
           node tests/mock-speaking-browser.test.js
           node tests/mock-speaking-timed-browser.test.js
+          node tests/mock-speaking-review-browser.test.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
