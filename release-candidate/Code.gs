@@ -2109,7 +2109,7 @@ function mockSpeakingQuality_(decoded,expected){
 function previewMockSpeakingAssessment(attemptID){
  const owner=email_(Session.getEffectiveUser().getEmail()),active=email_(Session.getActiveUser().getEmail());
  if(!owner||active!==owner)securityError_('FORBIDDEN','Only the deployment owner can pilot audio assessment');
- const config=mockSpeakingAssessmentConfig_(),p={attemptID:String(attemptID||'')},ctx={user:{role:'teacher',email:owner,name:'Owner'}};
+ const config=mockSpeakingAssessmentConfig_(),p={attemptID:String(attemptID||'')},ctx={role:'teacher',user:{role:'teacher',email:owner,name:'Owner'}};
  const a=mockReviewAttempt_(p,ctx),plan=mockSpeakingPlan_(a);
  const receipts=rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID);
  if(receipts.length!==3||[1,2,3].some(part=>receipts.filter(r=>Number(r.Part)===part).length!==1))
