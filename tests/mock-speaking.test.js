@@ -31,6 +31,7 @@ viewer=true;check('explicit viewer rejected before write',req('uploadMockSpeakin
 editor=true;check('explicit editor rejected before write',req('uploadMockSpeaking',p,'student').code==='MOCK_NOT_READY');editor=false;
 for(const bad of [{part:4},{durationSeconds:0},{durationSeconds:361},{mime:'text/html'},{audioBase64:'invalid!'},{audioBase64:Buffer.alloc(128).toString('base64')},{mime:'audio/ogg'}])
  check('invalid upload rejected',req('uploadMockSpeaking',{...p,...bad},'student').code==='VALIDATION');
+check('Speaking uploads require original part order',req('uploadMockSpeaking',{...p,part:3},'student').code==='MOCK_SECTION_ORDER'&&createCount===0);
 const first=req('uploadMockSpeaking',p,'student');check('private recording gets pending receipt',first.ok&&first.receipt.part===1&&first.receipt.bytes===128&&first.assessment==='pending'&&createCount===1);
 check('receipt hides file id and audio',!JSON.stringify(first).includes('private-file')&&!JSON.stringify(first).includes(p.audioBase64));
 check('lost response exact retry creates no duplicate',req('uploadMockSpeaking',p,'student').recovered&&createCount===1&&sheets.MockSpeakingUploads.vals.length===2);

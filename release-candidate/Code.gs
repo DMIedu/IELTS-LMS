@@ -1826,6 +1826,9 @@ function uploadMockSpeaking_(p,ctx){
  if(same){if(same.AttemptID!==a.AttemptID||Number(same.Part)!==part||same.Digest!==fingerprint)securityError_('VALIDATION','Upload identity already used');
  return {ok:true,receipt:mockSpeakingReceipt_(same),recovered:true,assessment:'pending'};}
  if(records.some(r=>r.AttemptID===a.AttemptID&&Number(r.Part)===part))securityError_('MOCK_RECORDING_EXISTS','This part already has an acknowledged recording');
+ const done=records.filter(r=>r.AttemptID===a.AttemptID).map(r=>Number(r.Part)).sort();
+ if(done.some((v,i)=>v!==i+1))securityError_('MOCK_SETUP_REQUIRED','Speaking receipts need owner review');
+ if(part!==done.length+1)securityError_('MOCK_SECTION_ORDER','Upload Speaking parts in order');
  const name='mock-speaking-'+digest_(a.AttemptID+'|'+part).slice(0,32),found=folder.getFilesByName(name);let file;
  if(found.hasNext()){file=found.next();if(found.hasNext()||file.getDescription()!==fingerprint)securityError_('MOCK_UPLOAD_CONFLICT','An interrupted upload needs owner review');mockSpeakingPrivate_(file);}
  else{file=folder.createFile(Utilities.newBlob(bytes,mime,name));mockSpeakingPrivate_(file);file.setDescription(fingerprint);}

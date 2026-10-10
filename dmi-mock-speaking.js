@@ -4,7 +4,7 @@
 const auth=await DMI_AUTH.requireRole('student');if(!auth)return;
 $('capture').hidden=false;let recordFailed=false,stream=null,recorder=null,chunks=[],pending=null,blob=null,start=0,duration=0,timer=null,busy=false,uploaded=[];
 function say(s){$('status').textContent=s;}
-function controls(){const recording=recorder&&recorder.state==='recording';$('record').disabled=busy||recording||!!blob||!!pending||!$('consent').checked||uploaded.includes(Number($('part').value));$('stop').disabled=!recording;$('upload').disabled=busy||recording||!blob;$('part').disabled=busy||recording||!!blob||!!pending;$('consent').disabled=recording||!!pending;$('retry').hidden=!pending;$('retry').disabled=busy;}
+function controls(){const recording=recorder&&recorder.state==='recording';$('record').disabled=busy||recording||!!blob||!!pending||!$('consent').checked||uploaded.includes(Number($('part').value))||Number($('part').value)!==[1,2,3].find(p=>!uploaded.includes(p));$('stop').disabled=!recording;$('upload').disabled=busy||recording||!blob;$('part').disabled=busy||recording||!!blob||!!pending;$('consent').disabled=recording||!!pending;$('retry').hidden=!pending;$('retry').disabled=busy;}
 async function call(action,p){const r=await DMI_AUTH.call(action,{sittingID,...p});if(!r||!r.ok)throw Error(r&&r.error||'Connection interrupted.');return r;}
 function cleanup(){clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;}
 function receipts(r){uploaded=r.receipts.map(r=>r.part);$('receipts').replaceChildren();r.receipts.forEach(r=>{const p=document.createElement('p');p.textContent='Part '+r.part+' received · '+r.id+' · assessment pending';$('receipts').append(p);});controls();}
