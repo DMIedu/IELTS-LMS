@@ -18,7 +18,7 @@ function task(){const t=current.writingTasks.find(t=>t.task===Number($('task').v
  ['task','coherence','lexical','grammar'].forEach(k=>$('score-'+k).value=last?last.scores[k]:'');$('feedback').value=last?last.feedback:'';
  $('history').replaceChildren();t.history.forEach(r=>$('history').append(text('p',r.reviewedAt+' · '+r.teacherName+' · '+JSON.stringify(r.scores)+' · '+r.feedback)));
 }
-function show(r){current=r.review;$('review').hidden=false;$('identity').textContent=current.studentID+' · '+current.studentEmail+' · '+current.paper+' · '+current.paperVersion;
+function show(r){current=r.review;$('speaking-link').href='mock-speaking-review.html?attempt='+encodeURIComponent(current.id);$('review').hidden=false;$('identity').textContent=current.studentID+' · '+current.studentEmail+' · '+current.paper+' · '+current.paperVersion;
  $('answers').replaceChildren();current.sections.forEach(s=>{const box=text('section','');box.append(text('h3',s.name+(s.closed?' — closed':' — in progress')));
  const keys=new Set([...s.questions.map(q=>q.id),...Object.keys(s.answers)]);for(const id of keys){const q=s.questions.find(q=>q.id===id);
  box.append(text('p',id+'. '+(q?q.prompt:'Question text unavailable')));if(q&&q.chart)DMI_MOCK_CHART.render(box,q.chart);box.append(text('pre',s.answers[id]||'No acknowledged answer'));}$('answers').append(box);});
