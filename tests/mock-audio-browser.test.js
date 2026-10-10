@@ -6,6 +6,7 @@ function wav(seconds){const rate=8000,size=rate*seconds*2,b=Buffer.alloc(44+size
 const browser=await chromium.launch({args:['--autoplay-policy=no-user-gesture-required']}),context=await browser.newContext(),page=await context.newPage();let failAudio=false,audioRequests=0;
 await context.route('**/*',async route=>{const url=new URL(route.request().url()),rel=url.pathname.split('/').pop();
  if(url.hostname==='audio.example'){audioRequests++;if(failAudio)return route.abort();const body=wav(rel==='wrong.wav'?4:12),range=route.request().headers().range;const headers={'Accept-Ranges':'bytes'};
+if(rel==='no-range.wav')return route.fulfill({contentType:'audio/wav',body});
 if(range){const m=range.match(/bytes=(\d+)-(\d*)/),start=Number(m[1]),end=m[2]?Math.min(Number(m[2]),body.length-1):body.length-1;headers['Content-Range']='bytes '+start+'-'+end+'/'+body.length;return route.fulfill({status:206,contentType:'audio/wav',headers,body:body.subarray(start,end+1)});}
 return route.fulfill({contentType:'audio/wav',headers,body});}
  if(rel==='dmi-mock-audio.js')return route.fulfill({contentType:'text/javascript',body:fs.readFileSync(path.join(root,rel),'utf8')});
@@ -13,7 +14,7 @@ return route.fulfill({contentType:'audio/wav',headers,body});}
 });
 await page.goto('https://draft.example/audio-fixture');
 const timelineStarted=Date.now()-3000;
-async function set(elapsed,section='listening',wrong=false){await page.evaluate(({elapsed,section,wrong,timelineStarted})=>{const now=timelineStarted+elapsed*1000;window.fixture={id:'synthetic-attempt',section,startedAt:new Date(timelineStarted).toISOString(),serverNow:new Date(now).toISOString(),listeningAudio:{durationSeconds:24,clips:[{url:'https://audio.example/'+(wrong?'wrong.wav':'one.wav'),startSeconds:0,durationSeconds:12},{url:'https://audio.example/two.wav',startSeconds:12,durationSeconds:12}]}};DMI_MOCK_AUDIO.update(document.getElementById('host'),fixture);},{elapsed,section,wrong,timelineStarted});}
+async function set(elapsed,section='listening',wrong=false,noRange=false){await page.evaluate(({elapsed,section,wrong,noRange,timelineStarted})=>{const now=timelineStarted+elapsed*1000;window.fixture={id:'synthetic-attempt',section,startedAt:new Date(timelineStarted).toISOString(),serverNow:new Date(now).toISOString(),listeningAudio:{durationSeconds:24,clips:[{url:'https://audio.example/'+(wrong?'wrong.wav':noRange?'no-range.wav':'one.wav'),startSeconds:0,durationSeconds:12},{url:'https://audio.example/two.wav',startSeconds:12,durationSeconds:12}]}};DMI_MOCK_AUDIO.update(document.getElementById('host'),fixture);},{elapsed,section,wrong,noRange,timelineStarted});}
 await set(3);await page.waitForFunction(()=>document.querySelector('audio').readyState>=1);
 check('no free seeking controls',await page.locator('audio').getAttribute('controls')===null);
 check('playback requires candidate join',await page.locator('audio').evaluate(a=>a.paused));
@@ -33,6 +34,8 @@ await set(25);check('review time stops playback',await page.locator('audio').eva
 await set(25,'reading');check('Reading removes audio and controls',await page.locator('audio').count()===0&&await page.locator('#host').textContent()==='');
 await set(1,'listening',true);await page.getByText('Recording duration differs from the reviewed schedule. Ask your teacher.',{exact:true}).waitFor();
 check('duration mismatch stops playback',await page.locator('audio').evaluate(a=>a.paused));
+await page.evaluate(()=>DMI_MOCK_AUDIO.stop());await set(3,'listening',false,true);await page.getByText('Audio host cannot reach the current position. Ask your teacher; the test clock continues.',{exact:true}).waitFor();
+check('non-seekable host is stopped with a clear message',await page.locator('audio').evaluate(a=>a.paused));
 await page.evaluate(()=>DMI_MOCK_AUDIO.stop());failAudio=true;await set(1);await page.getByText('Audio connection failed. Press Join Listening to rejoin at the current position, or ask your teacher.',{exact:true}).waitFor();
 check('audio failure reports recovery instruction',await page.locator('button').isEnabled());
 failAudio=false;await page.locator('button').click();await page.waitForFunction(()=>!document.querySelector('audio').paused);

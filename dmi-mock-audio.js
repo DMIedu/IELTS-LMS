@@ -32,6 +32,9 @@ function update(host,a){
  if(!Number.isFinite(s.audio.duration)||Math.abs(s.audio.duration-clip.durationSeconds)>2){
  s.audio.pause();s.failed=true;report('Recording duration differs from the reviewed schedule. Ask your teacher.');return;
  }
+ if(target>0.3&&!Array.from({length:s.audio.seekable.length},(_,i)=>i).some(i=>s.audio.seekable.start(i)<=target&&s.audio.seekable.end(i)>=target)){
+ s.audio.pause();s.failed=true;report('Audio host cannot reach the current position. Ask your teacher; the test clock continues.');return;
+ }
  if(Math.abs(s.audio.currentTime-target)>1.5||play){try{s.audio.currentTime=Math.min(target,s.audio.duration);}catch(e){report('Cannot join the current audio position. Ask your teacher.');return;}}
  s.audio.playbackRate=1;
  if(play||s.joined&&s.audio.paused&&!s.failed){
