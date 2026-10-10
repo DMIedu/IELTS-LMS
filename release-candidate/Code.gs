@@ -1578,6 +1578,24 @@ function mockChart_(chart){
   return result;
 }
 
+/** Reviewed fixed-order clips; host must be explicitly approved before rollout. */
+function mockListeningAudio_(audio,total){
+  const fail=()=>securityError_('MOCK_NOT_READY','The Listening recording needs review');
+  const host=String(PropertiesService.getScriptProperties().getProperty('DMI_MOCK_AUDIO_HOST')||'').toLowerCase();
+  if(!/^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(host)||
+    !audio||!Array.isArray(audio.clips)||!audio.clips.length||audio.clips.length>4)fail();
+  let start=0;
+  const clips=audio.clips.map(c=>{
+    if(!c||!Number.isInteger(c.durationSeconds)||c.durationSeconds<1||c.durationSeconds>2400||
+      typeof c.url!=='string'||c.url.length>2000||!c.url.startsWith('https://'+host+'/')||
+      /[\s\\<>]/.test(c.url)||c.url.includes('#')||c.startSeconds!==start)fail();
+    const result={url:c.url,startSeconds:start,durationSeconds:c.durationSeconds};
+    start+=c.durationSeconds;return result;
+  });
+  if(start!==total)fail();
+  return {clips,durationSeconds:total};
+}
+
 function mockPaper_(id,version){
   const matches=rows(mockSheet_('MockPapers',DMI_MOCK_PAPER_HEADERS)).filter(r=>r.PaperID===id&&(!version||String(r.Version)===String(version)));
   if(matches.length!==1)securityError_('MOCK_NOT_READY','An immutable reviewed paper version is required');
@@ -1596,6 +1614,7 @@ function mockPaper_(id,version){
       securityError_('MOCK_NOT_READY','The mock questions need review');
     section.questions.forEach(q=>{if(q.chart!=null){if(name!=='writing')securityError_('MOCK_NOT_READY','Charts belong to Writing tasks');mockChart_(q.chart);}});
   });
+  mockListeningAudio_(paper.listeningAudio,paper.listeningSeconds);
   // No arbitrary URLs/keys are exposed: public content is a strict allowlist.
   return {record:r,paper,digest:digest_(r.PaperJSON)};
 }
@@ -1646,6 +1665,7 @@ function mockAttemptPublic_(a,state){
     if(!equal_(loaded.digest,a.PaperDigest))securityError_('MOCK_PAPER_CHANGED','The paper changed. Contact your teacher; your saved work is preserved.');
     const section=loaded.paper.sections[index];
     result.answers=state.sections[index].answers;
+    if(index===0)result.listeningAudio=mockListeningAudio_(loaded.paper.listeningAudio,loaded.paper.listeningSeconds);
     result.content={name:section.name,instructions:String(section.instructions||''),passages:Array.isArray(section.passages)?
       section.passages.map(v=>({title:String(v.title||''),text:String(v.text||'')})):[],
       questions:section.questions.map(q=>({id:q.id,prompt:q.prompt,options:Array.isArray(q.options)?q.options.map(String):[],

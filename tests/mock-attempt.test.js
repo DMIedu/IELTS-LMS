@@ -12,9 +12,9 @@ req('enterMockSitting',{sittingID:id,code:sitting.code},'student');
 check('unfinished runner cannot start',req('startMockAttempt',{sittingID:id},'student').code==='MOCK_NOT_READY');
 check('disabled runner creates no attempts',sheets.MockAttempts.vals.length===1);
 const oldProps=ctx.PropertiesService.getScriptProperties;
-ctx.PropertiesService.getScriptProperties=()=>({getProperty:k=>k==='DMI_MOCK_RUNNER_ENABLED'?'true':oldProps().getProperty(k)});
+ctx.PropertiesService.getScriptProperties=()=>({getProperty:k=>k==='DMI_MOCK_RUNNER_ENABLED'?'true':k==='DMI_MOCK_AUDIO_HOST'?'audio.example':oldProps().getProperty(k)});
 check('missing paper fails closed',req('startMockAttempt',{sittingID:id},'student').code==='MOCK_NOT_READY');
-const paper={listeningSeconds:1800,sections:['listening','reading','writing'].map((name,i)=>({
+const paper={listeningSeconds:1800,listeningAudio:{clips:[{url:'https://audio.example/synthetic.wav',startSeconds:0,durationSeconds:1800,answerKey:'NEVER-EXPOSE-KEY'}]},sections:['listening','reading','writing'].map((name,i)=>({
  name,instructions:'Private instructions',passages:[{title:'Private text',text:'Synthetic passage'}],
  questions:Array.from({length:i===2?2:40},(_,j)=>({id:String(j+1),prompt:'Question '+(j+1),key:'NEVER-EXPOSE-KEY',options:['A','B']}))
 }))};
@@ -36,9 +36,14 @@ for(const invalid of [{...lineChart,projectionStartIndex:-1},{...lineChart,proje
  const bad=JSON.parse(paperJSON);bad.sections[2].questions[0].chart=invalid;sheets.MockPapers.vals[1][4]=JSON.stringify(bad);
  check('invalid line chart blocks paper',req('startMockAttempt',{sittingID:id},'student').code==='MOCK_NOT_READY');
 }
+for(const badAudio of [null,{clips:[]},{clips:[{url:'http://audio.example/x',startSeconds:0,durationSeconds:1800}]},{clips:[{url:'https://evil.example/x',startSeconds:0,durationSeconds:1800}]},{clips:[{url:'https://audio.example/x',startSeconds:1,durationSeconds:1800}]},{clips:[{url:'https://audio.example/x',startSeconds:0,durationSeconds:1700}]},{clips:[{url:'https://audio.example/x#bad',startSeconds:0,durationSeconds:1800}]}]){
+ const bad=JSON.parse(paperJSON);bad.listeningAudio=badAudio;sheets.MockPapers.vals[1][4]=JSON.stringify(bad);
+ check('invalid audio schedule blocks start',req('startMockAttempt',{sittingID:id},'student').code==='MOCK_NOT_READY');
+}
 sheets.MockPapers.vals[1][4]=paperJSON;
 const begin=req('startMockAttempt',{sittingID:id},'student'),attempt=begin.attempt;
 check('reviewed test fixture starts Listening',begin.ok&&attempt.section==='listening'&&attempt.revision===0);
+check('Listening exposes only validated schedule',begin.attempt.listeningAudio.clips[0].url==='https://audio.example/synthetic.wav'&&!JSON.stringify(begin.attempt.listeningAudio).includes('answerKey'));
 check('Writing chart not revealed in Listening',!JSON.stringify(begin).includes('Synthetic chart'));
 check('keys never returned',!JSON.stringify(begin).includes('NEVER-EXPOSE-KEY'));
 check('future sections not returned',!JSON.stringify(begin).includes('"name":"reading"'));
@@ -68,6 +73,7 @@ check('late autosave cannot alter submitted work',req('saveMockAnswers',{...base
 clock.now=Date.parse(attempt.deadlines[0]);
 const reading=req('resumeMockAttempt',{sittingID:id},'student');
 check('deadline advances to Reading automatically',reading.attempt.section==='reading');
+check('Listening audio not delivered to Reading',!reading.attempt.listeningAudio);
 check('Reading has sixty minutes',Date.parse(attempt.deadlines[1])-clock.now===3600000);
 check('cannot return to Listening',req('saveMockAnswers',{...base,revision:reading.attempt.revision,requestID:crypto.randomUUID()},'student').code==='MOCK_SECTION_CLOSED');
 const readingSave=req('saveMockAnswers',{...base,section:'reading',revision:reading.attempt.revision,requestID:crypto.randomUUID(),answersJSON:'{"2":"B"}'},'student');

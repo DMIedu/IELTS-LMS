@@ -12,6 +12,7 @@ on:
       - 'dmi-mock-runner.js'
       - 'dmi-mock-review.js'
       - 'dmi-mock-chart.js'
+      - 'dmi-mock-audio.js'
       - 'dmi-auth.js'
       - 'assets/british-council-registration-partner.png'
       - 'tests/mock-entry*.js'
@@ -19,6 +20,7 @@ on:
       - 'tests/mock-runner-browser.test.js'
       - 'tests/mock-review-browser.test.js'
       - 'tests/mock-chart-browser.test.js'
+      - 'tests/mock-audio-browser.test.js'
       - '.github/workflows/mock-entry-checks.yml'
 permissions:
   contents: read
@@ -43,6 +45,7 @@ jobs:
           node tests/mock-runner-browser.test.js
           node tests/mock-review-browser.test.js
           node tests/mock-chart-browser.test.js
+          node tests/mock-audio-browser.test.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -32,6 +32,7 @@ function render(a,force){
    });
   }else{$('instructions').textContent='Your acknowledged written answers are saved. No score has been released.';}
  }
+ DMI_MOCK_AUDIO.update($('listening-audio'),a);
  $('saved').textContent='Saved on server · revision '+a.revision;controls();tick();
 }
 function tick(){
