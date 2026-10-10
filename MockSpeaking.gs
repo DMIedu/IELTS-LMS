@@ -50,7 +50,7 @@ function uploadMockSpeaking_(p,ctx){
  ogg=u.slice(0,4).join(',')==='79,103,103,83',mp4=u.slice(4,8).join(',')==='102,116,121,112';
  if(!(mime.startsWith('audio/webm')&&webm||mime.startsWith('audio/ogg')&&ogg||mime==='audio/mp4'&&mp4))securityError_('VALIDATION','Recording container does not match its format');
  const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,bytes).map(b=>('0'+((b+256)%256).toString(16)).slice(-2)).join('');
- const fingerprint=digest_(JSON.stringify([a.AttemptID,part,requestID,hash,mime,duration]));
+ const fingerprint=digest_(JSON.stringify([a.AttemptID,part,requestID,hash,mime,duration,String(p.recordingID||'')]));
  const sheet=mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS),records=rows(sheet),same=records.find(r=>r.RequestID===requestID);
  if(same){if(same.AttemptID!==a.AttemptID||Number(same.Part)!==part||same.Digest!==fingerprint)securityError_('VALIDATION','Upload identity already used');
  return {ok:true,receipt:mockSpeakingReceipt_(same),recovered:true,assessment:'pending'};}
@@ -59,8 +59,8 @@ function uploadMockSpeaking_(p,ctx){
  if(done.some((v,i)=>v!==i+1))securityError_('MOCK_SETUP_REQUIRED','Speaking receipts need owner review');
  if(part!==done.length+1)securityError_('MOCK_SECTION_ORDER','Upload Speaking parts in order');
  const name='mock-speaking-'+digest_(a.AttemptID+'|'+part).slice(0,32),found=folder.getFilesByName(name);let file;
- if(found.hasNext()){file=found.next();if(found.hasNext()||file.getDescription()!==fingerprint)securityError_('MOCK_UPLOAD_CONFLICT','An interrupted upload needs owner review');mockSpeakingPrivate_(file);}
- else{file=folder.createFile(Utilities.newBlob(bytes,mime,name));mockSpeakingPrivate_(file);file.setDescription(fingerprint);}
+ if(found.hasNext()){file=found.next();if(found.hasNext()||file.getDescription()!==fingerprint)securityError_('MOCK_UPLOAD_CONFLICT','An interrupted upload needs owner review');mockSpeakingPrivate_(file);mockSpeakingTimedUpload_(a,p,true);}
+ else{mockSpeakingTimedUpload_(a,p,false);file=folder.createFile(Utilities.newBlob(bytes,mime,name));mockSpeakingPrivate_(file);file.setDescription(fingerprint);}
  const r={ReceiptID:'AUDIO-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Part:part,RequestID:requestID,Digest:fingerprint,Bytes:bytes.length,Mime:mime,DurationSeconds:duration,FileID:file.getId(),UploadedAt:new Date()};
  const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
  return {ok:true,receipt:mockSpeakingReceipt_(r),assessment:'pending'};
