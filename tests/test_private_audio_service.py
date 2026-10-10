@@ -42,7 +42,7 @@ class ServiceChecks(unittest.TestCase):
 
     def test_body_and_identity_bounds(self):
         for change in ({"CONTENT_LENGTH": "0"}, {"CONTENT_LENGTH": "99999999"},
-                       {"CONTENT_LENGTH": "bad"}, {"CONTENT_TYPE": "text/html"},
+                       {"CONTENT_LENGTH": "bad"}, {"CONTENT_LENGTH": "²"}, {"CONTENT_LENGTH": "9" * 10000}, {"CONTENT_TYPE": "text/html"},
                        {"HTTP_TRANSFER_ENCODING": "chunked"}, {"HTTP_IDEMPOTENCY_KEY": "wrong"}):
             with self.subTest(change=change):
                 self.assertEqual(self.call(**change)[0], "400 Bad Request")
