@@ -93,5 +93,28 @@ class HostingTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn(b"INVALID_PORT", result.stderr)
 
+
+    def test_browser_proxy_headers_reach_route_and_auth_checks(self):
+        headers = {"X-Synthetic-Proxy-" + str(i): "fixture" for i in range(40)}
+        with server() as port:
+            status, _, body = request(port, method="GET", headers=headers)
+            self.assertEqual(status, 405)
+            self.assertEqual(body["code"], "POST_REQUIRED")
+            self.assertEqual(request(port, headers=headers)[2]["code"], "WORKER_DISABLED")
+        with server(True) as port:
+            self.assertEqual(request(port, headers=headers)[0], 401)
+
+    def test_excessive_headers_remain_rejected(self):
+        headers = {"X-Synthetic-Extra-" + str(i): "fixture" for i in range(101)}
+        with server() as port:
+            conn = http.client.HTTPConnection("127.0.0.1", port, timeout=3)
+            try:
+                conn.request("GET", "/v1/evaluate", headers=headers)
+                response = conn.getresponse()
+                self.assertEqual(response.status, 431)
+                response.read()
+            finally:
+                conn.close()
+
 if __name__ == "__main__":
     unittest.main()
