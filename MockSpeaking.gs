@@ -7,6 +7,8 @@ function initializeMockSpeaking(){
  if(!head.includes('RecordingID'))uploads.getRange(1,head.length+1).setValue('RecordingID');
  mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS);
  if(!book.getSheetByName('MockSpeakingReviews'))book.insertSheet('MockSpeakingReviews').appendRow(DMI_SPEAKING_REVIEW_HEADERS);
+ const reviewSheet=book.getSheetByName('MockSpeakingReviews'),reviewHead=reviewSheet.getDataRange().getValues()[0].map(headerName_);
+ if(!reviewHead.includes('FeedbackDigest'))reviewSheet.getRange(1,reviewHead.length+1).setValue('FeedbackDigest');
  mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS);
  Logger.log('Speaking upload storage ready. Capture remains disabled; no recordings or results changed.');}finally{lock.releaseLock();}
 }
@@ -76,7 +78,7 @@ function listMockSpeakingUploads_(p,ctx){
 }
 
 /** Teacher-only private audio and append-only notes. No band scoring or public links. */
-const DMI_SPEAKING_REVIEW_HEADERS=['ReviewID','AttemptID','Part','ReceiptID','Feedback','TeacherEmail','TeacherName','ReviewedAt','RequestID','BaseRevision'];
+const DMI_SPEAKING_REVIEW_HEADERS=['ReviewID','AttemptID','Part','ReceiptID','Feedback','TeacherEmail','TeacherName','ReviewedAt','RequestID','BaseRevision','FeedbackDigest'];
 function mockSpeakingUploadForReview_(a,p){
  const part=Number(p.part),id=String(p.receiptID||'');
  if(![1,2,3].includes(part))securityError_('VALIDATION','Choose a Speaking part');
@@ -117,14 +119,14 @@ function saveMockSpeakingReview_(p,ctx){
  if(!feedback||feedback.length>5000||!Number.isInteger(revision)||revision<0)securityError_('VALIDATION','Enter a review note of up to 5000 characters');
  const sheet=mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS),all=rows(sheet),prior=all.find(r=>r.TeacherEmail===email_(ctx.user.email)&&r.RequestID===requestID);
  if(prior){
-  if(prior.AttemptID!==a.AttemptID||Number(prior.Part)!==part||prior.ReceiptID!==receipt.ReceiptID||prior.Feedback!==sheetText_(feedback)||Number(prior.BaseRevision)!==revision)
+  if(prior.AttemptID!==a.AttemptID||Number(prior.Part)!==part||prior.ReceiptID!==receipt.ReceiptID||!(prior.FeedbackDigest?equal_(prior.FeedbackDigest,digest_(feedback)):[feedback,sheetText_(feedback)].includes(prior.Feedback))||Number(prior.BaseRevision)!==revision)
   securityError_('VALIDATION','Review request identity already used');
   return{ok:true,saved:mockSpeakingReviewPublic_(prior),recovered:true,assessment:'pending'};
  }
  const history=all.filter(r=>r.AttemptID===a.AttemptID&&Number(r.Part)===part);
  if(revision!==history.length)securityError_('MOCK_REVIEW_CONFLICT','A newer Speaking note exists. Reload before saving.');
  const r={ReviewID:'SPEAK-REVIEW-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Part:part,ReceiptID:receipt.ReceiptID,
- Feedback:sheetText_(feedback),TeacherEmail:email_(ctx.user.email),TeacherName:sheetText_(ctx.user.name),ReviewedAt:new Date(),RequestID:requestID,BaseRevision:revision};
+ Feedback:sheetText_(feedback),TeacherEmail:email_(ctx.user.email),TeacherName:sheetText_(ctx.user.name),ReviewedAt:new Date(),RequestID:requestID,BaseRevision:revision,FeedbackDigest:digest_(feedback)};
  const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
  return{ok:true,saved:mockSpeakingReviewPublic_(r),assessment:'pending'};
 }
