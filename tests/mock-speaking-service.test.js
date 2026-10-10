@@ -33,6 +33,7 @@ const p={attemptID:attempt.AttemptID,part:1,receiptID:uploaded.receipt.id};
 vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockSpeakingAssessment.gs'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockSpeakingAssessmentService.gs'),'utf8'),ctx);
 ctx.Session.getActiveUser=()=>user;
+const ownerAccount=sheets.Teachers.vals[1].slice();ownerAccount[0]='OWNER';ownerAccount[2]='owner@example.com';sheets.Teachers.appendRow(ownerAccount);
 let gatewayEnabled=false,endpoint='https://assessment.example.com/v1/evaluate',host='assessment.example.com',calls=0,mode='ok',captured;
 const oldProperties=ctx.PropertiesService.getScriptProperties;
 ctx.PropertiesService.getScriptProperties=()=>({getProperty:k=>({DMI_MOCK_ASSESSMENT_ENABLED:String(gatewayEnabled),DMI_MOCK_ASSESSMENT_ENDPOINT:endpoint,DMI_MOCK_ASSESSMENT_HOST:host,DMI_MOCK_ASSESSMENT_TOKEN:'synthetic-token-'.repeat(4),DMI_MOCK_ASSESSMENT_PROVIDER:'fixture',DMI_MOCK_ASSESSMENT_VERSION:'v1'})[k]??oldProperties().getProperty(k)});
