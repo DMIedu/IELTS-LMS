@@ -12,6 +12,7 @@ import struct
 import subprocess
 import sys
 import unittest
+from unittest.mock import patch
 import wave
 
 spec = importlib.util.spec_from_file_location("processor", Path(__file__).parents[1] / "private-audio-service" / "processor.py")
@@ -160,6 +161,21 @@ class DecoderChecks(unittest.TestCase):
         self.fails(lambda: processor.process_request(body(self.tone), decoder=lambda r: pcm, metrics=metrics), "ASSESSOR_NOT_CONFIGURED")
         self.fails(lambda: processor.process_request(body(self.tone), decoder=lambda r: pcm, metrics=metrics,
                      assessor=lambda *args: {"status": "released"}), "ASSESSMENT_INVALID")
+
+    def test_decoder_command_has_no_file_or_network_protocols(self):
+        with patch.object(processor.subprocess, "run") as runner:
+            runner.return_value = type("Result", (), {"returncode": 0, "stdout": bytes(32000)})()
+            processor.decode_audio(clip(self.tone))
+            args, options = runner.call_args
+            command = args[0]
+            self.assertEqual(command[command.index("-protocol_whitelist") + 1], "pipe")
+            self.assertEqual(command[command.index("-i") + 1], "pipe:0")
+            self.assertEqual(options["timeout"], 25)
+            self.assertNotIn("shell", options)
+
+    def test_decoder_timeout_fails_without_raw_errors(self):
+        with patch.object(processor.subprocess, "run", side_effect=subprocess.TimeoutExpired("synthetic", 25)):
+            self.fails(lambda: processor.decode_audio(clip(self.tone)), "DECODE_FAILED")
 
     def test_worker_disabled_by_default(self):
         environment = {k: v for k, v in os.environ.items() if k != "DMI_AUDIO_WORKER_ENABLED"}
