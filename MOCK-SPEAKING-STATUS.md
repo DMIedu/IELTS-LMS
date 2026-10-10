@@ -1,32 +1,15 @@
 # Speaking capture draft status
 
-This is a disabled capture rehearsal on feature/academic-lab-mock, draft PR 6. It is not a complete timed Speaking test or AI assessment. No native setup, folder creation, property change, deployment or runner enablement was performed.
+Speaking capture remains disabled on feature/academic-lab-mock, draft PR 6. No native storage setup, deployment, property/account/secret change, result release or runner enablement occurred.
 
-## Implemented
+The manual capture page supports consent, Part 1 → 2 → 3 upload order, microphone failure handling, fixed pending clip identity, exact retries and safe receipt refresh. The timed Speaking page now records parts automatically against server-owned windows and retains independent pending clips during upload failures. See MOCK-SPEAKING-TIMED-STATUS.md for exact timing and grace rules.
 
-- Student-only microphone capture with consent, fixed Part 1 → 2 → 3 upload order and stops on capture errors. DMI and supplied British Council registration badge appear in the draft header.
-- Recording stays in page memory until acknowledged. Closing or refreshing before upload loses that unsaved recording; acknowledged server receipts restore after refresh.
-- A lost upload response retains the exact request and audio for retry. Acknowledged parts cannot be overwritten; an orphan file from an interrupted metadata save can be recovered without another file.
-- Assigned-candidate access checks and the written-test deadline gate run on the server. Teacher receipt listing returns pending metadata only; it does not yet provide private audio playback.
-- Accepts WebM/Opus, Ogg/Opus and MP4 containers with MIME/magic checks, a 4 MB body limit and bounded client-reported duration. These checks do not decode audio or establish genuine duration/content.
-- No bands, provider calls or existing Marks/ExamResults writes.
+Raw audio stays in page memory until acknowledgement; closing or refreshing early loses pending audio. After acknowledgement, safe receipt metadata restores from the server. Exact retry recovers uncertain responses and matching orphan files without duplicate files. Teacher API lists pending receipt metadata only; private audio playback is not implemented.
 
-## Disabled storage contract
+Storage remains gated by DMI_MOCK_SPEAKING_ENABLED and a later owner-private DMI_MOCK_SPEAKING_FOLDER_ID. The additive MockSpeakingUploads setup function has not run in any native project. Folder/new or recovered files must be owner-private with a complete permission list containing only the effective owner's user permission. Sharing, groups, pagination or permission lookup failure fail closed. See [Google Drive permissions list](https://developers.google.com/workspace/drive/api/reference/rest/v3/permissions/list). Native OAuth/API availability and Drive inheritance behavior remain unverified.
 
-DMI_MOCK_SPEAKING_ENABLED remains absent/false. A future native setup needs an owner-controlled private DMI_MOCK_SPEAKING_FOLDER_ID and the additive MockSpeakingUploads metadata tab. initializeMockSpeaking exists as a draft; it was not run in a live or test Apps Script project.
+Accepts bounded WebM/Opus, Ogg/Opus or MP4 containers with MIME/magic checks, at most 4 MB, and reported duration limits. Actual decoding/duration/content validation and genuine audio assessment remain pending. Receipts expose no audio data, file IDs or direct links; no bands/provider calls/Marks or ExamResults writes.
 
-The folder and new/recovered files must be owned by the effective deployment owner, show private DriveApp sharing, and have a complete Drive API permissions list containing exactly one user owner. Group/domain/public permissions, pagination and lookup failure are rejected. This requires working Drive API access and the appropriate OAuth permission during later native acceptance. See the [Google Drive permissions list API](https://developers.google.com/workspace/drive/api/reference/rest/v3/permissions/list).
+Still required: private teacher audio playback and review, retention/deletion policy, genuine provider evaluation, native storage/microphone/headphone acceptance, full content/audio review and lab pilot. All runner/capture/timed gates remain absent/false.
 
-Candidate/teacher receipts expose no Drive IDs, audio data or direct recording links. Actual Drive storage behavior and permission inheritance have only synthetic coverage so far.
-
-## Remaining before use
-
-Timed private prompts and server-owned Speaking deadlines; microphone/headphone preflight; genuine audio assessment provider and evaluation; private teacher playback/review; retention/deletion policy; native Apps Script storage acceptance and lab pilot. No automatic band or pronunciation proxy is supplied. Both private papers still need full content/audio review and measured Listening clips.
-
-Local computer access remains unavailable, so screenshots have not been visually inspected. Tests use synthetic microphone audio and fake private storage, with no real candidate recordings.
-
-Latest functional verification: https://github.com/DMIedu/IELTS-LMS/actions/runs/38013443911 at 729b6eb807efb88067ed43c72acd0fd8c7461765. Passed 32 Speaking upload checks and 15 Speaking browser checks, plus 95 attempt/review, 14 Listening, 82 entry backend, 36 entry browser, 18 runner, 10 review, 17 chart and 13 login transport checks. Synthetic storage/audio only; no native acceptance or provider assessment.
-
-## Timed prompt continuation
-
-The server timing module now connects through the verified POST dispatcher, session action list and exact consolidated draft bundle. The timing page remains a microphone-preflight prompt rehearsal and does not record audio. The manual capture rehearsal is separate; automatic recording/upload timing integration is unfinished. See MOCK-SPEAKING-TIMED-STATUS.md for the private schema, disabled gates and passed 30 server/12 timed browser checks.
+Latest verification: https://github.com/DMIedu/IELTS-LMS/actions/runs/38015442059: 43 timed server checks, 19 timed recording browser checks and existing synthetic checks passed. No real recordings or Drive writes; screenshots not visually inspected locally.
