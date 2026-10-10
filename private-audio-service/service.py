@@ -28,7 +28,7 @@ def create_app(enabled=False, token="", processor=process_request, now=time.mono
         if not isinstance(supplied, str) or len(supplied) > 4103 or not hmac.compare_digest(supplied.encode(), ("Bearer " + token).encode()):
             return respond("401 Unauthorized", {"ok": False, "code": "UNAUTHENTICATED"})
         length = environ.get("CONTENT_LENGTH", "")
-        if not str(length).isdigit() or not 1 <= int(length) <= MAX_BODY or environ.get("HTTP_TRANSFER_ENCODING") or environ.get("CONTENT_TYPE") != "application/json":
+        if not str(length).isascii() or not str(length).isdigit() or not 1 <= int(length) <= MAX_BODY or environ.get("HTTP_TRANSFER_ENCODING") or environ.get("CONTENT_TYPE") != "application/json":
             return respond("400 Bad Request", {"ok": False, "code": "INVALID_REQUEST"})
         if not lock.acquire(blocking=False):
             return respond("503 Service Unavailable", {"ok": False, "code": "BUSY"})
