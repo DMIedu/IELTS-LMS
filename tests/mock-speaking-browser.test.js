@@ -19,6 +19,10 @@ check('receipt states assessment pending',(await page.locator('#receipts').textC
 await page.reload();await page.locator('#receipts p').waitFor();check('refresh restores receipt',await page.locator('#receipts p').count()===1);
 await page.locator('#part').selectOption('2');await page.locator('#consent').check();check('next unrecorded part available',await page.locator('#record').isEnabled());
 await page.setViewportSize({width:390,height:844});check('mobile fits viewport',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+await page.evaluate(()=>{const Native=window.MediaRecorder;function Wrapped(...args){const r=new Native(...args);window.syntheticRecorder=r;return r;}Wrapped.isTypeSupported=Native.isTypeSupported.bind(Native);window.MediaRecorder=Wrapped;});
+await page.locator('#record').click();await page.getByText('Recording part 2.',{exact:true}).waitFor();
+await page.evaluate(()=>window.syntheticRecorder.dispatchEvent(new Event('error')));await page.getByText('Recording failed; no recording was uploaded. Ask your teacher.',{exact:true}).waitFor();
+check('failed capture cannot upload a partial recording',await page.locator('#upload').isDisabled()&&receipts.length===1);
 await page.evaluate(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw Error('Synthetic microphone denied');};});await page.locator('#record').click();await page.getByText('Synthetic microphone denied',{exact:true}).waitFor();
 check('permission failure leaves no recording to upload',await page.locator('#upload').isDisabled());
 await context.close();await browser.close();console.log(JSON.stringify({speakingBrowserChecks:checks,realAudioUploads:0,provider:'NOT_CONFIGURED'}));})().catch(e=>{console.error(e);process.exit(1);});
