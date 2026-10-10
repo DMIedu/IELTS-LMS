@@ -64,7 +64,7 @@ for(const bad of ['http://assessment.example.com/v1','https://other.example.com/
  endpoint=bad;check('unsafe endpoint rejected '+bad,run().code==='ASSESSMENT_NOT_READY'&&calls===0);
 }endpoint='https://assessment.example.com/v1/evaluate';
 let result=run();
-check('synthetic successful assessment stays draft',result.ok&&result.assessment.teacherReviewRequired===true&&result.releaseApproved===false);
+check('synthetic successful assessment stays draft '+JSON.stringify(result),result.ok&&result.assessment.teacherReviewRequired===true&&result.releaseApproved===false);
 check('all three private byte payloads bound',JSON.parse(captured.opts.payload).recordings.length===3&&JSON.parse(captured.opts.payload).recordings.every(r=>r.audioBase64===bytes.toString('base64')));
 check('redirects disabled with bounded controlled request',captured.opts.followRedirects===false&&captured.opts.muteHttpExceptions===true&&captured.opts.method==='post');
 check('no candidate email or Drive IDs sent',!captured.opts.payload.includes('one@example.com')&&!captured.opts.payload.includes('private-file'));
