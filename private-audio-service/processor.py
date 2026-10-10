@@ -30,7 +30,7 @@ def unpack_audio(recording):
     mime = recording.get("mime")
     kinds = {"audio/webm": "matroska", "audio/webm;codecs=opus": "matroska",
              "audio/ogg": "ogg", "audio/ogg;codecs=opus": "ogg", "audio/mp4": "mov"}
-    if mime not in kinds:
+    if not isinstance(mime, str) or mime not in kinds:
         reject()
     encoded = recording.get("audioBase64")
     if not isinstance(encoded, str) or len(encoded) > 5600000:
