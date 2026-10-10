@@ -41,3 +41,12 @@ The Render setup uses an empty Root Directory, Docker build context private-audi
 The first deployment at ff3726e emitted a Gunicorn management-socket permission error for /home/worker while Render still reported Live. The draft correction disables the unused control socket instead of granting write access. After checks pass, manually deploy the corrected branch commit and inspect fresh logs. Auto-Deploy Off means GitHub changes are not installed automatically.
 
 A browser GET to /v1/evaluate should return POST_REQUIRED. This verifies only routing/server reachability, not AI readiness or authenticated POST behavior. The root URL returns NOT_FOUND because this is an API service, not a homepage. No real recordings or provider secrets should be added until disabled/authenticated synthetic acceptance, account/model setup and cost controls are verified.
+
+
+## Browser/proxy header correction
+
+The corrected owner deployment 8268fcc is screenshot-confirmed Live, without the earlier control-socket error in visible logs. Opening /v1/evaluate in the owner's browser then returned Gunicorn 431 with "limit request headers fields", before the WSGI route. This is not an AI/key/password error.
+
+The next draft restores Gunicorn's bounded default header-count limit of 100 (previous pilot override was 16). Individual field-size limit 8190 and request-line limit 2048 are unchanged; this does not remove bearer authentication, processing gates or JSON/body limits. Synthetic loopback regression checks exercise 40 additional proxy-style headers for GET routing, disabled POST and enabled unauthenticated POST, and verify 101 additional headers remain rejected with 431.
+
+After these checks pass, manually redeploy latest commit. Native browser/proxy routing acceptance remains pending until the owner repeats the endpoint check and gets POST_REQUIRED. Keep both worker/assessor gates disabled during routing verification.
