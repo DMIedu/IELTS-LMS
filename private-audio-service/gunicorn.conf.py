@@ -11,7 +11,8 @@ timeout = 210
 graceful_timeout = 210
 backlog = 8
 limit_request_line = 2048
-limit_request_fields = 16
+# Allow browser and hosting-proxy headers within Gunicorn's bounded default.
+limit_request_fields = 100
 limit_request_field_size = 8190
 worker_tmp_dir = "/dev/shm"
 accesslog = None
