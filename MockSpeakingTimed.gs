@@ -34,6 +34,7 @@ function mockSpeakingTimedPublic_(a,plan){
  return {ok:true,speaking:{attemptID:a.AttemptID,serverNow:new Date(now).toISOString(),startedAt:s.startedAt,
   deadline:new Date(start+plan.totalSeconds*1000).toISOString(),totalSeconds:plan.totalSeconds,
   status:current?'in_progress':'finished',assessment:'pending',
+  recordingWindow:current&&current.phase!=='preparation'?mockSpeakingWindow_(a,plan,current.part,true):null,
   stage:current?{phase:current.phase,part:current.part,prompt:current.prompt,
    startedAt:new Date(start+current.startSeconds*1000).toISOString(),deadline:new Date(start+current.endSeconds*1000).toISOString()}:null}};
 }
@@ -41,10 +42,32 @@ function startMockSpeakingTimed_(p,ctx){
  mockSpeakingTimedGate_();const a=mockSpeakingAccess_(p,ctx);mockSpeakingFolder_();const plan=mockSpeakingPlan_(a),state=mockAttemptState_(a);
  if(!state.speaking){
   if(![true,'true'].includes(p.consent)||![true,'true'].includes(p.microphoneReady))securityError_('VALIDATION','Complete microphone preflight and recording consent first');
-  state.speaking={startedAt:new Date().toISOString(),paperDigest:a.PaperDigest};mockAttemptPatch_(a,state);
+  state.speaking={startedAt:new Date().toISOString(),paperDigest:a.PaperDigest,recordingIDs:{1:opaque_(),2:opaque_(),3:opaque_()}};mockAttemptPatch_(a,state);
  }
  return mockSpeakingTimedPublic_(a,plan);
 }
 function resumeMockSpeakingTimed_(p,ctx){
  mockSpeakingTimedGate_();const a=mockSpeakingAccess_(p,ctx);mockSpeakingFolder_();return mockSpeakingTimedPublic_(a,mockSpeakingPlan_(a));
+}
+
+/** Window metadata does not prove audio content/duration; real decoding/assessment remains pending. */
+function mockSpeakingWindow_(a,plan,part,publicView){
+ const s=mockSpeakingTimedState_(a),stages=plan.stages.filter(v=>v.part===part&&v.phase!=='preparation');
+ const start=new Date(s.startedAt).getTime()+stages[0].startSeconds*1000,end=new Date(s.startedAt).getTime()+stages[stages.length-1].endSeconds*1000;
+ const id=s.recordingIDs&&s.recordingIDs[part];
+ if(typeof id!=='string'||!id)securityError_('MOCK_SETUP_REQUIRED','Recording identities need teacher assistance');
+ const eligible=Date.now()>=start&&Date.now()<=start+15000;
+ return {part,startedAt:new Date(start).toISOString(),deadline:new Date(end).toISOString(),uploadDeadline:new Date(end+900000).toISOString(),
+  recordingID:!publicView||eligible?id:null,eligible};
+}
+function mockSpeakingTimedUpload_(a,p,recovery){
+ const state=mockAttemptState_(a);
+ if(!state.speaking&&PropertiesService.getScriptProperties().getProperty('DMI_MOCK_SPEAKING_TIMED_ENABLED')!=='true')return;
+ mockSpeakingTimedGate_();const plan=mockSpeakingPlan_(a),window=mockSpeakingWindow_(a,plan,Number(p.part),false);
+ if(typeof p.recordingID!=='string'||!equal_(window.recordingID,p.recordingID))
+ securityError_('MOCK_RECORDING_ID','This recording does not belong to the timed part');
+ if(!recovery&&(Date.now()<new Date(window.deadline).getTime()||Date.now()>new Date(window.uploadDeadline).getTime()))
+ securityError_('MOCK_UPLOAD_WINDOW','The timed recording upload window is closed; ask your teacher');
+ if(Number(p.durationSeconds)>(new Date(window.deadline)-new Date(window.startedAt))/1000+5)
+ securityError_('VALIDATION','Recording exceeds its timed part');
 }
