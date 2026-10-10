@@ -21,3 +21,6 @@ capture_output = False
 preload_app = False
 # Per-process replay cache does not survive restart; do not scale this pilot.
 max_requests = 0
+
+# No runtime management socket is needed in this non-root hosted pilot.
+control_socket_disable = True
