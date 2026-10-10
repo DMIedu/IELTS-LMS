@@ -26,3 +26,7 @@ Timed private prompts and server-owned Speaking deadlines; microphone/headphone 
 Local computer access remains unavailable, so screenshots have not been visually inspected. Tests use synthetic microphone audio and fake private storage, with no real candidate recordings.
 
 Latest functional verification: https://github.com/DMIedu/IELTS-LMS/actions/runs/38013443911 at 729b6eb807efb88067ed43c72acd0fd8c7461765. Passed 32 Speaking upload checks and 15 Speaking browser checks, plus 95 attempt/review, 14 Listening, 82 entry backend, 36 entry browser, 18 runner, 10 review, 17 chart and 13 login transport checks. Synthetic storage/audio only; no native acceptance or provider assessment.
+
+## Timed prompt continuation
+
+Isolated server timing and a microphone-preflight prompt rehearsal are implemented in MockSpeakingTimed.gs and mock-speaking-timed.html. They are NOT wired into Code.gs/Security.gs or the consolidated bundle: automatic approval review blocked those broad source edits. The capture page still uses manual rehearsal recording; no timed recording integration is claimed. See MOCK-SPEAKING-TIMED-STATUS.md for schema, exact gates, 22 server/12 browser checks and remaining work.
