@@ -1,8 +1,9 @@
 /* Synthetic teacher review workbook; no network or real candidates. */
 const {chromium}=require('playwright'),{createHarness}=require('./mock-entry.test.js'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..'),h=createHarness();vm.runInContext(fs.readFileSync(path.join(root,'MockAttempts.gs'),'utf8'),h.ctx);h.ctx.initializeMockTests();h.ctx.initializeMockAttempts();
+const oldProperties=h.ctx.PropertiesService.getScriptProperties;h.ctx.PropertiesService.getScriptProperties=()=>({getProperty:k=>k==='DMI_MOCK_AUDIO_HOST'?'audio.example':oldProperties().getProperty(k)});
 const created=h.req('createMockSitting',h.payload()),id=created.sitting.id;
-const paper={listeningSeconds:1800,sections:['listening','reading','writing'].map((name,i)=>({name,questions:Array.from({length:i===2?2:40},(_,j)=>({id:String(j+1),prompt:'Synthetic '+name+' '+(j+1)}))}))};
+const paper={listeningSeconds:1800,listeningAudio:{clips:[{url:'https://audio.example/synthetic.wav',startSeconds:0,durationSeconds:1800}]},sections:['listening','reading','writing'].map((name,i)=>({name,questions:Array.from({length:i===2?2:40},(_,j)=>({id:String(j+1),prompt:'Synthetic '+name+' '+(j+1)}))}))};
 const json=JSON.stringify(paper);h.sheets.MockPapers.appendRow(['DMI-ACADEMIC-MOCK-01','v1',true,true,json]);
 const fields={AttemptID:'ATTEMPT-synthetic',AdmissionID:'none',SittingID:id,StudentEmail:'one@example.com',StudentID:'S1',PaperID:'DMI-ACADEMIC-MOCK-01',PaperVersion:'v1',PaperDigest:h.ctx.digest_(json),StartedAt:new Date(h.clock.now-100000),ListeningDeadline:new Date(h.clock.now-3000),ReadingDeadline:new Date(h.clock.now-2000),WritingDeadline:new Date(h.clock.now-1000),StateJSON:JSON.stringify({sections:[{answers:{'1':'A'},closed:true},{answers:{'1':'B'},closed:true},{answers:{'1':'<img src=x onerror=alert(1)>','2':'Synthetic essay'},closed:true}]}),Revision:0};
 h.sheets.MockAttempts.appendRow(h.sheets.MockAttempts.vals[0].map(k=>fields[k]));
