@@ -52,7 +52,11 @@ check('same request cannot change feedback',req('saveMockSpeakingReview',{...not
 check('stale revision rejected',req('saveMockSpeakingReview',{...note,requestID:crypto.randomUUID()}).code==='MOCK_REVIEW_CONFLICT');
 check('next revision appends history',req('saveMockSpeakingReview',{...note,revision:1,feedback:'Second note',requestID:crypto.randomUUID()}).ok&&sheets.MockSpeakingReviews.vals.length===3);
 check('review history preserves both notes',req('getMockSpeakingReview',p).review.parts[0].history.map(n=>n.feedback).join('|')==='Synthetic teacher note|Second note');
-check('formula-like feedback stored as text',req('saveMockSpeakingReview',{...note,revision:2,feedback:'=1+1',requestID:crypto.randomUUID()}).saved.feedback.startsWith("'"));
+const escapedNote={...note,revision:2,feedback:'=1+1',requestID:crypto.randomUUID()};
+check('formula-like feedback stored as text',req('saveMockSpeakingReview',escapedNote).saved.feedback.startsWith("'"));
+sheets.MockSpeakingReviews.vals[3][sheets.MockSpeakingReviews.vals[0].indexOf('Feedback')]='=1+1';
+check('text-escape normalization keeps exact retry recoverable',req('saveMockSpeakingReview',escapedNote).recovered&&sheets.MockSpeakingReviews.vals.length===4);
+check('normalized note cannot change payload on same identity',req('saveMockSpeakingReview',{...escapedNote,feedback:'=2+2'}).code==='VALIDATION');
 sheets.MockSpeakingUploads.vals[0].pop();ctx.initializeMockSpeaking();
 check('additive legacy header upgrade preserves receipts',sheets.MockSpeakingUploads.vals[0].at(-1)==='RecordingID'&&sheets.MockSpeakingUploads.vals.length===2&&sheets.MockSpeakingReviews.vals.length===4);
 check('scores untouched by playback and notes',sheets.Marks.vals.length===1&&sheets.ExamResults.vals.length===1);
