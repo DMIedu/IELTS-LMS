@@ -69,6 +69,8 @@ def create_app(enabled=False, token="", processor=process_request, now=time.mono
             lock.release()
     return application
 
+from gemini_assessor import runtime_process
+
 # Importing this file creates a callable, not a running HTTP server.
 application = create_app(os.environ.get("DMI_AUDIO_WORKER_ENABLED") == "true",
-                         os.environ.get("DMI_AUDIO_WORKER_TOKEN", ""))
+                         os.environ.get("DMI_AUDIO_WORKER_TOKEN", ""), processor=runtime_process)
