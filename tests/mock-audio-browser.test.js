@@ -5,7 +5,9 @@ function wav(seconds){const rate=8000,size=rate*seconds*2,b=Buffer.alloc(44+size
 (async()=>{
 const browser=await chromium.launch({args:['--autoplay-policy=no-user-gesture-required']}),context=await browser.newContext(),page=await context.newPage();let failAudio=false,audioRequests=0;
 await context.route('**/*',async route=>{const url=new URL(route.request().url()),rel=url.pathname.split('/').pop();
- if(url.hostname==='audio.example'){audioRequests++;if(failAudio)return route.abort();return route.fulfill({contentType:'audio/wav',body:wav(rel==='wrong.wav'?4:12)});}
+ if(url.hostname==='audio.example'){audioRequests++;if(failAudio)return route.abort();const body=wav(rel==='wrong.wav'?4:12),range=route.request().headers().range;const headers={'Accept-Ranges':'bytes'};
+if(range){const m=range.match(/bytes=(\d+)-(\d*)/),start=Number(m[1]),end=m[2]?Math.min(Number(m[2]),body.length-1):body.length-1;headers['Content-Range']='bytes '+start+'-'+end+'/'+body.length;return route.fulfill({status:206,contentType:'audio/wav',headers,body:body.subarray(start,end+1)});}
+return route.fulfill({contentType:'audio/wav',headers,body});}
  if(rel==='dmi-mock-audio.js')return route.fulfill({contentType:'text/javascript',body:fs.readFileSync(path.join(root,rel),'utf8')});
  return route.fulfill({contentType:'text/html',body:'<div id="host"></div><script src="dmi-mock-audio.js"></script>'});
 });
@@ -16,6 +18,7 @@ await set(3);await page.waitForFunction(()=>document.querySelector('audio').read
 check('no free seeking controls',await page.locator('audio').getAttribute('controls')===null);
 check('playback requires candidate join',await page.locator('audio').evaluate(a=>a.paused));
 await page.locator('button').click();await page.waitForFunction(()=>!document.querySelector('audio').paused);
+console.log('Audio seek diagnostic',await page.locator('audio').evaluate(a=>({time:a.currentTime,duration:a.duration,paused:a.paused,seekable:Array.from({length:a.seekable.length},(_,i)=>[a.seekable.start(i),a.seekable.end(i)]),status:a.parentElement.textContent})));
 await page.waitForFunction(()=>document.querySelector('audio').currentTime>=3&&document.querySelector('audio').currentTime<6,{},{timeout:5000});
 console.log('Synthetic first join',await page.locator('audio').evaluate(a=>({time:a.currentTime,duration:a.duration,paused:a.paused,seekable:a.seekable.length})));
 check('join follows elapsed server clock',await page.locator('audio').evaluate(a=>a.currentTime>=3&&a.currentTime<6));
