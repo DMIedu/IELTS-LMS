@@ -29,4 +29,4 @@ Latest functional verification: https://github.com/DMIedu/IELTS-LMS/actions/runs
 
 ## Timed prompt continuation
 
-Isolated server timing and a microphone-preflight prompt rehearsal are implemented in MockSpeakingTimed.gs and mock-speaking-timed.html. They are NOT wired into Code.gs/Security.gs or the consolidated bundle: automatic approval review blocked those broad source edits. The capture page still uses manual rehearsal recording; no timed recording integration is claimed. See MOCK-SPEAKING-TIMED-STATUS.md for schema, exact gates, 22 server/12 browser checks and remaining work.
+The server timing module now connects through the verified POST dispatcher, session action list and exact consolidated draft bundle. The timing page remains a microphone-preflight prompt rehearsal and does not record audio. The manual capture rehearsal is separate; automatic recording/upload timing integration is unfinished. See MOCK-SPEAKING-TIMED-STATUS.md for the private schema, disabled gates and passed 30 server/12 timed browser checks.
