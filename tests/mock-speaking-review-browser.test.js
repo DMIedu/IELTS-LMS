@@ -36,6 +36,11 @@ const root=path.resolve(__dirname,'..');let checks=0;const check=(n,v)=>{assert.
  const url=await page.locator('#speaking-audio').getAttribute('src');await page.locator('#speaking-close').click();
  check('close revokes audio blob',await page.evaluate(u=>syntheticRevoked.includes(u),url));
  check('closed audio has no source',await page.locator('#speaking-audio').isHidden()&&await page.locator('#speaking-audio').getAttribute('src')===null);
+ await page.locator('#speaking-play').click();await page.getByText('Private recording loaded. Press Play to listen; assessment remains pending.',{exact:true}).waitFor();
+ const secondURL=await page.locator('#speaking-audio').getAttribute('src');
+ await page.evaluate(()=>window.dispatchEvent(new StorageEvent('storage',{key:'dmi_lms_token',newValue:'changed'})));
+ check('account change hides private review and revokes audio',await page.locator('#speaking-review').isHidden()&&await page.evaluate(u=>syntheticRevoked.includes(u),secondURL));
+ await page.reload();await page.getByText('Private review loaded. Assessment pending.',{exact:true}).waitFor();
  await page.locator('#speaking-part').selectOption('2');check('missing recording cannot play or save',await page.locator('#speaking-play').isDisabled()&&await page.locator('#speaking-save').isDisabled());
  await page.locator('#speaking-part').selectOption('1');await page.locator('#speaking-feedback').fill('<img src=x onerror="window.syntheticInjected=1"> Teacher note');
  await page.locator('#speaking-save').click();await page.locator('#speaking-retry').waitFor({state:'visible'});
