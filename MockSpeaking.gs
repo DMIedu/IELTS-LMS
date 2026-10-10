@@ -17,6 +17,16 @@ function mockSpeakingPrivate_(item){
  item.getSharingAccess()!==DriveApp.Access.PRIVATE||item.getViewers().length||
  item.getEditors().some(u=>email_(u.getEmail())!==owner))
  securityError_('MOCK_NOT_READY','Speaking storage must be private to the deployment owner');
+ let permissions;
+ try{
+  const response=UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(item.getId())+'/permissions?fields=permissions(type,role,emailAddress),nextPageToken&supportsAllDrives=true',
+   {headers:{Authorization:'Bearer '+ScriptApp.getOAuthToken()},muteHttpExceptions:true});
+  if(response.getResponseCode()!==200)throw new Error('Permission lookup failed');
+  permissions=JSON.parse(response.getContentText());
+ }catch(e){securityError_('MOCK_NOT_READY','Private Speaking permissions need verification');}
+ const list=permissions.permissions;
+ if(permissions.nextPageToken||!Array.isArray(list)||list.length!==1||list[0].type!=='user'||list[0].role!=='owner'||email_(list[0].emailAddress)!==owner)
+ securityError_('MOCK_NOT_READY','Speaking storage must have only its owner permission');
 }
 function mockSpeakingAccess_(p,ctx){
  const a=mockAttemptAccess_(p,ctx),state=mockReconcileAttempt_(a);

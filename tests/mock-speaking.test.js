@@ -5,13 +5,15 @@ vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockAttempts.gs'),'utf
 vm.runInContext(fs.readFileSync(path.join(__dirname,'..','MockSpeaking.gs'),'utf8'),ctx);
 ctx.initializeMockTests();ctx.initializeMockAttempts();ctx.initializeMockSpeaking();ctx.initializeMockSpeaking();
 check('Speaking setup additive and idempotent',sheets.MockSpeakingUploads.vals.length===1&&sheets.Marks.vals.length===1);
-let enabled=false,shared=false,viewer=false,editor=false,files=[],createCount=0;
+let enabled=false,shared=false,viewer=false,editor=false,group=false,paged=false,lookupError=false,files=[],createCount=0;
 const original=ctx.PropertiesService.getScriptProperties;
 ctx.PropertiesService.getScriptProperties=()=>({getProperty:k=>k==='DMI_MOCK_SPEAKING_ENABLED'?String(enabled):k==='DMI_MOCK_SPEAKING_FOLDER_ID'?'synthetic_folder_1234':original().getProperty(k)});
 const user={getEmail:()=> 'owner@example.com'};
 const privacy={getOwner:()=>user,getSharingAccess:()=>shared?'ANYONE':'PRIVATE',getViewers:()=>viewer?[user]:[],getEditors:()=>editor?[{getEmail:()=> 'other@example.com'}]:[]};
 ctx.Session={getEffectiveUser:()=>user};
-const folder={...privacy,getFilesByName:name=>{const matching=files.filter(f=>f.name===name);let i=0;return{hasNext:()=>i<matching.length,next:()=>matching[i++]};},
+ctx.ScriptApp={getOAuthToken:()=> 'synthetic-test-token'};
+ctx.UrlFetchApp={fetch:()=>({getResponseCode:()=>lookupError?403:200,getContentText:()=>JSON.stringify({permissions:[{type:'user',role:'owner',emailAddress:'owner@example.com'},...(group?[{type:'group',role:'reader',emailAddress:'synthetic@example.com'}]:[])],...(paged?{nextPageToken:'synthetic-next'}:{})})})};
+const folder={...privacy,getId:()=> 'synthetic_folder_1234',getFilesByName:name=>{const matching=files.filter(f=>f.name===name);let i=0;return{hasNext:()=>i<matching.length,next:()=>matching[i++]};},
  createFile:blob=>{createCount++;const f={...privacy,name:blob.name,description:'',getId:()=> 'private-file-'+createCount,getDescription(){return this.description;},setDescription(d){this.description=d;}};files.push(f);return f;}};
 ctx.DriveApp={Access:{PRIVATE:'PRIVATE'},getFolderById:()=>folder};
 ctx.Utilities.base64Decode=s=>Array.from(Buffer.from(s,'base64'));
@@ -29,6 +31,9 @@ check('other student cannot upload for candidate',req('uploadMockSpeaking',{...p
 shared=true;check('public folder rejected before write',req('uploadMockSpeaking',p,'student').code==='MOCK_NOT_READY'&&createCount===0);shared=false;
 viewer=true;check('explicit viewer rejected before write',req('uploadMockSpeaking',p,'student').code==='MOCK_NOT_READY');viewer=false;
 editor=true;check('explicit editor rejected before write',req('uploadMockSpeaking',p,'student').code==='MOCK_NOT_READY');editor=false;
+group=true;check('group permission rejected despite empty DriveApp viewers',req('uploadMockSpeaking',p,'student').code==='MOCK_NOT_READY'&&createCount===0);group=false;
+paged=true;check('incomplete permission listing fails closed',req('uploadMockSpeaking',p,'student').code==='MOCK_NOT_READY'&&createCount===0);paged=false;
+lookupError=true;check('permission lookup failure fails closed',req('uploadMockSpeaking',p,'student').code==='MOCK_NOT_READY'&&createCount===0);lookupError=false;
 for(const bad of [{part:4},{durationSeconds:0},{durationSeconds:361},{mime:'text/html'},{audioBase64:'invalid!'},{audioBase64:Buffer.alloc(128).toString('base64')},{mime:'audio/ogg'}])
  check('invalid upload rejected',req('uploadMockSpeaking',{...p,...bad},'student').code==='VALIDATION');
 check('Speaking uploads require original part order',req('uploadMockSpeaking',{...p,part:3},'student').code==='MOCK_SECTION_ORDER'&&createCount===0);
