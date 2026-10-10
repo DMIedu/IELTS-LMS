@@ -6,6 +6,7 @@ on:
       - 'MockAttempts.gs'
       - 'MockSpeaking.gs'
       - 'MockSpeakingTimed.gs'
+      - 'MockSpeakingRetention.gs'
       - 'Code.gs'
       - 'Security.gs'
       - 'release-candidate/Code.gs'
@@ -29,6 +30,7 @@ on:
       - 'tests/mock-speaking.test.js'
       - 'tests/mock-speaking-timed.test.js'
       - 'tests/mock-speaking-review.test.js'
+      - 'tests/mock-speaking-retention.test.js'
       - 'tests/mock-speaking-browser.test.js'
       - 'tests/mock-speaking-timed-browser.test.js'
       - 'tests/mock-speaking-review-browser.test.js'
@@ -48,6 +50,7 @@ jobs:
           node tests/mock-speaking.test.js
           node tests/mock-speaking-timed.test.js
           node tests/mock-speaking-review.test.js
+          node tests/mock-speaking-retention.test.js
           node tests/phase2-login-transport.test.js
       - name: Install browser test dependency
         run: npm install --no-save --ignore-scripts playwright
