@@ -1895,7 +1895,7 @@ function mockSpeakingTimedPublic_(a,plan){
 function startMockSpeakingTimed_(p,ctx){
  mockSpeakingTimedGate_();const a=mockSpeakingAccess_(p,ctx);mockSpeakingFolder_();const plan=mockSpeakingPlan_(a),state=mockAttemptState_(a);
  if(!state.speaking){
-  if(p.consent!==true||p.microphoneReady!==true)securityError_('VALIDATION','Complete microphone preflight and recording consent first');
+  if(![true,'true'].includes(p.consent)||![true,'true'].includes(p.microphoneReady))securityError_('VALIDATION','Complete microphone preflight and recording consent first');
   state.speaking={startedAt:new Date().toISOString(),paperDigest:a.PaperDigest};mockAttemptPatch_(a,state);
  }
  return mockSpeakingTimedPublic_(a,plan);
