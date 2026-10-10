@@ -89,6 +89,19 @@ class GeminiChecks(unittest.TestCase):
         self.fails(lambda: self.assessor(self.body, self.prepared, self.decoded), "ASSESSOR_REQUEST_TOO_LARGE")
         self.assertEqual(self.calls, [])
 
+    def test_unknown_model_fields_are_not_forwarded(self):
+        self.criteria["grammar"]["privateExtra"] = "unrequested field"
+        self.criteria["grammar"]["evidence"][0]["extra"] = "unrequested field"
+        report = self.assessor(self.body, self.prepared, self.decoded)
+        self.assertNotIn("privateExtra", json.dumps(report))
+        self.assertNotIn('"extra"', json.dumps(report))
+
+    def test_transport_error_masks_private_details(self):
+        def failed(*args):
+            raise RuntimeError("private synthetic API key")
+        assessor = GeminiAssessor("synthetic-key-" * 4, "gemini-fixture-test", failed)
+        self.fails(lambda: assessor(self.body, self.prepared, self.decoded), "ASSESSOR_SERVICE_ERROR")
+
     def test_redirect_handler_refuses_follow(self):
         self.assertIsNone(NoRedirect().redirect_request(None, None, 302, "redirect", {}, "https://other.example.com"))
 
