@@ -24,19 +24,17 @@ const sitting=req('createMockSitting',h.payload()),id=sitting.sitting.id;
 const attempt={AttemptID:'ATTEMPT-speaking',AdmissionID:'none',SittingID:id,StudentEmail:'one@example.com',StudentID:'S1',PaperID:'DMI-ACADEMIC-MOCK-01',PaperVersion:'v1',PaperDigest:'synthetic',StartedAt:new Date(clock.now-100000),ListeningDeadline:new Date(clock.now-3000),ReadingDeadline:new Date(clock.now-2000),WritingDeadline:new Date(clock.now-1000),StateJSON:JSON.stringify({sections:[0,1,2].map(()=>({closed:true,answers:{}}))}),Revision:0};
 sheets.MockAttempts.appendRow(sheets.MockAttempts.vals[0].map(k=>attempt[k]));
 enabled=true;
-function timedReq(action,p={},who='teacher'){
- try{
-  const parameters={sessionToken:h.tokens[who],...p};
-  const auth=ctx.authorize_(parameters,'myMockSpeakingUploads');
-  return action==='startMockSpeakingTimed'?ctx.startMockSpeakingTimed_(parameters,auth):ctx.resumeMockSpeakingTimed_(parameters,auth);
- }catch(e){return{ok:false,code:e.code||'ERROR',error:e.message};}
-}
+const timedReq=req;
 const originalPaper=ctx.mockPaper_;
 let speakingFixture={speakingTiming:{reviewed:true,part1:Array.from({length:8},(_,i)=>({prompt:'Synthetic introduction '+i,seconds:30})),cue:'Synthetic private cue',part3:Array.from({length:4},(_,i)=>({prompt:'Synthetic discussion '+i,seconds:60}))}};
 ctx.mockPaper_=()=>({paper:speakingFixture,digest:'synthetic'});
 const timedP={sittingID:id,consent:true,microphoneReady:true};
 check('timed gate disabled',timedReq('startMockSpeakingTimed',timedP,'student').code==='MOCK_NOT_READY');
 timedEnabled=true;
+for(const action of ['startMockSpeakingTimed','resumeMockSpeakingTimed']){
+ check('timed GET rejected: '+action,req(action,timedP,'student',false).code==='POST_REQUIRED');
+ check('other attempt denied: '+action,req(action,{...timedP,attemptID:'ATTEMPT-other'},'student').code==='FORBIDDEN');
+}
 check('timed teacher denied',timedReq('startMockSpeakingTimed',timedP).code==='FORBIDDEN');
 check('timed other candidate denied',timedReq('startMockSpeakingTimed',timedP,'second').code==='MOCK_NOT_STARTED');
 check('timed anonymous denied',timedReq('startMockSpeakingTimed',{...timedP,sessionToken:''},'student').code==='UNAUTHENTICATED');
@@ -73,5 +71,7 @@ ctx.mockPaper_=originalPaper;
 
 
 check('scores unchanged',sheets.Marks.vals.length===1&&sheets.ExamResults.vals.length===1);
-new vm.Script(fs.readFileSync(path.join(__dirname,'..','MockSpeakingTimed.gs'),'utf8'));
-console.log(JSON.stringify({speakingTimedBackendChecks:checks,dispatch:'NOT_CONNECTED',liveWrites:0}));
+const bundle=fs.readFileSync(path.join(__dirname,'..','release-candidate','Code.gs'),'utf8');
+new vm.Script(bundle);
+check('deployment bundle includes exact timing module',bundle.includes(fs.readFileSync(path.join(__dirname,'..','MockSpeakingTimed.gs'),'utf8')));
+console.log(JSON.stringify({speakingTimedBackendChecks:checks,dispatch:'VERIFIED_POST_HANDLER',liveWrites:0}));
