@@ -105,6 +105,9 @@ function handle(e) {
       .forEach(k=>{if(p[k]!=null)p[k]=sheetText_(p[k]);});
     switch(action){
       case 'listMockAttempts': result=listMockAttempts_(p,ctx);break;
+      case 'uploadMockSpeaking': result=uploadMockSpeaking_(p,ctx);break;
+      case 'myMockSpeakingUploads': result=myMockSpeakingUploads_(p,ctx);break;
+      case 'listMockSpeakingUploads': result=listMockSpeakingUploads_(p,ctx);break;
       case 'getMockAttemptReview': result=getMockAttemptReview_(p,ctx);break;
       case 'saveMockWritingReview': result=saveMockWritingReview_(p,ctx);break;
       case 'startMockAttempt': result=startMockAttempt_(p,ctx);break;
