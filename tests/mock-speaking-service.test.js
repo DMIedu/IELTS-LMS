@@ -15,7 +15,7 @@ ctx.Session={getEffectiveUser:()=>user};
 ctx.ScriptApp={getOAuthToken:()=> 'synthetic-test-token'};
 ctx.UrlFetchApp={fetch:()=>({getResponseCode:()=>lookupError?403:200,getContentText:()=>JSON.stringify({permissions:[{type:'user',role:'owner',emailAddress:'owner@example.com'},...(group?[{type:'group',role:'reader',emailAddress:'synthetic@example.com'}]:[])],...(paged?{nextPageToken:'synthetic-next'}:{})})})};
 const folder={...privacy,getId:()=> 'synthetic_folder_1234',getFilesByName:name=>{const matching=files.filter(f=>f.name===name);let i=0;return{hasNext:()=>i<matching.length,next:()=>matching[i++]};},
- createFile:blob=>{createCount++;const f={...privacy,name:blob.name,bytes:blob.bytes.slice(),getBlob(){return{getBytes:()=>this.bytes.slice()};},description:'',getId:()=> 'private-file-'+createCount,getDescription(){return this.description;},setDescription(d){this.description=d;}};files.push(f);return f;}};
+ createFile:blob=>{createCount++;const fileID='private-file-'+createCount;const f={...privacy,name:blob.name,bytes:blob.bytes.slice(),getBlob(){return{getBytes:()=>this.bytes.slice()};},description:'',getId:()=>fileID,getDescription(){return this.description;},setDescription(d){this.description=d;}};files.push(f);return f;}};
 ctx.DriveApp={Access:{PRIVATE:'PRIVATE'},getFolderById:()=>folder};
 ctx.Utilities.base64Decode=s=>Array.from(Buffer.from(s,'base64'));
 ctx.Utilities.newBlob=(bytes,mime,name)=>({bytes,mime,name});
@@ -64,7 +64,7 @@ for(const bad of ['http://assessment.example.com/v1','https://other.example.com/
  endpoint=bad;check('unsafe endpoint rejected '+bad,run().code==='ASSESSMENT_NOT_READY'&&calls===0);
 }endpoint='https://assessment.example.com/v1/evaluate';
 let result=run();
-check('synthetic successful assessment stays draft '+JSON.stringify(result),result.ok&&result.assessment.teacherReviewRequired===true&&result.releaseApproved===false);
+check('synthetic successful assessment stays draft',result.ok&&result.assessment.teacherReviewRequired===true&&result.releaseApproved===false);
 check('all three private byte payloads bound',JSON.parse(captured.opts.payload).recordings.length===3&&JSON.parse(captured.opts.payload).recordings.every(r=>r.audioBase64===bytes.toString('base64')));
 check('redirects disabled with bounded controlled request',captured.opts.followRedirects===false&&captured.opts.muteHttpExceptions===true&&captured.opts.method==='post');
 check('no candidate email or Drive IDs sent',!captured.opts.payload.includes('one@example.com')&&!captured.opts.payload.includes('private-file'));
