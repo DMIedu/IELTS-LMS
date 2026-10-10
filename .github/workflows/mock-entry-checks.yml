@@ -12,6 +12,7 @@ on:
       - 'private-audio-service/**'
       - 'tests/test_private_audio_processor.py'
       - 'tests/test_private_audio_service.py'
+      - 'tests/test_private_audio_container.py'
       - 'Code.gs'
       - 'Security.gs'
       - 'release-candidate/Code.gs'
@@ -71,6 +72,7 @@ jobs:
           python -m pip install -r private-audio-service/requirements.txt
           python tests/test_private_audio_processor.py -v
           python tests/test_private_audio_service.py -v
+          python tests/test_private_audio_container.py -v
       - name: Install browser test dependency
         run: npm install --no-save --ignore-scripts playwright
       - name: Install Chromium
