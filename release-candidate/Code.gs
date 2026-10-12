@@ -108,6 +108,28 @@ function handle(e) {
     ['studentName','teacherName','name','class','course','lesson','test','testName','comments']
       .forEach(k=>{if(p[k]!=null)p[k]=sheetText_(p[k]);});
     switch(action){
+      case 'listMockAttempts': result=listMockAttempts_(p,ctx);break;
+      case 'startMockSpeakingTimed': result=startMockSpeakingTimed_(p,ctx);break;
+      case 'resumeMockSpeakingTimed': result=resumeMockSpeakingTimed_(p,ctx);break;
+      case 'getMockSpeakingRecording': result=getMockSpeakingRecording_(p,ctx);break;
+      case 'getMockSpeakingReview': result=getMockSpeakingReview_(p,ctx);break;
+      case 'saveMockSpeakingReview': result=saveMockSpeakingReview_(p,ctx);break;
+      case 'uploadMockSpeaking': result=uploadMockSpeaking_(p,ctx);break;
+      case 'myMockSpeakingUploads': result=myMockSpeakingUploads_(p,ctx);break;
+      case 'listMockSpeakingUploads': result=listMockSpeakingUploads_(p,ctx);break;
+      case 'getMockAttemptReview': result=getMockAttemptReview_(p,ctx);break;
+      case 'saveMockWritingReview': result=saveMockWritingReview_(p,ctx);break;
+      case 'startMockAttempt': result=startMockAttempt_(p,ctx);break;
+      case 'resumeMockAttempt': result=resumeMockAttempt_(p,ctx);break;
+      case 'saveMockAnswers': result=saveMockAnswers_(p,ctx);break;
+      case 'submitMockSection': result=submitMockSection_(p,ctx);break;
+      case 'createMockSitting': result=createMockSitting_(p,ctx);break;
+      case 'listMockSittings': result=listMockSittings_(ctx);break;
+      case 'rotateMockCode': result=rotateMockCode_(p,ctx);break;
+      case 'closeMockSitting': result=closeMockSitting_(p,ctx);break;
+      case 'enterMockSitting': result=enterMockSitting_(p,ctx);break;
+      case 'myMockAdmission': result=myMockAdmission_(p,ctx);break;
+      case 'listMockAdmissions': result=listMockAdmissions_(p,ctx);break;
       case 'session': result={ok:true,role:ctx.role,user:ctx.user};break;
       case 'logout': result=logout_(ctx);break;
       case 'changePassword': result=changePassword_(p,ctx);break;
@@ -833,9 +855,9 @@ return module.exports;
  */
 const DMI_SESSION_HOURS = 4;
 const DMI_PASSWORD_ITERATIONS = 600000;
-const DMI_TEACHER_ACTIONS = ['listStudents','addStudent','deleteStudent',
+const DMI_TEACHER_ACTIONS = ['getMockSpeakingRecording','getMockSpeakingReview','saveMockSpeakingReview','listMockSpeakingUploads','listMockAttempts','getMockAttemptReview','saveMockWritingReview','createMockSitting','rotateMockCode','closeMockSitting','listMockAdmissions','listStudents','addStudent','deleteStudent',
   'renewStudent','addCourse','deleteCourse','addMark','resetStudentPassword','setLMSData','saveCourseDetails','listCourseEnrollments','setCourseEnrollment'];
-const DMI_ACTIONS = DMI_TEACHER_ACTIONS.concat(['listCourses','listMarks',
+const DMI_ACTIONS = DMI_TEACHER_ACTIONS.concat(['startMockSpeakingTimed','resumeMockSpeakingTimed','uploadMockSpeaking','myMockSpeakingUploads','startMockAttempt','resumeMockAttempt','saveMockAnswers','submitMockSection','listMockSittings','enterMockSitting','myMockAdmission','listCourses','listMarks',
   'listExamResults','submitExamResult','getLMSData','session','logout','changePassword','listCourseCatalogue']);
 
 function securityError_(code, message) {
@@ -1336,4 +1358,783 @@ function removeStudentCourseEnrolments_(email){
   if(!sheet)return;
   const data=sheet.getDataRange().getValues(), head=data[0].map(headerName_);
   for(let i=data.length-1;i>0;i--)if(email_(data[i][head.indexOf('StudentEmail')])===email_(email))sheet.deleteRow(i+1);
+}
+
+/**
+ * Academic lab mock entry foundation. A successful admission is NOT an exam start.
+ * The timed runner, original paper and AI assessment are a separate rollout gate.
+ * Public actions run under handle()'s script lock and verified session.
+ */
+const DMI_MOCK_PAPERS = {'DMI-ACADEMIC-MOCK-01':'Mock 01 — Original DMI Academic paper','DMI-ACADEMIC-MOCK-02':'Mock 02 — Existing practice paper set'};
+const DMI_MOCK_HEADERS = ['SittingID','Title','Class','PaperID','OpensAt','ClosesAt','Status','CandidatesJSON','CodeSalt','CodeHash','CodeVersion','CreatedBy','CreatedAt','CreateRequestID','LastCodeRequestID'];
+const DMI_ADMISSION_HEADERS = ['AdmissionID','SittingID','StudentEmail','StudentID','StudentName','AdmittedAt','Status'];
+
+function mockSheet_(name,headers){
+  const sheet=ss().getSheetByName(name);
+  if(!sheet || !headers.every(k=>sheet.getDataRange().getValues()[0].map(headerName_).includes(k)))
+    securityError_('MOCK_SETUP_REQUIRED','Mock test setup is not ready. Please contact DMI.');
+  return sheet;
+}
+function initializeMockTests(){
+  secret_();
+  const lock=LockService.getScriptLock();
+  if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
+  try {
+    const book=ss();
+    [['MockSittings',DMI_MOCK_HEADERS],['MockAdmissions',DMI_ADMISSION_HEADERS]].forEach(pair=>{
+      if(!book.getSheetByName(pair[0]))book.insertSheet(pair[0]).appendRow(pair[1]);
+      mockSheet_(pair[0],pair[1]);
+    });
+    Logger.log('Mock entry ready. Existing accounts, courses, marks and sessions preserved. Exam sections are not enabled yet.');
+  } finally {lock.releaseLock();}
+}
+function mockRole_(ctx,role){
+  if(ctx.role!==role)securityError_('FORBIDDEN',role==='teacher'?'Teacher access required':'Student access required');
+  active_(ctx.role,account_(ctx.role,ctx.user.email));
+}
+function mockID_(value){
+  const id=String(value||'');
+  if(!/^MOCK-[a-f0-9]{24}$/.test(id))securityError_('VALIDATION','Choose a valid mock sitting');
+  return id;
+}
+function mockRequestID_(value){
+  const id=String(value||'');
+  if(!/^[a-f0-9-]{32,36}$/.test(id))securityError_('VALIDATION','Request identity required');
+  return id;
+}
+function mockRecord_(id){
+  const r=rows(mockSheet_('MockSittings',DMI_MOCK_HEADERS)).find(r=>r.SittingID===mockID_(id));
+  if(!r)securityError_('NOT_FOUND','Mock sitting not found');
+  return r;
+}
+function mockCandidates_(r){
+  let emails;
+  try {emails=JSON.parse(r.CandidatesJSON);}catch(e){securityError_('MOCK_SETUP_REQUIRED','Mock candidates need attention');}
+  if(!Array.isArray(emails) || !emails.length || emails.length>100 || !emails.every(e=>typeof e==='string'))
+    securityError_('MOCK_SETUP_REQUIRED','Mock candidates need attention');
+  return emails.map(email_);
+}
+function mockState_(r){
+  if(r.Status==='closed')return 'closed';
+  if(r.Status!=='scheduled')securityError_('MOCK_SETUP_REQUIRED','Mock sitting needs attention');
+  const start=new Date(r.OpensAt).getTime(),end=new Date(r.ClosesAt).getTime();
+  if(!Number.isFinite(start)||!Number.isFinite(end)||end<=start)
+    securityError_('MOCK_SETUP_REQUIRED','Mock schedule needs attention');
+  return Date.now()<start?'scheduled':Date.now()>=end?'expired':'open';
+}
+function mockPublic_(r,teacher){
+  const out={id:r.SittingID,title:r.Title,class:r.Class,paper:r.PaperID,paperTitle:DMI_MOCK_PAPERS[r.PaperID]||r.PaperID,
+    opensAt:new Date(r.OpensAt).toISOString(),closesAt:new Date(r.ClosesAt).toISOString(),
+    state:mockState_(r),examReady:false};
+  if(teacher){
+    out.candidates=mockCandidates_(r).map(email=>{
+      const a=account_('student',email);
+      return {email,name:a?a.Name:'Removed account',id:a?a.ID:''};
+    });
+    out.codeVersion=Number(r.CodeVersion);
+    out.createRequestID=r.CreateRequestID;
+  }
+  return out;
+}
+function mockPatch_(id,fields){
+  const sheet=mockSheet_('MockSittings',DMI_MOCK_HEADERS),data=sheet.getDataRange().getValues();
+  const head=data[0].map(headerName_),i=data.findIndex((r,i)=>i>0 && r[head.indexOf('SittingID')]===id);
+  if(i<1)securityError_('NOT_FOUND','Mock sitting not found');
+  const row=data[i].slice();
+  Object.keys(fields).forEach(k=>{if(!head.includes(k))securityError_('MOCK_SETUP_REQUIRED','Mock schema needs attention');row[head.indexOf(k)]=fields[k];});
+  sheet.getRange(i+1,1,1,head.length).setValues([row]);
+}
+function mockNewCode_(){
+  const raw=opaque_().slice(0,12).toUpperCase(),salt=opaque_();
+  return {code:raw.match(/.{4}/g).join('-'),salt,hash:digest_(salt+'|'+raw)};
+}
+function createMockSitting_(p,ctx){
+  mockRole_(ctx,'teacher');
+  const sheet=mockSheet_('MockSittings',DMI_MOCK_HEADERS),requestID=mockRequestID_(p.requestID);
+  const existing=rows(sheet).find(r=>r.CreatedBy===email_(ctx.user.email) && r.CreateRequestID===requestID);
+  if(existing)return {ok:true,sitting:mockPublic_(existing,true),recovered:true};
+  const paperID=String(p.paperID||'DMI-ACADEMIC-MOCK-01');
+  if(!Object.prototype.hasOwnProperty.call(DMI_MOCK_PAPERS,paperID))securityError_('VALIDATION','Choose an available mock paper');
+  const title=String(p.title||'').trim(),cls=String(p.class||'').trim();
+  const start=new Date(p.opensAt).getTime(),end=new Date(p.closesAt).getTime();
+  if(!title || title.length>100 || cls.length>80 || !Number.isFinite(start)||!Number.isFinite(end) ||
+    end<=start || end<=Date.now() || end-start>7*86400000 || start>Date.now()+90*86400000)
+    securityError_('VALIDATION','Enter a title and a valid entry window of up to seven days');
+  let candidates;try{candidates=JSON.parse(String(p.candidatesJSON||''));}catch(e){securityError_('VALIDATION','Choose the students for this sitting');}
+  if(!Array.isArray(candidates)||!candidates.length||candidates.length>100 || !candidates.every(e=>typeof e==='string'))
+    securityError_('VALIDATION','Choose 1–100 students');
+  candidates=Array.from(new Set(candidates.map(email_)));
+  candidates.forEach(email=>{try{active_('student',account_('student',email));}catch(e){securityError_('VALIDATION','Choose only existing active students');}});
+  const code=mockNewCode_(),id='MOCK-'+opaque_().slice(0,24);
+  const fields={SittingID:id,Title:sheetText_(title),Class:sheetText_(cls),PaperID:paperID,
+    OpensAt:new Date(start),ClosesAt:new Date(end),Status:'scheduled',CandidatesJSON:JSON.stringify(candidates),
+    CodeSalt:code.salt,CodeHash:code.hash,CodeVersion:1,CreatedBy:email_(ctx.user.email),
+    CreatedAt:new Date(),CreateRequestID:requestID,LastCodeRequestID:requestID};
+  const head=sheet.getDataRange().getValues()[0].map(headerName_);
+  sheet.appendRow(head.map(k=>Object.prototype.hasOwnProperty.call(fields,k)?fields[k]:''));
+  return {ok:true,sitting:mockPublic_(fields,true),code:code.code};
+}
+function listMockSittings_(ctx){
+  const data=rows(mockSheet_('MockSittings',DMI_MOCK_HEADERS));
+  return {ok:true,data:data.filter(r=>ctx.role==='teacher'||mockCandidates_(r).includes(email_(ctx.user.email)))
+    .map(r=>mockPublic_(r,ctx.role==='teacher')).sort((a,b)=>b.opensAt.localeCompare(a.opensAt))};
+}
+function rotateMockCode_(p,ctx){
+  mockRole_(ctx,'teacher');
+  const r=mockRecord_(p.sittingID),requestID=mockRequestID_(p.requestID);
+  if(['closed','expired'].includes(mockState_(r)))securityError_('MOCK_CLOSED','Entry is closed for this sitting');
+  if(r.LastCodeRequestID===requestID)return {ok:true,recovered:true,sitting:mockPublic_(r,true)};
+  const code=mockNewCode_();
+  const fields={CodeSalt:code.salt,CodeHash:code.hash,CodeVersion:Number(r.CodeVersion)+1,LastCodeRequestID:requestID};
+  mockPatch_(r.SittingID,fields);
+  return {ok:true,code:code.code,sitting:mockPublic_(Object.assign({},r,fields),true)};
+}
+function closeMockSitting_(p,ctx){
+  mockRole_(ctx,'teacher');
+  const r=mockRecord_(p.sittingID);
+  mockPatch_(r.SittingID,{Status:'closed',CodeHash:'',CodeSalt:''});
+  return {ok:true};
+}
+function mockAdmission_(r,ctx){
+  return rows(mockSheet_('MockAdmissions',DMI_ADMISSION_HEADERS))
+    .find(a=>a.SittingID===r.SittingID && email_(a.StudentEmail)===email_(ctx.user.email) && String(a.StudentID)===String(ctx.user.id));
+}
+function mockAdmissionPublic_(a){
+  return {id:a.AdmissionID,sittingID:a.SittingID,studentID:a.StudentID,studentName:a.StudentName,
+    admittedAt:new Date(a.AdmittedAt).toISOString(),status:a.Status};
+}
+function enterMockSitting_(p,ctx){
+  mockRole_(ctx,'student');
+  const r=mockRecord_(p.sittingID);
+  if(!mockCandidates_(r).includes(email_(ctx.user.email)))securityError_('FORBIDDEN','You are not assigned to this sitting');
+  const state=mockState_(r);
+  if(state==='scheduled')securityError_('MOCK_NOT_OPEN','Entry has not opened yet');
+  if(state!=='open')securityError_('MOCK_CLOSED','Entry is closed for this sitting');
+  const prior=mockAdmission_(r,ctx);
+  if(prior)return {ok:true,admission:mockAdmissionPublic_(prior),sitting:mockPublic_(r,false),resumed:true};
+  const cache=CacheService.getScriptCache(),key='mock-entry:'+digest_(r.SittingID+'|'+ctx.user.id+'|'+email_(ctx.user.email));
+  const raw=cache.get(key);
+  let tries={count:0,until:Date.now()+15*60000};
+  if(raw){try{tries=JSON.parse(raw);}catch(e){securityError_('MOCK_RATE_LIMITED','Please wait before trying this code again');}}
+  if(tries.until<=Date.now())tries={count:0,until:Date.now()+15*60000};
+  if(tries.count>=5)securityError_('MOCK_RATE_LIMITED','Please try the mock code again in 15 minutes');
+  const code=String(p.code||'').trim().toUpperCase().replace(/-/g,'');
+  if(!/^[A-F0-9]{12}$/.test(code) || !equal_(digest_(String(r.CodeSalt)+'|'+code),r.CodeHash)){
+    tries.count++;cache.put(key,JSON.stringify(tries),Math.max(1,Math.ceil((tries.until-Date.now())/1000)));
+    securityError_('INVALID_MOCK_CODE','Mock code is incorrect. Check it with your teacher.');
+  }
+  cache.remove(key);
+  const id='ADMIT-'+digest_(r.SittingID+'|'+ctx.user.id+'|'+email_(ctx.user.email)).slice(0,24);
+  const a={AdmissionID:id,SittingID:r.SittingID,StudentEmail:email_(ctx.user.email),StudentID:ctx.user.id,
+    StudentName:sheetText_(ctx.user.name),AdmittedAt:new Date(),Status:'admitted'};
+  const sheet=mockSheet_('MockAdmissions',DMI_ADMISSION_HEADERS),head=sheet.getDataRange().getValues()[0].map(headerName_);
+  sheet.appendRow(head.map(k=>Object.prototype.hasOwnProperty.call(a,k)?a[k]:''));
+  return {ok:true,admission:mockAdmissionPublic_(a),sitting:mockPublic_(r,false)};
+}
+function myMockAdmission_(p,ctx){
+  mockRole_(ctx,'student');
+  const r=mockRecord_(p.sittingID);
+  if(!mockCandidates_(r).includes(email_(ctx.user.email)))securityError_('FORBIDDEN','You are not assigned to this sitting');
+  const a=mockAdmission_(r,ctx);
+  return {ok:true,admission:a?mockAdmissionPublic_(a):null,sitting:mockPublic_(r,false)};
+}
+function listMockAdmissions_(p,ctx){
+  mockRole_(ctx,'teacher');const r=mockRecord_(p.sittingID);
+  return {ok:true,data:rows(mockSheet_('MockAdmissions',DMI_ADMISSION_HEADERS))
+    .filter(a=>a.SittingID===r.SittingID).map(mockAdmissionPublic_)};
+}
+
+
+/**
+ * Server-owned written mock lifecycle. All calls use handle()'s script lock.
+ * No content is shipped in public assets. Owner-reviewed papers live in MockPapers.
+ * This module does not enable the unfinished audio/Speaking candidate interface.
+ */
+const DMI_MOCK_PAPER_HEADERS=['PaperID','Version','Reviewed','AudioReviewed','PaperJSON'];
+const DMI_MOCK_ATTEMPT_HEADERS=['AttemptID','AdmissionID','SittingID','StudentEmail','StudentID','PaperID','PaperVersion','PaperDigest','StartedAt','ListeningDeadline','ReadingDeadline','WritingDeadline','StateJSON','Revision'];
+function initializeMockAttempts(){
+  secret_();const lock=LockService.getScriptLock();
+  if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
+  try{
+    const book=ss();
+    [['MockPapers',DMI_MOCK_PAPER_HEADERS],['MockAttempts',DMI_MOCK_ATTEMPT_HEADERS],['MockReviews',DMI_MOCK_REVIEW_HEADERS]].forEach(pair=>{
+      if(!book.getSheetByName(pair[0]))book.insertSheet(pair[0]).appendRow(pair[1]);
+      mockSheet_(pair[0],pair[1]);
+    });
+    Logger.log('Mock attempt storage ready. No paper was enabled and no existing results were changed.');
+  }finally{lock.releaseLock();}
+}
+
+/** Bounded chart data, never HTML/SVG or arbitrary resource URLs. */
+function mockChart_(chart){
+  if(chart==null)return null;
+  const fail=()=>securityError_('MOCK_NOT_READY','The Writing chart needs review');
+  if(!chart||typeof chart!=='object'||Array.isArray(chart)||!['bar','line'].includes(chart.type)||
+    typeof chart.title!=='string'||!chart.title.trim()||chart.title.length>160||
+    typeof chart.unit!=='string'||chart.unit.length>30||
+    !Number.isFinite(chart.maximum)||chart.maximum<=0||chart.maximum>1000000||
+    !Array.isArray(chart.categories)||!chart.categories.length||chart.categories.length>(chart.type==='line'?16:6)||
+    !chart.categories.every(v=>typeof v==='string'&&v.trim()&&v.length<=60)||
+    !Array.isArray(chart.series)||!chart.series.length||chart.series.length>4)fail();
+  if(!chart.series.every(s=>s&&typeof s.name==='string'&&s.name.trim()&&s.name.length<=60&&Array.isArray(s.values)&&
+    s.values.length===chart.categories.length&&s.values.every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0&&v<=chart.maximum)))fail();
+  if(chart.type==='line'&&(chart.categories.length<2||(chart.projectionStartIndex!=null&&
+    (!Number.isInteger(chart.projectionStartIndex)||chart.projectionStartIndex<1||chart.projectionStartIndex>=chart.categories.length))))fail();
+  const result={type:chart.type,title:chart.title,unit:chart.unit,maximum:chart.maximum,categories:chart.categories.slice(),
+    series:chart.series.map(s=>({name:s.name,values:s.values.slice()}))};
+  if(chart.type==='line'&&chart.projectionStartIndex!=null)result.projectionStartIndex=chart.projectionStartIndex;
+  return result;
+}
+
+/** Reviewed fixed-order clips; host must be explicitly approved before rollout. */
+function mockListeningAudio_(audio,total){
+  const fail=()=>securityError_('MOCK_NOT_READY','The Listening recording needs review');
+  const host=String(PropertiesService.getScriptProperties().getProperty('DMI_MOCK_AUDIO_HOST')||'').toLowerCase();
+  if(!/^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(host)||
+    !audio||!Array.isArray(audio.clips)||!audio.clips.length||audio.clips.length>4)fail();
+  let start=0;
+  const clips=audio.clips.map(c=>{
+    if(!c||!Number.isInteger(c.durationSeconds)||c.durationSeconds<1||c.durationSeconds>2400||
+      typeof c.url!=='string'||c.url.length>2000||!c.url.startsWith('https://'+host+'/')||
+      /[\s\\<>]/.test(c.url)||c.url.includes('#')||c.startSeconds!==start)fail();
+    const result={url:c.url,startSeconds:start,durationSeconds:c.durationSeconds};
+    start+=c.durationSeconds;return result;
+  });
+  if(start!==total)fail();
+  return {clips,durationSeconds:total};
+}
+
+function mockPaper_(id,version){
+  const matches=rows(mockSheet_('MockPapers',DMI_MOCK_PAPER_HEADERS)).filter(r=>r.PaperID===id&&(!version||String(r.Version)===String(version)));
+  if(matches.length!==1)securityError_('MOCK_NOT_READY','An immutable reviewed paper version is required');
+  const r=matches[0];
+  if(String(r.Reviewed).toLowerCase()!=='true'||String(r.AudioReviewed).toLowerCase()!=='true')
+    securityError_('MOCK_NOT_READY','The mock paper and Listening recording are not ready');
+  let paper;try{paper=JSON.parse(r.PaperJSON);}catch(e){securityError_('MOCK_NOT_READY','The mock paper needs review');}
+  if(!paper||typeof paper!=='object'||!Array.isArray(paper.sections)||paper.sections.length!==3||
+    !Number.isInteger(paper.listeningSeconds)||paper.listeningSeconds<1200||paper.listeningSeconds>2400||
+    !String(r.Version).match(/^[A-Za-z0-9._-]{1,40}$/))
+    securityError_('MOCK_NOT_READY','The mock paper needs review');
+  ['listening','reading','writing'].forEach((name,i)=>{
+    const section=paper.sections[i],total=i===2?2:40;
+    if(!section||section.name!==name||!Array.isArray(section.questions)||section.questions.length!==total||
+      !section.questions.every((q,j)=>q&&q.id===String(j+1)&&typeof q.prompt==='string'&&q.prompt.trim()))
+      securityError_('MOCK_NOT_READY','The mock questions need review');
+    section.questions.forEach(q=>{if(q.chart!=null){if(name!=='writing')securityError_('MOCK_NOT_READY','Charts belong to Writing tasks');mockChart_(q.chart);}});
+  });
+  mockListeningAudio_(paper.listeningAudio,paper.listeningSeconds);
+  // No arbitrary URLs/keys are exposed: public content is a strict allowlist.
+  return {record:r,paper,digest:digest_(r.PaperJSON)};
+}
+function mockAttemptFor_(sitting,ctx){
+  return rows(mockSheet_('MockAttempts',DMI_MOCK_ATTEMPT_HEADERS)).find(a=>a.SittingID===sitting.SittingID&&
+    email_(a.StudentEmail)===email_(ctx.user.email)&&String(a.StudentID)===String(ctx.user.id));
+}
+function mockAttemptAccess_(p,ctx){
+  mockRole_(ctx,'student');const sitting=mockRecord_(p.sittingID);
+  if(!mockCandidates_(sitting).includes(email_(ctx.user.email)))securityError_('FORBIDDEN','You are not assigned to this sitting');
+  const a=mockAttemptFor_(sitting,ctx);
+  if(!a)securityError_('MOCK_NOT_STARTED','Start the mock before saving answers');
+  if(p.attemptID&&String(p.attemptID)!==a.AttemptID)securityError_('FORBIDDEN','Attempt does not belong to this candidate');
+  return a;
+}
+function mockAttemptState_(a){
+  let state;try{state=JSON.parse(a.StateJSON);}catch(e){securityError_('MOCK_SETUP_REQUIRED','Attempt needs teacher assistance');}
+  if(!state||!Array.isArray(state.sections)||state.sections.length!==3)securityError_('MOCK_SETUP_REQUIRED','Attempt needs teacher assistance');
+  return state;
+}
+function mockAttemptPatch_(a,state){
+  const sheet=mockSheet_('MockAttempts',DMI_MOCK_ATTEMPT_HEADERS),data=sheet.getDataRange().getValues(),head=data[0].map(headerName_);
+  const i=data.findIndex((r,i)=>i>0&&r[head.indexOf('AttemptID')]===a.AttemptID);
+  if(i<1)securityError_('NOT_FOUND','Attempt not found');
+  const json=JSON.stringify(state);
+  if(json.length>45000)securityError_('VALIDATION','Answers exceed the storage limit');
+  const next=Number(a.Revision)+1,row=data[i].slice();
+  row[head.indexOf('StateJSON')]=json;row[head.indexOf('Revision')]=next;
+  sheet.getRange(i+1,1,1,head.length).setValues([row]);
+  a.StateJSON=json;a.Revision=next;return state;
+}
+function mockDeadlines_(a){return [a.ListeningDeadline,a.ReadingDeadline,a.WritingDeadline].map(x=>new Date(x).getTime());}
+function mockReconcileAttempt_(a){
+  const state=mockAttemptState_(a),deadlines=mockDeadlines_(a);let changed=false;
+  if(!deadlines.every(Number.isFinite)||!deadlines.every((v,i)=>i===0||v>deadlines[i-1]))
+    securityError_('MOCK_SETUP_REQUIRED','Attempt deadlines need teacher assistance');
+  state.sections.forEach((s,i)=>{if(Date.now()>=deadlines[i]&&!s.closed){s.closed=true;s.reason='deadline';s.closedAt=new Date(deadlines[i]).toISOString();changed=true;}});
+  if(changed)mockAttemptPatch_(a,state);return state;
+}
+function mockAttemptPublic_(a,state){
+  const deadlines=mockDeadlines_(a),index=deadlines.findIndex(d=>Date.now()<d);
+  const result={id:a.AttemptID,sittingID:a.SittingID,revision:Number(a.Revision),serverNow:new Date().toISOString(),
+    startedAt:new Date(a.StartedAt).toISOString(),deadlines:deadlines.map(d=>new Date(d).toISOString()),
+    section:index<0?null:['listening','reading','writing'][index],status:index<0?'written_submitted':'in_progress',
+    assessment:'pending',speaking:'not_started',sections:state.sections.map(s=>({closed:s.closed,reason:s.reason||null}))};
+  if(index>=0){
+    const loaded=mockPaper_(a.PaperID,a.PaperVersion);
+    if(!equal_(loaded.digest,a.PaperDigest))securityError_('MOCK_PAPER_CHANGED','The paper changed. Contact your teacher; your saved work is preserved.');
+    const section=loaded.paper.sections[index];
+    result.answers=state.sections[index].answers;
+    if(index===0)result.listeningAudio=mockListeningAudio_(loaded.paper.listeningAudio,loaded.paper.listeningSeconds);
+    result.content={name:section.name,instructions:String(section.instructions||''),passages:Array.isArray(section.passages)?
+      section.passages.map(v=>({title:String(v.title||''),text:String(v.text||'')})):[],
+      questions:section.questions.map(q=>({id:q.id,prompt:q.prompt,options:Array.isArray(q.options)?q.options.map(String):[],
+        wordLimit:Number.isInteger(q.wordLimit)?q.wordLimit:null,chart:mockChart_(q.chart)}))};
+  }
+  return {ok:true,attempt:result};
+}
+function startMockAttempt_(p,ctx){
+  mockRole_(ctx,'student');const sitting=mockRecord_(p.sittingID);
+  if(!mockCandidates_(sitting).includes(email_(ctx.user.email)))securityError_('FORBIDDEN','You are not assigned to this sitting');
+  const prior=mockAttemptFor_(sitting,ctx);
+  if(prior)return mockAttemptPublic_(prior,mockReconcileAttempt_(prior));
+  if(mockState_(sitting)!=='open'||!mockAdmission_(sitting,ctx))securityError_('MOCK_ENTRY_REQUIRED','Enter the open sitting with your teacher code first');
+  // The browser runner/audio pipeline must be enabled explicitly by a later rollout.
+  if(PropertiesService.getScriptProperties().getProperty('DMI_MOCK_RUNNER_ENABLED')!=='true')
+    securityError_('MOCK_NOT_READY','The timed mock is still being prepared. Your admission is saved.');
+  const loaded=mockPaper_(sitting.PaperID),now=Date.now(),listenEnd=now+(loaded.paper.listeningSeconds+120)*1000;
+  const admission=mockAdmission_(sitting,ctx),a={AttemptID:'ATTEMPT-'+opaque_().slice(0,24),AdmissionID:admission.AdmissionID,
+    SittingID:sitting.SittingID,StudentEmail:email_(ctx.user.email),StudentID:ctx.user.id,PaperID:sitting.PaperID,
+    PaperVersion:String(loaded.record.Version),PaperDigest:loaded.digest,StartedAt:new Date(now),
+    ListeningDeadline:new Date(listenEnd),ReadingDeadline:new Date(listenEnd+3600000),WritingDeadline:new Date(listenEnd+7200000),
+    StateJSON:JSON.stringify({sections:[0,1,2].map(()=>({answers:{},closed:false}))}),Revision:0};
+  const sheet=mockSheet_('MockAttempts',DMI_MOCK_ATTEMPT_HEADERS),head=sheet.getDataRange().getValues()[0].map(headerName_);
+  sheet.appendRow(head.map(k=>a[k]));
+  return mockAttemptPublic_(a,mockAttemptState_(a));
+}
+function resumeMockAttempt_(p,ctx){
+  const a=mockAttemptAccess_(p,ctx);return mockAttemptPublic_(a,mockReconcileAttempt_(a));
+}
+function mutateMockAnswers_(p,ctx,submit){
+  const a=mockAttemptAccess_(p,ctx),state=mockReconcileAttempt_(a),names=['listening','reading','writing'],index=names.indexOf(String(p.section));
+  if(index<0)securityError_('VALIDATION','Choose a valid section');
+  const section=state.sections[index],request=mockRequestID_(p.requestID);
+  if(section.lastRequest===request)return mockAttemptPublic_(a,state);
+  if(section.closed)securityError_('MOCK_SECTION_CLOSED','This section is closed. Late answers were not saved.');
+  const current=mockDeadlines_(a).findIndex(d=>Date.now()<d);
+  if(current!==index)securityError_('MOCK_SECTION_ORDER','Complete sections in the test order');
+  if(!Number.isInteger(Number(p.revision))||Number(p.revision)!==Number(a.Revision))
+    securityError_('MOCK_REVISION_CONFLICT','A newer save exists. Resume the attempt before saving again.');
+  const loaded=mockPaper_(a.PaperID,a.PaperVersion);
+  if(!equal_(loaded.digest,a.PaperDigest))securityError_('MOCK_PAPER_CHANGED','The paper changed. Contact your teacher.');
+  const raw=String(p.answersJSON||'');
+  if(raw.length>(index===2?28000:6000))securityError_('VALIDATION','Answers are too long');
+  let answers;try{answers=JSON.parse(raw);}catch(e){securityError_('VALIDATION','Invalid answer draft');}
+  const allowed=loaded.paper.sections[index].questions.map(q=>q.id);
+  if(!answers||Array.isArray(answers)||typeof answers!=='object'||
+    !Object.keys(answers).every(k=>allowed.includes(k)&&typeof answers[k]==='string'&&answers[k].length<=(index===2?12000:100)))
+    securityError_('VALIDATION','Invalid answer draft');
+  section.answers=answers;section.lastRequest=request;
+  if(submit){section.closed=true;section.reason='candidate';section.closedAt=new Date().toISOString();}
+  mockAttemptPatch_(a,state);return mockAttemptPublic_(a,state);
+}
+function saveMockAnswers_(p,ctx){return mutateMockAnswers_(p,ctx,false);}
+function submitMockSection_(p,ctx){return mutateMockAnswers_(p,ctx,true);}
+
+/** Teacher-only review drafts. Append-only rubric history; no student result release. */
+const DMI_MOCK_REVIEW_HEADERS=['ReviewID','AttemptID','Task','ScoresJSON','Feedback','TeacherEmail','TeacherName','ReviewedAt','RequestID','BaseRevision'];
+function mockReviewAttempt_(p,ctx){
+  mockRole_(ctx,'teacher');
+  const a=rows(mockSheet_('MockAttempts',DMI_MOCK_ATTEMPT_HEADERS)).find(a=>a.AttemptID===String(p.attemptID||''));
+  if(!a)securityError_('NOT_FOUND','Mock attempt not found');
+  return a;
+}
+function mockReviewRows_(id){return rows(mockSheet_('MockReviews',DMI_MOCK_REVIEW_HEADERS)).filter(r=>r.AttemptID===id);}
+function mockReviewPublic_(r){return {id:r.ReviewID,task:Number(r.Task),scores:JSON.parse(r.ScoresJSON),
+  feedback:String(r.Feedback||''),teacherName:r.TeacherName,reviewedAt:new Date(r.ReviewedAt).toISOString(),revision:Number(r.BaseRevision)+1};}
+function listMockAttempts_(p,ctx){
+  mockRole_(ctx,'teacher');const sitting=mockRecord_(p.sittingID);
+  return {ok:true,data:rows(mockSheet_('MockAttempts',DMI_MOCK_ATTEMPT_HEADERS)).filter(a=>a.SittingID===sitting.SittingID).map(a=>{
+    const state=mockReconcileAttempt_(a),admission=rows(mockSheet_('MockAdmissions',DMI_ADMISSION_HEADERS)).find(r=>r.AdmissionID===a.AdmissionID);
+    return {id:a.AttemptID,sittingID:a.SittingID,paper:a.PaperID,studentID:a.StudentID,studentName:admission?admission.StudentName:'Candidate',
+      startedAt:new Date(a.StartedAt).toISOString(),writtenComplete:state.sections.every(s=>s.closed),assessment:'pending'};
+  })};
+}
+function getMockAttemptReview_(p,ctx){
+  const a=mockReviewAttempt_(p,ctx),state=mockReconcileAttempt_(a);let paper=null,problem=null;
+  try{const loaded=mockPaper_(a.PaperID,a.PaperVersion);if(!equal_(loaded.digest,a.PaperDigest))throw Error('changed');paper=loaded.paper;}
+  catch(e){problem='Pinned paper unavailable or changed. Saved answers remain visible; verify the original paper before marking.';}
+  const reviews=mockReviewRows_(a.AttemptID);
+  return {ok:true,review:{id:a.AttemptID,studentID:a.StudentID,studentEmail:a.StudentEmail,paper:a.PaperID,paperVersion:a.PaperVersion,
+    paperProblem:problem,assessment:'pending',speaking:'not_started',
+    sections:state.sections.map((s,i)=>({name:['listening','reading','writing'][i],closed:s.closed,reason:s.reason||null,
+      answers:s.answers,questions:paper?paper.sections[i].questions.map(q=>({id:q.id,prompt:q.prompt,chart:mockChart_(q.chart)})):[]})),
+    writingTasks:[1,2].map(task=>{const history=reviews.filter(r=>Number(r.Task)===task);return {task,revision:history.length,history:history.map(mockReviewPublic_)};})}};
+}
+function saveMockWritingReview_(p,ctx){
+  const a=mockReviewAttempt_(p,ctx),state=mockReconcileAttempt_(a),task=Number(p.task),requestID=mockRequestID_(p.requestID);
+  if(![1,2].includes(task))securityError_('VALIDATION','Choose Writing task 1 or 2');
+  const sheet=mockSheet_('MockReviews',DMI_MOCK_REVIEW_HEADERS),all=rows(sheet);
+  const prior=all.find(r=>r.TeacherEmail===email_(ctx.user.email)&&r.RequestID===requestID);
+  if(prior){if(prior.AttemptID!==a.AttemptID||Number(prior.Task)!==task)securityError_('VALIDATION','Request identity already used');
+    return {ok:true,saved:mockReviewPublic_(prior),recovered:true,assessment:'pending'};}
+  if(!state.sections[2].closed)securityError_('MOCK_REVIEW_NOT_READY','Writing must be closed before marking');
+  const loaded=mockPaper_(a.PaperID,a.PaperVersion);
+  if(!equal_(loaded.digest,a.PaperDigest))securityError_('MOCK_PAPER_CHANGED','Restore the pinned paper before marking');
+  const history=all.filter(r=>r.AttemptID===a.AttemptID&&Number(r.Task)===task),revision=Number(p.revision);
+  if(!Number.isInteger(revision)||revision!==history.length)securityError_('MOCK_REVIEW_CONFLICT','A newer review exists. Reload the review before saving.');
+  let scores;try{scores=JSON.parse(String(p.scoresJSON||''));}catch(e){securityError_('VALIDATION','Enter all four criterion marks');}
+  const criteria=['task','coherence','lexical','grammar'];
+  if(!scores||Array.isArray(scores)||Object.keys(scores).length!==4||!criteria.every(k=>typeof scores[k]==='number'&&Number.isInteger(scores[k])&&scores[k]>=0&&scores[k]<=9))
+    securityError_('VALIDATION','Enter four whole criterion bands from 0 to 9');
+  const feedback=String(p.feedback||'').trim();
+  if(!feedback||feedback.length>5000)securityError_('VALIDATION','Enter feedback of up to 5000 characters');
+  const r={ReviewID:'REVIEW-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Task:task,ScoresJSON:JSON.stringify(scores),
+    Feedback:sheetText_(feedback),TeacherEmail:email_(ctx.user.email),TeacherName:sheetText_(ctx.user.name),
+    ReviewedAt:new Date(),RequestID:requestID,BaseRevision:revision};
+  const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
+  return {ok:true,saved:mockReviewPublic_(r),assessment:'pending'};
+}
+
+/** Disabled Speaking capture/upload draft. No provider call, bands or result writes. */
+const DMI_SPEAKING_HEADERS=['ReceiptID','AttemptID','Part','RequestID','Digest','Bytes','Mime','DurationSeconds','FileID','UploadedAt','RecordingID'];
+function initializeMockSpeaking(){
+ secret_();const lock=LockService.getScriptLock();if(!lock.tryLock(20000))securityError_('BUSY','Please retry shortly');
+ try{const book=ss();if(!book.getSheetByName('MockSpeakingUploads'))book.insertSheet('MockSpeakingUploads').appendRow(DMI_SPEAKING_HEADERS);
+ const uploads=book.getSheetByName('MockSpeakingUploads'),head=uploads.getDataRange().getValues()[0].map(headerName_);
+ if(!head.includes('RecordingID'))uploads.getRange(1,head.length+1).setValue('RecordingID');
+ mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS);
+ if(!book.getSheetByName('MockSpeakingReviews'))book.insertSheet('MockSpeakingReviews').appendRow(DMI_SPEAKING_REVIEW_HEADERS);
+ const reviewSheet=book.getSheetByName('MockSpeakingReviews'),reviewHead=reviewSheet.getDataRange().getValues()[0].map(headerName_);
+ if(!reviewHead.includes('FeedbackDigest'))reviewSheet.getRange(1,reviewHead.length+1).setValue('FeedbackDigest');
+ mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS);
+ Logger.log('Speaking upload storage ready. Capture remains disabled; no recordings or results changed.');}finally{lock.releaseLock();}
+}
+function mockSpeakingFolder_(){
+ const props=PropertiesService.getScriptProperties();
+ if(props.getProperty('DMI_MOCK_SPEAKING_ENABLED')!=='true')securityError_('MOCK_NOT_READY','Speaking capture is still being prepared');
+ const id=String(props.getProperty('DMI_MOCK_SPEAKING_FOLDER_ID')||'');if(!/^[A-Za-z0-9_-]{10,100}$/.test(id))securityError_('MOCK_NOT_READY','Private Speaking storage needs setup');
+ const folder=DriveApp.getFolderById(id);mockSpeakingPrivate_(folder);return folder;
+}
+function mockSpeakingPrivate_(item){
+ const owner=email_(Session.getEffectiveUser().getEmail());
+ if(!owner||!item.getOwner()||email_(item.getOwner().getEmail())!==owner||
+ item.getSharingAccess()!==DriveApp.Access.PRIVATE||item.getViewers().length||
+ item.getEditors().some(u=>email_(u.getEmail())!==owner))
+ securityError_('MOCK_NOT_READY','Speaking storage must be private to the deployment owner');
+ let permissions;
+ try{
+  const response=UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/'+encodeURIComponent(item.getId())+'/permissions?fields=permissions(type,role,emailAddress),nextPageToken&supportsAllDrives=true',
+   {headers:{Authorization:'Bearer '+ScriptApp.getOAuthToken()},muteHttpExceptions:true});
+  if(response.getResponseCode()!==200)throw new Error('Permission lookup failed');
+  permissions=JSON.parse(response.getContentText());
+ }catch(e){securityError_('MOCK_NOT_READY','Private Speaking permissions need verification');}
+ const list=permissions.permissions;
+ if(permissions.nextPageToken||!Array.isArray(list)||list.length!==1||list[0].type!=='user'||list[0].role!=='owner'||email_(list[0].emailAddress)!==owner)
+ securityError_('MOCK_NOT_READY','Speaking storage must have only its owner permission');
+}
+function mockSpeakingAccess_(p,ctx){
+ const a=mockAttemptAccess_(p,ctx),state=mockReconcileAttempt_(a);
+ if(!state.sections.every(s=>s.closed)||Date.now()<mockDeadlines_(a)[2])securityError_('MOCK_SPEAKING_NOT_READY','Finish the written test before Speaking capture');
+ return a;
+}
+function mockSpeakingReceipt_(r){return {id:r.ReceiptID,part:Number(r.Part),bytes:Number(r.Bytes),durationSeconds:Number(r.DurationSeconds),uploadedAt:new Date(r.UploadedAt).toISOString(),assessment:'pending'};}
+function myMockSpeakingUploads_(p,ctx){
+ const a=mockSpeakingAccess_(p,ctx);mockSpeakingFolder_();
+ return {ok:true,receipts:rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID).map(mockSpeakingReceipt_),assessment:'pending'};
+}
+function uploadMockSpeaking_(p,ctx){
+ const a=mockSpeakingAccess_(p,ctx),folder=mockSpeakingFolder_(),part=Number(p.part),requestID=mockRequestID_(p.requestID),duration=Number(p.durationSeconds);
+ if(![1,2,3].includes(part)||!Number.isFinite(duration)||duration<1||duration>(part===2?125:360))securityError_('VALIDATION','Choose a valid recorded Speaking part');
+ const mime=String(p.mime||'');if(!['audio/webm','audio/webm;codecs=opus','audio/ogg','audio/ogg;codecs=opus','audio/mp4'].includes(mime))securityError_('VALIDATION','Unsupported audio format');
+ const raw=String(p.audioBase64||'');
+ if(raw.length<32||raw.length>5600000||raw.length%4||! /^[A-Za-z0-9+/]+={0,2}$/.test(raw))securityError_('VALIDATION','Invalid recording data');
+ let bytes;try{bytes=Utilities.base64Decode(raw);}catch(e){securityError_('VALIDATION','Invalid recording data');}
+ if(bytes.length<64||bytes.length>4194304)securityError_('VALIDATION','Recording must be at most 4 MB');
+ const u=bytes.map(v=>(v+256)%256),webm=u[0]===26&&u[1]===69&&u[2]===223&&u[3]===163,
+ ogg=u.slice(0,4).join(',')==='79,103,103,83',mp4=u.slice(4,8).join(',')==='102,116,121,112';
+ if(!(mime.startsWith('audio/webm')&&webm||mime.startsWith('audio/ogg')&&ogg||mime==='audio/mp4'&&mp4))securityError_('VALIDATION','Recording container does not match its format');
+ const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,bytes).map(b=>('0'+((b+256)%256).toString(16)).slice(-2)).join('');
+ const fingerprint=digest_(JSON.stringify([a.AttemptID,part,requestID,hash,mime,duration,String(p.recordingID||'')]));
+ const sheet=mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS),records=rows(sheet),same=records.find(r=>r.RequestID===requestID);
+ if(same){if(same.AttemptID!==a.AttemptID||Number(same.Part)!==part||same.Digest!==fingerprint)securityError_('VALIDATION','Upload identity already used');
+ return {ok:true,receipt:mockSpeakingReceipt_(same),recovered:true,assessment:'pending'};}
+ if(records.some(r=>r.AttemptID===a.AttemptID&&Number(r.Part)===part))securityError_('MOCK_RECORDING_EXISTS','This part already has an acknowledged recording');
+ const done=records.filter(r=>r.AttemptID===a.AttemptID).map(r=>Number(r.Part)).sort();
+ if(done.some((v,i)=>v!==i+1))securityError_('MOCK_SETUP_REQUIRED','Speaking receipts need owner review');
+ if(part!==done.length+1)securityError_('MOCK_SECTION_ORDER','Upload Speaking parts in order');
+ const name='mock-speaking-'+digest_(a.AttemptID+'|'+part).slice(0,32),found=folder.getFilesByName(name);let file;
+ if(found.hasNext()){file=found.next();if(found.hasNext()||file.getDescription()!==fingerprint)securityError_('MOCK_UPLOAD_CONFLICT','An interrupted upload needs owner review');mockSpeakingPrivate_(file);mockSpeakingTimedUpload_(a,p,true);}
+ else{mockSpeakingTimedUpload_(a,p,false);file=folder.createFile(Utilities.newBlob(bytes,mime,name));mockSpeakingPrivate_(file);file.setDescription(fingerprint);}
+ const r={ReceiptID:'AUDIO-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Part:part,RequestID:requestID,Digest:fingerprint,Bytes:bytes.length,Mime:mime,DurationSeconds:duration,FileID:file.getId(),UploadedAt:new Date(),RecordingID:String(p.recordingID||'')};
+ const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
+ return {ok:true,receipt:mockSpeakingReceipt_(r),assessment:'pending'};
+}
+function listMockSpeakingUploads_(p,ctx){
+ const a=mockReviewAttempt_(p,ctx);mockSpeakingFolder_();
+ return {ok:true,receipts:rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID).map(mockSpeakingReceipt_),assessment:'pending'};
+}
+
+/** Teacher-only private audio and append-only notes. No band scoring or public links. */
+const DMI_SPEAKING_REVIEW_HEADERS=['ReviewID','AttemptID','Part','ReceiptID','Feedback','TeacherEmail','TeacherName','ReviewedAt','RequestID','BaseRevision','FeedbackDigest'];
+function mockSpeakingUploadForReview_(a,p){
+ const part=Number(p.part),id=String(p.receiptID||'');
+ if(![1,2,3].includes(part))securityError_('VALIDATION','Choose a Speaking part');
+ const matches=rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID&&Number(r.Part)===part&&r.ReceiptID===id);
+ if(matches.length!==1)securityError_('NOT_FOUND','Recording receipt not found for this attempt');
+ return matches[0];
+}
+function mockSpeakingReviewPublic_(r){return{id:r.ReviewID,part:Number(r.Part),receiptID:r.ReceiptID,feedback:String(r.Feedback||''),teacherName:r.TeacherName,reviewedAt:new Date(r.ReviewedAt).toISOString(),revision:Number(r.BaseRevision)+1};}
+function getMockSpeakingReview_(p,ctx){
+ const a=mockReviewAttempt_(p,ctx);mockSpeakingFolder_();
+ const uploads=rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID);
+ const history=rows(mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS)).filter(r=>r.AttemptID===a.AttemptID);
+ return {ok:true,review:{attemptID:a.AttemptID,studentID:a.StudentID,studentEmail:a.StudentEmail,assessment:'pending',
+ parts:[1,2,3].map(part=>{const receipt=uploads.find(r=>Number(r.Part)===part),notes=history.filter(r=>Number(r.Part)===part);
+ return{part,receipt:receipt?mockSpeakingReceipt_(receipt):null,revision:notes.length,history:notes.map(mockSpeakingReviewPublic_)};})}};
+}
+function getMockSpeakingRecording_(p,ctx){
+ const a=mockReviewAttempt_(p,ctx),r=mockSpeakingUploadForReview_(a,p),folder=mockSpeakingFolder_();
+ const found=folder.getFilesByName('mock-speaking-'+digest_(a.AttemptID+'|'+Number(r.Part)).slice(0,32));
+ if(!found.hasNext())securityError_('NOT_FOUND','Private recording unavailable');
+ const file=found.next();if(found.hasNext()||file.getId()!==r.FileID||file.getDescription()!==r.Digest)
+ securityError_('MOCK_UPLOAD_CONFLICT','Recording identity needs owner review');
+ mockSpeakingPrivate_(file);const bytes=file.getBlob().getBytes();
+ if(bytes.length!==Number(r.Bytes)||bytes.length<64||bytes.length>4194304)securityError_('MOCK_UPLOAD_CONFLICT','Recording integrity needs owner review');
+ const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,bytes).map(b=>('0'+((b+256)%256).toString(16)).slice(-2)).join('');
+ const base=[a.AttemptID,Number(r.Part),r.RequestID,hash,r.Mime,Number(r.DurationSeconds)];
+ let identities=[String(r.RecordingID||'')];
+ if(!r.RecordingID){const s=mockAttemptState_(a).speaking;if(s&&s.recordingIDs&&s.recordingIDs[r.Part])identities.push(s.recordingIDs[r.Part]);}
+ const valid=identities.some(id=>equal_(digest_(JSON.stringify(base.concat([id]))),r.Digest))||
+ (!r.RecordingID&&equal_(digest_(JSON.stringify(base)),r.Digest));
+ if(!valid)securityError_('MOCK_UPLOAD_CONFLICT','Recording bytes changed; ask the owner to review');
+ if(!['audio/webm','audio/webm;codecs=opus','audio/ogg','audio/ogg;codecs=opus','audio/mp4'].includes(r.Mime))securityError_('MOCK_UPLOAD_CONFLICT','Unsupported recording format');
+ return{ok:true,recording:{receiptID:r.ReceiptID,part:Number(r.Part),mime:r.Mime,audioBase64:Utilities.base64Encode(bytes),assessment:'pending'}};
+}
+function saveMockSpeakingReview_(p,ctx){
+ const a=mockReviewAttempt_(p,ctx),receipt=mockSpeakingUploadForReview_(a,p);mockSpeakingFolder_();
+ const part=Number(p.part),requestID=mockRequestID_(p.requestID),feedback=String(p.feedback||'').trim(),revision=Number(p.revision);
+ if(!feedback||feedback.length>5000||!Number.isInteger(revision)||revision<0)securityError_('VALIDATION','Enter a review note of up to 5000 characters');
+ const sheet=mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS),all=rows(sheet),prior=all.find(r=>r.TeacherEmail===email_(ctx.user.email)&&r.RequestID===requestID);
+ if(prior){
+  if(prior.AttemptID!==a.AttemptID||Number(prior.Part)!==part||prior.ReceiptID!==receipt.ReceiptID||!(prior.FeedbackDigest?equal_(prior.FeedbackDigest,digest_(feedback)):[feedback,sheetText_(feedback)].includes(prior.Feedback))||Number(prior.BaseRevision)!==revision)
+  securityError_('VALIDATION','Review request identity already used');
+  return{ok:true,saved:mockSpeakingReviewPublic_(prior),recovered:true,assessment:'pending'};
+ }
+ const history=all.filter(r=>r.AttemptID===a.AttemptID&&Number(r.Part)===part);
+ if(revision!==history.length)securityError_('MOCK_REVIEW_CONFLICT','A newer Speaking note exists. Reload before saving.');
+ const r={ReviewID:'SPEAK-REVIEW-'+opaque_().slice(0,24),AttemptID:a.AttemptID,Part:part,ReceiptID:receipt.ReceiptID,
+ Feedback:sheetText_(feedback),TeacherEmail:email_(ctx.user.email),TeacherName:sheetText_(ctx.user.name),ReviewedAt:new Date(),RequestID:requestID,BaseRevision:revision,FeedbackDigest:digest_(feedback)};
+ const head=sheet.getDataRange().getValues()[0].map(headerName_);sheet.appendRow(head.map(k=>r[k]));
+ return{ok:true,saved:mockSpeakingReviewPublic_(r),assessment:'pending'};
+}
+
+/** Disabled timed Speaking prompt draft. No examiner simulation or assessment. */
+function mockSpeakingTimedGate_(){
+ if(PropertiesService.getScriptProperties().getProperty('DMI_MOCK_SPEAKING_TIMED_ENABLED')!=='true')
+ securityError_('MOCK_NOT_READY','Timed Speaking is still being prepared');
+}
+function mockSpeakingPlan_(a){
+ const loaded=mockPaper_(a.PaperID,a.PaperVersion);
+ if(!equal_(loaded.digest,a.PaperDigest))securityError_('MOCK_PAPER_CHANGED','The pinned paper changed; ask your teacher');
+ const s=loaded.paper.speakingTiming,fail=()=>securityError_('MOCK_NOT_READY','The Speaking prompts and timing need review');
+ if(!s||s.reviewed!==true||!Array.isArray(s.part1)||!Array.isArray(s.part3)||
+ s.part1.length<4||s.part1.length>12||s.part3.length<4||s.part3.length>8||
+ typeof s.cue!=='string'||!s.cue.trim()||s.cue.length>3000)fail();
+ const stages=[];let offset=0;
+ function add(phase,part,seconds,prompt){stages.push({phase,part,startSeconds:offset,endSeconds:offset+seconds,prompt});offset+=seconds;}
+ function questions(list,phase,part){
+  let total=0;
+  list.forEach(q=>{if(!q||typeof q.prompt!=='string'||!q.prompt.trim()||q.prompt.length>1500||
+   !Number.isInteger(q.seconds)||q.seconds<15||q.seconds>90)fail();total+=q.seconds;});
+  if(total<240||total>300)fail();
+  list.forEach(q=>add(phase,part,q.seconds,q.prompt));
+ }
+ questions(s.part1,'part1',1);add('preparation',2,60,s.cue);add('long_turn',2,120,s.cue);questions(s.part3,'part3',3);
+ return {stages,totalSeconds:offset,digest:loaded.digest};
+}
+function mockSpeakingTimedState_(a){
+ const state=mockAttemptState_(a),s=state.speaking;
+ if(!s||typeof s.startedAt!=='string'||!Number.isFinite(new Date(s.startedAt).getTime())||s.paperDigest!==a.PaperDigest)
+ securityError_('MOCK_SPEAKING_NOT_STARTED','Start timed Speaking after the microphone preflight');
+ return s;
+}
+function mockSpeakingTimedPublic_(a,plan){
+ const s=mockSpeakingTimedState_(a),start=new Date(s.startedAt).getTime(),now=Date.now(),elapsed=Math.max(0,(now-start)/1000);
+ const current=plan.stages.find(v=>elapsed<v.endSeconds);
+ return {ok:true,speaking:{attemptID:a.AttemptID,serverNow:new Date(now).toISOString(),startedAt:s.startedAt,
+  deadline:new Date(start+plan.totalSeconds*1000).toISOString(),totalSeconds:plan.totalSeconds,
+  status:current?'in_progress':'finished',assessment:'pending',
+  recordingWindow:current&&current.phase!=='preparation'?mockSpeakingWindow_(a,plan,current.part,true):null,
+  stage:current?{phase:current.phase,part:current.part,prompt:current.prompt,
+   startedAt:new Date(start+current.startSeconds*1000).toISOString(),deadline:new Date(start+current.endSeconds*1000).toISOString()}:null}};
+}
+function startMockSpeakingTimed_(p,ctx){
+ mockSpeakingTimedGate_();const a=mockSpeakingAccess_(p,ctx);mockSpeakingFolder_();const plan=mockSpeakingPlan_(a),state=mockAttemptState_(a);
+ if(!state.speaking){
+  if(![true,'true'].includes(p.consent)||![true,'true'].includes(p.microphoneReady))securityError_('VALIDATION','Complete microphone preflight and recording consent first');
+  state.speaking={startedAt:new Date().toISOString(),paperDigest:a.PaperDigest,recordingIDs:{1:opaque_(),2:opaque_(),3:opaque_()}};mockAttemptPatch_(a,state);
+ }
+ return mockSpeakingTimedPublic_(a,plan);
+}
+function resumeMockSpeakingTimed_(p,ctx){
+ mockSpeakingTimedGate_();const a=mockSpeakingAccess_(p,ctx);mockSpeakingFolder_();return mockSpeakingTimedPublic_(a,mockSpeakingPlan_(a));
+}
+
+/** Window metadata does not prove audio content/duration; real decoding/assessment remains pending. */
+function mockSpeakingWindow_(a,plan,part,publicView){
+ const s=mockSpeakingTimedState_(a),stages=plan.stages.filter(v=>v.part===part&&v.phase!=='preparation');
+ const start=new Date(s.startedAt).getTime()+stages[0].startSeconds*1000,end=new Date(s.startedAt).getTime()+stages[stages.length-1].endSeconds*1000;
+ const id=s.recordingIDs&&s.recordingIDs[part];
+ if(typeof id!=='string'||!id)securityError_('MOCK_SETUP_REQUIRED','Recording identities need teacher assistance');
+ const eligible=Date.now()>=start&&Date.now()<=start+15000;
+ return {part,startedAt:new Date(start).toISOString(),deadline:new Date(end).toISOString(),uploadDeadline:new Date(end+900000).toISOString(),
+  recordingID:!publicView||eligible?id:null,eligible};
+}
+function mockSpeakingTimedUpload_(a,p,recovery){
+ const state=mockAttemptState_(a);
+ if(!state.speaking&&PropertiesService.getScriptProperties().getProperty('DMI_MOCK_SPEAKING_TIMED_ENABLED')!=='true')return;
+ mockSpeakingTimedGate_();const plan=mockSpeakingPlan_(a),window=mockSpeakingWindow_(a,plan,Number(p.part),false);
+ if(typeof p.recordingID!=='string'||!equal_(window.recordingID,p.recordingID))
+ securityError_('MOCK_RECORDING_ID','This recording does not belong to the timed part');
+ if(!recovery&&(Date.now()<new Date(window.deadline).getTime()||Date.now()>new Date(window.uploadDeadline).getTime()))
+ securityError_('MOCK_UPLOAD_WINDOW','The timed recording upload window is closed; ask your teacher');
+ if(Number(p.durationSeconds)>(new Date(window.deadline)-new Date(window.startedAt))/1000+5)
+ securityError_('VALIDATION','Recording exceeds its timed part');
+}
+
+/** Owner-only retention dry run. No deletion, scheduling, provider call or result writes. */
+function previewMockSpeakingRetention(days){
+ const owner=email_(Session.getEffectiveUser().getEmail()),active=email_(Session.getActiveUser().getEmail());
+ if(!owner||!active||active!==owner)securityError_('FORBIDDEN','Only the deployment owner can preview retention');
+ if(typeof days!=='number'||!Number.isInteger(days)||days<7||days>365)securityError_('VALIDATION','Choose an explicit retention period from 7 to 365 days');
+ const folder=mockSpeakingFolder_(),now=Date.now(),cutoff=now-days*86400000;
+ const uploads=rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS));
+ const notes=rows(mockSheet_('MockSpeakingReviews',DMI_SPEAKING_REVIEW_HEADERS));
+ const candidates=[],held=[];const receiptCounts={},fileCounts={},partCounts={};
+ uploads.forEach(r=>{
+  const partKey=String(r.AttemptID)+'|'+String(r.Part);
+  receiptCounts[r.ReceiptID]=(receiptCounts[r.ReceiptID]||0)+1;
+  fileCounts[r.FileID]=(fileCounts[r.FileID]||0)+1;
+  partCounts[partKey]=(partCounts[partKey]||0)+1;
+ });
+ uploads.forEach(r=>{
+  const at=new Date(r.UploadedAt).getTime(),part=Number(r.Part);
+  const item={receiptID:String(r.ReceiptID||''),attemptID:String(r.AttemptID||''),part};
+  if(!r.ReceiptID||!r.AttemptID||!r.FileID||![1,2,3].includes(part)||!Number.isFinite(at)||at>now){
+   held.push({...item,reason:'INVALID_METADATA'});return;
+  }
+  if(receiptCounts[r.ReceiptID]!==1||fileCounts[r.FileID]!==1||partCounts[String(r.AttemptID)+'|'+String(r.Part)]!==1){
+   held.push({...item,reason:'DUPLICATE_IDENTITY'});return;
+  }
+  if(at>cutoff)return;
+  const found=folder.getFilesByName('mock-speaking-'+digest_(r.AttemptID+'|'+part).slice(0,32));
+  if(!found.hasNext()){held.push({...item,reason:'FILE_UNAVAILABLE'});return;}
+  const file=found.next();
+  if(found.hasNext()||file.getId()!==r.FileID||file.getDescription()!==r.Digest){held.push({...item,reason:'FILE_IDENTITY_CONFLICT'});return;}
+  // Permission uncertainty fails the entire preview closed; never reads audio bytes.
+  mockSpeakingPrivate_(file);
+  const reviews=notes.filter(n=>n.AttemptID===r.AttemptID&&Number(n.Part)===part&&n.ReceiptID===r.ReceiptID);
+  candidates.push({...item,uploadedAt:new Date(at).toISOString(),reviewCount:reviews.length,
+   holdForAssessment:reviews.length===0,deletionApproved:false});
+ });
+ return{ok:true,dryRun:true,retentionDays:days,asOf:new Date(now).toISOString(),cutoff:new Date(cutoff).toISOString(),
+  candidates,held,deletionEnabled:false,assessment:'pending'};
+}
+
+/** Provider-neutral response validation only. No AI call, scoring or result release. */
+const DMI_SPEAKING_CRITERIA=['fluencyCoherence','lexicalResource','grammar','pronunciation'];
+function validateMockSpeakingAssessment_(report,recordings){
+ const fail=()=>securityError_('ASSESSMENT_INVALID','Audio assessment needs teacher review');
+ if(!report||report.schemaVersion!==1||report.status!=='draft'||report.audioEvaluated!==true||
+ typeof report.provider!=='string'||!report.provider.trim()||report.provider.length>100||
+ typeof report.modelVersion!=='string'||!report.modelVersion.trim()||report.modelVersion.length>100||
+ typeof report.attemptID!=='string'||!report.attemptID||!Array.isArray(recordings)||recordings.length!==3||
+ !Array.isArray(report.recordings)||report.recordings.length!==3)fail();
+ const byPart={};recordings.forEach(r=>{
+  if(!r||![1,2,3].includes(r.part)||byPart[r.part]||r.attemptID!==report.attemptID||
+   typeof r.receiptID!=='string'||!r.receiptID||! /^[a-f0-9]{64}$/.test(r.audioSHA256)||
+   !Number.isFinite(r.decodedSeconds)||r.decodedSeconds<1||r.decodedSeconds>(r.part===2?125:360)||
+   r.decodingVerified!==true)fail();byPart[r.part]=r;
+ });
+ const seen={};report.recordings.forEach(r=>{
+  if(!r||![1,2,3].includes(r.part)||!byPart[r.part]||seen[r.part])fail();seen[r.part]=true;
+  const expected=byPart[r.part];
+  if(r.receiptID!==expected.receiptID||r.audioSHA256!==expected.audioSHA256||
+   r.decodedSeconds!==expected.decodedSeconds)fail();
+ });
+ if(!report.criteria||typeof report.criteria!=='object'||
+ Object.keys(report.criteria).sort().join('|')!==DMI_SPEAKING_CRITERIA.slice().sort().join('|'))fail();
+ const criteria={};
+ DMI_SPEAKING_CRITERIA.forEach(key=>{
+  const c=report.criteria[key];
+  if(!c||!Number.isInteger(c.band)||c.band<1||c.band>9||typeof c.feedback!=='string'||
+   !c.feedback.trim()||c.feedback.length>3000||!Array.isArray(c.evidence)||c.evidence.length<3||c.evidence.length>24)fail();
+  const parts={};
+  const evidence=c.evidence.map(e=>{
+   if(!e||!byPart[e.part]||e.source!=='audio'||!Number.isFinite(e.startSeconds)||!Number.isFinite(e.endSeconds)||
+    e.startSeconds<0||e.endSeconds<=e.startSeconds||e.endSeconds>byPart[e.part].decodedSeconds||
+    typeof e.observation!=='string'||!e.observation.trim()||e.observation.length>1000)fail();
+   parts[e.part]=true;
+   return{part:e.part,source:'audio',startSeconds:e.startSeconds,endSeconds:e.endSeconds,observation:e.observation.trim()};
+  });
+  if(Object.keys(parts).length!==3)fail();
+  criteria[key]={band:c.band,feedback:c.feedback.trim(),evidence};
+ });
+ // Caller must supply server-verified decoded recording identities, not candidate claims.
+ // Provider audioEvaluated/evidence claims require independent calibration; this validates shape/binding only.
+ return{schemaVersion:1,attemptID:report.attemptID,status:'draft',provider:report.provider.trim(),
+  modelVersion:report.modelVersion.trim(),criteria,teacherReviewRequired:true,releaseApproved:false};
+}
+
+/** Disabled owner-only audio-service pilot. No public endpoint or automatic result release. */
+function mockSpeakingAssessmentConfig_(){
+ const p=PropertiesService.getScriptProperties();
+ if(p.getProperty('DMI_MOCK_ASSESSMENT_ENABLED')!=='true')securityError_('ASSESSMENT_NOT_READY','Audio assessment is not configured');
+ const endpoint=String(p.getProperty('DMI_MOCK_ASSESSMENT_ENDPOINT')||''),host=String(p.getProperty('DMI_MOCK_ASSESSMENT_HOST')||'');
+ const match=/^https:\/\/([a-z0-9-]+(?:\.[a-z0-9-]+)+)(\/[A-Za-z0-9/_-]*)$/.exec(endpoint);
+ const token=String(p.getProperty('DMI_MOCK_ASSESSMENT_TOKEN')||''),provider=String(p.getProperty('DMI_MOCK_ASSESSMENT_PROVIDER')||''),version=String(p.getProperty('DMI_MOCK_ASSESSMENT_VERSION')||'');
+ if(!match||match[1]!==host||/^(?:[0-9.]+)$/.test(host)||/(?:^|\.)(?:localhost|local|internal)$/.test(host)||
+ token.length<32||token.length>4096||/[\r\n]/.test(token)||!provider.trim()||provider.length>100||!version.trim()||version.length>100)
+ securityError_('ASSESSMENT_NOT_READY','The private audio service needs owner setup');
+ return{endpoint,token,provider,version};
+}
+function mockSpeakingQuality_(decoded,expected){
+ const fail=()=>securityError_('ASSESSMENT_INVALID','Decoded audio metadata needs owner review');
+ if(!Array.isArray(decoded)||decoded.length!==3)fail();
+ const seen={},recordings=[],issues=[];
+ decoded.forEach(d=>{
+  if(!d||![1,2,3].includes(d.part)||seen[d.part])fail();seen[d.part]=true;
+  const e=expected.find(r=>r.part===d.part);
+  if(!e||d.receiptID!==e.receiptID||d.audioSHA256!==e.audioSHA256||d.decodingVerified!==true||
+   d.speechDetectionVerified!==true||!Number.isFinite(d.decodedSeconds)||d.decodedSeconds<1||
+   d.decodedSeconds>(d.part===2?125:360)||!Number.isFinite(d.speechSeconds)||d.speechSeconds<0||
+   d.speechSeconds>d.decodedSeconds||!Number.isFinite(d.silenceRatio)||d.silenceRatio<0||d.silenceRatio>1||
+   !Number.isFinite(d.clippingRatio)||d.clippingRatio<0||d.clippingRatio>1)fail();
+  if(Math.abs(d.decodedSeconds-e.reportedSeconds)>5)issues.push({part:d.part,code:'DURATION_MISMATCH'});
+  if(d.speechSeconds<(d.part===2?10:5)||d.silenceRatio>=0.95)issues.push({part:d.part,code:'INSUFFICIENT_SPEECH'});
+  if(d.clippingRatio>=0.1)issues.push({part:d.part,code:'CLIPPING'});
+  recordings.push({part:d.part,attemptID:e.attemptID,receiptID:e.receiptID,audioSHA256:e.audioSHA256,decodedSeconds:d.decodedSeconds,decodingVerified:true});
+ });
+ return{recordings,issues};
+}
+function previewMockSpeakingAssessment(attemptID){
+ const owner=email_(Session.getEffectiveUser().getEmail()),active=email_(Session.getActiveUser().getEmail());
+ if(!owner||active!==owner)securityError_('FORBIDDEN','Only the deployment owner can pilot audio assessment');
+ const config=mockSpeakingAssessmentConfig_(),p={attemptID:String(attemptID||'')},ctx={role:'teacher',user:{role:'teacher',email:owner,name:'Owner'}};
+ const a=mockReviewAttempt_(p,ctx),plan=mockSpeakingPlan_(a);
+ const receipts=rows(mockSheet_('MockSpeakingUploads',DMI_SPEAKING_HEADERS)).filter(r=>r.AttemptID===a.AttemptID);
+ if(receipts.length!==3||[1,2,3].some(part=>receipts.filter(r=>Number(r.Part)===part).length!==1))
+ securityError_('ASSESSMENT_NOT_READY','Three acknowledged recordings are required');
+ const expected=[],recordings=[1,2,3].map(part=>{
+  const r=receipts.find(r=>Number(r.Part)===part),audio=getMockSpeakingRecording_({...p,part,receiptID:r.ReceiptID},ctx).recording;
+  const bytes=Utilities.base64Decode(audio.audioBase64);
+  const hash=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,bytes).map(b=>('0'+((b+256)%256).toString(16)).slice(-2)).join('');
+  expected.push({part,attemptID:a.AttemptID,receiptID:r.ReceiptID,audioSHA256:hash,reportedSeconds:Number(r.DurationSeconds)});
+  return{part,receiptID:r.ReceiptID,audioSHA256:hash,mime:audio.mime,audioBase64:audio.audioBase64};
+ });
+ const requestID=digest_(JSON.stringify([a.AttemptID,a.PaperDigest,config.provider,config.version,expected.map(r=>[r.part,r.receiptID,r.audioSHA256])]));
+ const body={schemaVersion:1,requestID,attemptID:a.AttemptID,provider:config.provider,modelVersion:config.version,
+  speakingPlan:plan.stages,recordings};
+ let response;
+ try{response=UrlFetchApp.fetch(config.endpoint,{method:'post',contentType:'application/json',headers:{Authorization:'Bearer '+config.token,'Idempotency-Key':requestID},
+  payload:JSON.stringify(body),followRedirects:false,muteHttpExceptions:true});}
+ catch(e){securityError_('ASSESSMENT_SERVICE_ERROR','The audio service is unavailable. No score was released.');}
+ if(response.getResponseCode()!==200)securityError_('ASSESSMENT_SERVICE_ERROR','The audio service did not complete the request. No score was released.');
+ const raw=response.getContentText();if(raw.length>262144)securityError_('ASSESSMENT_INVALID','The audio response exceeds its limit');
+ let data;try{data=JSON.parse(raw);}catch(e){securityError_('ASSESSMENT_INVALID','The audio service returned an invalid response');}
+ if(!data||data.requestID!==requestID)securityError_('ASSESSMENT_INVALID','Audio response identity does not match');
+ const quality=mockSpeakingQuality_(data.decoded,expected);
+ if(quality.issues.length)return{ok:true,status:'needs_teacher_review',qualityIssues:quality.issues,assessment:null,releaseApproved:false};
+ if(!data.assessment||data.assessment.provider!==config.provider||data.assessment.modelVersion!==config.version)
+ securityError_('ASSESSMENT_INVALID','Assessment model identity does not match');
+ return{ok:true,status:'draft',qualityIssues:[],assessment:validateMockSpeakingAssessment_(data.assessment,quality.recordings),releaseApproved:false};
 }

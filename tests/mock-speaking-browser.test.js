@@ -1,0 +1,28 @@
+/* Synthetic microphone and receipt service. No real recording upload or students. */
+const {chromium}=require('playwright'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');const root=path.resolve(__dirname,'..');let checks=0;const check=(n,v)=>{assert.ok(v,n);checks++;};
+(async()=>{const browser=await chromium.launch({args:['--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream']}),context=await browser.newContext(),page=await context.newPage();let receipts=[],requests=[],lose=true,last=null;
+await page.exposeFunction('speakingCall',async(a,p)=>{if(a==='myMockSpeakingUploads')return{ok:true,receipts,assessment:'pending'};
+if(a==='uploadMockSpeaking'){requests.push(p);if(p.requestID!==last){last=p.requestID;receipts.push({id:'AUDIO-synthetic',part:p.part,bytes:Buffer.from(p.audioBase64,'base64').length,durationSeconds:p.durationSeconds,assessment:'pending'});}if(lose){lose=false;throw Error('Synthetic lost response');}return{ok:true,receipt:receipts.at(-1),assessment:'pending'};}return{ok:false,error:'Unsupported'};});
+await context.route('**/*',async route=>{const rel=new URL(route.request().url()).pathname.split('/').pop();if(rel==='dmi-auth.js')return route.fulfill({contentType:'text/javascript',body:"window.DMI_AUTH={requireRole:async()=>({role:'student',user:{name:'Synthetic'}}),call:(a,p)=>window.speakingCall(a,p)};"});
+const file=path.join(root,rel);if(fs.existsSync(file))return route.fulfill({contentType:rel.endsWith('.js')?'text/javascript':rel.endsWith('.css')?'text/css':'text/html',body:fs.readFileSync(file)});return route.abort();});
+await page.goto('https://draft.example/mock-speaking.html?sitting=MOCK-'+'a'.repeat(24));await page.getByText('Capture rehearsal only. Follow the teacher’s instructions; no AI band is generated.',{exact:true}).waitFor();
+check('consent required',await page.locator('#record').isDisabled());await page.locator('#consent').check();await page.locator('#record').click();await page.getByText('Recording part 1.',{exact:true}).waitFor();
+check('part fixed during recording',await page.locator('#part').isDisabled());await page.waitForTimeout(1250);await page.locator('#stop').click();await page.getByText('Recording held on this page. Upload it before closing or refreshing.',{exact:true}).waitFor();
+check('recording cannot be replaced before upload',await page.locator('#record').isDisabled());await page.locator('#upload').click();await page.locator('#retry').waitFor({state:'visible'});
+check('uncertain upload freezes part',await page.locator('#part').isDisabled());check('audio payload present',requests[0].audioBase64.length>32&&requests[0].mime.startsWith('audio/')&&requests[0].durationSeconds>=1);
+await page.locator('#retry').click();await page.getByText('Recording acknowledged by the server. Assessment pending.',{exact:true}).waitFor();
+check('retry keeps exact upload identity and bytes',requests.length===2&&JSON.stringify(requests[0])===JSON.stringify(requests[1]));
+check('lost response gives only one receipt',receipts.length===1);
+check('acknowledged part cannot be replaced',await page.locator('#record').isDisabled());
+check('no browser audio storage',await page.evaluate(()=>localStorage.length===0&&sessionStorage.length===0));
+check('receipt states assessment pending',(await page.locator('#receipts').textContent()).includes('assessment pending'));
+await page.reload();await page.locator('#receipts p').waitFor();check('refresh restores receipt',await page.locator('#receipts p').count()===1);
+await page.locator('#part').selectOption('2');await page.locator('#consent').check();check('next unrecorded part available',await page.locator('#record').isEnabled());
+await page.setViewportSize({width:390,height:844});check('mobile fits viewport',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+await page.evaluate(()=>{const Native=window.MediaRecorder;function Wrapped(...args){const r=new Native(...args);window.syntheticRecorder=r;return r;}Wrapped.isTypeSupported=Native.isTypeSupported.bind(Native);window.MediaRecorder=Wrapped;});
+await page.locator('#record').click();await page.getByText('Recording part 2.',{exact:true}).waitFor();
+await page.evaluate(()=>window.syntheticRecorder.dispatchEvent(new Event('error')));await page.getByText('Recording failed; no recording was uploaded. Ask your teacher.',{exact:true}).waitFor();
+check('failed capture cannot upload a partial recording',await page.locator('#upload').isDisabled()&&receipts.length===1);
+await page.evaluate(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw Error('Synthetic microphone denied');};});await page.locator('#record').click();await page.getByText('Synthetic microphone denied',{exact:true}).waitFor();
+check('permission failure leaves no recording to upload',await page.locator('#upload').isDisabled());
+await context.close();await browser.close();console.log(JSON.stringify({speakingBrowserChecks:checks,realAudioUploads:0,provider:'NOT_CONFIGURED'}));})().catch(e=>{console.error(e);process.exit(1);});
