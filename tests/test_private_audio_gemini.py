@@ -60,6 +60,20 @@ class GeminiChecks(unittest.TestCase):
         self.assertEqual(len(report["recordings"]), 3)
         self.assertEqual(report["criteria"]["pronunciation"]["band"], 6)
 
+    def test_current_json_response_format_contract(self):
+        self.assessor(self.body, self.prepared, self.decoded)
+        config = self.calls[0][2]["generation_config"]
+        self.assertNotIn("response_schema", config)
+        text_format = config["response_format"]["text"]
+        self.assertEqual(text_format["mime_type"], "APPLICATION_JSON")
+        schema = text_format["schema"]
+        self.assertEqual(schema["type"], "object")
+        self.assertEqual(set(schema["required"]), set(self.criteria))
+        grammar = schema["properties"]["grammar"]
+        self.assertEqual(grammar["properties"]["band"]["type"], "integer")
+        self.assertEqual(grammar["properties"]["evidence"]["type"], "array")
+        self.assertEqual(grammar["properties"]["evidence"]["items"]["properties"]["source"]["enum"], ["audio"])
+
     def test_provider_mp4_mime_mapping(self):
         self.prepared[0]["mime"] = "audio/mp4"
         self.assessor(self.body, self.prepared, self.decoded)
