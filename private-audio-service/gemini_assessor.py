@@ -28,16 +28,16 @@ def post_json(url, headers, payload):
         raise ProcessingError("ASSESSOR_SERVICE_ERROR") from None
 
 def response_schema():
-    evidence = {"type": "OBJECT", "properties": {
-        "part": {"type": "INTEGER"}, "source": {"type": "STRING", "enum": ["audio"]},
-        "startSeconds": {"type": "NUMBER"}, "endSeconds": {"type": "NUMBER"},
-        "observation": {"type": "STRING"}},
+    evidence = {"type": "object", "properties": {
+        "part": {"type": "integer"}, "source": {"type": "string", "enum": ["audio"]},
+        "startSeconds": {"type": "number"}, "endSeconds": {"type": "number"},
+        "observation": {"type": "string"}},
         "required": ["part", "source", "startSeconds", "endSeconds", "observation"]}
-    criterion = {"type": "OBJECT", "properties": {
-        "band": {"type": "INTEGER"}, "feedback": {"type": "STRING"},
-        "evidence": {"type": "ARRAY", "items": evidence}},
+    criterion = {"type": "object", "properties": {
+        "band": {"type": "integer"}, "feedback": {"type": "string"},
+        "evidence": {"type": "array", "items": evidence}},
         "required": ["band", "feedback", "evidence"]}
-    return {"type": "OBJECT", "properties": {key: criterion for key in CRITERIA}, "required": list(CRITERIA)}
+    return {"type": "object", "properties": {key: criterion for key in CRITERIA}, "required": list(CRITERIA)}
 
 def validate_criteria(criteria, decoded):
     def invalid():
@@ -94,8 +94,9 @@ class GeminiAssessor:
                           {"inline_data": {"mime_type": mime_map[clip["mime"]],
                                            "data": base64.b64encode(clip["sourceBytes"]).decode("ascii")}}])
         request = {"contents": [{"role": "user", "parts": parts}],
-                   "generation_config": {"response_format": {"text": {"mime_type": "application/json"}},
-                                         "response_schema": response_schema(), "temperature": 0.2, "max_output_tokens": 8192}}
+                   "generation_config": {"response_format": {"text": {"mime_type": "APPLICATION_JSON",
+                                                                    "schema": response_schema()}},
+                                         "temperature": 0.2, "max_output_tokens": 8192}}
         payload = json.dumps(request, allow_nan=False).encode()
         if len(payload) > MAX_REQUEST:
             raise ProcessingError("ASSESSOR_REQUEST_TOO_LARGE")
