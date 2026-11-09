@@ -7,9 +7,9 @@
 const DMI_SESSION_HOURS = 4;
 const DMI_PASSWORD_ITERATIONS = 600000;
 const DMI_TEACHER_ACTIONS = ['listStudents','addStudent','deleteStudent',
-  'renewStudent','addCourse','deleteCourse','addMark','resetStudentPassword','setLMSData','saveCourseDetails','listCourseEnrollments','setCourseEnrollment'];
+  'renewStudent','addCourse','deleteCourse','addMark','resetStudentPassword','setLMSData','saveCourseDetails','listCourseEnrollments','setCourseEnrollment','listCourseProgress'];
 const DMI_ACTIONS = DMI_TEACHER_ACTIONS.concat(['listCourses','listMarks',
-  'listExamResults','submitExamResult','getLMSData','session','logout','changePassword','listCourseCatalogue']);
+  'listExamResults','submitExamResult','getLMSData','session','logout','changePassword','listCourseCatalogue','setLessonProgress']);
 
 function securityError_(code, message) {
   const e = new Error(message); e.code = code; throw e;

@@ -71,7 +71,7 @@ function handle(e) {
   try {
     const p=Object.assign({},e && e.parameter || {});
     const action=String(p.action||'');
-    if(action==='ping')return json({ok:true,version:'phase3-courses',time:new Date()});
+    if(action==='ping')return json({ok:true,version:'phase3-progress',time:new Date()});
     // Credentials and bearer tokens must never be accepted in GET URLs.
     if(!e || !e.postData)securityError_('POST_REQUIRED','Use POST');
     lock=LockService.getScriptLock();
@@ -114,6 +114,8 @@ function handle(e) {
       case 'renewStudent': result=renewStudent(p);break;
       case 'listCourses': result=visibleCourseLessons_(ctx);break;
       case 'listCourseCatalogue': result=listCourseCatalogue_(ctx);break;
+      case 'setLessonProgress': result=setLessonProgress_(p,ctx);break;
+      case 'listCourseProgress': result=listCourseProgress_(p,ctx);break;
       case 'saveCourseDetails': result=saveCourseDetails_(p,ctx);break;
       case 'listCourseEnrollments': result=listCourseEnrolments_(p,ctx);break;
       case 'setCourseEnrollment': result=setCourseEnrolment_(p,ctx);break;
@@ -201,6 +203,7 @@ function deleteStudent(p) {
     if (email_(data[i][emailCol]) === email) {
       sheet.deleteRow(i + 1);
       removeStudentCourseEnrolments_(email);
+      removeStudentLessonProgress_(email);
       return { ok: true };
     }
   }

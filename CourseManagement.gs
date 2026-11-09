@@ -50,15 +50,16 @@ function courseVisible_(course,ctx,enrolments){
     enrolments.some(e=>e.CourseKey===course.CourseKey && email_(e.StudentEmail)===email_(ctx.user.email));
 }
 function listCourseCatalogue_(ctx){
-  const courses=courseRecords_(), enrolments=courseEnrolments_(), lessons=rows(tab('Courses'));
+  const courses=courseRecords_(), enrolments=courseEnrolments_(), lessons=rows(tab('Courses')),progress=progressRecords_();
   const data=courses.filter(c=>courseVisible_(c,ctx,enrolments)).map(c=>{
     const out=Object.assign({},c);
     out.Lessons=lessons.filter(l=>courseKey_(l.Course)===c.CourseKey);
     out.Enrolled=enrolments.some(e=>e.CourseKey===c.CourseKey && email_(e.StudentEmail)===email_(ctx.user.email));
+    if(ctx.role==='student')out.CompletedLessonIDs=progressLessonIDs_(c.CourseKey,ctx.user.email,out.Lessons,progress);
     if(ctx.role==='teacher')out.EnrolledCount=enrolments.filter(e=>e.CourseKey===c.CourseKey).length;
     return out;
   });
-  return {ok:true,data,courseManagementReady:!!courseSheet_('CourseDetails',DMI_COURSE_HEADERS,false) &&
+  return {ok:true,data,progressTrackingReady:!!courseSheet_('CourseProgress',DMI_PROGRESS_HEADERS,false),courseManagementReady:!!courseSheet_('CourseDetails',DMI_COURSE_HEADERS,false) &&
     !!courseSheet_('CourseEnrollments',DMI_ENROLMENT_HEADERS,false)};
 }
 function visibleCourseLessons_(ctx){

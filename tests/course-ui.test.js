@@ -4,6 +4,7 @@ async function runCourseUITests(source){
   let checks=0;const nodes=new Map(),calls=[],requests=[];
   class Node{
     constructor(){this.value='';this.innerHTML='';this.textContent='';this.disabled=false;this.children=[];}
+    querySelectorAll(){return this.inputs||[];}
     replaceChildren(...children){this.children=children;this.innerHTML='';this.textContent='';}
     appendChild(child){this.children.push(child);return child;}
     append(...children){children.forEach(c=>this.appendChild(c));}
@@ -46,6 +47,39 @@ async function runCourseUITests(source){
   await document.getElementById('courseRefresh').onclick();
   assert(document.getElementById('courseNotice').className==='msg ok' &&
     !document.getElementById('courseDetailFields').disabled,'Successful refresh clears stale error and enables editing');checks++;
+
+  const progressCourse={CourseKey:'pkey',Course:'Progress course',Lessons:[{CourseID:'L1',Lesson:'First'},{CourseID:'L2',Lesson:'Second'}],CompletedLessonIDs:['L1']};
+  const progressHTML=ui.renderCourses([progressCourse],true);
+  assert(progressHTML.includes('1 / 2') && progressHTML.includes('checked') && progressHTML.includes('Mark complete'),'Completion checkboxes and totals rendered');checks++;
+  assert(!ui.renderCourses([progressCourse],false).includes('Mark complete'),'Old backend does not show completion writes');checks++;
+  const hostile=Object.assign({},progressCourse,{CourseKey:'"><script>',Lessons:[{CourseID:'"><img>',Lesson:'Safe'}]});
+  assert(!ui.renderCourses([hostile],true).includes('<script>') && !ui.renderCourses([hostile],true).includes('<img>'),'Completion attributes escaped');checks++;
+  const message=new Node(),count=new Node(),card={querySelector:s=>s==='[data-progress-message]'?message:count};
+  const input={dataset:{progressCourse:'pkey',progressLesson:'L2'},checked:false,disabled:false,closest:()=>card};
+  document.getElementById('coursesBox').inputs=[input];
+  requests.push({ok:true,data:[progressCourse],progressTrackingReady:true});await ui.loadStudent();
+  input.checked=true;requests.push({ok:true});await input.onchange();
+  assert(count.textContent==='2 / 2' && message.textContent==='Progress saved.' && !input.disabled,'Successful completion updates count and releases checkbox');checks++;
+  const last=calls.at(-1);
+  assert(last.action==='setLessonProgress' && last.params.completed==='true' && !('studentEmail' in last.params),'Browser sends completion without a selectable student identity');checks++;
+  input.checked=false;requests.push({ok:false,code:'FORBIDDEN',error:'Not enrolled'});await input.onchange();
+  assert(input.checked===true && message.textContent==='Not enrolled','Rejected completion restores confirmed state');checks++;
+  const prior=calls.length;input.checked=false;requests.push(new SyntaxError('private HTML'));await input.onchange();
+  assert(input.checked===true && message.textContent.includes('Could not confirm') && !message.textContent.includes('private HTML') && calls.length===prior+1,'Ambiguous writes require refresh and never retry automatically');checks++;
+  input.checked=false;requests.push({ok:true});await input.onchange();
+  assert(count.textContent==='1 / 2','Unmarking updates confirmed total');checks++;
+  document.getElementById('coursesBox').inputs=[];
+  requests.push({ok:true,data:[progressCourse],courseManagementReady:true});
+  await document.getElementById('courseRefresh').onclick();
+  document.getElementById('detailCourse').value='pkey';
+  requests.push({ok:true,data:[{studentName:'<script>name</script>',studentEmail:'<img>',completedLessons:1,totalLessons:2,percent:50,canAccess:true}],progressTrackingReady:true});
+  await document.getElementById('courseProgressRefresh').onclick();
+  const teacherHTML=document.getElementById('courseProgressBox').innerHTML;
+  assert(teacherHTML.includes('50%') && teacherHTML.includes('1 / 2') && !teacherHTML.includes('<script>') && !teacherHTML.includes('<img>'),'Teacher report escapes identities and shows completion');checks++;
+  requests.push({ok:true,data:[],progressTrackingReady:false});
+  await document.getElementById('courseProgressRefresh').onclick();
+  assert(document.getElementById('courseProgressBox').textContent==='Lesson progress is not enabled yet.','Teacher sees clear setup state');checks++;
+
   return checks;
 }
 

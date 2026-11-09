@@ -30,8 +30,8 @@ async function runCourseTests(sources){
   }};
   const ContentService={MimeType:{JSON:'json'},createTextOutput:text=>({setMimeType:()=>JSON.parse(text)})};
   const api=new Function('PropertiesService','SpreadsheetApp','LockService','Utilities','ContentService','Logger',
-    sources.code+'\n'+sources.security+'\n'+sources.management+
-    '\nreturn {initializeCourseManagement,courseRecords_,courseKey_,listCourseCatalogue_,saveCourseDetails_,setCourseEnrolment_,listCourseEnrolments_,digest_,credentialVersion_,handle,account_,deleteStudent};')(
+    sources.code+'\n'+sources.security+'\n'+sources.management+'\n'+sources.progress+
+    '\nreturn {initializeLessonProgress,setLessonProgress_,listCourseProgress_,initializeCourseManagement,courseRecords_,courseKey_,listCourseCatalogue_,saveCourseDetails_,setCourseEnrolment_,listCourseEnrolments_,digest_,credentialVersion_,handle,account_,deleteStudent};')(
     {getScriptProperties:()=>properties},{openById:()=>spreadsheet},{getScriptLock:()=>lock},Utilities,ContentService,{log:()=>{}});
   const teacher={role:'teacher',user:{email:'teacher@example.invalid'}},student={role:'student',user:{email:'a@example.invalid'}},other={role:'student',user:{email:'b@example.invalid'}};
   const legacy=api.courseKey_('Existing course'),before=JSON.stringify(Array.from(book,([n,s])=>[n,s.data]));
@@ -86,7 +86,57 @@ async function runCourseTests(sources){
   api.setCourseEnrolment_({courseKey:key,studentEmail:student.user.email,enrolled:'false'},teacher);
   check(api.listCourseCatalogue_(student).data.length===0,'Removal revokes course listing access');
   api.setCourseEnrolment_({courseKey:key,studentEmail:student.user.email,enrolled:'true'},teacher);
+
+  check(!request('listCourseCatalogue',{}).progressTrackingReady,'Missing progress setup does not block catalogue');
+  const progressParams={courseKey:key,lessonID:String(book.get('Courses').data[2][0]),completed:'true'};
+  check(request('setLessonProgress',progressParams).code==='COURSE_SETUP_REQUIRED','Progress writes require setup');
+  const preserved=JSON.stringify(Array.from(book,([n,s])=>[n,s.data]));
+  api.initializeLessonProgress();api.initializeLessonProgress();
+  check(book.get('CourseProgress').data.length===1,'Progress setup is idempotent');
+  check(JSON.stringify(Array.from(book,([n,s])=>[n,s.data]).filter(([n])=>n!=='CourseProgress'))===preserved,'Progress setup preserves all prior data');
+  check(api.handle({parameter:{action:'setLessonProgress'},postData:{}}).code==='UNAUTHENTICATED','Anonymous progress blocked');
+  check(request('setLessonProgress',progressParams,'teacher').code==='FORBIDDEN','Teacher cannot mark a student lesson');
+  check(request('listCourseProgress',{courseKey:key}).code==='FORBIDDEN','Student cannot read class progress');
+  check(request('setLessonProgress',Object.assign({},progressParams,{studentEmail:other.user.email})).code==='FORBIDDEN','Cannot forge progress owner');
+  check(request('setLessonProgress',Object.assign({},progressParams,{lessonID:'L1'})).code==='NOT_FOUND','Lesson must belong to selected course');
+  check(request('setLessonProgress',Object.assign({},progressParams,{courseKey:'missing'})).code==='NOT_FOUND','Unknown course rejected');
+  check(request('setLessonProgress',Object.assign({},progressParams,{completed:'maybe'})).code==='VALIDATION','Invalid completion rejected');
+  check(request('setLessonProgress',progressParams).ok,'Student can complete enrolled lesson');
+  check(request('setLessonProgress',progressParams).ok && book.get('CourseProgress').data.length===2,'Repeated completion is idempotent');
+  check(request('listCourseCatalogue',{}).data.find(c=>c.CourseKey===key).CompletedLessonIDs[0]===progressParams.lessonID,'Completion is read from persistent sheet');
+  const originalToken=tokens.student;tokens.student='c'.repeat(64);session('student',student.user.email,tokens.student);
+  check(request('listCourseCatalogue',{}).data.find(c=>c.CourseKey===key).CompletedLessonIDs[0]===progressParams.lessonID,'A separate session reads the same saved completion');
+  tokens.student=originalToken;
+  check(book.get('CourseProgress').data[1][1]===student.user.email,'Progress owner comes from verified session');
+  check(!api.listCourseCatalogue_(other).data.some(c=>c.CourseKey===key),'Progress does not grant other students enrolment');
+  const report=request('listCourseProgress',{courseKey:key},'teacher');
+  check(report.data.length===1 && report.data[0].completedLessons===1 && report.data[0].percent===100 && report.data[0].canAccess,'Teacher report counts completion');
+  check(request('setLessonProgress',Object.assign({},progressParams,{completed:'false'})).ok && book.get('CourseProgress').data.length===1,'Student can unmark completion');
+  request('setLessonProgress',progressParams);
+  api.setCourseEnrolment_({courseKey:key,studentEmail:student.user.email,enrolled:'false'},teacher);
+  check(request('setLessonProgress',progressParams).code==='FORBIDDEN','Removed enrolment blocks progress writes');
+  const historical=request('listCourseProgress',{courseKey:key},'teacher').data[0];
+  check(historical.completedLessons===1 && !historical.canAccess,'Teacher sees retained progress after removal');
+  api.setCourseEnrolment_({courseKey:key,studentEmail:student.user.email,enrolled:'true'},teacher);
+  check(request('listCourseCatalogue',{}).data.find(c=>c.CourseKey===key).CompletedLessonIDs.length===1,'Re-enrolment restores retained progress');
+  const studentRow=book.get('Students').data[1];studentRow[3]=past;
+  check(request('setLessonProgress',progressParams).code==='ACCESS_EXPIRED','Expired account cannot update progress');
+  check(!request('listCourseProgress',{courseKey:key},'teacher').data[0].canAccess,'Teacher report flags expired access');
+  studentRow[3]=future;
+  check(request('listCourseCatalogue',{}).data.find(c=>c.CourseKey===key).CompletedLessonIDs.length===1,'Renewed expiry preserves progress');
+  const oldLesson=book.get('Courses').data.splice(2,1)[0];
+  check(request('listCourseCatalogue',{}).data.find(c=>c.CourseKey===key).CompletedLessonIDs.length===0,'Deleted lessons omitted from completed IDs');
+  const emptyReport=request('listCourseProgress',{courseKey:key},'teacher').data[0];
+  check(emptyReport.completedLessons===0 && emptyReport.totalLessons===0 && emptyReport.percent===0,'Zero lessons have zero progress, not NaN');
+  book.get('Courses').data.push(oldLesson);
+  const students=book.get('Students');students.data.push(['S4','c@example.invalid','Student C',future,'Active','hashC']);
+  api.saveCourseDetails_(Object.assign({},fields,{courseKey:key,enrolmentRequired:'false'}),teacher);
+  check(request('listCourseProgress',{courseKey:key},'teacher').data.length===4,'Open course report includes all accounts');
+  check(api.listCourseCatalogue_(other).data.find(c=>c.CourseKey===key).CompletedLessonIDs.length===0,'Other student cannot inherit completion');
+  api.saveCourseDetails_(Object.assign({},fields,{courseKey:key,enrolmentRequired:'true'}),teacher);
+
   api.deleteStudent({email:student.user.email});
+  check(book.get('CourseProgress').data.length===1,'Account deletion clears progress');
   check(book.get('CourseEnrollments').data.length===1,'Account deletion clears enrolments');
   check(request('listCourseCatalogue',{}).code==='UNAUTHENTICATED','Deleted account cannot reuse session');
   const mismatch=details.data[1][0];details.data[1][0]='broken';
@@ -95,6 +145,6 @@ async function runCourseTests(sources){
 }
 
 const read=name=>fs.readFileSync(path.join(__dirname,'..',name),'utf8');
-runCourseTests({code:read('Code.gs'),security:read('Security.gs'),management:read('CourseManagement.gs')})
+runCourseTests({code:read('Code.gs'),security:read('Security.gs'),management:read('CourseManagement.gs'),progress:read('LessonProgress.gs')})
 .then(count=>console.log(count+' course management checks passed'))
 .catch(error=>{console.error(error.message);process.exitCode=1;});
