@@ -1,0 +1,34 @@
+{
+  "paperID": "DMI-ACADEMIC-MOCK-02",
+  "title": "DMI Academic Mock 02 — Existing paper set",
+  "status": "draft-disabled",
+  "sourceRef": "8476e6002c49b6ce390f464201dfbb24b4700497",
+  "sections": [
+    {
+      "section": "listening",
+      "path": "book 18 listening test 1.html",
+      "sourceBlobSHA": "bbcc88982d6688823a377ce7c91cfdf779e9ed53"
+    },
+    {
+      "section": "reading",
+      "path": "book 18 reding test 1.html",
+      "sourceBlobSHA": "1a85b27bc2c62de5f7fecaca14d1470220bbe9b6"
+    },
+    {
+      "section": "writing",
+      "path": "book 18 writing test 1.html",
+      "sourceBlobSHA": "a817407759bbc996cb378f047d5009e0ce5a5fd7"
+    },
+    {
+      "section": "speaking",
+      "path": "book 17 speaking test 1.html",
+      "sourceBlobSHA": "2a63e02c466b333877595e38fef6e31d763a6250"
+    }
+  ],
+  "notes": [
+    "Listening, Reading and Writing use Book 18 Test 1; Speaking uses Book 17 Test 1.",
+    "This manifest selects sources; it does not enable a timed mock or duplicate questions or answer keys.",
+    "Standalone practice timers, scoring and local speaking heuristics must not be treated as a completed secure mock.",
+    "Full audio review, private paper adaptation, shared runner and teacher review remain required."
+  ]
+}

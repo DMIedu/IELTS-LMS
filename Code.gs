@@ -104,6 +104,28 @@ function handle(e) {
     ['studentName','teacherName','name','class','course','lesson','test','testName','comments']
       .forEach(k=>{if(p[k]!=null)p[k]=sheetText_(p[k]);});
     switch(action){
+      case 'listMockAttempts': result=listMockAttempts_(p,ctx);break;
+      case 'startMockSpeakingTimed': result=startMockSpeakingTimed_(p,ctx);break;
+      case 'resumeMockSpeakingTimed': result=resumeMockSpeakingTimed_(p,ctx);break;
+      case 'getMockSpeakingRecording': result=getMockSpeakingRecording_(p,ctx);break;
+      case 'getMockSpeakingReview': result=getMockSpeakingReview_(p,ctx);break;
+      case 'saveMockSpeakingReview': result=saveMockSpeakingReview_(p,ctx);break;
+      case 'uploadMockSpeaking': result=uploadMockSpeaking_(p,ctx);break;
+      case 'myMockSpeakingUploads': result=myMockSpeakingUploads_(p,ctx);break;
+      case 'listMockSpeakingUploads': result=listMockSpeakingUploads_(p,ctx);break;
+      case 'getMockAttemptReview': result=getMockAttemptReview_(p,ctx);break;
+      case 'saveMockWritingReview': result=saveMockWritingReview_(p,ctx);break;
+      case 'startMockAttempt': result=startMockAttempt_(p,ctx);break;
+      case 'resumeMockAttempt': result=resumeMockAttempt_(p,ctx);break;
+      case 'saveMockAnswers': result=saveMockAnswers_(p,ctx);break;
+      case 'submitMockSection': result=submitMockSection_(p,ctx);break;
+      case 'createMockSitting': result=createMockSitting_(p,ctx);break;
+      case 'listMockSittings': result=listMockSittings_(ctx);break;
+      case 'rotateMockCode': result=rotateMockCode_(p,ctx);break;
+      case 'closeMockSitting': result=closeMockSitting_(p,ctx);break;
+      case 'enterMockSitting': result=enterMockSitting_(p,ctx);break;
+      case 'myMockAdmission': result=myMockAdmission_(p,ctx);break;
+      case 'listMockAdmissions': result=listMockAdmissions_(p,ctx);break;
       case 'session': result={ok:true,role:ctx.role,user:ctx.user};break;
       case 'logout': result=logout_(ctx);break;
       case 'changePassword': result=changePassword_(p,ctx);break;
