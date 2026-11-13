@@ -1497,36 +1497,25 @@ function manualSave() {
   alert('Exam progress saved locally.');
 }
 
-function getScore(answers) {
-  let score = 0;
+const PAIRS = [[17, 18], [19, 20]]; // "choose TWO" questions: either order is correct
+function questionMarks(answers) {
+  const ok = {};
   for (let i = 1; i <= 40; i++) {
-    if (i === 14 || i === 15 || i === 27 || i === 28 || i === 29 || i === 30) continue; // handle below
-    const ans = (answers[i] || '').toLowerCase().replace(/^(the|a|an)\s+/, '').trim();
-    const keyVal = KEY[i].toLowerCase().trim();
-    if (ans === keyVal) score++;
+    const ans = String(answers[i] || '').toLowerCase().replace(/^(the|a|an)\s+/, '').trim();
+    ok[i] = ans !== '' && ans === String(KEY[i]).toLowerCase().trim();
   }
-  
-  // Handle Q17-18 order independence (C and E)
-  const ans17 = (answers[17] || '').toUpperCase().trim();
-  const ans18 = (answers[18] || '').toUpperCase().trim();
-  if ((ans17 === 'C' && ans18 === 'E') || (ans17 === 'E' && ans18 === 'C')) {
-    score += 2;
-  } else if (ans17 === 'C' || ans17 === 'E' || ans18 === 'C' || ans18 === 'E') {
-    if (ans17 !== ans18 && (ans17 === 'C' || ans17 === 'E' || ans18 === 'C' || ans18 === 'E')) {
-      score += 1;
-    }
-  }
-
-  // Handle Q19-20 order independence (A and B)
-  const ans19 = (answers[19] || '').toUpperCase().trim();
-  const ans20 = (answers[20] || '').toUpperCase().trim();
-  if ((ans19 === 'A' && ans20 === 'B') || (ans19 === 'B' && ans20 === 'A')) {
-    score += 2;
-  } else if (ans19 === 'A' || ans19 === 'B' || ans20 === 'A' || ans20 === 'B') {
-    if (ans19 !== ans20 && (ans19 === 'A' || ans19 === 'B' || ans20 === 'A' || ans20 === 'B')) {
-      score += 1;
-    }
-  }
+  PAIRS.forEach(function (p) {
+    const set = [String(KEY[p[0]]).toUpperCase(), String(KEY[p[1]]).toUpperCase()];
+    const x = String(answers[p[0]] || '').toUpperCase().trim(), y = String(answers[p[1]] || '').toUpperCase().trim();
+    ok[p[0]] = set.indexOf(x) !== -1;
+    ok[p[1]] = set.indexOf(y) !== -1 && y !== x;
+  });
+  return ok;
+}
+function getScore(answers) {
+  const ok = questionMarks(answers);
+  let score = 0;
+  for (let i = 1; i <= 40; i++) if (ok[i]) score++;
   return score;
 }
 
@@ -1589,26 +1578,20 @@ function renderResults(rec) {
   const q18Correct = (ans18 === 'C' || ans18 === 'E') && (ans17 !== ans18);
 
   const ans19 = (rec.answers[19] || '').toUpperCase().trim();
-  const ans20 = (rec.answers[20] || tyranny || '').toUpperCase().trim();
+  const ans20 = (rec.answers[20] || '').toUpperCase().trim();
   const q19Correct = (ans19 === 'A' || ans19 === 'B');
   const q20Correct = (ans20 === 'A' || ans20 === 'B') && (ans19 !== ans20);
 
+  const __marks = questionMarks(rec.answers);
   for (let i = 1; i <= 40; i++) {
     const stAns = rec.answers[i] || '—';
     let isCorrect = false;
     
-    if (i === 14) isCorrect = q14Correct;
-    else if (i === 15) isCorrect = q15Correct;
-    else if (i === 27) isCorrect = q27Correct;
-    else if (i === 28) isCorrect = q28Correct;
-    else if (i === 29) isCorrect = q29Correct;
-    else if (i === 30) isCorrect = q30Correct;
-    else isCorrect = (stAns.toLowerCase().replace(/^(the|a|an)\s+/, '').trim() === KEY[i].toLowerCase().trim());
+    isCorrect = !!__marks[i];
     
     let keyShow = KEY[i];
-    if (i === 14 || i === 15) keyShow = 'B or E (must be different)';
-    else if (i === 27 || i === 28) keyShow = 'B or E (must be different)';
-    else if (i === 29 || i === 30) keyShow = 'A or C (must be different)';
+    const __pair = PAIRS.find(function (pp) { return pp.indexOf(i) !== -1; });
+    if (__pair) keyShow = KEY[__pair[0]] + ' or ' + KEY[__pair[1]] + ' (must be different)';
     
     reviewHTML += `<div class="ans-card ${isCorrect ? 'correct' : 'incorrect'}"><span class="status-icon">${isCorrect ? '✓' : '✗'}</span><strong>Question ${i}:</strong> Your answer: <code style="font-weight:700;">${esc(stAns)}</code> | Correct answer: <code style="font-weight:700;">${keyShow}</code></div>`;
   }
@@ -1807,26 +1790,20 @@ function showDetail(idx){const r=allResults[idx];if(!r)return;
   const q18Correct = (ans18 === 'C' || ans18 === 'E') && (ans17 !== ans18);
 
   const ans19 = (rec.answers[19] || '').toUpperCase().trim();
-  const ans20 = (rec.answers[20] || tyranny || '').toUpperCase().trim();
+  const ans20 = (rec.answers[20] || '').toUpperCase().trim();
   const q19Correct = (ans19 === 'A' || ans19 === 'B');
   const q20Correct = (ans20 === 'A' || ans20 === 'B') && (ans19 !== ans20);
 
+  const __marks = questionMarks(r.answers);
   for(let i=1;i<=40;i++){
     const stAns=r.answers[i]||'—';
     let isCorrect=false;
     
-    if (i === 14) isCorrect = q14Correct;
-    else if (i === 15) isCorrect = q15Correct;
-    else if (i === 27) isCorrect = q27Correct;
-    else if (i === 28) isCorrect = q28Correct;
-    else if (i === 29) isCorrect = q29Correct;
-    else if (i === 30) isCorrect = q30Correct;
-    else isCorrect = (stAns.toLowerCase().replace(/^(the|a|an)/, '').trim() === KEY[i].toLowerCase().trim());
+    isCorrect = !!__marks[i];
     
     let keyShow = KEY[i];
-    if (i === 14 || i === 15) keyShow = 'B or E (must be different)';
-    else if (i === 27 || i === 28) keyShow = 'B or E (must be different)';
-    else if (i === 29 || i === 30) keyShow = 'A or C (must be different)';
+    const __pair = PAIRS.find(function (pp) { return pp.indexOf(i) !== -1; });
+    if (__pair) keyShow = KEY[__pair[0]] + ' or ' + KEY[__pair[1]] + ' (must be different)';
 
     qListHTML+=`<div style="font-size:12px; margin-bottom:4px; padding:3px 6px; border-radius:4px; border:1px solid ${isCorrect?'#c2e7d1':'#f8d7da'}; background:${isCorrect?'#e6f4ec':'#fde8e9'}; color:${isCorrect?'var(--green)':'var(--dmi-red)'}">Q${i}. Student: <b>${esc(stAns)}</b> | Correct: <b>${keyShow}</b></div>`;
   }

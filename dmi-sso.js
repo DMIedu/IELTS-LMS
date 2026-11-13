@@ -162,11 +162,19 @@
     }
     var out = nativeSet.apply(this, arguments);
     if (added) send(added);
+    if (added && window.DMI_MOCK) { try { window.DMI_MOCK.onResult(added); } catch (e) {} }
     return out;
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prefill);
   else prefill();
+
+  // ---------- 4. lab mock test mode (opened from mock-test.html) ----------
+  if (/[?&]mock=/.test(location.search)) {
+    var mockJs = document.createElement('script');
+    mockJs.src = BASE + 'dmi-mock.js';
+    document.head.appendChild(mockJs);
+  }
 })().catch(function(){
   var here=document.currentScript && document.currentScript.src;
   location.replace((here?here.replace(/[^\/]*$/,''):'/IELTS-LMS/')+'login.html');

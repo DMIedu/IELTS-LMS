@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DMI IELTS Mock Test</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Layout: DMI header; one card at a time: unlock (branch + invigilator passcode), mock overview, final result. Light only, like the rest of the LMS. */
+    :root {
+      --ink: #1e2d40; --muted: #5f6e84; --line: #d5dce8; --soft: #f2f5f9; --paper: #ffffff;
+      --navy: #0f1e2d; --blue: #123c7c; --red: #c0202a; --gold: #c9903a; --gold-soft: #fbf0dc; --green: #127a4b;
+      --display: "Playfair Display", Georgia, serif;
+      --body: "Outfit", Arial, Helvetica, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+    body { margin: 0; font-family: var(--body); color: var(--ink); background: var(--soft); line-height: 1.55; }
+    [hidden] { display: none !important; }
+    .top { background: linear-gradient(150deg, var(--navy) 0%, #1a2e45 55%, #0f2236 100%); color: #fff; }
+    .top-inner { max-width: 820px; margin: 0 auto; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 12px; color: #fff; text-decoration: none; min-width: 0; }
+    .brand img { height: 42px; width: auto; border-radius: 4px; }
+    .brand strong { display: block; font-size: 16px; }
+    .brand span { display: block; font-size: 12px; color: #c9d3e2; }
+    .who { font-size: 13px; color: #c9d3e2; text-align: right; }
+    .who b { color: #fff; display: block; font-size: 14px; }
+    main { max-width: 820px; margin: 0 auto; padding: 26px 16px 60px; }
+    h1 { font-family: var(--display); font-size: clamp(30px, 5vw, 42px); line-height: 1.12; margin: 0 0 8px; text-wrap: balance; }
+    h2 { font-family: var(--display); font-size: 22px; margin: 0 0 6px; }
+    .lede { color: var(--muted); font-size: 17px; margin: 0 0 20px; max-width: 620px; }
+    .card { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin: 0 0 16px; }
+    .form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    label { display: flex; flex-direction: column; gap: 5px; font-weight: 600; font-size: 14px; min-width: 0; }
+    select, input { font: inherit; font-size: 17px; padding: 11px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); color: var(--ink); width: 100%; }
+    #code { letter-spacing: .12em; text-transform: uppercase; }
+    select:focus-visible, input:focus-visible, .go:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+    .hint { font-weight: 400; color: var(--muted); font-size: 13px; }
+    .go { display: inline-flex; align-items: center; justify-content: center; border: 0; background: var(--navy); color: #fff; font: inherit; font-weight: 700; font-size: 16px; padding: 12px 22px; border-radius: 10px; cursor: pointer; text-decoration: none; }
+    .go:hover { background: var(--blue); }
+    .go[disabled] { opacity: .6; cursor: progress; }
+    .go.ghost { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .err { color: var(--red); font-weight: 600; margin: 12px 0 0; }
+    .lab { display: flex; gap: 12px; align-items: flex-start; background: var(--gold-soft); border: 1px solid #ecd3a6; border-radius: 10px; padding: 12px 14px; color: #5a3c0c; font-size: 14.5px; margin: 0 0 16px; }
+    .lab b { color: #3d2806; }
+    .seq { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; counter-reset: s; }
+    .seq li { display: grid; grid-template-columns: 2.2em 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+    .seq li::before { counter-increment: s; content: counter(s); width: 2em; height: 2em; border-radius: 50%; display: grid; place-items: center; font-weight: 700; background: #e7edf6; color: var(--blue); }
+    .seq li.done::before { content: "\2713"; background: var(--green); color: #fff; }
+    .seq li.now { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-soft); }
+    .seq b { display: block; font-size: 16px; }
+    .seq span { color: var(--muted); font-size: 14px; }
+    .seq em { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--blue); }
+    ul.rules { margin: 8px 0 0; padding-left: 20px; }
+    ul.rules li { margin: 4px 0; }
+    .bands { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 14px 0 0; }
+    .band { border: 1px solid var(--line); border-radius: 10px; padding: 14px; background: var(--soft); min-width: 0; }
+    .band small { display: block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+    .band big { display: block; font-family: var(--display); font-size: 34px; line-height: 1.1; color: var(--blue); }
+    .band span { font-size: 14px; color: var(--muted); }
+    footer { max-width: 820px; margin: 0 auto; padding: 0 16px 40px; color: var(--muted); font-size: 13.5px; }
+    @media (max-width: 640px) {
+      .form, .bands { grid-template-columns: 1fr; }
+      .brand span, .who span { display: none; }
+      .brand img { height: 34px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="index.html"><img src="dmi-logo.jfif" alt="DMI Computer Education logo"><div><strong>IELTS Mock Test</strong><span>DMI Computer Education &middot; lab only</span></div></a>
+      <div class="who" id="who"></div>
+    </div>
+  </header>
+
+  <main>
+    <p class="lede" id="loading">Checking your DMI sign-in&hellip;</p>
+
+    <!-- Unlock -->
+    <section id="unlock" hidden>
+      <h1>IELTS Mock Test</h1>
+      <p class="lede">The full mock runs in the DMI lab: Listening, then Reading, then Writing, timed like the real exam.</p>
+      <div class="lab"><span aria-hidden="true">&#128274;</span><div><b>Lab only.</b> Your invigilator will type the passcode on this computer when the mock begins. The passcode only works on the mock day.</div></div>
+      <form class="card" id="unlockForm" novalidate>
+        <div class="form">
+          <label for="branch">Your DMI branch<select id="branch">
+            <option value="">Choose branch</option>
+            <option>Jaffna</option><option>Nelliady</option><option>Chavakachcheri</option><option>Chunnakam</option><option>Kilinochchi</option><option>Sandilipay</option>
+          </select></label>
+          <label for="code">Invigilator passcode<input id="code" type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Typed by the invigilator"><span class="hint">Students: please wait for your invigilator.</span></label>
+        </div>
+        <p class="err" id="unlockErr" hidden></p>
+        <div class="actions"><button class="go" type="submit" id="unlockBtn">Unlock mock test</button></div>
+      </form>
+    </section>
+
+    <!-- Overview / in progress -->
+    <section id="overview" hidden>
+      <h1 id="ovTitle">Mock Test</h1>
+      <p class="lede">Your mock test is unlocked. The sections run in this order, and each one starts when you press its Start button.</p>
+      <div class="card">
+        <h2>Order of the test</h2>
+        <ol class="seq" id="seq"></ol>
+      </div>
+      <div class="card">
+        <h2>Rules</h2>
+        <ul class="rules">
+          <li>Do not close, refresh or leave this browser tab until the whole mock is finished.</li>
+          <li>Each section has its own timer. When the time ends, your answers are submitted automatically.</li>
+          <li>You cannot go back to a section after you submit it.</li>
+          <li>Your scores are shown only at the end. Your teacher marks Writing.</li>
+        </ul>
+        <div class="actions"><button class="go" type="button" id="goBtn">Start</button></div>
+      </div>
+    </section>
+
+    <!-- Result -->
+    <section id="result" hidden>
+      <h1 id="resTitle">Mock test finished</h1>
+      <p class="lede">Well done. Your answers have been saved to your DMI account and sent to your teacher.</p>
+      <div class="card">
+        <h2>Your results</h2>
+        <div class="bands" id="bands"></div>
+        <p class="hint" style="margin-top:14px">Listening and Reading bands use the standard conversion from your score out of 40. Writing is marked by your teacher, and Speaking is tested separately.</p>
+        <p class="err" id="finishErr" hidden></p>
+        <div class="actions"><a class="go" href="student-panel.html">Go to my dashboard</a><a class="go ghost" href="index.html">Practice Hub</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>DMI Computer Education &middot; IELTS Department. Mock tests are for registered DMI students in the DMI lab.</footer>
+
+  <script src="dmi-auth.js"></script>
+  <script>
+  (async function () {
+    var MOCK_API = "https://script.google.com/macros/s/AKfycbwLkFpHNFGyaKrFv0Lfji6y75OdX13L21l7Q3A81jYujsRSHYigDUgCfqxhcsBUfoKqag/exec";
+    var KEY = "dmi_mock", BRANCH_KEY = "dmi_lms_branch";
+    // Which papers make up each mock. Order inside each mock: Listening -> Reading -> Writing.
+    function L(b, t) { return { skill: "listening", minutes: 40, file: "book " + b + " listening test " + t + ".html", title: "Book " + b + " Listening Test " + t }; }
+    function R(b, t) { return { skill: "reading", minutes: 60, file: "book " + b + " reding test " + t + ".html", title: "Book " + b + " Reading Test " + t }; }
+    function W(b, t) { return { skill: "writing", minutes: 60, file: "book " + b + " writing test " + t + ".html", title: "Book " + b + " Writing Test " + t }; }
+    var MOCKS = {
+      1: [L(19, 1), R(20, 1), W(20, 1)],
+      2: [L(19, 2), R(20, 2), W(20, 2)],
+      3: [L(19, 3), R(20, 3), W(20, 3)],
+      4: [L(19, 4), R(20, 4), W(20, 4)],
+      5: [L(18, 1), R(18, 1), W(19, 1)],
+      6: [L(18, 2), R(18, 2), W(19, 2)]
+    };
+    var NAMES = { listening: "Listening", reading: "Reading", writing: "Writing" };
+
+    function $(id) { return document.getElementById(id); }
+    function show(id) { ["unlock", "overview", "result"].forEach(function (s) { $(s).hidden = s !== id; }); $("loading").hidden = true; window.scrollTo(0, 0); }
+    function load() { try { return JSON.parse(sessionStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
+    function save(s) { try { sessionStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
+    function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function api(q) { return fetch(MOCK_API + "?" + new URLSearchParams(q)).then(function (r) { return r.json(); }); }
+    function paperUrl(sec, st) { return encodeURIComponent(sec.file) + "?mock=" + encodeURIComponent(st.sessionId); }
+
+    var auth = await DMI_AUTH.requireRole();
+    if (!auth) return;
+    var user = auth.user || {};
+    $("who").innerHTML = "<b>" + esc(user.name || "") + "</b><span>" + esc(user.id || user.email || "") + "</span>";
+
+    var st = load();
+    var done = new URLSearchParams(location.search).get("done") === "1";
+
+    if (st && done && st.idx >= st.sections.length) return renderResult(st);
+    if (st && st.idx < st.sections.length) return renderOverview(st);
+    renderUnlock();
+
+    function renderUnlock() {
+      try { var b = localStorage.getItem(BRANCH_KEY); if (b) $("branch").value = b; } catch (e) {}
+      show("unlock");
+      $("unlockForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var branch = $("branch").value, code = $("code").value.trim(), err = $("unlockErr"), btn = $("unlockBtn");
+        if (!branch) { err.hidden = false; err.textContent = "Choose your branch."; return; }
+        if (!code) { err.hidden = false; err.textContent = "The invigilator needs to type the passcode."; return; }
+        err.hidden = true; btn.disabled = true; btn.textContent = "Checking…";
+        api({ action: "mockStart", code: code, email: user.email || user.id || "", name: user.name || "", branch: branch })
+          .then(function (res) {
+            btn.disabled = false; btn.textContent = "Unlock mock test";
+            if (!res || !res.ok) { err.hidden = false; err.textContent = (res && res.error) || "The passcode could not be checked. Try again."; $("code").value = ""; return; }
+            try { localStorage.setItem(BRANCH_KEY, branch); } catch (x) {}
+            var s = { sessionId: res.sessionId, mock: res.mock, sections: MOCKS[res.mock], idx: 0, results: {} };
+            save(s);
+            renderOverview(s);
+          })
+          .catch(function () { btn.disabled = false; btn.textContent = "Unlock mock test"; err.hidden = false; err.textContent = "No internet connection. Check the connection and try again."; });
+      });
+    }
+
+    function renderOverview(s) {
+      $("ovTitle").textContent = "Mock Test " + s.mock;
+      $("seq").innerHTML = s.sections.map(function (sec, i) {
+        var cls = i < s.idx ? "done" : i === s.idx ? "now" : "";
+        return '<li class="' + cls + '"><div><b>' + NAMES[sec.skill] + "</b><span>" + esc(sec.title) + "</span></div><em>" + sec.minutes + " min</em></li>";
+      }).join("");
+      var next = s.sections[s.idx];
+      $("goBtn").textContent = (s.idx === 0 ? "Start " : "Continue to ") + NAMES[next.skill];
+      $("goBtn").onclick = function () { location.href = paperUrl(next, s); };
+      show("overview");
+    }
+
+    function renderResult(s) {
+      $("resTitle").textContent = "Mock Test " + s.mock + " finished";
+      var r = s.results || {};
+      function box(skill) {
+        var x = r[skill] || {};
+        if (skill === "writing") return '<div class="band"><small>Writing</small><big>Sent</big><span>Task 1 ' + (x.wc1 || 0) + " words &middot; Task 2 " + (x.wc2 || 0) + " words. Your teacher will mark it.</span></div>";
+        return '<div class="band"><small>' + NAMES[skill] + "</small><big>" + (x.band != null ? "Band " + esc(x.band) : "&ndash;") + "</big><span>" + (x.score != null ? esc(x.score) + "/40 correct" : "Not recorded") + "</span></div>";
+      }
+      $("bands").innerHTML = box("listening") + box("reading") + box("writing");
+      show("result");
+      if (!s.finished) {
+        api({ action: "mockFinish", session: s.sessionId })
+          .then(function (res) { if (res && res.ok) { s.finished = true; save(s); } })
+          .catch(function () { var e = $("finishErr"); e.hidden = false; e.textContent = "Could not reach the server to close the mock. Your section results are already saved. Please tell your invigilator."; });
+      }
+    }
+  })();
+  </script>
+</body>
+</html>
